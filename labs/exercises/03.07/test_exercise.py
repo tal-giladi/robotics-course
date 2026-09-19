@@ -115,15 +115,16 @@ def test_a_turn_in_place_covers_no_distance(impl) -> None:
 
 
 def test_gaps_are_counted_and_converted_to_lost_samples(impl) -> None:
-    # 20 ms apart, except one 100 ms hole = 4 missing samples, and one 0.03 s hiccup (not a gap:
-    # 0.03 <= 1.5 * 0.02 is false... 0.03 > 0.03 is false, so it is exactly at the threshold).
+    # Intervals: 0.02 0.02 0.10 0.02 0.02 0.03 0.02 -> median 0.02, threshold 1.5 x 0.02 = 0.03.
+    # The 0.10 s hole is a gap and swallowed 4 samples. The 0.03 s hiccup sits EXACTLY on the
+    # threshold, and the rule is "longer than", so it is normal jitter, not a gap.
     times = [0.02, 0.04, 0.06, 0.16, 0.18, 0.20, 0.23, 0.25]
     samples = [make(impl, t) for t in times]
     s = impl.summarize(samples, 0.001)
     assert s.median_interval_s == pytest.approx(0.02)
-    assert s.gaps == 2, "0.10 s and 0.03 s both exceed 1.5 x 0.02 s"
+    assert s.gaps == 1, "only the 0.10 s interval is longer than 1.5 x the median"
     assert s.max_gap_s == pytest.approx(0.10)
-    assert s.lost_samples == 4 + 0, "round(0.10/0.02)-1 = 4, round(0.03/0.02)-1 = round(1.5)-1 = 1"
+    assert s.lost_samples == 4, "round(0.10 / 0.02) - 1 = 4"
 
 
 def test_battery_is_none_when_nothing_was_measured(impl) -> None:
