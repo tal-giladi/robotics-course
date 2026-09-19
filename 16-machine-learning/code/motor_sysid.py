@@ -35,7 +35,8 @@ from robotlab.sim import DiffDriveParams, DiffDriveSim, SensorParams, SimBase, W
 
 DATA = HERE / "data" / "motor"
 DT = 0.02                                        # 50 Hz telemetry
-V_NOM = 11.1                                     # labs/config/karmel.yaml battery.nominal_v
+V_NOM = 11.1                                     # reference voltage for k (3 x 3.7 V). Any fixed
+                                                 # reference works: it only rescales k.
 HOLD_S = 0.8                                     # each random duty is held this long
 TRAIN_SOCS = (1.0, 0.75, 0.5)                    # battery state of charge for training logs
 TEST_SOC = 0.12                                  # nearly empty battery: a voltage the model never saw
