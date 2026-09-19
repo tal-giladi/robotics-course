@@ -59,7 +59,11 @@ class FakeCamera(Node):
         qos = (QoSProfile(depth=1, reliability=ReliabilityPolicy.RELIABLE) if args.reliable
                else qos_profile_sensor_data)
         self.pub_img = self.create_publisher(Image, f"{args.namespace}/image_raw", qos)
-        self.pub_info = self.create_publisher(CameraInfo, f"{args.namespace}/camera_info", qos)
+        # With the no-camera-info fault the publisher is never created, so the topic does not even
+        # appear in `ros2 topic list` -- exactly what a driver that forgot CameraInfo looks like.
+        self.pub_info = (None if args.fault == "no-camera-info"
+                         else self.create_publisher(CameraInfo, f"{args.namespace}/camera_info",
+                                                    qos))
         self.k = 0
         self.create_timer(1.0 / args.fps, self.tick)
         mbps = args.width * args.height * 3 * args.fps * 8 / 1e6
@@ -110,7 +114,7 @@ class FakeCamera(Node):
         msg.step = a.width * 3            # bytes per row: width * channels * bytes per channel
         msg.data = pixels.tobytes()
         self.pub_img.publish(msg)
-        if a.fault != "no-camera-info":
+        if self.pub_info is not None:
             self.pub_info.publish(self.camera_info(stamp))
 
 

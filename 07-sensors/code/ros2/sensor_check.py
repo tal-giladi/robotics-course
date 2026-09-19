@@ -86,7 +86,10 @@ def report(node: SensorCheck, args: argparse.Namespace) -> int:
           f"worst gap {rr.max_gap_ms:.1f} ms, ~{rr.dropped_estimate} missing")
 
     age = stamp_age_stats(node.stamps, node.received)
-    check("stamp age", 0.0 <= age["median_ms"] <= args.max_age_ms,
+    # A few milliseconds of "negative age" are normal on a /clock-driven time source: simulation
+    # time advances in discrete ticks, so a stamp can briefly be ahead of the receiver's clock.
+    # Anything more negative means two different clocks.
+    check("stamp age", -args.clock_slack_ms <= age["median_ms"] <= args.max_age_ms,
           f"median {age['median_ms']:.1f} ms, p95 {age['p95_ms']:.1f} ms, "
           f"max {age['max_ms']:.1f} ms (limit {args.max_age_ms:.0f} ms)")
     check("stamps increase", all(b > a for a, b in zip(node.stamps, node.stamps[1:])),
@@ -174,6 +177,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--expect-hz", type=float, default=None)
     p.add_argument("--frame", default=None, help="the frame_id you expect")
     p.add_argument("--max-age-ms", type=float, default=200.0)
+    p.add_argument("--clock-slack-ms", type=float, default=25.0,
+                   help="how far a stamp may be in the future before it counts as a clock mismatch")
     p.add_argument("--min-valid", type=float, default=0.5, help="LaserScan: valid-beam fraction")
     p.add_argument("--reliable", action="store_true",
                    help="subscribe RELIABLE (the default is the sensor-data QoS)")
