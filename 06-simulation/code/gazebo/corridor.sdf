@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!--
+  corridor.sdf — lesson 06.08. A deliberately BAD world for SLAM, and the world you must be able
+  to recognise before you build a good one.
+
+  A 10 m x 1.4 m corridor, closed at both ends, with nothing in it. Every pose in the middle looks
+  exactly like every other pose in the middle to a 2D LiDAR: move a metre along x and the only
+  rays that change are the handful pointing at the two distant end walls. Scan matching has nothing
+  to lock on to, so slam_toolbox's pose slides along the corridor and Nav2's AMCL particles spread
+  into a long ellipse.
+
+    py 06-simulation/code/gazebo/world_check.py 06-simulation/code/gazebo/corridor.sdf
+    ros2 launch karmel_bringup robot.launch.py sim:=true headless:=true enable_camera:=false \
+      world:=$PWD/06-simulation/code/gazebo/corridor.sdf x:=-4.0
+
+  Exercise 06.08-E4 asks you to make it mappable by adding features, and to prove it with the
+  same checker. The systems, physics step and ground plane are copied from karmel_gazebo's
+  empty.sdf so the robot's sensors and gz_ros2_control work exactly as in every other world.
+-->
+<sdf version="1.9">
+  <world name="corridor">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+
+    <gravity>0 0 -9.8</gravity>
+    <scene>
+      <ambient>0.6 0.6 0.6 1</ambient>
+      <background>0.8 0.85 0.9 1</background>
+      <grid>false</grid>
+    </scene>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface>
+        </collision>
+        <visual name="visual">
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- The corridor: 10 m long (x in [-5, 5]), 1.4 m wide (y in [-0.7, 0.7]), walls 1 m high. -->
+    <model name="corridor_walls">
+      <static>true</static>
+      <link name="walls">
+
+        <collision name="north_collision">
+          <pose>0 0.75 0.5 0 0 0</pose>
+          <geometry><box><size>10.1 0.1 1.0</size></box></geometry>
+        </collision>
+        <visual name="north_visual">
+          <pose>0 0.75 0.5 0 0 0</pose>
+          <geometry><box><size>10.1 0.1 1.0</size></box></geometry>
+          <material><ambient>0.93 0.9 0.82 1</ambient><diffuse>0.93 0.9 0.82 1</diffuse></material>
+        </visual>
+
+        <collision name="south_collision">
+          <pose>0 -0.75 0.5 0 0 0</pose>
+          <geometry><box><size>10.1 0.1 1.0</size></box></geometry>
+        </collision>
+        <visual name="south_visual">
+          <pose>0 -0.75 0.5 0 0 0</pose>
+          <geometry><box><size>10.1 0.1 1.0</size></box></geometry>
+          <material><ambient>0.93 0.9 0.82 1</ambient><diffuse>0.93 0.9 0.82 1</diffuse></material>
+        </visual>
+
+        <collision name="west_collision">
+          <pose>-5.05 0 0.5 0 0 0</pose>
+          <geometry><box><size>0.1 1.6 1.0</size></box></geometry>
+        </collision>
+        <visual name="west_visual">
+          <pose>-5.05 0 0.5 0 0 0</pose>
+          <geometry><box><size>0.1 1.6 1.0</size></box></geometry>
+          <material><ambient>0.93 0.9 0.82 1</ambient><diffuse>0.93 0.9 0.82 1</diffuse></material>
+        </visual>
+
+        <collision name="east_collision">
+          <pose>5.05 0 0.5 0 0 0</pose>
+          <geometry><box><size>0.1 1.6 1.0</size></box></geometry>
+        </collision>
+        <visual name="east_visual">
+          <pose>5.05 0 0.5 0 0 0</pose>
+          <geometry><box><size>0.1 1.6 1.0</size></box></geometry>
+          <material><ambient>0.93 0.9 0.82 1</ambient><diffuse>0.93 0.9 0.82 1</diffuse></material>
+        </visual>
+
+      </link>
+    </model>
+  </world>
+</sdf>

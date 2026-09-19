@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!--
+  materials_test.sdf — lesson 06.07. A 2 x 2 m box whose four walls differ only in *material*:
+
+      north (y = +1.0)  matt white      ambient/diffuse 0.95
+      south (y = -1.0)  matt black      ambient/diffuse 0.02
+      east  (x = +1.0)  glass-like      diffuse alpha 0.15, high specular
+      west  (x = -1.0)  polished metal  specular 1.0, metalness 1.0
+
+  Spawn karmel in the middle and every wall face is 0.95 m away. The point of the experiment is
+  what the two sensors do with that:
+
+    the simulated LiDAR   returns the same range and the same noise off all four walls, because
+                          gpu_lidar is a depth render: it has no notion of reflectivity, incidence
+                          angle, absorption or transparency. A real RPLIDAR C1 loses returns on
+                          matt black at long range, on glass at any range, and on a mirror it
+                          reports whatever the mirror is pointing at.
+    the simulated camera  does see the difference, because the camera IS a render — but with no
+                          auto-exposure, no white balance, no rolling shutter and no motion blur.
+
+    ros2 launch karmel_bringup robot.launch.py sim:=true headless:=true \
+      world:=$PWD/06-simulation/code/gazebo/materials_test.sdf
+    python3 06-simulation/code/ros2/sensor_stats.py (with the usual use_sim_time ros-arg)
+-->
+<sdf version="1.9">
+  <world name="materials_test">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+
+    <gravity>0 0 -9.8</gravity>
+    <scene>
+      <ambient>0.6 0.6 0.6 1</ambient>
+      <background>0.8 0.85 0.9 1</background>
+      <grid>false</grid>
+    </scene>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface>
+        </collision>
+        <visual name="visual">
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="walls">
+      <static>true</static>
+      <link name="link">
+
+        <!-- north: matt white -->
+        <collision name="north_collision">
+          <pose>0 1.05 0.4 0 0 0</pose>
+          <geometry><box><size>2.2 0.1 0.8</size></box></geometry>
+        </collision>
+        <visual name="north_visual">
+          <pose>0 1.05 0.4 0 0 0</pose>
+          <geometry><box><size>2.2 0.1 0.8</size></box></geometry>
+          <material>
+            <ambient>0.95 0.95 0.95 1</ambient>
+            <diffuse>0.95 0.95 0.95 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+
+        <!-- south: matt black -->
+        <collision name="south_collision">
+          <pose>0 -1.05 0.4 0 0 0</pose>
+          <geometry><box><size>2.2 0.1 0.8</size></box></geometry>
+        </collision>
+        <visual name="south_visual">
+          <pose>0 -1.05 0.4 0 0 0</pose>
+          <geometry><box><size>2.2 0.1 0.8</size></box></geometry>
+          <material>
+            <ambient>0.02 0.02 0.02 1</ambient>
+            <diffuse>0.02 0.02 0.02 1</diffuse>
+            <specular>0.0 0.0 0.0 1</specular>
+          </material>
+        </visual>
+
+        <!-- east: glass-like (a real LiDAR mostly shoots straight through this) -->
+        <collision name="east_collision">
+          <pose>1.05 0 0.4 0 0 0</pose>
+          <geometry><box><size>0.1 2.2 0.8</size></box></geometry>
+        </collision>
+        <visual name="east_visual">
+          <pose>1.05 0 0.4 0 0 0</pose>
+          <geometry><box><size>0.1 2.2 0.8</size></box></geometry>
+          <material>
+            <ambient>0.6 0.75 0.8 0.15</ambient>
+            <diffuse>0.6 0.75 0.8 0.15</diffuse>
+            <specular>0.9 0.9 0.9 1</specular>
+          </material>
+        </visual>
+
+        <!-- west: polished metal (a real LiDAR at a shallow angle sees the reflection, not the wall) -->
+        <collision name="west_collision">
+          <pose>-1.05 0 0.4 0 0 0</pose>
+          <geometry><box><size>0.1 2.2 0.8</size></box></geometry>
+        </collision>
+        <visual name="west_visual">
+          <pose>-1.05 0 0.4 0 0 0</pose>
+          <geometry><box><size>0.1 2.2 0.8</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.55 1</ambient>
+            <diffuse>0.5 0.5 0.55 1</diffuse>
+            <specular>1.0 1.0 1.0 1</specular>
+            <pbr><metal><metalness>1.0</metalness><roughness>0.05</roughness></metal></pbr>
+          </material>
+        </visual>
+
+      </link>
+    </model>
+  </world>
+</sdf>
