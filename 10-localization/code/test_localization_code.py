@@ -16,6 +16,7 @@ import kf1d_wall
 import kf_multivariate
 import loc_common as lc
 import uncertainty_ellipses
+from robotlab.sim import OccupancyGrid
 
 
 def _png(path) -> bool:
@@ -99,3 +100,100 @@ def test_kf_multivariate(tmp_path):
     assert enc[0.01]["nees"] > 5.99 and enc[0.01]["nis_enc"] < 0.5, "NIS looks calm while NEES says overconfident"
     assert math.isfinite(enc[0.03]["nees"]) and enc[0.03]["nees"] < 3
     assert _png(tmp_path / "kf_multivariate_run.png") and _png(tmp_path / "kf_nees.png")
+
+
+# --- 10.06-10.10 --------------------------------------------------------------------------------
+def test_ekf_landmarks(tmp_path):
+    import ekf_landmarks
+
+    res = ekf_landmarks.main(["--solution", "--seeds", "2", "--out", str(tmp_path)])
+    assert max(res["numbers"]["jacobian_errors"].values()) < 1e-7, "analytic Jacobians must match central differences"
+    assert res["numbers"]["nis"] == pytest.approx(0.319, abs=1e-3)
+    tour = res["tour"]
+    assert tour["ekf5"]["rmse"] < 0.05 and tour["ekf5"]["max"] < 0.12
+    assert tour["dr_rmse"] > 5 * tour["ekf5"]["rmse"], "the EKF must beat dead reckoning by a wide margin"
+    assert 1.0 < tour["ekf5"]["nis"] < 3.5 and tour["ekf5"]["nees"] < 6.0
+    sweep = res["k_sweep"]
+    assert sweep[0.002]["nees"] > 10, "too little process noise -> badly overconfident"
+    assert sweep[0.05]["nees"] < 2.0, "too much process noise -> underconfident"
+    assert res["nowrap"]["nis"] > 100, "an unwrapped bearing innovation must blow the NIS up"
+    assert res["association"]["good start, ids ignored"]["wrong"] == 0
+    assert res["association"]["start 36 cm / 11 deg off, P0 honest, no ids"]["wrong"] > 10
+    assert res["linearization"]["mc_x"] < 0.95 and res["linearization"]["inside95"] < 0.5, (
+        "with 30 deg of heading uncertainty the EKF's ellipse should NOT cover 95% of the truth")
+    assert _png(tmp_path / "ekf_tour.png") and _png(tmp_path / "ekf_sigma.png")
+
+
+def test_imu_odom_fusion(tmp_path):
+    import imu_odom_fusion
+
+    res = imu_odom_fusion.main(["--seeds", "1", "--out", str(tmp_path)])
+    assert res["bias_hat"] == pytest.approx(0.01, abs=3 * res["bias_se"] + 1e-4)
+    assert res["scale"] == pytest.approx(1.04, abs=0.02), "the fit should recover wheel_separation_scale"
+    raw, cal = np.array(res["raw_sweep"]), np.array(res["cal_sweep"])
+    assert raw.max() / raw.min() > 5, "with two biases the alpha sweep has a deep, lucky minimum"
+    assert cal.max() < 1.5 and cal.max() / cal.min() < 5, "after calibration every alpha is fine"
+    assert res["best_flip"][0] != res["best_raw"][0], "flipping the gyro bias must move the best alpha"
+    assert res["rmse"]["rmse_kf"] < 0.2 * res["rmse"]["rmse_odom"]
+    assert res["bias_final"] == pytest.approx(0.01, abs=0.003), "the KF must find the gyro bias"
+    assert _png(tmp_path / "imu_odom_run.png") and _png(tmp_path / "imu_odom_alpha.png")
+
+
+def test_mcl_apartment(tmp_path):
+    import mcl_apartment
+
+    res = mcl_apartment.main(["--solution", "--quick", "--out", str(tmp_path)])
+    track = res["tracking"][100]
+    assert track["rmse"] < 0.05 and res["dead_reckoning_rmse"] > 20 * track["rmse"]
+    conv = res["global"][1000]
+    assert conv["converged_s"] is not None and conv["converged_s"] < 15.0
+    assert conv["settled"] < 0.10
+    sym = res["symmetry"]
+    # In a plain rectangle the two 180-degree-apart poses are indistinguishable, so the cloud
+    # collapses onto ONE of them; which one is chance (seed, particle count, run length).
+    assert sym["near_truth"] + sym["mirrored"] > 0.8, "the cloud must settle on one of the two poses"
+    assert (sym["final"] > 1.0) == (sym["mirrored"] > 0.5), (
+        "a 2 m error means it picked the mirror pose, and vice versa")
+    r = res["resampling"]
+    assert r["mn_var"] > 3 * r["lv_var"], "multinomial resampling adds variance for nothing"
+    assert r["depletion"]["every scan"][0] > 5 * r["depletion"]["when ESS < N/2"][0]
+    kid = res["kidnap"]
+    assert kid["plain_late"] > 0.8 > kid["inject_late"], "only random injection survives a kidnapping"
+    assert kid["inject_before"] > kid["plain_before"], "... and it costs accuracy while localized"
+    models = res["models"]
+    assert models["beam_s"] > 2 * models["lf_s"], "ray casting is much more expensive"
+    assert _png(tmp_path / "mcl_runs.png") and _png(tmp_path / "mcl_kidnap.png")
+
+
+def test_export_replay(tmp_path):
+    import export_replay
+
+    r = export_replay.main(["--out", str(tmp_path)])
+    assert r["map_cells"] == (132, 112) and r["resolution"] == 0.05
+    assert r["occupied"] > 1500 and r["free"] > 10_000
+    assert (tmp_path / "apartment.yaml").exists() and (tmp_path / "apartment.pgm").exists()
+    grid = OccupancyGrid.load(tmp_path / "apartment.yaml")   # map_server format, round trip
+    assert grid.data.shape == (112, 132) and grid.origin == pytest.approx((-0.3, -0.3))
+    data = np.load(tmp_path / "replay.npz")
+    assert data["ranges"].shape == (r["scans"], 360) and data["truth"].shape[1] == 3
+    assert r["dr_final"] > 0.5, "the odometry the ROS nodes replay must actually drift"
+
+
+def test_tag_localization(tmp_path):
+    import tag_localization
+
+    res = tag_localization.main(["--solution", "--quick", "--repeats", "1", "--out", str(tmp_path)])
+    single = res["single"]
+    assert abs(single["range_err"]) < 0.03 and abs(single["bearing_err"]) < math.radians(1.0)
+    fit = res["fit"]
+    assert 0.0 < fit["sigma_rel_measured"] < 0.10 and fit["detection_rate"] > 0.4
+    assert fit["sigma_bearing"] >= tag_localization.SIGMA_BEARING_FLOOR, "simulated sigmas must be floored"
+    assert res["visibility"]["fraction"] > 0.3, "ten tags should be visible a good part of the tour"
+    ekf = res["ekf"]
+    assert ekf["rmse"] < 0.03 and 0.5 < ekf["nis"] < 3.5
+    assert res["dead_reckoning"]["rmse"] > 10 * ekf["rmse"]
+    ungated = res["maperror_no_gate"]
+    gated = res["maperror_chi-square_95%_gate"]
+    assert ungated["rmse"] > 2 * gated["rmse"], "a mis-measured tag must hurt when it is not gated"
+    assert ungated["nis"] > 4.0 and gated["rejected"] > 10
+    assert _png(tmp_path / "tag_map.png")
