@@ -131,6 +131,11 @@ def main(argv: list[str] | None = None) -> dict:
         bias = measure_gyro_bias(base) if has_gyro(base) else 0.0
         if has_gyro(base):
             print(f"gyro bias while standing still: {bias:+.5f} rad/s ({math.degrees(bias):+.2f} deg/s)")
+        else:
+            print("no gyro on this target: heading comes from the encoders (see Part 3 in the lesson)")
+        if not simulation:
+            print("NOTE: off the simulator there is no ground truth. Every 'error' below is what the")
+            print("      ESTIMATOR believes; measure the real angle with a protractor on the floor.")
 
         def reset() -> None:
             if simulation:

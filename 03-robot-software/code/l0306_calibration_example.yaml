@@ -1,0 +1,31 @@
+# Example calibration overlay for lesson 03.06 — merged OVER labs/config/karmel.yaml.
+#
+#   python 03-robot-software/code/l0306_config_lab.py --overlay 03-robot-software/code/l0306_calibration_example.yaml
+#
+# Config is a CHOICE (pin map, speed limits, chassis dimensions). Calibration is a MEASUREMENT of
+# one particular robot: it has a date, a method, an operator and an uncertainty, and it is worth
+# nothing without them. Keeping them in separate files means you can re-measure without touching
+# design decisions, and you can tell at a glance which numbers came from a tape measure.
+#
+# These are plausible numbers for a karmel built from the Stage-1 BOM; they are NOT your robot's.
+# Produce your own with the procedures in lessons 01.12 (drive a square) and 09.05 (UMBmark).
+
+calibration:                     # provenance — ignored by robotlab.config's dataclasses
+  date: "2026-09-14"
+  operator: tal
+  robot_serial: karmel-001
+  method: >
+    wheel_radius_m from 5 x 3.000 m straight runs on the lab floor, tape measure, +/- 3 mm;
+    wheel_separation_m from UMBmark (5 CW + 5 CCW 2.0 m squares), lesson 09.05;
+    duty_deadband from a duty ramp at 0.005 steps until the wheels first turned, lesson 08.02.
+  uncertainty:
+    wheel_radius_m: 0.0003       # +/- 0.3 mm -> +/- 0.7 % of distance
+    wheel_separation_m: 0.0015   # +/- 1.5 mm -> +/- 0.75 % of heading
+  notes: >
+    Right motor is measurably weaker than the left; that asymmetry belongs in the controller's
+    feedforward (lesson 08.09), not here, because this file describes geometry.
+
+drive:
+  wheel_radius_m: 0.0446         # measured, not the 45.0 mm nominal from the datasheet
+  wheel_separation_m: 0.2032     # UMBmark effective wheelbase, wider than the mechanical 200 mm
+  duty_deadband: 0.105
