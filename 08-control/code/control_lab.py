@@ -93,8 +93,11 @@ def add_target_args(parser: argparse.ArgumentParser) -> None:
 class Target:
     """Context manager giving a DifferentialBase for the command-line options; always stops the motors."""
 
-    def __init__(self, args: argparse.Namespace, **sim_overrides: Any) -> None:
+    def __init__(self, args: argparse.Namespace, on_the_floor: str | None = None, **sim_overrides: Any) -> None:
+        """``on_the_floor`` describes the space the robot needs (08.10, 08.11): it replaces the
+        wheels-in-the-air confirmation with a clear-lane one. ``None`` = wheels in the air."""
         self.args = args
+        self.on_the_floor = on_the_floor
         self.sim_overrides = sim_overrides
         self.base: Any = None
         self._server: Any = None
@@ -105,7 +108,10 @@ class Target:
             from robotlab.serial_base import SerialBase
 
             if a.port:
-                confirm_wheels_in_the_air(a.yes)
+                if self.on_the_floor:
+                    confirm_floor_space(a.yes, self.on_the_floor)
+                else:
+                    confirm_wheels_in_the_air(a.yes)
                 url = a.port
             else:
                 from robotlab.fake_pico import FakePico, FakePicoServer, default_sim
@@ -131,6 +137,16 @@ def confirm_wheels_in_the_air(yes: bool) -> None:
     print("SAFETY: the wheels will spin. Put the robot on a stand with BOTH wheels off the table,")
     print("        keep a hand on the battery switch. Ctrl-C stops the motors.")
     if not yes and input("Wheels in the air? Type yes: ").strip().lower() != "yes":
+        sys.exit("aborted")
+
+
+def confirm_floor_space(yes: bool, space: str) -> None:
+    """For the lessons that must run ON the floor (08.10, 08.11): confirm the lane instead."""
+    print(f"SAFETY: the robot will DRIVE on the floor. You need {space}: no cables, pets, children,")
+    print("        table edges or stairs in the lane, and a hand on the battery switch.")
+    print("        Ctrl-C stops the commands; the firmware watchdog then brakes within 0.3 s,")
+    print("        which is still about 12 cm of travel at 0.4 m/s.")
+    if not yes and input("Lane clear? Type yes: ").strip().lower() != "yes":
         sys.exit("aborted")
 
 

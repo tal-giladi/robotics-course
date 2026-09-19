@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import time
 from pathlib import Path
 
 import numpy as np
@@ -91,8 +92,11 @@ def report(node: SensorCheck, args: argparse.Namespace) -> int:
     check("stamps increase", all(b > a for a, b in zip(node.stamps, node.stamps[1:])),
           "monotonic" if all(b > a for a, b in zip(node.stamps, node.stamps[1:]))
           else "stamps repeat or go backwards")
-    check("stamp is set", node.stamps[0] > 1e8,
-          f"{node.stamps[0]:.3f} s" + ("" if node.stamps[0] > 1e8 else "  <- zero/unset stamp"))
+    epoch = node.stamps[0] > 1e8      # a wall clock reads ~1.7e9 s; simulation time starts at 0
+    check("stamp is set", node.stamps[0] > 0.0,
+          f"{node.stamps[0]:.3f} s" + ("" if epoch else
+                                       "  <- not a wall clock: simulation time, or an unset stamp"
+                                       if node.stamps[0] > 0 else "  <- zero/unset stamp"))
 
     m = node.msgs[0]
     frame = m.header.frame_id
@@ -195,9 +199,11 @@ def main(argv: list[str] | None = None) -> int:
     args.kind = args.kind or guess_kind(args.topic)
     rclpy.init(args=ros_args or None)
     node = SensorCheck(args)
-    end = node.get_clock().now().nanoseconds * 1e-9 + args.seconds
+    # Wall clock for the window, node clock for the stamps. With use_sim_time the node clock reads
+    # 0 until the first /clock message, so a window measured on it would end before it began.
+    end = time.monotonic() + args.seconds
     try:
-        while rclpy.ok() and node.get_clock().now().nanoseconds * 1e-9 < end:
+        while rclpy.ok() and time.monotonic() < end:
             rclpy.spin_once(node, timeout_sec=0.1)
         code = report(node, args)
     except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):

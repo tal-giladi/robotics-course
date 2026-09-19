@@ -33,15 +33,22 @@ SETTLE_S = 0.8
 DELAY_STEPS = 1  # one 20 ms period of extra lag: the outer loop lives on the Pi, not on the Pico
 
 
+def has_gyro(base) -> bool:
+    """SimBase has one; a real robot only if an IMU is wired to the Pi (lesson 07.05)."""
+    return hasattr(base, "gyro_z")
+
+
 def make_heading(base, cfg, source: str, bias: float = 0.0):
     if source == "gyro":
         return GyroHeading(base.gyro_z, bias)
     return EncoderHeading(cfg.drive.meters_per_tick, cfg.drive.wheel_separation_m)
 
 
-def turn(base, cfg, ex, degrees: float, controller_factory, source: str = "gyro", bias: float = 0.0,
+def turn(base, cfg, ex, degrees: float, controller_factory, source: str | None = None, bias: float = 0.0,
          seconds: float | None = None, start_heading: float = 0.0):
     """Run one turn; returns the log. ``controller_factory(start_heading)`` builds the controller."""
+    if source is None:  # without an IMU the encoders are all there is (and Part 3 shows what that costs)
+        source = "gyro" if has_gyro(base) else "encoder"
     estimator = make_heading(base, cfg, source, bias)
     estimator.theta = start_heading
     controller = controller_factory(start_heading)
@@ -119,10 +126,10 @@ def main(argv: list[str] | None = None) -> dict:
     def profiled(start: float):
         return ex.TurnController(ex.TrapezoidalProfile(radians, V_MAX, A_MAX), start, KP, KI, MAX_YAW)
 
-    with Target(args) as base:
+    with Target(args, on_the_floor="a clear circle at least 1 m across") as base:
         simulation = is_sim(base)
-        bias = measure_gyro_bias(base) if hasattr(base, "gyro_z") else 0.0
-        if hasattr(base, "gyro_z"):
+        bias = measure_gyro_bias(base) if has_gyro(base) else 0.0
+        if has_gyro(base):
             print(f"gyro bias while standing still: {bias:+.5f} rad/s ({math.degrees(bias):+.2f} deg/s)")
 
         def reset() -> None:
@@ -163,7 +170,7 @@ def main(argv: list[str] | None = None) -> dict:
               f"done in {profile.duration:.2f} s")
 
         # --- Part 3 -------------------------------------------------------------------------
-        if hasattr(base, "gyro_z"):
+        if has_gyro(base):
             print("\nPart 3 - where the heading comes from")
             print(f"  {'source':28s} {'believed':>10s} {'true':>10s} {'error':>10s}")
             for name, source, b in (("gyro, bias removed", "gyro", bias), ("gyro, raw", "gyro", 0.0),

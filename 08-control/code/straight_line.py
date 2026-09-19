@@ -146,7 +146,7 @@ def main(argv: list[str] | None = None) -> dict:
     print(f"outer heading loop: kp {args.kp} ki {args.ki} rad/s per rad, correction clamped to "
           f"+-{MAX_YAW_CORRECTION} rad/s")
 
-    with Target(args) as base:
+    with Target(args, on_the_floor=f"a clear lane about {args.metres + 1:.0f} m long and 1 m wide") as base:
         simulation = is_sim(base)
         have_gyro = hasattr(base, "gyro_z") and not args.no_gyro
 
