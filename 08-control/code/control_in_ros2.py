@@ -39,23 +39,23 @@ KP, KI = 0.084, 1.05  # the lambda = 50 ms design of 08.07, on the deadband-comp
 class SpeedLimiter:
     """The velocity and acceleration limiter of ros2_controllers' diff_drive_controller.
 
-    Parameters mirror ``linear.x.*`` / ``angular.z.*`` in controllers.yaml. ``limit`` is called once
-    per controller_manager cycle with the period of that cycle, and clamps the command so that
-    neither the speed nor the change of speed exceeds the configuration.
+    Field names mirror the Jazzy parameters ``linear.x.*`` / ``angular.z.*``; as in the C++ header,
+    ``max_deceleration`` is normally NEGATIVE (m/s^2). ``limit`` is called once per
+    controller_manager cycle with the period of that cycle, and clamps the command so that neither
+    the speed nor its rate of change exceeds the configuration. (Jerk limits exist too; the same
+    idea one derivative further out.)
     """
 
     max_velocity: float
     min_velocity: float
-    max_acceleration: float
-    min_acceleration: float  # the most negative allowed change per second (braking)
+    max_acceleration: float  # >= 0
+    max_deceleration: float  # <= 0
     previous: float = 0.0
 
     def limit(self, command: float, dt: float) -> float:
         wanted = min(max(command, self.min_velocity), self.max_velocity)
         change = wanted - self.previous
-        highest = self.max_acceleration * dt
-        lowest = self.min_acceleration * dt
-        self.previous = self.previous + min(max(change, lowest), highest)
+        self.previous += min(max(change, self.max_deceleration * dt), self.max_acceleration * dt)
         return self.previous
 
     def reset(self, value: float = 0.0) -> None:

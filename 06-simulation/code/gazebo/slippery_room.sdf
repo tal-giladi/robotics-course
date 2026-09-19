@@ -1,15 +1,18 @@
 <?xml version="1.0"?>
 <!--
   slippery_room.sdf — lesson 06.05. A 4 x 4 m room whose FLOOR has almost no friction
-  (mu = 0.05 instead of the 1.0 of karmel_gazebo/worlds/empty.sdf). Everything else is identical,
+  (mu = 0.01 instead of the 1.0 of karmel_gazebo/worlds/empty.sdf). Everything else is identical,
   including the systems karmel needs (Physics, UserCommands, SceneBroadcaster, Sensors, Imu).
 
     ros2 launch karmel_bringup robot.launch.py sim:=true headless:=true enable_camera:=false \
         world:=$PWD/06-simulation/code/gazebo/slippery_room.sdf
 
   The point: the wheels still turn exactly as commanded, so the ENCODERS (and therefore /odom)
-  report the commanded motion — but the robot barely moves. Wheel odometry cannot see slip.
-  Change <mu> below to 1.0 and the same command drives the full distance.
+  report the commanded motion — but the robot travels less. Wheel odometry cannot see slip.
+  Measured with "0.3 m/s for 5 s" (odom always reports ~1.50 m):
+      mu = 0.00   the robot does not move at all   (true x = -0.006 m)
+      mu = 0.01   true x = 1.375 m                 (9 % short)
+      mu = 0.10   true x = 1.498 m                 (no measurable slip)
 -->
 <sdf version="1.9">
   <world name="slippery_room">
@@ -46,7 +49,7 @@
       <link name="link">
         <collision name="collision">
           <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
-          <surface><friction><ode><mu>0.05</mu><mu2>0.05</mu2></ode></friction></surface>
+          <surface><friction><ode><mu>0.01</mu><mu2>0.01</mu2></ode></friction></surface>
         </collision>
         <visual name="visual">
           <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>

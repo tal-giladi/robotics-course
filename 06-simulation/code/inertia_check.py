@@ -97,12 +97,12 @@ def plausibility(report: LinkReport) -> str:
     if report.extent is None or report.mass <= 0 or not math.isfinite(report.gyration_m):
         return "?"
     ratio = report.gyration_m / report.extent
-    # A solid body's radius of gyration is between ~0.4 and ~1.0 times its half-size
-    # (solid sphere 0.63 R, solid cube about the face axis 0.58 a/2, thin ring 1.0 R).
-    if ratio < 0.1:
-        return f"SUSPICIOUS (k/size {ratio:.3f}: far too small — placeholder inertia?)"
-    if ratio > 2.0:
-        return f"SUSPICIOUS (k/size {ratio:.3f}: far too large)"
+    # About its LARGEST principal axis a solid body's radius of gyration is roughly 0.5-1.0 times
+    # its half-size (solid sphere 0.63 R, solid cube 0.58 a/2, thin rod 0.58 L/2, thin hoop 1.0 R).
+    if ratio < 0.35:
+        return f"SUSPICIOUS (k/size {ratio:.2f}: far too small — placeholder inertia?)"
+    if ratio > 1.5:
+        return f"SUSPICIOUS (k/size {ratio:.2f}: far too large for this geometry)"
     return f"ok (k/size {ratio:.2f})"
 
 
