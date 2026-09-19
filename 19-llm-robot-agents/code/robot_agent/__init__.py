@@ -7,4 +7,5 @@ anthropic_llm  Claude adapter (Messages API tool use) (19.03)
 agent_loop     the tool-calling loop with budgets and logging (19.03)
 fsm            hierarchical state machines + the fetch task (19.04)
 bt             the fetch task as a py_trees behavior tree (19.05)
+planning       the plan language, the plan validator and plan -> behavior tree (19.06)
 """

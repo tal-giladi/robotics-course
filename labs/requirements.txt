@@ -7,3 +7,4 @@ pyyaml>=6.0
 pytest>=8.0
 pyserial>=3.5
 opencv-python-headless>=4.9
+py-trees>=2.2
