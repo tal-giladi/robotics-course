@@ -1,0 +1,84 @@
+# ros2_control controllers for the SO-101 — identical for mock, topic (real arm) and Gazebo.
+#
+# Topics and actions this produces (lesson 14.08):
+#   /joint_states                                   <- joint_state_broadcaster
+#   /arm_controller/joint_trajectory                -> JointTrajectory (fire and forget)
+#   /arm_controller/follow_joint_trajectory         -> FollowJointTrajectory action (with feedback,
+#                                                      result and cancel — this is what MoveIt uses)
+#   /arm_controller/controller_state                <- JointTrajectoryControllerState
+#   /gripper_controller/gripper_cmd                 -> control_msgs/GripperCommand action
+#
+# THE LIMITS HERE ARE OPERATING LIMITS, NOT MECHANICAL ONES.
+# The URDF carries what the servo can physically do (1.6 N.m, 5.2 rad/s); this file carries what
+# you have decided to allow. Start low and raise them one at a time (SAFETY.md rule 6, 14.11).
+
+controller_manager:
+  ros__parameters:
+    # 50 Hz. The bus round-trip for six STS3215 servos at 1 Mbps is a few milliseconds; asking
+    # for 100 Hz just means more reads that return the same numbers.
+    update_rate: 50
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    gripper_controller:
+      # Jazzy deprecates position_controllers/GripperActionController in favour of this one.
+      # If your ros2_controllers is older, swap the type back and drop max_velocity.
+      type: parallel_gripper_action_controller/GripperActionController
+
+arm_controller:
+  ros__parameters:
+    joints:
+      - shoulder_pan
+      - shoulder_lift
+      - elbow_flex
+      - wrist_flex
+      - wrist_roll
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+
+    # false: a goal must name every joint. Turning it on is convenient and lets a typo leave a
+    # joint uncommanded, holding a stale position while the others move.
+    allow_partial_joints_goal: false
+    # false: a goal point without positions (velocity/acceleration only) is rejected. Our
+    # trajectories always carry positions.
+    allow_integration_in_goal_trajectories: false
+    # Feed the MEASURED state back into the interpolation, so a trajectory that starts where the
+    # arm is not gets corrected instead of replayed blindly.
+    # (Jazzy deprecates `open_loop_control`; `interpolate_from_desired_state: false` is the
+    # closed-loop behaviour you want here.)
+    interpolate_from_desired_state: false
+
+    constraints:
+      # how late a trajectory may finish before the goal is aborted
+      goal_time: 0.5
+      # "stopped" means below this joint speed [rad/s] at the end
+      stopped_velocity_tolerance: 0.02
+      # per-joint: trajectory = allowed error DURING the motion, goal = allowed error at the END.
+      # 0.05 rad = 2.9 deg during the move: the SO-101's servos lag noticeably under load, and a
+      # tolerance tighter than the lag aborts every trajectory. 0.02 rad = 1.1 deg at the goal.
+      shoulder_pan:   {trajectory: 0.05, goal: 0.02}
+      shoulder_lift:  {trajectory: 0.05, goal: 0.02}
+      elbow_flex:     {trajectory: 0.05, goal: 0.02}
+      wrist_flex:     {trajectory: 0.05, goal: 0.02}
+      wrist_roll:     {trajectory: 0.08, goal: 0.03}
+
+gripper_controller:
+  ros__parameters:
+    joint: gripper
+    state_interfaces: ["position", "velocity"]
+    goal_tolerance: 0.01     # rad — the jaw is "there" within 0.6 deg
+    max_effort: 0.5          # about 30 % of the STS3215's 1.6 N.m stall torque (14.03)
+    max_velocity: 0.5        # rad/s on the jaw joint
+    # Stall detection: a jaw that stops moving while still commanded has GRIPPED SOMETHING.
+    # allow_stalling makes that a successful grasp instead of a failed goal — which is the whole
+    # point of a gripper action, and the check 15.08 uses for "did I actually pick it up?".
+    allow_stalling: true
+    stall_velocity_threshold: 0.01
+    stall_timeout: 0.3

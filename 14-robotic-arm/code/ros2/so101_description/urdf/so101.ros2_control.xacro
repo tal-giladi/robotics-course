@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+  The ros2_control description of the SO-101 (lesson 14.08).
+
+  This is the ONLY place where "simulated arm", "real arm" and "arm in Gazebo" differ. Everything
+  above it — controller_manager, joint_trajectory_controller, joint_state_broadcaster, their YAML,
+  MoveIt, your own code — is identical in all three worlds. That is the whole point of
+  ros2_control, and it is why 14.09 can be done with no arm on the desk.
+
+    hardware:=mock     mock_components/GenericSystem
+                       command interfaces loop straight back into the state interfaces.
+                       No physics, no delay, no failure. Use it to develop and to run CI.
+
+    hardware:=topic    topic_based_ros2_control/TopicBasedSystem
+                       commands are published as sensor_msgs/JointState on joint_commands_topic
+                       and states are read from joint_states_topic. The actual servo driver is
+                       then an ordinary Python node (so101_bringup/joint_bridge.py) that reuses
+                       14.03's servo_tools safety layer. This is the REAL ARM path in this course.
+
+    hardware:=gazebo   gz_ros2_control/GazeboSimSystem — the arm inside Gazebo Harmonic (06.06).
+
+  Interfaces, per joint:
+    command  position [rad]                  (the SO-101's servos are position-controlled)
+    state    position [rad], velocity [rad/s]
+
+  Why not an effort or velocity command interface? The STS3215 has no torque-control mode worth
+  using and no velocity mode you can trust for trajectories; its native command is a goal
+  position plus a speed cap. Declaring interfaces the hardware does not have is how a controller
+  ends up silently doing nothing.
+
+  VERSION-SENSITIVE (verified 2026-09 against ROS 2 Jazzy):
+    apt install ros-jazzy-ros2-control ros-jazzy-ros2-controllers \
+                ros-jazzy-topic-based-ros2-control
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="so101_joint_interfaces" params="name lower upper initial:=0.0">
+    <joint name="${name}">
+      <command_interface name="position">
+        <param name="min">${lower}</param>
+        <param name="max">${upper}</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">${initial}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="so101_ros2_control"
+               params="prefix hardware joint_commands_topic joint_states_topic">
+    <ros2_control name="${prefix}SO101System" type="system">
+      <hardware>
+        <xacro:if value="${hardware == 'mock'}">
+          <plugin>mock_components/GenericSystem</plugin>
+          <!-- integrate the commands so velocity states are non-zero and look plausible -->
+          <param name="calculate_dynamics">true</param>
+        </xacro:if>
+        <xacro:if value="${hardware == 'topic'}">
+          <plugin>topic_based_ros2_control/TopicBasedSystem</plugin>
+          <param name="joint_commands_topic">${joint_commands_topic}</param>
+          <param name="joint_states_topic">${joint_states_topic}</param>
+          <!-- publish a command whenever it differs from the state by more than this [rad].
+               1e-4 rad = 0.006 deg, well under the servo's 0.088 deg resolution. -->
+          <param name="trigger_joint_command_threshold">1e-4</param>
+        </xacro:if>
+        <xacro:if value="${hardware == 'gazebo'}">
+          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </xacro:if>
+      </hardware>
+
+      <xacro:so101_joint_interfaces name="${prefix}shoulder_pan"   lower="-1.91986" upper="1.91986"/>
+      <xacro:so101_joint_interfaces name="${prefix}shoulder_lift"  lower="-1.74533" upper="1.74533"/>
+      <xacro:so101_joint_interfaces name="${prefix}elbow_flex"     lower="-1.69"    upper="1.69"/>
+      <xacro:so101_joint_interfaces name="${prefix}wrist_flex"     lower="-1.65806" upper="1.65806"/>
+      <xacro:so101_joint_interfaces name="${prefix}wrist_roll"     lower="-2.74385" upper="2.84121"/>
+      <!-- the gripper starts half open so nothing is pinched at start-up -->
+      <xacro:so101_joint_interfaces name="${prefix}gripper" lower="-0.174533" upper="1.74533" initial="0.6"/>
+    </ros2_control>
+  </xacro:macro>
+
+</robot>

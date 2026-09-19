@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!--
+  SO-101 follower arm as a xacro URDF, for lessons 14.08-14.11.
+
+  Kinematics (every xyz/rpy/axis/limit below) is copied from
+  14-robotic-arm/code/data/so101_kinematics.yaml, which is itself copied verbatim from
+  TheRobotStudio/SO-ARM100 Simulation/SO101/so101_new_calib.urdf (Apache-2.0).
+  labs/exercises/14.08 checks that this file and that YAML give the same forward kinematics, so
+  they cannot drift apart.
+
+  What is NOT copied from upstream:
+    * visual/collision geometry — the upstream meshes are not vendored here, so every link is a
+      simple box or cylinder sized to enclose the real part. Good enough for RViz, for reach
+      checks and for MoveIt's self-collision matrix; not a pretty picture.
+    * inertias — crude uniform-box values. Enough for RViz and for a kinematic simulation;
+      NOT enough for dynamics or for a Gazebo drop test.
+    * <limit effort> and <limit velocity> — the MECHANICAL limits of an STS3215 at 7.4 V
+      (1.6 N.m stall, ~5.2 rad/s no load; vendor figures, not measured). Your OPERATING limits
+      are much lower and live in so101_bringup/config/controllers.yaml and in MoveIt's
+      joint_limits.yaml — see 14.11.
+
+  Frames: base_link sits on the table under the arm, x forward, z up (REP-103).
+          gripper_frame_link is the tool point between the jaws; its z axis is the approach
+          direction. This is the frame every IK target in module 14 refers to.
+
+  Arguments:
+    hardware   mock | topic | gazebo   which ros2_control system plugin to use
+    prefix     name prefix, for two arms on one robot (leader/follower, or 15.10's mobile base)
+
+  Render and check it:
+    xacro so101.urdf.xacro hardware:=mock > /tmp/so101.urdf && check_urdf /tmp/so101.urdf
+-->
+<robot name="so101" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="hardware" default="mock"/>
+  <xacro:arg name="prefix" default=""/>
+  <xacro:arg name="joint_commands_topic" default="/so101/joint_commands"/>
+  <xacro:arg name="joint_states_topic" default="/so101/driver_joint_states"/>
+
+  <xacro:property name="hw" value="$(arg hardware)"/>
+  <xacro:property name="p" value="$(arg prefix)"/>
+
+  <!-- Crude but honest link sizes (metres). The arm is 3D-printed PLA; masses are estimates. -->
+  <xacro:property name="link_mass" value="0.10"/>
+
+  <material name="so101_grey"><color rgba="0.25 0.27 0.30 1.0"/></material>
+  <material name="so101_orange"><color rgba="0.90 0.45 0.10 1.0"/></material>
+
+  <!-- A box link with a matching uniform-box inertia. -->
+  <xacro:macro name="box_link" params="name sx sy sz mass:=0.10 ox:=0 oy:=0 oz:=0 material:=so101_grey">
+    <link name="${name}">
+      <visual>
+        <origin xyz="${ox} ${oy} ${oz}"/>
+        <geometry><box size="${sx} ${sy} ${sz}"/></geometry>
+        <material name="${material}"/>
+      </visual>
+      <collision>
+        <origin xyz="${ox} ${oy} ${oz}"/>
+        <geometry><box size="${sx} ${sy} ${sz}"/></geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${ox} ${oy} ${oz}"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${mass * (sy*sy + sz*sz) / 12.0}" ixy="0" ixz="0"
+                 iyy="${mass * (sx*sx + sz*sz) / 12.0}" iyz="0"
+                 izz="${mass * (sx*sx + sy*sy) / 12.0}"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <!-- ===================== links ===================== -->
+  <xacro:box_link name="${p}base_link"      sx="0.100" sy="0.090" sz="0.062" oz="0.031" mass="0.25"/>
+  <xacro:box_link name="${p}shoulder_link"  sx="0.055" sy="0.055" sz="0.060"/>
+  <xacro:box_link name="${p}upper_arm_link" sx="0.130" sy="0.045" sz="0.040" ox="-0.058"/>
+  <xacro:box_link name="${p}lower_arm_link" sx="0.150" sy="0.040" sz="0.038" ox="-0.067"/>
+  <xacro:box_link name="${p}wrist_link"     sx="0.045" sy="0.070" sz="0.040" oy="-0.030"/>
+  <xacro:box_link name="${p}gripper_link"   sx="0.040" sy="0.040" sz="0.100" oz="-0.050" material="so101_orange"/>
+  <xacro:box_link name="${p}moving_jaw_so101_v1_link" sx="0.020" sy="0.060" sz="0.020" oy="0.028" material="so101_orange"/>
+  <link name="${p}gripper_frame_link"/>
+
+  <!-- ===================== joints =====================
+       Values below are the upstream URDF's, unrounded. The odd 3.14159 / 1.5708 (rather than
+       pi / pi/2) is deliberate: it is what the published model contains, and keeping it makes
+       this URDF agree with so101_kinematics.yaml to the last digit. -->
+  <joint name="${p}shoulder_pan" type="revolute">
+    <parent link="${p}base_link"/>
+    <child link="${p}shoulder_link"/>
+    <origin xyz="0.0388353 -8.97657e-09 0.0624" rpy="3.14159 4.18253e-17 -3.14159"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.91986" upper="1.91986" effort="1.6" velocity="5.2"/>
+  </joint>
+
+  <joint name="${p}shoulder_lift" type="revolute">
+    <parent link="${p}shoulder_link"/>
+    <child link="${p}upper_arm_link"/>
+    <origin xyz="-0.0303992 -0.0182778 -0.0542" rpy="-1.5708 -1.5708 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.74533" upper="1.74533" effort="1.6" velocity="5.2"/>
+  </joint>
+
+  <joint name="${p}elbow_flex" type="revolute">
+    <parent link="${p}upper_arm_link"/>
+    <child link="${p}lower_arm_link"/>
+    <origin xyz="-0.11257 -0.028 1.73763e-16" rpy="-3.63608e-16 8.74301e-16 1.5708"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.69" upper="1.69" effort="1.6" velocity="5.2"/>
+  </joint>
+
+  <joint name="${p}wrist_flex" type="revolute">
+    <parent link="${p}lower_arm_link"/>
+    <child link="${p}wrist_link"/>
+    <origin xyz="-0.1349 0.0052 3.62355e-17" rpy="4.02456e-15 8.67362e-16 -1.5708"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.65806" upper="1.65806" effort="1.6" velocity="5.2"/>
+  </joint>
+
+  <joint name="${p}wrist_roll" type="revolute">
+    <parent link="${p}wrist_link"/>
+    <child link="${p}gripper_link"/>
+    <origin xyz="5.55112e-17 -0.0611 0.0181" rpy="1.5708 0.0486795 3.14159"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-2.74385" upper="2.84121" effort="1.6" velocity="5.2"/>
+  </joint>
+
+  <!-- The jaw is a BRANCH off gripper_link, not part of the base -> tool chain. -->
+  <joint name="${p}gripper" type="revolute">
+    <parent link="${p}gripper_link"/>
+    <child link="${p}moving_jaw_so101_v1_link"/>
+    <origin xyz="0.0202 0.0188 -0.0234" rpy="1.5708 -5.24284e-08 -1.41553e-15"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.174533" upper="1.74533" effort="1.6" velocity="5.2"/>
+  </joint>
+
+  <!-- The tool point: between the jaws, z along the approach direction. -->
+  <joint name="${p}gripper_frame_joint" type="fixed">
+    <parent link="${p}gripper_link"/>
+    <child link="${p}gripper_frame_link"/>
+    <origin xyz="-0.0079 -0.000218121 -0.0981274" rpy="0 3.14159 0"/>
+  </joint>
+
+  <!-- ===================== ros2_control ===================== -->
+  <xacro:include filename="$(find so101_description)/urdf/so101.ros2_control.xacro"/>
+  <xacro:so101_ros2_control
+      prefix="${p}" hardware="${hw}"
+      joint_commands_topic="$(arg joint_commands_topic)"
+      joint_states_topic="$(arg joint_states_topic)"/>
+
+</robot>
