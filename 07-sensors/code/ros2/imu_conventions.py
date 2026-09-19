@@ -110,19 +110,23 @@ _AXIS = {"x": 0, "y": 1, "z": 2}
 
 
 def axis_remap_matrix(spec: str) -> np.ndarray:
-    """A 3x3 signed permutation matrix from a spec like "x y z", "y -x z" or "-y x z".
+    """A 3x3 signed permutation matrix from a spec like "x y z", "y -x z" or "x -y -z".
 
-    The spec says: sensor axis i, expressed in the robot frame. `"y -x z"` means "the sensor's x
-    axis points along the robot's +y, and the sensor's y axis points along the robot's -x" -- what
-    you get when you bolt the breakout down rotated 90 degrees. Use this only for the rotations
-    that are exact multiples of 90 degrees; anything else belongs in the URDF as a real rotation.
+    Read the spec as three answers to "where does the chip's axis point on the robot?", in the
+    order x, y, z. `"y -x z"` means: the chip's +x points along the robot's +y, the chip's +y
+    points along the robot's -x, the chip's +z points along the robot's +z -- what you get when
+    you bolt the breakout down rotated 90 degrees counter-clockwise.
+
+    The returned matrix takes a vector in the *sensor* frame to the *robot* frame:
+    `v_robot = M @ v_sensor`. Use it only for rotations that are exact multiples of 90 degrees;
+    anything else is a real rotation and belongs in the URDF, not in your driver.
     """
     parts = spec.split()
     if len(parts) != 3:
         raise ValueError(f"axis remap needs three axes, got {spec!r}")
     m = np.zeros((3, 3))
     used = set()
-    for row, token in enumerate(parts):
+    for sensor_axis, token in enumerate(parts):
         sign = -1.0 if token.startswith("-") else 1.0
         name = token.lstrip("+-").lower()
         if name not in _AXIS:
@@ -130,7 +134,7 @@ def axis_remap_matrix(spec: str) -> np.ndarray:
         if name in used:
             raise ValueError(f"axis {name!r} used twice in {spec!r}")
         used.add(name)
-        m[row, _AXIS[name]] = sign
+        m[_AXIS[name], sensor_axis] = sign
     return m
 
 

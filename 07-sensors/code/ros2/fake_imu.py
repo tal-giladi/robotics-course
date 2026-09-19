@@ -168,7 +168,7 @@ def main(argv: list[str] | None = None) -> None:
     node = FakeImu(args)
     try:
         rclpy.spin(node)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass
     finally:
         node.destroy_node()

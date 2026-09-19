@@ -118,21 +118,34 @@ def part_imperfections() -> None:
         error = math.hypot(sim.pose.x, sim.pose.y)
         print(f"{label:32s} {sim.pose.x:10.3f} {sim.pose.y:10.3f} "
               f"{math.degrees(sim.pose.theta):14.2f} {error:10.3f}")
-    print("  (a perfect robot ends where it started: 0.000, 0.000, 0 deg)")
+    print("  'ideal' is not exactly zero: the firmware's velocity loop needs time to reach each")
+    print("  setpoint, so every side and every turn is a little short. That is physics, not a bug.")
 
 
 def part_encoders_lie() -> None:
-    print("\nPart 4 — the encoders cannot see slip")
+    """Three ways a wheel-encoder estimate drifts, and how each one grows with distance."""
+    print("\nPart 4 — what the encoders cannot see (straight line, ideal firmware)")
     ideal = DiffDriveParams.ideal()
-    for label, params in (("no slip", ideal), ("slip_std 0.05", replace(ideal, slip_std=0.05))):
-        sim = DiffDriveSim(World(), params, SensorParams.ideal(), seed=3)
-        sim.set_velocity(5.0, 5.0)
-        sim.advance(9.0, DT)
-        left_ticks, right_ticks = sim.ticks
-        meters_per_tick = 2 * math.pi * params.wheel_radius_m / params.ticks_per_wheel_rev
-        odometry_says = 0.5 * (left_ticks + right_ticks) * meters_per_tick
-        print(f"  {label:14s} encoders say {odometry_says:6.3f} m   truth {sim.pose.x:6.3f} m   "
-              f"error {odometry_says - sim.pose.x:+.3f} m")
+    cases = {
+        "nothing wrong": ideal,
+        "slip_std 0.05 (zero mean)": replace(ideal, slip_std=0.05),
+        "wheels 1.5 % bigger than believed": replace(ideal, wheel_radius_scale_left=1.015,
+                                                     wheel_radius_scale_right=1.015),
+    }
+    meters_per_tick = 2 * math.pi * ideal.wheel_radius_m / ideal.ticks_per_wheel_rev
+    print(f"{'imperfection':36s} {'after 2 m':>22} {'after 10 m':>22}")
+    print(f"{'':36s} {'encoders / truth / err':>22} {'encoders / truth / err':>22}")
+    for label, params in cases.items():
+        cells = []
+        for seconds in (9.0, 45.0):  # 5 rad/s * 0.045 m = 0.225 m/s -> 2 m and 10 m
+            sim = DiffDriveSim(World(), params, SensorParams.ideal(), seed=3)
+            sim.set_velocity(5.0, 5.0)
+            sim.advance(seconds, DT)
+            says = 0.5 * sum(sim.ticks) * meters_per_tick
+            cells.append(f"{says:.2f}/{sim.pose.x:.2f}/{says - sim.pose.x:+.3f}")
+        print(f"{label:36s} {cells[0]:>22} {cells[1]:>22}")
+    print("  Zero-mean slip is a random walk: the error grows with the SQUARE ROOT of distance.")
+    print("  A wrong wheel radius is a scale factor: the error grows in PROPORTION to distance.")
 
 
 # --------------------------------------------------------------------------------- part 5
@@ -141,7 +154,7 @@ def part_limits() -> None:
     world = World.rectangle_room(4.0, 3.0)
     sim = DiffDriveSim(world, DiffDriveParams.ideal(), SensorParams.ideal(), pose=(2.0, 1.5, 0.0), seed=0)
     sim.set_velocity(6.0, 6.0)
-    for _ in range(round(6.0 / DT)):
+    for _ in range(round(15.0 / DT)):
         sim.step(DT)
         if sim.collided:
             break
@@ -149,6 +162,7 @@ def part_limits() -> None:
           f"(the wall is at 4.000, the collision radius is {sim.params.robot_radius_m:.3f} m)")
     print(f"  collided = {sim.collided}; true wheel speed is now {sim.wheel_rad_s[0]:.3f} rad/s")
     print(f"  front range sensor reads {sim.front_range():.3f} m")
+    sim.advance(0.5, DT)  # let the motors wind down against the wall
     ticks_before = sim.ticks
     sim.advance(1.0, DT)
     print(f"  after another second of full throttle the encoders added "
