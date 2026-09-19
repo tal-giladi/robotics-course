@@ -1,0 +1,9 @@
+# Python dependencies for the non-ROS labs (labs/python, labs/exercises, labs/examples).
+# Minimum versions, not exact pins: any newer release should work.
+numpy>=1.26
+scipy>=1.11
+matplotlib>=3.8
+pyyaml>=6.0
+pytest>=8.0
+pyserial>=3.5
+opencv-python-headless>=4.9

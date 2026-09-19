@@ -1,0 +1,11 @@
+# battery_health parameters for launch files (lesson 04.10).
+# "/**/battery_health" = a node named battery_health in ANY namespace, so the same file works
+# for /battery_health, /karmel1/battery_health and /karmel2/battery_health.
+/**/battery_health:
+  ros__parameters:
+    cells_series: 3
+    full_v: 12.6
+    low_threshold_v: 10.5
+    critical_v: 9.9
+    hysteresis_v: 0.2
+    filter_alpha: 0.3

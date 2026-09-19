@@ -1,0 +1,266 @@
+<?xml version="1.0"?>
+<!--
+  karmel — the course robot, as a xacro URDF.
+
+  Every dimension comes from config/robot.yaml, a copy of labs/config/karmel.yaml (the single
+  source of truth). Change the robot there, copy it here (check_config_sync.py tells you when
+  the two differ), and the URDF, the simulation and the controllers follow.
+
+  Frames (REP-103 / REP-105):
+    base_footprint   on the ground, directly below base_link; x forward, y left, z up
+    base_link        midpoint between the drive wheels, at axle height (= wheel radius)
+    left/right_wheel continuous joints, positive rotation drives the robot forward
+    caster_link      passive ball caster (fixed + frictionless in simulation)
+    imu_link         IMU chip frame
+    laser            2D LiDAR scan plane (sensor_msgs/LaserScan frame_id)
+    camera_link      camera body, x forward (REP-103)
+    camera_optical_frame  z forward, x right, y down (REP-103 optical convention; Image frame_id)
+    range_front_link ToF / ultrasonic sensor, x along the beam (sensor_msgs/Range frame_id)
+
+  Arguments:
+    use_sim           true → ros2_control uses gz_ros2_control/GazeboSimSystem and the Gazebo
+                      sensors/plugins are added; false → karmel_hardware/KarmelSystem (serial)
+    controllers_file  controller_manager YAML loaded by gz_ros2_control (sim only)
+    enable_camera     simulate the camera (turn off for faster headless CI runs)
+    serial_device     serial port of the Pico for the real hardware interface
+    robot_config      robot YAML (default: the copy in this package)
+
+  Render it:  xacro karmel.urdf.xacro use_sim:=false > /tmp/karmel.urdf && check_urdf /tmp/karmel.urdf
+-->
+<robot name="karmel" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="use_sim" default="false"/>
+  <xacro:arg name="controllers_file" default=""/>
+  <xacro:arg name="enable_camera" default="true"/>
+  <xacro:arg name="robot_config" default="$(find karmel_description)/config/robot.yaml"/>
+  <xacro:arg name="serial_device" default=""/>
+
+  <xacro:property name="use_sim" value="$(arg use_sim)"/>
+  <xacro:property name="enable_camera" value="$(arg enable_camera)"/>
+  <xacro:property name="controllers_file" value="$(arg controllers_file)"/>
+  <xacro:property name="serial_device_arg" value="$(arg serial_device)"/>
+
+  <!-- ===================== parameters from robot.yaml ===================== -->
+  <xacro:property name="cfg" value="${xacro.load_yaml('$(arg robot_config)')}"/>
+
+  <xacro:property name="total_mass"        value="${cfg['robot']['mass_kg']}"/>
+  <xacro:property name="wheel_radius"      value="${cfg['drive']['wheel_radius_m']}"/>
+  <xacro:property name="wheel_separation"  value="${cfg['drive']['wheel_separation_m']}"/>
+  <xacro:property name="wheel_width"       value="${cfg['drive']['wheel_width_m']}"/>
+  <xacro:property name="max_wheel_speed"   value="${cfg['drive']['max_wheel_speed_rad_s']}"/>
+  <xacro:property name="ticks_per_rev"
+                  value="${int(cfg['drive']['encoder_cpr_motor'] * cfg['drive']['gear_ratio'] * cfg['drive']['quadrature_multiplier'])}"/>
+  <xacro:property name="chassis_length"    value="${cfg['chassis']['length_m']}"/>
+  <xacro:property name="chassis_width"     value="${cfg['chassis']['width_m']}"/>
+  <xacro:property name="chassis_height"    value="${cfg['chassis']['height_m']}"/>
+  <xacro:property name="ground_clearance"  value="${cfg['chassis']['ground_clearance_m']}"/>
+  <xacro:property name="caster_x"          value="${cfg['chassis']['caster_offset_x_m']}"/>
+  <xacro:property name="sensors"           value="${cfg['sensors']}"/>
+  <xacro:property name="serial_cfg"        value="${cfg['serial']}"/>
+
+  <!-- ===================== derived geometry ===================== -->
+  <!-- base_link sits at axle height, so the ground is at z = -wheel_radius in base_link. -->
+  <xacro:property name="chassis_bottom_z" value="${ground_clearance - wheel_radius}"/>
+  <xacro:property name="chassis_center_z" value="${chassis_bottom_z + chassis_height / 2.0}"/>
+  <xacro:property name="chassis_top_z"    value="${chassis_bottom_z + chassis_height}"/>
+  <!-- The body sits between the wheels (5 mm gap each side); chassis.width_m is the overall envelope. -->
+  <xacro:property name="body_width"       value="${min(chassis_width, wheel_separation - wheel_width - 0.010)}"/>
+  <!-- Ball caster touches the ground and is half-sunk into the chassis bottom plate. -->
+  <xacro:property name="caster_radius"    value="${max(0.005, ground_clearance)}"/>
+
+  <!-- mass budget: the sensors and wheels get plausible masses, the chassis gets the rest -->
+  <xacro:property name="wheel_mass"  value="0.08"/>
+  <xacro:property name="caster_mass" value="0.03"/>
+  <xacro:property name="lidar_mass"  value="0.11"/>
+  <xacro:property name="camera_mass" value="0.05"/>
+  <xacro:property name="imu_mass"    value="0.01"/>
+  <xacro:property name="range_mass"  value="0.01"/>
+  <xacro:property name="chassis_mass"
+                  value="${total_mass - 2*wheel_mass - caster_mass - lidar_mass - camera_mass - imu_mass - range_mass}"/>
+
+  <xacro:include filename="$(find karmel_description)/urdf/inertial_macros.xacro"/>
+  <xacro:include filename="$(find karmel_description)/urdf/materials.xacro"/>
+
+  <!-- ===================== base ===================== -->
+  <link name="base_footprint"/>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 ${chassis_center_z}" rpy="0 0 0"/>
+      <geometry><box size="${chassis_length} ${body_width} ${chassis_height}"/></geometry>
+      <material name="karmel_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${chassis_center_z}" rpy="0 0 0"/>
+      <geometry><box size="${chassis_length} ${body_width} ${chassis_height}"/></geometry>
+    </collision>
+    <xacro:box_inertia m="${chassis_mass}" x="${chassis_length}" y="${body_width}" z="${chassis_height}">
+      <origin xyz="0 0 ${chassis_center_z}" rpy="0 0 0"/>
+    </xacro:box_inertia>
+  </link>
+
+  <!-- ===================== drive wheels ===================== -->
+  <!-- The joint frame is rolled -90° about x so the wheel cylinder (z axis) points along +y.
+       Axis 0 0 1 in that frame = +y in base_link: positive velocity drives both wheels forward. -->
+  <xacro:macro name="drive_wheel" params="side y_sign">
+    <joint name="${side}_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${side}_wheel"/>
+      <origin xyz="0 ${y_sign * wheel_separation / 2.0} 0" rpy="${-pi/2} 0 0"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="1.0" velocity="${max_wheel_speed}"/>
+      <dynamics damping="0.001" friction="0.0"/>
+    </joint>
+
+    <link name="${side}_wheel">
+      <visual>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="karmel_black"/>
+      </visual>
+      <collision>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:cylinder_inertia>
+    </link>
+  </xacro:macro>
+
+  <xacro:drive_wheel side="left"  y_sign="1"/>
+  <xacro:drive_wheel side="right" y_sign="-1"/>
+
+  <!-- ===================== caster ===================== -->
+  <joint name="caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_link"/>
+    <origin xyz="${caster_x} 0 ${caster_radius - wheel_radius}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="caster_link">
+    <visual>
+      <geometry><sphere radius="${caster_radius}"/></geometry>
+      <material name="karmel_grey"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="${caster_radius}"/></geometry>
+    </collision>
+    <xacro:sphere_inertia m="${caster_mass}" r="${caster_radius}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:sphere_inertia>
+  </link>
+
+  <!-- ===================== IMU ===================== -->
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="${sensors['imu']['x_m']} ${sensors['imu']['y_m']} ${sensors['imu']['z_m']}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="imu_link">
+    <visual>
+      <geometry><box size="0.02 0.02 0.004"/></geometry>
+      <material name="karmel_green"/>
+    </visual>
+    <xacro:box_inertia m="${imu_mass}" x="0.02" y="0.02" z="0.004">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:box_inertia>
+  </link>
+
+  <!-- ===================== LiDAR ===================== -->
+  <!-- "laser" is the scan plane. The puck body is modelled below it, on a mast down to the chassis. -->
+  <xacro:property name="lidar_radius" value="0.028"/>
+  <xacro:property name="lidar_height" value="0.041"/>
+  <xacro:property name="lidar_z" value="${sensors['lidar']['z_m']}"/>
+  <xacro:property name="mast_height" value="${lidar_z - lidar_height * 0.75 - chassis_top_z}"/>
+
+  <joint name="laser_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="laser"/>
+    <origin xyz="${sensors['lidar']['x_m']} ${sensors['lidar']['y_m']} ${lidar_z}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="laser">
+    <visual>
+      <origin xyz="0 0 ${-lidar_height * 0.25}" rpy="0 0 0"/>
+      <geometry><cylinder radius="${lidar_radius}" length="${lidar_height}"/></geometry>
+      <material name="karmel_black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${-lidar_height * 0.25}" rpy="0 0 0"/>
+      <geometry><cylinder radius="${lidar_radius}" length="${lidar_height}"/></geometry>
+    </collision>
+    <xacro:if value="${mast_height > 0.001}">
+      <visual>
+        <origin xyz="0 0 ${-lidar_height * 0.75 - mast_height / 2.0}" rpy="0 0 0"/>
+        <geometry><box size="0.03 0.03 ${mast_height}"/></geometry>
+        <material name="karmel_grey"/>
+      </visual>
+    </xacro:if>
+    <xacro:cylinder_inertia m="${lidar_mass}" r="${lidar_radius}" h="${lidar_height}">
+      <origin xyz="0 0 ${-lidar_height * 0.25}" rpy="0 0 0"/>
+    </xacro:cylinder_inertia>
+  </link>
+
+  <!-- ===================== camera ===================== -->
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="${sensors['camera']['x_m']} ${sensors['camera']['y_m']} ${sensors['camera']['z_m']}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <origin xyz="-0.01 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.02 0.08 0.03"/></geometry>
+      <material name="karmel_black"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.01 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.02 0.08 0.03"/></geometry>
+    </collision>
+    <xacro:box_inertia m="${camera_mass}" x="0.02" y="0.08" z="0.03">
+      <origin xyz="-0.01 0 0" rpy="0 0 0"/>
+    </xacro:box_inertia>
+  </link>
+
+  <!-- Optical frame: z forward, x right, y down. Images and camera_info use this frame_id. -->
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_optical_frame"/>
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+  </joint>
+  <link name="camera_optical_frame"/>
+
+  <!-- ===================== front range sensor ===================== -->
+  <joint name="range_front_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="range_front_link"/>
+    <origin xyz="${sensors['range_front']['x_m']} ${sensors['range_front']['y_m']} ${sensors['range_front']['z_m']}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="range_front_link">
+    <visual>
+      <origin xyz="-0.004 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.008 0.025 0.013"/></geometry>
+      <material name="karmel_green"/>
+    </visual>
+    <xacro:box_inertia m="${range_mass}" x="0.008" y="0.025" z="0.013">
+      <origin xyz="-0.004 0 0" rpy="0 0 0"/>
+    </xacro:box_inertia>
+  </link>
+
+  <!-- ===================== ros2_control and Gazebo ===================== -->
+  <xacro:include filename="$(find karmel_description)/urdf/karmel.ros2_control.xacro"/>
+  <xacro:karmel_ros2_control use_sim="${use_sim}"/>
+
+  <xacro:if value="${use_sim}">
+    <xacro:include filename="$(find karmel_description)/urdf/karmel.gazebo.xacro"/>
+  </xacro:if>
+
+</robot>

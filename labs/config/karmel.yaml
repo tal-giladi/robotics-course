@@ -1,0 +1,93 @@
+# karmel — the course robot. Single source of physical parameters and wiring.
+# Units: SI (m, rad, s, V, A). Frames: REP-103 (x forward, y left, z up), origin = base_link
+# at the midpoint between the drive wheels, on the ground plane projection (base_footprint) + wheel radius.
+#
+# The values below are the course defaults for the Stage-1 BOM in HARDWARE.md.
+# YOUR robot will differ: measure and calibrate (lessons 01.12, 09.05) and edit this file.
+
+robot:
+  name: karmel
+  mass_kg: 1.6
+
+drive:
+  wheel_radius_m: 0.045         # 90 mm Pololu wheels
+  wheel_separation_m: 0.200     # track width, wheel center to wheel center
+  wheel_width_m: 0.010
+  encoder_cpr_motor: 11         # Yahboom 520 hall encoder: 11 pulses per motor revolution, one channel
+  gear_ratio: 56.0              # 205 RPM version (1:56). The 333 RPM version is 1:30 — set yours
+  quadrature_multiplier: 4      # counting both edges of both channels
+  # ticks per wheel revolution = 11 * 56 * 4 = 2464
+  max_wheel_speed_rad_s: 17.0   # loaded, at ~11 V (no-load 205 RPM = 21.5 rad/s); ≈ 0.77 m/s at the rim
+  motor_time_constant_s: 0.08
+  duty_deadband: 0.12           # below this |duty| the motor does not turn
+  max_linear_speed_m_s: 0.5     # software limit
+  max_angular_speed_rad_s: 2.5  # software limit
+  max_linear_accel_m_s2: 1.0
+
+chassis:
+  length_m: 0.25
+  width_m: 0.20
+  height_m: 0.07
+  ground_clearance_m: 0.012
+  caster_offset_x_m: -0.10      # ball caster behind the wheels
+
+sensors:
+  range_front:
+    type: vl53l1x               # ToF on I2C; a US-100 ultrasonic (3.3 V) also faces forward
+    x_m: 0.125
+    y_m: 0.0
+    z_m: 0.05
+    max_range_m: 4.0
+    fov_rad: 0.47
+  imu:
+    x_m: 0.0
+    y_m: 0.0
+    z_m: 0.04
+  lidar:
+    x_m: 0.0
+    y_m: 0.0
+    z_m: 0.12
+    max_range_m: 12.0
+    samples: 360
+    rate_hz: 10
+  camera:
+    x_m: 0.10
+    y_m: 0.0
+    z_m: 0.10
+    width_px: 640
+    height_px: 480
+    horizontal_fov_rad: 1.20
+
+battery:
+  chemistry: li-ion
+  cells_series: 3               # 3S 18650 pack: 9.0 V empty … 12.6 V full
+  nominal_v: 10.8               # 3 x 3.6 V nominal (Samsung 35E)
+  full_v: 12.6
+  low_warning_v: 10.5
+  cutoff_v: 9.9
+  capacity_ah: 3.5               # Samsung 35E cells
+
+serial:
+  device: /dev/ttyACM0
+  baud: 115200
+  watchdog_ms: 300
+  telemetry_hz: 50
+
+# Raspberry Pi Pico 2 GPIO assignments (see 01.08, 01.09, 01.13, 01.14 wiring tables)
+pins:
+  # 2x Pololu DRV8874 carriers in IN/IN mode (PMODE tied high, nSLEEP tied high)
+  motor_left_in1: 2
+  motor_left_in2: 3
+  motor_right_in1: 6
+  motor_right_in2: 7
+  motor_left_ipropi_adc: 27     # optional current sense (DRV8874 IPROPI)
+  encoder_left_a: 10
+  encoder_left_b: 11
+  encoder_right_a: 12
+  encoder_right_b: 13
+  i2c_sda: 4                    # I2C0 — VL53L1X, INA219 (battery voltage/current)
+  i2c_scl: 5
+  ultrasonic_trig: 14           # US-100 in pulse mode, powered at 3.3 V (an HC-SR04 would need an echo divider)
+  ultrasonic_echo: 15
+  battery_adc: 26               # ADC0 through a 100k/22k divider — alternative to the INA219
+  status_led: 25

@@ -1,0 +1,76 @@
+# Single source of truth for version-sensitive choices.
+# Lessons quote these values; when you upgrade the course, change them here first,
+# then grep for "Version-sensitive" markers (python tools/validate.py --versions lists them).
+# Evidence for every value: references/research/software-versions-2026-09.md
+
+verified: "2026-09-16"
+
+ros2:
+  distro: jazzy               # ROS 2 Jazzy Jalisco, LTS
+  distro_name: Jazzy Jalisco
+  eol: "2029-05"
+  docs: https://docs.ros.org/en/jazzy/
+  install_docs: https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
+  why_not_newer: >
+    Lyrical Luth (May 2026, Ubuntu 26.04) is the next LTS, but on 2026-09-16 navigation2 and
+    nav2_bringup were not yet in the main apt repository and TurtleBot4, micro-ROS setup and
+    Isaac ROS did not support it. Revisit for the next course revision.
+  next_candidate: lyrical
+
+ubuntu:
+  version: "24.04"
+  codename: noble
+  python: "3.12"
+
+gazebo:
+  release: harmonic           # official pairing for Jazzy
+  eol: "2029-05"
+  ros_package: ros-jazzy-ros-gz
+  docs: https://gazebosim.org/docs/harmonic/getstarted/
+  deprecated:
+    - "Gazebo Classic (gazebo11): end-of-life 2025-01-29 — do not use"
+    - "ros_ign_* packages: renamed to ros_gz_*"
+
+packages:                     # apt versions observed on packages.ros.org, noble, 2026-09-16
+  navigation2: "1.3.x"
+  moveit: "2.12.x"
+  ros2_control: "4.48.x"
+  ros2_controllers: "4.42.x"
+  slam_toolbox: "2.8.x"
+  gz_ros2_control: "1.2.x"
+  ros_gz: "1.0.x"
+
+gotchas:
+  - "diff_drive_controller on Jazzy subscribes to geometry_msgs/TwistStamped (~/cmd_vel), not Twist"
+  - "rosbag2 records MCAP by default (since Iron)"
+  - "Nav2 on Jazzy uses BehaviorTree.CPP v4; plugin names use '::'"
+  - "RPi.GPIO does not work on Raspberry Pi 5 — use lgpio / gpiozero with the lgpio pin factory"
+  - "Raspberry Pi Camera Module (libcamera) is not supported by Ubuntu 24.04's stock packages — course uses a USB webcam with v4l2_camera; CSI camera is an optional advanced path"
+  - "PEP 668: pip install into system Python is blocked on Ubuntu 24.04 — use apt/rosdep, or a venv"
+
+raspberry_pi:
+  model: Raspberry Pi 5
+  os: Ubuntu Server 24.04 LTS (arm64)
+  gpio_library: lgpio / gpiozero (lgpio pin factory)
+
+microcontroller:
+  board: Raspberry Pi Pico 2 (RP2350)   # Pico (RP2040) also works
+  firmware: MicroPython
+  docs: https://docs.micropython.org/en/latest/rp2/quickref.html
+
+jetson:
+  board: Jetson Orin Nano Super Developer Kit
+  jetpack: "7.2.x"            # Ubuntu 24.04, CUDA 13; see research notes for flashing caveats
+  isaac_ros: "4.x (targets Jazzy)"
+
+isaac:
+  isaac_sim: "6.1"
+  isaac_lab: "2.3 (3.0 beta)"
+
+python_tools:
+  uv: https://docs.astral.sh/uv/
+  pytorch: https://pytorch.org/get-started/locally/
+
+docker_images:
+  ros_base: "ros:jazzy-ros-base"      # amd64 + arm64
+  desktop: "osrf/ros:jazzy-desktop-full"  # amd64 only

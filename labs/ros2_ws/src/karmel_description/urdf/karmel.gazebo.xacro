@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!--
+  Gazebo (Harmonic) extensions for karmel: contact friction, simulated sensors and the
+  gz_ros2_control system plugin. Only included when use_sim:=true.
+
+  Sensor data flows   gz sensor → gz topic → ros_gz_bridge → ROS topic
+    gpu_lidar  gz "scan"                              → /scan               (LaserScan, frame laser)
+    imu        gz "imu"                               → /imu                (Imu, frame imu_link)
+    camera     gz "camera/image_raw", "camera/camera_info" → /camera/image_raw, /camera/camera_info
+                                                        (frame camera_optical_frame)
+
+  The world must load the gz-sim Sensors system (render engine ogre2) and the Imu system;
+  every world in karmel_gazebo/worlds does.
+
+  <gz_frame_id> sets the header.frame_id of the gz message. Without it Gazebo uses the scoped
+  name ("karmel/base_footprint/lidar"), because fixed joints are merged into the parent link
+  when URDF is converted to SDF — the sensor would then be in a frame TF does not know.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ===================== contact properties ===================== -->
+  <xacro:macro name="wheel_friction" params="link">
+    <gazebo reference="${link}">
+      <mu1>1.2</mu1>
+      <mu2>1.2</mu2>
+      <kp>1.0e6</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>0.1</maxVel>
+    </gazebo>
+  </xacro:macro>
+  <xacro:wheel_friction link="left_wheel"/>
+  <xacro:wheel_friction link="right_wheel"/>
+
+  <!-- The ball caster is a frictionless sphere: it slides instead of rolling. -->
+  <gazebo reference="caster_link">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <kp>1.0e6</kp>
+    <kd>100.0</kd>
+  </gazebo>
+
+  <!-- ===================== 2D LiDAR ===================== -->
+  <xacro:property name="lidar" value="${sensors['lidar']}"/>
+  <gazebo reference="laser">
+    <sensor name="lidar" type="gpu_lidar">
+      <topic>scan</topic>
+      <gz_frame_id>laser</gz_frame_id>
+      <update_rate>${lidar['rate_hz']}</update_rate>
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>${lidar['samples']}</samples>
+            <resolution>1</resolution>
+            <!-- 360 samples over a full turn: stop one step short of +π so the first and last ray differ -->
+            <min_angle>${-pi}</min_angle>
+            <max_angle>${pi - 2.0 * pi / lidar['samples']}</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.05</min>
+          <max>${lidar['max_range_m']}</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>   <!-- ~1 cm, typical for a low-cost triangulation/ToF LiDAR -->
+        </noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
+  <!-- ===================== IMU ===================== -->
+  <gazebo reference="imu_link">
+    <sensor name="imu" type="imu">
+      <topic>imu</topic>
+      <gz_frame_id>imu_link</gz_frame_id>
+      <update_rate>100</update_rate>
+      <always_on>true</always_on>
+      <imu>
+        <angular_velocity>
+          <x><noise type="gaussian"><mean>0.0</mean><stddev>2e-3</stddev><bias_mean>1e-4</bias_mean><bias_stddev>1e-5</bias_stddev></noise></x>
+          <y><noise type="gaussian"><mean>0.0</mean><stddev>2e-3</stddev><bias_mean>1e-4</bias_mean><bias_stddev>1e-5</bias_stddev></noise></y>
+          <z><noise type="gaussian"><mean>0.0</mean><stddev>2e-3</stddev><bias_mean>1e-4</bias_mean><bias_stddev>1e-5</bias_stddev></noise></z>
+        </angular_velocity>
+        <linear_acceleration>
+          <x><noise type="gaussian"><mean>0.0</mean><stddev>1.7e-2</stddev><bias_mean>0.05</bias_mean><bias_stddev>0.005</bias_stddev></noise></x>
+          <y><noise type="gaussian"><mean>0.0</mean><stddev>1.7e-2</stddev><bias_mean>0.05</bias_mean><bias_stddev>0.005</bias_stddev></noise></y>
+          <z><noise type="gaussian"><mean>0.0</mean><stddev>1.7e-2</stddev><bias_mean>0.05</bias_mean><bias_stddev>0.005</bias_stddev></noise></z>
+        </linear_acceleration>
+      </imu>
+    </sensor>
+  </gazebo>
+
+  <!-- ===================== camera ===================== -->
+  <xacro:if value="${enable_camera}">
+    <xacro:property name="cam" value="${sensors['camera']}"/>
+    <gazebo reference="camera_link">
+      <sensor name="camera" type="camera">
+        <topic>camera/image_raw</topic>
+        <gz_frame_id>camera_optical_frame</gz_frame_id>
+        <update_rate>15</update_rate>
+        <always_on>true</always_on>
+        <visualize>false</visualize>
+        <camera>
+          <camera_info_topic>camera/camera_info</camera_info_topic>
+          <horizontal_fov>${cam['horizontal_fov_rad']}</horizontal_fov>
+          <image>
+            <width>${cam['width_px']}</width>
+            <height>${cam['height_px']}</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>30.0</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+      </sensor>
+    </gazebo>
+  </xacro:if>
+
+  <!-- ===================== ros2_control inside Gazebo ===================== -->
+  <!-- Starts a controller_manager inside the gz-sim process, using the <ros2_control> tag above
+       (GazeboSimSystem) and the controller YAML passed as controllers_file. -->
+  <gazebo>
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>${controllers_file}</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>

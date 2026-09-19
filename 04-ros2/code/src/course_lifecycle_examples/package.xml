@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>course_lifecycle_examples</name>
+  <version>0.1.0</version>
+  <description>Lesson 04.15: a lifecycle (managed) battery monitor and a launch file that drives its transitions.</description>
+  <maintainer email="course@example.com">Robotics course</maintainer>
+  <license>Apache-2.0</license>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>lifecycle_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>karmel_tutorial</exec_depend>
+  <exec_depend>karmel_tutorial_interfaces</exec_depend>
+  <exec_depend>course_params_examples</exec_depend>
+
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

@@ -1,0 +1,105 @@
+# SO-101 follower arm — kinematic parameters used by every module-14 script.
+#
+# SOURCE (copied verbatim, nothing rounded):
+#   TheRobotStudio / SO-ARM100, file Simulation/SO101/so101_new_calib.urdf,
+#   commit 385e8d7c68e24945df6c60d9bd68837a4b7411ae (2025-07-02, the last change to that file
+#   as of 2026-09-16), license Apache-2.0:
+#   https://github.com/TheRobotStudio/SO-ARM100/blob/385e8d7c68e24945df6c60d9bd68837a4b7411ae/Simulation/SO101/so101_new_calib.urdf
+#   A copy of that URDF is in data/so101_new_calib.urdf; test_so101_data.py checks that this
+#   file and the URDF give the same forward kinematics.
+#
+# MEANING (URDF semantics, the same as 05-frames-and-transforms/code/frames_math.py):
+#   For joint i:  T_parent_child(q) = T(xyz, rpy) @ Rot(axis, q)
+#   xyz in m, rpy in rad (R = Rz(yaw) Ry(pitch) Rx(roll)), axis is a unit vector in the CHILD frame,
+#   lower/upper are the URDF joint limits in rad. "fixed" joints have no q.
+#   The URDF writes pi as 3.14159 and pi/2 as 1.5708; that ~3e-6 rad rounding is kept on purpose so
+#   the numbers match the published model exactly (it moves the tool by < 0.01 mm).
+#
+# FRAMES: base_link is the arm's base (x forward, z up when the base sits on the table).
+#   The tool frame is gripper_frame_link: a point between the jaws; its z axis is the approach
+#   direction (it points along base +x when all joints are 0).
+#
+# ZERO POSE ("new calibration" convention of this URDF): upper arm roughly vertical, forearm
+#   horizontal, pointing forward — an upside-down "L". It is NOT guaranteed to equal LeRobot's
+#   0 degrees (the middle of each joint's recorded range); 14.03 measures the mapping per joint.
+#
+# DERIVED LENGTHS (computed from the numbers below by arm_kinematics.so101_link_lengths(); for
+# intuition and the planar models of 14.04–14.07 — the 3D code always uses the full transforms):
+#   base_link origin -> shoulder_pan axis:        0.0388 m forward, 0.0624 m up
+#   shoulder_pan -> shoulder_lift axis:           0.0542 m up, 0.0304 m forward
+#   shoulder_lift axis -> elbow_flex axis:        0.1160 m  ("upper arm", 13.97 deg off the link line)
+#   elbow_flex axis -> wrist_flex axis:           0.1350 m  ("forearm")
+#   wrist_flex axis -> tool point:                0.1601 m  (wrist + gripper)
+#   tool point at q = 0 in base_link:             (0.3914, 0.0000, 0.2265) m
+
+model: so101_new_calib
+base_frame: base_link
+tool_frame: gripper_frame_link
+
+joints:
+  - name: shoulder_pan
+    type: revolute
+    parent: base_link
+    child: shoulder_link
+    xyz: [0.0388353, -8.97657e-09, 0.0624]
+    rpy: [3.14159, 4.18253e-17, -3.14159]
+    axis: [0, 0, 1]
+    lower: -1.91986
+    upper: 1.91986
+  - name: shoulder_lift
+    type: revolute
+    parent: shoulder_link
+    child: upper_arm_link
+    xyz: [-0.0303992, -0.0182778, -0.0542]
+    rpy: [-1.5708, -1.5708, 0]
+    axis: [0, 0, 1]
+    lower: -1.74533
+    upper: 1.74533
+  - name: elbow_flex
+    type: revolute
+    parent: upper_arm_link
+    child: lower_arm_link
+    xyz: [-0.11257, -0.028, 1.73763e-16]
+    rpy: [-3.63608e-16, 8.74301e-16, 1.5708]
+    axis: [0, 0, 1]
+    lower: -1.69
+    upper: 1.69
+  - name: wrist_flex
+    type: revolute
+    parent: lower_arm_link
+    child: wrist_link
+    xyz: [-0.1349, 0.0052, 3.62355e-17]
+    rpy: [4.02456e-15, 8.67362e-16, -1.5708]
+    axis: [0, 0, 1]
+    lower: -1.65806
+    upper: 1.65806
+  - name: wrist_roll
+    type: revolute
+    parent: wrist_link
+    child: gripper_link
+    xyz: [5.55112e-17, -0.0611, 0.0181]
+    rpy: [1.5708, 0.0486795, 3.14159]
+    axis: [0, 0, 1]
+    lower: -2.74385
+    upper: 2.84121
+  - name: gripper_frame_joint
+    type: fixed
+    parent: gripper_link
+    child: gripper_frame_link
+    xyz: [-0.0079, -0.000218121, -0.0981274]
+    rpy: [0, 3.14159, 0]
+    axis: [0, 0, 0]
+    lower: 0
+    upper: 0
+
+# The gripper jaw is a branch off gripper_link, not part of the base->tool chain.
+gripper_jaw:
+  name: gripper
+  type: revolute
+  parent: gripper_link
+  child: moving_jaw_so101_v1_link
+  xyz: [0.0202, 0.0188, -0.0234]
+  rpy: [1.5708, -5.24284e-08, -1.41553e-15]
+  axis: [0, 0, 1]
+  lower: -0.174533
+  upper: 1.74533

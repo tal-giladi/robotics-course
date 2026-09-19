@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+"""Generate apartment.sdf — a ~6 x 5 m apartment for mapping and navigation labs.
+
+Walls and furniture are listed as plain data below; edit them and re-run:
+
+    python3 generate_apartment.py > apartment.sdf
+    python3 generate_apartment.py --map ../../karmel_bringup/maps > apartment.sdf   # + ground-truth map
+
+Layout (top view, x to the right, y up, origin in the middle of the apartment):
+
+    y=2.5 +--------------------------+-------------------+
+          |  sofa                    D   wardrobe  bed   |
+          |  coffee table            |                   |
+          |                          +----+   D   +------+  y=0.5
+          |  tv       (robot spawn)  |    fridge         |
+          |                          D       dining  counter
+          |      bookshelf           |       table       |
+    y=-2.5 +-------------------------+-------------------+
+         x=-3                     x=0.5                 x=3
+    living room                    bedroom (top) / kitchen (bottom); D = door
+
+The dining table is a top on four legs: a 2D LiDAR at 16 cm sees only the legs — the classic
+"invisible table" that lesson 12.04 (costmaps) uses to motivate 3D sensing.
+"""
+
+import argparse
+import math
+import os
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+WALL_HEIGHT = 1.0
+WALL_THICKNESS = 0.1
+
+# (name, x_start, y_start, x_end, y_end) — axis-aligned wall segments, centre lines
+WALLS = [
+    ('north', -3.0, 2.5, 3.0, 2.5),
+    ('south', -3.0, -2.5, 3.0, -2.5),
+    ('west', -3.0, -2.5, -3.0, 2.5),
+    ('east', 3.0, -2.5, 3.0, 2.5),
+    # living room | kitchen + bedroom, with two doors (y in [-1.6, -0.8] and [1.2, 2.0])
+    ('mid_1', 0.5, -2.5, 0.5, -1.6),
+    ('mid_2', 0.5, -0.8, 0.5, 1.2),
+    ('mid_3', 0.5, 2.0, 0.5, 2.5),
+    # bedroom | kitchen, door x in [1.4, 2.2]
+    ('bed_1', 0.5, 0.5, 1.4, 0.5),
+    ('bed_2', 2.2, 0.5, 3.0, 0.5),
+]
+
+# (name, x, y, z_bottom, size_x, size_y, size_z, yaw, rgb)
+FURNITURE = [
+    ('sofa', -1.75, 2.05, 0.0, 1.8, 0.7, 0.45, 0.0, (0.35, 0.3, 0.6)),
+    ('coffee_table', -1.75, 1.05, 0.0, 1.0, 0.5, 0.40, 0.0, (0.55, 0.4, 0.25)),
+    ('tv_stand', -2.75, 0.0, 0.0, 0.4, 1.2, 0.50, 0.0, (0.2, 0.2, 0.2)),
+    ('bookshelf', -1.2, -2.3, 0.0, 1.0, 0.3, 1.80, 0.0, (0.6, 0.45, 0.3)),
+    ('armchair', -0.3, 1.9, 0.0, 0.7, 0.7, 0.50, 0.3, (0.6, 0.25, 0.25)),
+    ('bed', 2.5, 1.7, 0.0, 0.9, 1.5, 0.50, 0.0, (0.85, 0.85, 0.95)),
+    ('wardrobe', 1.0, 2.2, 0.0, 0.9, 0.5, 1.90, 0.0, (0.5, 0.35, 0.2)),
+    ('nightstand', 1.85, 2.2, 0.0, 0.4, 0.4, 0.50, 0.0, (0.5, 0.35, 0.2)),
+    ('counter', 2.7, -1.2, 0.0, 0.6, 2.4, 0.90, 0.0, (0.9, 0.9, 0.85)),
+    ('fridge', 0.9, 0.1, 0.0, 0.7, 0.6, 1.80, 0.0, (0.95, 0.95, 0.95)),
+    # open kitchen door leaf, hinged at (0.55, -0.8), swung into the kitchen
+    ('kitchen_door', 0.95, -0.77, 0.0, 0.8, 0.04, 0.95, 0.0, (0.75, 0.6, 0.4)),
+    # dining table: top + 4 legs
+    ('dining_top', 1.6, -1.4, 0.72, 1.0, 0.8, 0.04, 0.0, (0.55, 0.4, 0.25)),
+    ('dining_leg_1', 1.15, -1.05, 0.0, 0.05, 0.05, 0.72, 0.0, (0.3, 0.2, 0.1)),
+    ('dining_leg_2', 2.05, -1.05, 0.0, 0.05, 0.05, 0.72, 0.0, (0.3, 0.2, 0.1)),
+    ('dining_leg_3', 1.15, -1.75, 0.0, 0.05, 0.05, 0.72, 0.0, (0.3, 0.2, 0.1)),
+    ('dining_leg_4', 2.05, -1.75, 0.0, 0.05, 0.05, 0.72, 0.0, (0.3, 0.2, 0.1)),
+    # a plant pot by the living-room window
+    ('plant_pot', 0.1, -2.15, 0.0, 0.3, 0.3, 0.45, 0.0, (0.3, 0.55, 0.3)),
+]
+
+
+def box(name, x, y, z, sx, sy, sz, yaw, rgb):
+    r, g, b = rgb
+    return f'''
+      <collision name="{name}_collision">
+        <pose>{x:.3f} {y:.3f} {z:.3f} 0 0 {yaw:.3f}</pose>
+        <geometry><box><size>{sx:.3f} {sy:.3f} {sz:.3f}</size></box></geometry>
+      </collision>
+      <visual name="{name}_visual">
+        <pose>{x:.3f} {y:.3f} {z:.3f} 0 0 {yaw:.3f}</pose>
+        <geometry><box><size>{sx:.3f} {sy:.3f} {sz:.3f}</size></box></geometry>
+        <material><ambient>{r} {g} {b} 1</ambient><diffuse>{r} {g} {b} 1</diffuse></material>
+      </visual>'''
+
+
+def wall_boxes():
+    """Walls as (name, x, y, z_bottom, size_x, size_y, size_z, yaw)."""
+    for name, x0, y0, x1, y1 in WALLS:
+        length = abs(x1 - x0) + abs(y1 - y0) + WALL_THICKNESS
+        sx, sy = (length, WALL_THICKNESS) if y0 == y1 else (WALL_THICKNESS, length)
+        yield f'wall_{name}', (x0 + x1) / 2, (y0 + y1) / 2, 0.0, sx, sy, WALL_HEIGHT, 0.0
+
+
+def write_sdf(out):
+    walls = [box(n, x, y, z + sz / 2, sx, sy, sz, yaw, (0.93, 0.9, 0.82))
+             for n, x, y, z, sx, sy, sz, yaw in wall_boxes()]
+    furniture = [box(n, x, y, z + sz / 2, sx, sy, sz, yaw, rgb)
+                 for n, x, y, z, sx, sy, sz, yaw, rgb in FURNITURE]
+
+    with open(os.path.join(HERE, 'empty.sdf'), encoding='utf-8') as f:
+        empty = f.read()
+    # Reuse the physics, systems, light and ground plane of empty.sdf.
+    head = ('<?xml version="1.0"?>\n'
+            '<!-- apartment.sdf: GENERATED by generate_apartment.py (edit that script, not this file). -->\n'
+            '<sdf version="1.9">\n  ')
+    body = empty[empty.index('<world name="empty">'):empty.index('  </world>')]
+    body = body.replace('<world name="empty">', '<world name="apartment">')
+    out.write(head + body + f'''
+    <model name="apartment">
+      <static>true</static>
+      <link name="walls">{''.join(walls)}
+      </link>
+      <link name="furniture">{''.join(furniture)}
+      </link>
+    </model>
+  </world>
+</sdf>
+''')
+
+
+def write_map(directory, name='apartment', resolution=0.05, scan_height=0.165, margin=0.3):
+    """Ground-truth occupancy map: everything the LiDAR plane (scan_height above the floor) can hit.
+
+    Same format as nav2_map_server's map_saver (trinary PGM + YAML), with map frame = Gazebo world
+    frame, so a robot spawned at (x, y) starts at map pose (x, y).
+    """
+    boxes = list(wall_boxes()) + [f[:8] for f in FURNITURE]
+    boxes = [b for b in boxes if b[3] <= scan_height <= b[3] + b[6]]   # only what the scan plane cuts
+    x_min, y_min = -3.0 - WALL_THICKNESS / 2 - margin, -2.5 - WALL_THICKNESS / 2 - margin
+    width = int(round((6.0 + WALL_THICKNESS + 2 * margin) / resolution))
+    height = int(round((5.0 + WALL_THICKNESS + 2 * margin) / resolution))
+
+    def occupied(px, py):
+        for _, x, y, _, sx, sy, _, yaw in boxes:
+            dx, dy = px - x, py - y
+            c, s = math.cos(yaw), math.sin(yaw)
+            u, v = c * dx + s * dy, -s * dx + c * dy         # point in the box frame
+            if abs(u) <= sx / 2 + resolution / 2 and abs(v) <= sy / 2 + resolution / 2:
+                return True
+        return False
+
+    pixels = bytearray()
+    for row in range(height):                              # PGM rows go top (max y) to bottom
+        py = y_min + (height - row - 0.5) * resolution
+        for col in range(width):
+            px = x_min + (col + 0.5) * resolution
+            inside = -3.0 < px < 3.0 and -2.5 < py < 2.5
+            pixels.append(0 if occupied(px, py) else (254 if inside else 205))
+    with open(os.path.join(directory, name + '.pgm'), 'wb') as f:
+        f.write(b'P5\n# CREATOR: generate_apartment.py\n%d %d\n255\n' % (width, height) + bytes(pixels))
+    with open(os.path.join(directory, name + '.yaml'), 'w', encoding='utf-8') as f:
+        f.write(f'# Ground-truth map of worlds/apartment.sdf, GENERATED by generate_apartment.py --map\n'
+                f'image: {name}.pgm\nmode: trinary\nresolution: {resolution}\n'
+                f'origin: [{x_min:.3f}, {y_min:.3f}, 0]\nnegate: 0\noccupied_thresh: 0.65\nfree_thresh: 0.25\n')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--map', metavar='DIR', help='also write apartment.pgm/.yaml (ground-truth map) to DIR')
+    args = parser.parse_args()
+    write_sdf(sys.stdout)
+    if args.map:
+        write_map(args.map)
+
+
+if __name__ == '__main__':
+    main()

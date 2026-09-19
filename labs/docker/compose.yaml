@@ -1,0 +1,110 @@
+# karmel dev containers: ROS 2 Jazzy + Gazebo Harmonic. See docker/README.md.
+#
+#   cd labs
+#   docker compose -f docker/compose.yaml build                     # once (~15 min, ~7 GB)
+#   docker compose -f docker/compose.yaml run --rm wslg             # Windows 11 (Docker Desktop, WSL 2)
+#   docker compose -f docker/compose.yaml run --rm linux            # Linux desktop with X11
+#   docker compose -f docker/compose.yaml run --rm ci               # headless: build, test, smoke-test
+#
+# Inside a dev shell the repo layout is mirrored at ~/labs:
+#   ~/labs/ros2_ws/src  <- labs/ros2_ws/src (bind mount: edit on the host, build in the container)
+#   ~/labs/config, ~/labs/python  <- labs/config, labs/python
+#   build/ install/ log/ live in named volumes (fast, and no Linux symlinks on your Windows disk)
+#
+# DDS networking: every ROS 2 node in every container on the same Docker network (and, with host
+# networking, on your LAN) with the same ROS_DOMAIN_ID sees every other one. Pick your own
+# ROS_DOMAIN_ID (0..101) so you don't drive a classmate's robot, or set
+# ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST to stay inside the container.
+
+name: karmel
+
+x-dev: &dev
+  image: karmel-ros:jazzy-deps
+  build:
+    context: ..                 # labs/
+    dockerfile: docker/Dockerfile
+    target: deps
+  working_dir: /home/ros/labs/ros2_ws
+  stdin_open: true
+  tty: true
+  shm_size: 1gb                 # Gazebo and DDS shared memory transport need more than Docker's 64 MB
+  environment: &dev-env
+    ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-0}
+    ROS_AUTOMATIC_DISCOVERY_RANGE: ${ROS_AUTOMATIC_DISCOVERY_RANGE:-SUBNET}
+
+services:
+  # ------------------------------------------------------------------ Windows 11 + Docker Desktop
+  # WSLg's X11/Wayland sockets live in Docker Desktop's VM under /run/desktop/mnt/host/wslg
+  # (tested 2026-09-17 with Docker Desktop 29.7 on Windows 11: RViz opens on the Windows desktop).
+  # If you run Docker Engine *inside* your own WSL 2 Ubuntu instead, use /mnt/wslg (see README).
+  wslg:
+    <<: *dev
+    environment:
+      <<: *dev-env
+      DISPLAY: ":0"
+      WAYLAND_DISPLAY: wayland-0
+      XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
+      PULSE_SERVER: /mnt/wslg/PulseServer
+    volumes:
+      - ../ros2_ws/src:/home/ros/labs/ros2_ws/src
+      - ../ros2_ws/tools:/home/ros/labs/ros2_ws/tools
+      - ../ros2_ws/check_config_sync.py:/home/ros/labs/ros2_ws/check_config_sync.py
+      - ../config:/home/ros/labs/config
+      - ../python:/home/ros/labs/python:ro
+      - ws-build:/home/ros/labs/ros2_ws/build
+      - ws-install:/home/ros/labs/ros2_ws/install
+      - ws-log:/home/ros/labs/ros2_ws/log
+      - /run/desktop/mnt/host/wslg/.X11-unix:/tmp/.X11-unix
+      - /run/desktop/mnt/host/wslg:/mnt/wslg
+    # Host networking on Docker Desktop only reaches the Docker VM, not your LAN; to talk to the
+    # real robot from Windows, run ROS natively in WSL 2 with mirrored networking (README).
+
+  # ------------------------------------------------------------------ Linux desktop (X11)
+  # Run `xhost +local:` on the host once per login so the container may open windows.
+  linux:
+    <<: *dev
+    network_mode: host          # DDS discovery on your LAN: talk to the Raspberry Pi directly
+    ipc: host                   # lets DDS shared-memory transport work with host processes
+    environment:
+      <<: *dev-env
+      DISPLAY: ${DISPLAY:-:0}
+      QT_X11_NO_MITSHM: "1"
+    volumes:
+      - ../ros2_ws/src:/home/ros/labs/ros2_ws/src
+      - ../ros2_ws/tools:/home/ros/labs/ros2_ws/tools
+      - ../ros2_ws/check_config_sync.py:/home/ros/labs/ros2_ws/check_config_sync.py
+      - ../config:/home/ros/labs/config
+      - ../python:/home/ros/labs/python:ro
+      - ws-build:/home/ros/labs/ros2_ws/build
+      - ws-install:/home/ros/labs/ros2_ws/install
+      - ws-log:/home/ros/labs/ros2_ws/log
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    devices:
+      - /dev/dri:/dev/dri       # GPU for Gazebo/RViz (Intel/AMD). NVIDIA: add `gpus: all` instead.
+    # Real hardware from a Linux laptop (Pico over USB): uncomment
+    # group_add: [dialout]
+    # devices: [/dev/dri:/dev/dri, /dev/ttyACM0:/dev/ttyACM0]
+
+  # ------------------------------------------------------------------ headless CI
+  # The workspace is baked into the image (target: final). No display: Gazebo renders the LiDAR
+  # with EGL/llvmpipe (--headless-rendering). Runs colcon test and a 40 s simulation smoke test.
+  ci:
+    image: karmel-ros:jazzy
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: final
+    shm_size: 1gb
+    environment:
+      ROS_DOMAIN_ID: "42"
+      ROS_AUTOMATIC_DISCOVERY_RANGE: LOCALHOST
+    command: >
+      bash -c "colcon test --event-handlers console_direct- --return-code-on-test-failure
+      && colcon test-result --verbose
+      && python3 check_config_sync.py
+      && bash tools/smoke_test.sh"
+
+volumes:
+  ws-build:
+  ws-install:
+  ws-log:

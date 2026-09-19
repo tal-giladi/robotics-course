@@ -1,0 +1,8 @@
+# Change the voltage below which /battery/health reports STATE_LOW (lesson 04.07).
+# Served by karmel_tutorial/battery_health on /battery/set_low_threshold.
+
+float32 low_threshold_v       # requested threshold [V]
+---
+bool accepted                 # false when the value is outside the safe range
+string message                # human-readable reason
+float32 previous_threshold_v  # threshold before this call [V]

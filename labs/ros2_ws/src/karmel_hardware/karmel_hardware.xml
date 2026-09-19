@@ -1,0 +1,10 @@
+<library path="karmel_hardware">
+  <class name="karmel_hardware/KarmelSystem"
+         type="karmel_hardware::KarmelSystem"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      karmel's differential base over protocol v1 (USB serial to the Raspberry Pi Pico):
+      wheel velocity commands, wheel position/velocity states.
+    </description>
+  </class>
+</library>

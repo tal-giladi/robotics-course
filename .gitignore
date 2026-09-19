@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ROS 2 / colcon
+labs/ros2_ws/build/
+labs/ros2_ws/install/
+labs/ros2_ws/log/
+
+# Robot data: keep bags, datasets, models and videos out of Git (use Git LFS or external storage)
+*.db3
+*.mcap
+rosbag2_*/
+*.bag
+*.pt
+*.pth
+*.onnx
+*.engine
+*.safetensors
+datasets/
+outputs/
+wandb/
+
+# Project evidence: small files OK, large media ignored
+projects/evidence/**/*.mp4
+projects/evidence/**/*.mov
+projects/evidence/**/*.bag
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Generated plots from examples
+*.png.tmp
+sim_quickstart.png

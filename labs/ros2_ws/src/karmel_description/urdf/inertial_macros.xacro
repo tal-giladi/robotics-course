@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+  Inertia macros for simple solids (solid, uniform density), about the centre of mass.
+  Physics engines need a plausible inertia tensor for every link that has mass; wrong or
+  zero inertias are the #1 cause of robots that jitter, sink or explode in Gazebo.
+
+    box      (x, y, z edges):      Ixx = m/12 (y² + z²)   Iyy = m/12 (x² + z²)   Izz = m/12 (x² + y²)
+    cylinder (axis along z):        Ixx = Iyy = m/12 (3r² + h²)                   Izz = m r² / 2
+    sphere:                         Ixx = Iyy = Izz = 2/5 m r²
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="box_inertia" params="m x y z *origin">
+    <inertial>
+      <xacro:insert_block name="origin"/>
+      <mass value="${m}"/>
+      <inertia ixx="${m / 12.0 * (y*y + z*z)}" ixy="0.0" ixz="0.0"
+               iyy="${m / 12.0 * (x*x + z*z)}" iyz="0.0"
+               izz="${m / 12.0 * (x*x + y*y)}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="cylinder_inertia" params="m r h *origin">
+    <inertial>
+      <xacro:insert_block name="origin"/>
+      <mass value="${m}"/>
+      <inertia ixx="${m / 12.0 * (3*r*r + h*h)}" ixy="0.0" ixz="0.0"
+               iyy="${m / 12.0 * (3*r*r + h*h)}" iyz="0.0"
+               izz="${m / 2.0 * r*r}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="sphere_inertia" params="m r *origin">
+    <inertial>
+      <xacro:insert_block name="origin"/>
+      <mass value="${m}"/>
+      <inertia ixx="${2.0 / 5.0 * m * r*r}" ixy="0.0" ixz="0.0"
+               iyy="${2.0 / 5.0 * m * r*r}" iyz="0.0"
+               izz="${2.0 / 5.0 * m * r*r}"/>
+    </inertial>
+  </xacro:macro>
+
+</robot>

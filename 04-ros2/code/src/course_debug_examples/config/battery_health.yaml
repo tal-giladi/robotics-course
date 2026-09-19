@@ -1,0 +1,6 @@
+# Parameters for the battery system in broken_battery_system.launch.py (lesson 04.13).
+# Intent: warn early (11.0 V) because this robot carries a heavy arm.
+battery_health_params:
+  ros__parameters:
+    low_threshold_v: 11.0
+    critical_v: 10.2

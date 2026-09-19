@@ -1,0 +1,11 @@
+# Bench-test profile: warn early so you see LOW within a minute of battery_sim's default drain.
+# "/**" matches every node in every namespace — handy for settings shared by the whole system.
+/**:
+  ros__parameters:
+    use_sim_time: false
+
+battery_health:
+  ros__parameters:
+    low_threshold_v: 12.0
+    critical_v: 11.0
+    filter_alpha: 0.5

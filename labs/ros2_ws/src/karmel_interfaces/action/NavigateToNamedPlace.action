@@ -1,0 +1,29 @@
+# Drive to a place from the semantic map ("kitchen", "charging_dock", "sofa").
+# A thin skill wrapper around Nav2 NavigateToPose that an LLM can call by name.
+
+# Goal
+string place_name
+float32 timeout_s              # 0 = no timeout
+bool allow_replanning          # false: fail instead of taking a very different route
+---
+# Result
+uint8 SUCCEEDED=0
+uint8 UNKNOWN_PLACE=1
+uint8 NO_PATH=2
+uint8 TIMEOUT=3
+uint8 CANCELED=4
+uint8 BLOCKED=5
+uint8 FAILED=6
+bool success
+uint8 error_code
+string message                 # short explanation suitable to show to the LLM / user
+geometry_msgs/PoseStamped final_pose
+float32 distance_to_place_m    # remaining distance when the action ended
+float32 elapsed_s
+---
+# Feedback
+string state                   # "planning" | "driving" | "recovering" | "arrived"
+geometry_msgs/PoseStamped current_pose
+float32 distance_remaining_m
+float32 estimated_time_remaining_s
+uint16 number_of_recoveries

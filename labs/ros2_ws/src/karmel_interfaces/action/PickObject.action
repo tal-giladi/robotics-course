@@ -1,0 +1,26 @@
+# Pick up an object with the arm. The skill looks the object up (or uses the given pose),
+# approaches, grasps, lifts and verifies the grasp.
+
+# Goal
+string label                   # e.g. "red cube"; used when object_id is empty
+string object_id               # tracked object id from DetectedObject (preferred when known)
+geometry_msgs/PoseStamped object_pose   # optional hint; ignored if header.frame_id is empty
+float32 timeout_s              # 0 = no timeout
+---
+# Result
+uint8 SUCCEEDED=0
+uint8 OBJECT_NOT_FOUND=1
+uint8 OUT_OF_REACH=2
+uint8 PLANNING_FAILED=3
+uint8 GRASP_FAILED=4
+uint8 TIMEOUT=5
+uint8 CANCELED=6
+uint8 FAILED=7
+bool success
+uint8 error_code
+string message
+string picked_object_id
+---
+# Feedback
+string stage                   # "locating" | "approaching" | "grasping" | "lifting" | "verifying"
+float32 progress               # 0..1 over the whole pick

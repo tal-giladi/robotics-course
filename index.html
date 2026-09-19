@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Practical Robotics — from software engineer to autonomous AI robot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta name="description" content="A hands-on robotics course: build, program and extend a real robot — ROS 2, simulation, control, SLAM, navigation, vision, a robotic arm, embodied AI and LLM agents.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css">
+  <style>
+    :root { --theme-color: #c2410c; }
+    .sidebar { padding-top: 20px; }
+    .sidebar > h1 { margin: 0 20px 10px; font-size: 1.1em; }
+    .markdown-section { max-width: 920px; }
+    .markdown-section table { display: table; width: 100%; }
+    .markdown-section details { margin: .4em 0 .8em; }
+    .markdown-section summary { cursor: pointer; font-weight: 600; }
+    .mermaid svg { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: 'Practical Robotics',
+      repo: 'https://github.com/tal-giladi/robotics-course',
+      loadSidebar: true,
+      subMaxLevel: 0,
+      auto2top: true,
+      maxLevel: 4,
+      relativePath: true,
+      alias: { '/.*/_sidebar.md': '/_sidebar.md' },
+      search: { placeholder: 'Search the course...', noData: 'No results.', depth: 3,
+                paths: 'auto' },
+      copyCode: { buttonText: 'Copy', errorText: 'Error', successText: 'Copied' },
+      'flexible-alerts': {
+        style: 'flat',
+        note: { label: 'Note' }, tip: { label: 'Tip' }, important: { label: 'Important' },
+        warning: { label: 'Warning' }, caution: { label: 'Caution' }
+      },
+      markdown: {
+        renderer: {
+          code: function (code, lang) {
+            if (lang === 'mermaid') {
+              return '<div class="mermaid">' + code.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+            }
+            return this.origin.code.apply(this, arguments);
+          }
+        }
+      },
+      plugins: [
+        function (hook) {
+          hook.doneEach(function () {
+            if (window.mermaid) {
+              window.mermaid.run({ querySelector: '.markdown-section .mermaid' });
+            }
+          });
+        }
+      ]
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' });</script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-plugin-flexible-alerts"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-cpp.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-csharp.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-docker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-cmake.min.js"></script>
+</body>
+</html>

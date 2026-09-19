@@ -1,0 +1,2858 @@
+# ============================================================================
+# SINGLE SOURCE OF TRUTH for the course structure and dependency graph.
+#
+#   * Every lesson, foundation lesson and project is declared here.
+#   * `tools/build.py` turns this into curriculum/graph.json (read by course.py),
+#     the "At a glance" header of every lesson, _sidebar.md and COURSE_MAP tables.
+#   * `tools/validate.py` fails if a file is missing, a prerequisite points
+#     nowhere, or the graph has a cycle.
+#
+# Field reference (see MAINTAINING.md for the full schema):
+#   id          canonical id. Main path "NN.MM", foundations "FM.05", projects "P04".
+#   slug        file name part: <module dir>/<id>-<slug>.md
+#   difficulty  beginner | intermediate | advanced
+#   time        estimated minutes including exercises (not optional challenges)
+#   requires    HARD prerequisites (you will be lost without them)
+#   optional    SOFT prerequisites: foundation lessons that help if the topic is new
+#   hardware    hardware catalog ids (see `hardware:` at the bottom). [] = none
+#   software    what must be installed
+#   teaches     concepts this lesson owns; `course.py learn <concept>` searches these
+#   skip_if     one sentence: who can safely skip it
+#   version_sensitive  true when instructions depend on fast-moving versions
+# ============================================================================
+
+course:
+  title: "Practical Robotics: From Software Engineer to Autonomous AI Robot"
+  robot_name: karmel
+  created: "2026-09-16"
+
+tracks:
+  main:
+    title: Main practical path
+    description: Build, program and extend a real robot. Do these in order.
+  foundations:
+    title: Optional foundations
+    description: Learn a prerequisite exactly when you need it. Skip what you know.
+  projects:
+    title: Projects
+    description: Milestones that prove you can do it, not just that you read it.
+
+modules:
+
+# ---------------------------------------------------------------------------
+- id: "00"
+  dir: 00-orientation
+  track: main
+  title: Orientation — what robotics actually is
+  summary: The vocabulary and the mental map of the whole robotics stack, plus how to study this course with an AI teacher.
+  lessons:
+  - id: "00.01"
+    slug: what-is-a-robot
+    title: What is a robot? The sense–think–act loop
+    difficulty: beginner
+    time: 30
+    requires: []
+    optional: []
+    hardware: []
+    software: []
+    teaches: [robot, sense-think-act, autonomy, embodiment]
+    skip_if: You can explain why a robot is a closed loop between software and physics, not a program with motors attached.
+  - id: "00.02"
+    slug: the-robotics-stack
+    title: The robotics stack from AI down to motors
+    difficulty: beginner
+    time: 45
+    requires: ["00.01"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [robotics-stack, perception, planning, control, localization, middleware]
+    skip_if: You can draw the layers from an LLM planner down to a PWM signal and say what runs at which rate.
+  - id: "00.03"
+    slug: actuators-and-sensors-field-guide
+    title: "Field guide: motors, servos, encoders, IMUs, cameras, LiDAR, ToF, ultrasonic"
+    difficulty: beginner
+    time: 45
+    requires: ["00.02"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [actuator, sensor, motor, servo, encoder, imu, camera, lidar, tof, ultrasonic, motor-controller, battery]
+    skip_if: You know what each of these parts measures or moves and roughly what it costs.
+  - id: "00.04"
+    slug: robot-computers
+    title: "Robot computers: microcontrollers, single-board computers and GPUs"
+    difficulty: beginner
+    time: 35
+    requires: ["00.03"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [microcontroller, sbc, embedded-computer, real-time, edge-gpu]
+    skip_if: You can explain why a robot typically has both a Raspberry Pi and a microcontroller.
+  - id: "00.05"
+    slug: ros2-in-one-page
+    title: ROS 2 and robot middleware in one page
+    difficulty: beginner
+    time: 30
+    requires: ["00.02"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [ros2-overview, robot-middleware]
+    skip_if: You have used ROS or ROS 2 before.
+  - id: "00.06"
+    slug: safety-mindset
+    title: The safety mindset for home robotics
+    difficulty: beginner
+    time: 30
+    requires: ["00.03"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [robot-safety-culture, emergency-stop, safe-testing]
+    skip_if: Never. Read it even if you are experienced; it is short.
+  - id: "00.07"
+    slug: how-to-use-this-course
+    title: How to study this course with an AI teacher and the progress tool
+    difficulty: beginner
+    time: 25
+    requires: []
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [course-tool, learning-strategy]
+    skip_if: Never — it explains course.py and how optional tracks work.
+
+# ---------------------------------------------------------------------------
+- id: "01"
+  dir: 01-first-robot
+  track: main
+  title: Your first physical robot
+  summary: Buy, assemble, power and program a small differential-drive robot — motors, encoders, distance sensors and battery monitoring.
+  lessons:
+  - id: "01.01"
+    slug: plan-the-build
+    title: Plan the build — the architecture of your first robot
+    difficulty: beginner
+    time: 40
+    requires: ["00.04"]
+    optional: ["FE.01"]
+    hardware: []
+    software: []
+    teaches: [robot-architecture, differential-drive-intro, pi-plus-mcu-architecture]
+    skip_if: You already own a working differential-drive robot with encoders and a companion computer.
+  - id: "01.02"
+    slug: buying-hardware-in-israel
+    title: "Stage 1 shopping list: buying the parts in Israel"
+    difficulty: beginner
+    time: 45
+    requires: ["01.01"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [bom, sourcing-israel, import-rules]
+    skip_if: You have all Stage-1 hardware in hand.
+    version_sensitive: true
+  - id: "01.03"
+    slug: workbench-and-tools
+    title: "Your workbench: tools, multimeter and first soldering"
+    difficulty: beginner
+    time: 60
+    requires: ["01.02"]
+    optional: ["FE.03", "FE.17"]
+    hardware: [tools]
+    software: []
+    teaches: [workbench-setup, continuity-test, basic-soldering]
+    skip_if: You can measure voltage and continuity and solder header pins cleanly.
+  - id: "01.04"
+    slug: raspberry-pi-setup
+    title: Set up the Raspberry Pi 5 headless (OS, SSH, updates)
+    difficulty: beginner
+    time: 60
+    requires: ["01.02"]
+    optional: ["FL.03", "FL.08"]
+    hardware: [robot-base]
+    software: [ubuntu, ssh]
+    teaches: [pi-setup, headless-ssh, hostname-mdns]
+    skip_if: You can SSH into a Pi 5 running the course's recommended Ubuntu release.
+    version_sensitive: true
+  - id: "01.05"
+    slug: pico-microcontroller-setup
+    title: Set up the Pico microcontroller and talk to it over USB
+    difficulty: beginner
+    time: 45
+    requires: ["01.04"]
+    optional: ["FC.01", "FC.02"]
+    hardware: [robot-base]
+    software: [micropython, mpremote]
+    teaches: [micropython-flash, repl, usb-serial]
+    skip_if: You can flash MicroPython to a Pico and run a script on it from the Pi.
+    version_sensitive: true
+  - id: "01.06"
+    slug: mechanical-assembly
+    title: Mechanical assembly — chassis, motors, wheels, caster
+    difficulty: beginner
+    time: 90
+    requires: ["01.03"]
+    optional: ["FP.04"]
+    hardware: [robot-base, tools]
+    software: []
+    teaches: [chassis-assembly, motor-mounting, cable-routing-basics]
+    skip_if: Your chassis is assembled with motors mounted and wheels aligned.
+  - id: "01.07"
+    slug: power-system
+    title: Power it safely — battery, fuse, switch, buck converter, common ground
+    difficulty: beginner
+    time: 90
+    requires: ["01.06"]
+    optional: ["FE.13", "FE.14", "FE.15", "FE.16"]
+    hardware: [robot-base, tools]
+    software: []
+    teaches: [power-distribution, fuse, buck-converter, common-ground, battery-safety-practice]
+    skip_if: Never skip the safety checks, even if you have built power systems before.
+  - id: "01.08"
+    slug: first-motor-spin
+    title: Wire the motor driver and spin a motor (PWM and direction)
+    difficulty: beginner
+    time: 75
+    requires: ["01.05", "01.07"]
+    optional: ["FE.07", "FE.10", "FE.12"]
+    hardware: [robot-base]
+    software: [micropython]
+    teaches: [motor-driver-wiring, pwm-motor-speed, motor-direction, deadband]
+    skip_if: You can make both motors spin both directions at a commanded duty cycle.
+  - id: "01.09"
+    slug: reading-encoders
+    title: Read the wheel encoders — ticks, direction, counts per revolution
+    difficulty: beginner
+    time: 75
+    requires: ["01.08"]
+    optional: ["FC.05", "FE.06"]
+    hardware: [robot-base]
+    software: [micropython]
+    teaches: [quadrature-encoder, ticks-per-revolution, encoder-interrupts, pio-counting]
+    skip_if: You can report signed tick counts for both wheels reliably at full speed.
+  - id: "01.10"
+    slug: pi-pico-protocol
+    title: Design the Pi ↔ Pico serial protocol (with a watchdog)
+    difficulty: intermediate
+    time: 90
+    requires: ["01.09"]
+    optional: ["FE.09", "FPY.01"]
+    hardware: [robot-base]
+    software: [python, pyserial, micropython]
+    teaches: [serial-protocol-design, framing, checksum, command-watchdog]
+    skip_if: You already have a robust, versioned command/telemetry link with a motor-stop watchdog.
+  - id: "01.11"
+    slug: drive-and-rotate
+    title: Drive forward, backward and rotate in place (open loop)
+    difficulty: beginner
+    time: 60
+    requires: ["01.10"]
+    optional: ["FP.01"]
+    hardware: [robot-base]
+    software: [python]
+    teaches: [open-loop-driving, differential-steering, calibration-by-measurement]
+    skip_if: Your robot drives and turns on command from Python on the Pi.
+  - id: "01.12"
+    slug: encoder-distance-and-square
+    title: Use encoders to drive exact distances and angles — drive a square
+    difficulty: intermediate
+    time: 90
+    requires: ["01.11"]
+    optional: ["FM.01", "FM.02", "FM.03"]
+    hardware: [robot-base]
+    software: [python]
+    teaches: [ticks-to-distance, wheel-circumference, encoder-turning, drive-square]
+    skip_if: Your robot drives a 1 m square using encoder feedback and returns near its start.
+  - id: "01.13"
+    slug: distance-sensors-stop
+    title: Ultrasonic and ToF sensors — stop before hitting things
+    difficulty: beginner
+    time: 75
+    requires: ["01.11"]
+    optional: ["FE.09", "FE.05"]
+    hardware: [robot-base]
+    software: [python, micropython]
+    teaches: [hc-sr04-wiring, level-shifting-practice, vl53l1x-i2c, reactive-stop]
+    skip_if: Your robot reliably stops before an obstacle using a distance sensor.
+  - id: "01.14"
+    slug: battery-monitoring
+    title: Measure and report battery state; low-battery shutdown
+    difficulty: beginner
+    time: 60
+    requires: ["01.10"]
+    optional: ["FE.08", "FE.02"]
+    hardware: [robot-base]
+    software: [python, micropython]
+    teaches: [voltage-divider-adc, ina219-ina226, state-of-charge-estimate, low-voltage-cutoff]
+    skip_if: Your robot reports battery voltage and shuts down safely at a threshold.
+  - id: "01.15"
+    slug: teleop-from-laptop
+    title: Drive it from your laptop — keyboard teleop over the network
+    difficulty: intermediate
+    time: 60
+    requires: ["01.11"]
+    optional: ["FL.09"]
+    hardware: [robot-base]
+    software: [python]
+    teaches: [teleop, network-control-loop, deadman-switch]
+    skip_if: You can drive the robot remotely and it stops when the connection drops.
+
+# ---------------------------------------------------------------------------
+- id: "02"
+  dir: 02-robot-electronics
+  track: main
+  title: Robot electronics in practice
+  summary: From a breadboard that works to a robot that keeps working — power budgets, drivers, buses, noise, wiring and systematic electrical debugging.
+  lessons:
+  - id: "02.01"
+    slug: datasheets-and-pinouts
+    title: Reading datasheets and pinouts without drowning
+    difficulty: beginner
+    time: 45
+    requires: ["01.08"]
+    optional: ["FE.01"]
+    hardware: []
+    software: []
+    teaches: [datasheet-reading, absolute-maximum-ratings, pinout]
+    skip_if: You routinely extract absolute max ratings, logic levels and timing from datasheets.
+  - id: "02.02"
+    slug: power-budget
+    title: Power budgets and power architecture (why the Pi reboots when motors start)
+    difficulty: intermediate
+    time: 60
+    requires: ["01.07", "02.01"]
+    optional: ["FE.15", "FP.05"]
+    hardware: [robot-base]
+    software: []
+    teaches: [power-budget, brownout, stall-current, battery-runtime, separate-rails]
+    skip_if: You can compute worst-case current per rail and runtime for your robot.
+  - id: "02.03"
+    slug: motor-drivers-in-depth
+    title: Motor drivers in depth — H-bridges, PWM frequency, current, braking
+    difficulty: intermediate
+    time: 60
+    requires: ["01.08", "02.01"]
+    optional: ["FE.12", "FE.18"]
+    hardware: [robot-base]
+    software: [micropython]
+    teaches: [h-bridge, pwm-frequency, brake-vs-coast, back-emf, current-limits]
+    skip_if: You can choose a motor driver for a given motor's stall current and explain decay modes.
+  - id: "02.04"
+    slug: buses-i2c-spi-uart
+    title: "Buses in practice: I²C scanning, SPI, UART"
+    difficulty: intermediate
+    time: 75
+    requires: ["01.13"]
+    optional: ["FE.09", "FE.06"]
+    hardware: [robot-base]
+    software: [python, micropython]
+    teaches: [i2c-scan, i2c-addresses, pull-ups-practice, spi-practice, uart-practice]
+    skip_if: You have debugged an I²C bus with a scan and know how to pick pull-up values.
+  - id: "02.05"
+    slug: logic-levels-and-protection
+    title: Logic levels, level shifting and protecting GPIO pins
+    difficulty: beginner
+    time: 45
+    requires: ["02.04"]
+    optional: ["FE.05"]
+    hardware: [robot-base]
+    software: []
+    teaches: [logic-levels, level-shifter, series-resistor-protection, 5v-tolerance]
+    skip_if: You never connect a 5 V signal to a 3.3 V pin and know why.
+  - id: "02.06"
+    slug: noise-grounding-emi
+    title: Noise, grounding, decoupling and motor EMI
+    difficulty: intermediate
+    time: 60
+    requires: ["02.03"]
+    optional: ["FE.16", "FE.18"]
+    hardware: [robot-base]
+    software: []
+    teaches: [ground-loops, decoupling-capacitors, motor-noise-suppression, star-ground]
+    skip_if: You can explain and fix sensor glitches that happen only when motors run.
+  - id: "02.07"
+    slug: wiring-harness
+    title: Connectors, crimping and a wiring harness that survives vibration
+    difficulty: beginner
+    time: 60
+    requires: ["01.07"]
+    optional: ["FE.04"]
+    hardware: [robot-base, tools]
+    software: []
+    teaches: [jst-xh, xt30-xt60, crimping, strain-relief, wire-gauge]
+    skip_if: Your robot's wiring uses keyed connectors with strain relief and correct gauges.
+  - id: "02.08"
+    slug: from-breadboard-to-perfboard
+    title: From breadboard to a soldered robot board
+    difficulty: intermediate
+    time: 120
+    requires: ["02.07", "02.06"]
+    optional: ["FE.17"]
+    hardware: [robot-base, tools]
+    software: []
+    teaches: [perfboard-layout, soldered-power-board, design-for-debug]
+    skip_if: Your electronics are already soldered and documented.
+  - id: "02.09"
+    slug: electrical-debugging-method
+    title: "Systematic electrical debugging: the motor doesn't move"
+    difficulty: intermediate
+    time: 60
+    requires: ["02.03", "02.05"]
+    optional: ["FE.03"]
+    hardware: [robot-base, tools]
+    software: []
+    teaches: [debugging-by-bisection, measure-dont-guess, fault-tree]
+    skip_if: You debug hardware by measuring from power source to load, not by swapping parts at random.
+  - id: "02.10"
+    slug: can-bus-and-smart-actuators
+    title: CAN bus and smart actuators — when bigger robots need them
+    difficulty: intermediate
+    time: 40
+    requires: ["02.04"]
+    optional: ["FE.19"]
+    hardware: []
+    software: []
+    teaches: [can-bus-practice, smart-servo-buses, rs485]
+    skip_if: You know when a robot should use CAN or RS-485 instead of I²C or UART.
+
+# ---------------------------------------------------------------------------
+- id: "03"
+  dir: 03-robot-software
+  track: main
+  title: Software engineering for robots
+  summary: Python ecosystem, serial links, concurrency, hardware abstraction, config, logging, testing, C++ and networking — robotics software written professionally.
+  lessons:
+  - id: "03.01"
+    slug: python-robotics-ecosystem
+    title: The Python robotics ecosystem (a map for C# developers)
+    difficulty: beginner
+    time: 40
+    requires: ["01.11"]
+    optional: ["FPY.01"]
+    hardware: []
+    software: [python]
+    teaches: [python-robotics-libraries, numpy-scipy-opencv-map, csharp-python-analogies]
+    skip_if: You know which library does what among numpy, scipy, opencv, pyserial, gpiozero, rclpy and torch.
+  - id: "03.02"
+    slug: environments-and-pinning
+    title: Project layout, environments and version pinning on Ubuntu
+    difficulty: beginner
+    time: 50
+    requires: ["03.01"]
+    optional: ["FL.10"]
+    hardware: []
+    software: [python, uv]
+    teaches: [venv, uv-lockfile, pep668, reproducible-environment]
+    skip_if: You can reproduce your robot's Python environment on a fresh machine from a lockfile.
+    version_sensitive: true
+  - id: "03.03"
+    slug: robust-serial-communication
+    title: Robust serial communication — framing, timeouts, reconnection
+    difficulty: intermediate
+    time: 60
+    requires: ["01.10", "03.02"]
+    optional: ["FE.09"]
+    hardware: [robot-base]
+    software: [python, pyserial]
+    teaches: [pyserial-practice, cobs-framing, crc, reconnect-logic, udev-rules]
+    skip_if: Your serial link survives unplugging the Pico and plugging it back in.
+  - id: "03.04"
+    slug: timing-and-concurrency
+    title: Loops, timing and concurrency — threads, asyncio, processes
+    difficulty: intermediate
+    time: 75
+    requires: ["03.03"]
+    optional: ["FPY.05", "FC.07"]
+    hardware: []
+    software: [python]
+    teaches: [control-loop-timing, jitter, asyncio-robotics, threads-vs-processes, gil]
+    skip_if: You can run a fixed-rate loop in Python and measure its jitter.
+  - id: "03.05"
+    slug: hardware-abstraction
+    title: Hardware abstraction — interfaces, drivers and fakes
+    difficulty: intermediate
+    time: 60
+    requires: ["03.04"]
+    optional: ["FPY.04"]
+    hardware: []
+    software: [python]
+    teaches: [hardware-abstraction-layer, protocols-typing, fake-drivers, dependency-injection-python]
+    skip_if: Your robot code can run against a fake robot without changing business logic.
+  - id: "03.06"
+    slug: configuration-and-calibration
+    title: Configuration and calibration data
+    difficulty: beginner
+    time: 40
+    requires: ["03.05"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [config-files, calibration-storage, dataclass-config, validation]
+    skip_if: Wheel radius and pin numbers live in validated config, not in code.
+  - id: "03.07"
+    slug: logging-and-telemetry
+    title: Logging, telemetry and plotting what the robot did
+    difficulty: intermediate
+    time: 60
+    requires: ["03.05"]
+    optional: ["FPY.03"]
+    hardware: []
+    software: [python, matplotlib]
+    teaches: [structured-logging, telemetry, csv-logging, plotjuggler-foxglove]
+    skip_if: You record timestamped telemetry and can plot any run afterwards.
+  - id: "03.08"
+    slug: testing-robot-software
+    title: Testing robot software — unit, simulation and hardware-in-the-loop
+    difficulty: intermediate
+    time: 60
+    requires: ["03.05"]
+    optional: []
+    hardware: []
+    software: [python, pytest]
+    teaches: [unit-tests-with-fakes, sim-tests, hil-testing, test-pyramid-robotics]
+    skip_if: Your robot repo has automated tests that run without hardware.
+  - id: "03.09"
+    slug: where-cpp-is-used
+    title: Where C and C++ are used in robotics — and enough C++ to read it
+    difficulty: intermediate
+    time: 75
+    requires: ["03.04"]
+    optional: ["FC.03", "FC.04"]
+    hardware: []
+    software: [cpp-compiler, cmake]
+    teaches: [cpp-in-robotics, real-time-constraints, when-to-use-cpp]
+    skip_if: You write C++ comfortably.
+  - id: "03.10"
+    slug: networking-for-robots
+    title: Networking for robots — Wi-Fi, latency, discovery, time sync
+    difficulty: intermediate
+    time: 60
+    requires: ["01.15"]
+    optional: ["FL.09"]
+    hardware: [robot-base]
+    software: [chrony]
+    teaches: [wifi-latency, mdns, time-synchronization, network-partitions]
+    skip_if: Your robot and laptop share synchronized clocks and you have measured Wi-Fi latency.
+  - id: "03.11"
+    slug: ci-and-reproducibility
+    title: Git workflow, CI and reproducibility for a robot repo
+    difficulty: intermediate
+    time: 50
+    requires: ["03.08"]
+    optional: ["FL.11", "FL.12"]
+    hardware: []
+    software: [git, docker]
+    teaches: [robotics-ci, docker-dev-environment, git-lfs-bags, release-tagging]
+    skip_if: Your robot repo runs tests in CI in the same container you develop in.
+
+# ---------------------------------------------------------------------------
+- id: "04"
+  dir: 04-ros2
+  track: main
+  title: ROS 2
+  summary: ROS 2 from zero, explained through distributed-systems concepts — ending with your physical robot as a ROS 2 system.
+  lessons:
+  - id: "04.01"
+    slug: why-middleware
+    title: Why middleware? ROS 2 through a distributed-systems lens
+    difficulty: beginner
+    time: 45
+    requires: ["00.05", "03.04"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [ros2-architecture, dds, rmw, pub-sub-in-robotics]
+    skip_if: You can compare ROS 2 topics/services/actions to Kafka, gRPC and long-running jobs.
+  - id: "04.02"
+    slug: installing-ros2
+    title: Installing ROS 2 — native Ubuntu, Docker on Windows, and the Pi
+    difficulty: beginner
+    time: 90
+    requires: ["04.01"]
+    optional: ["FL.02", "FL.07", "FL.12"]
+    hardware: []
+    software: [ubuntu, ros2, docker]
+    teaches: [ros2-install, ros2-distros, sourcing-setup, ros-domain-id]
+    skip_if: "`ros2 run demo_nodes_py talker` works on your laptop and on the Pi."
+    version_sensitive: true
+  - id: "04.03"
+    slug: nodes-and-cli
+    title: Nodes and the ros2 command line
+    difficulty: beginner
+    time: 45
+    requires: ["04.02"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [ros2-node, ros2-cli, turtlesim]
+    skip_if: You can list nodes, topics and their types from the CLI.
+  - id: "04.04"
+    slug: topics-publishers-subscribers
+    title: Topics — writing publishers and subscribers in Python
+    difficulty: beginner
+    time: 60
+    requires: ["04.03"]
+    optional: []
+    hardware: []
+    software: [ros2, rclpy]
+    teaches: [ros2-topic, publisher, subscriber, rclpy-node]
+    skip_if: You have written rclpy publishers and subscribers.
+  - id: "04.05"
+    slug: packages-and-workspaces
+    title: Packages, workspaces and colcon
+    difficulty: beginner
+    time: 50
+    requires: ["04.04"]
+    optional: []
+    hardware: []
+    software: [ros2, colcon]
+    teaches: [ros2-package, colcon-build, ament-python, workspace-overlay]
+    skip_if: You can create, build and overlay a Python ROS 2 package.
+  - id: "04.06"
+    slug: messages-and-custom-interfaces
+    title: Messages, interfaces and custom messages
+    difficulty: beginner
+    time: 50
+    requires: ["04.05"]
+    optional: []
+    hardware: []
+    software: [ros2, colcon]
+    teaches: [ros2-msg, custom-message, interface-package, std-msgs-geometry-msgs]
+    skip_if: You have defined and used a custom .msg in an interface package.
+  - id: "04.07"
+    slug: services
+    title: Services — request/response
+    difficulty: beginner
+    time: 45
+    requires: ["04.06"]
+    optional: []
+    hardware: []
+    software: [ros2, rclpy]
+    teaches: [ros2-service, service-client, async-service-call]
+    skip_if: You can write a service server and an async client without deadlocking.
+  - id: "04.08"
+    slug: actions
+    title: Actions — long-running goals with feedback and cancellation
+    difficulty: intermediate
+    time: 60
+    requires: ["04.07"]
+    optional: []
+    hardware: []
+    software: [ros2, rclpy]
+    teaches: [ros2-action, action-feedback, goal-cancel]
+    skip_if: You have written an action server with feedback and cancellation.
+  - id: "04.09"
+    slug: parameters
+    title: Parameters — configuring nodes at runtime
+    difficulty: beginner
+    time: 40
+    requires: ["04.05"]
+    optional: []
+    hardware: []
+    software: [ros2, rclpy]
+    teaches: [ros2-parameter, parameter-yaml, parameter-callbacks]
+    skip_if: Your nodes read parameters from YAML and validate runtime changes.
+  - id: "04.10"
+    slug: launch-files
+    title: Launch files — starting a system
+    difficulty: intermediate
+    time: 50
+    requires: ["04.09"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [ros2-launch, launch-arguments, including-launch-files, remapping]
+    skip_if: You write Python launch files with arguments, includes and remapping.
+  - id: "04.11"
+    slug: qos
+    title: Quality of Service — reliability, durability, history
+    difficulty: intermediate
+    time: 50
+    requires: ["04.04"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [ros2-qos, sensor-data-qos, transient-local, qos-incompatibility]
+    skip_if: You can diagnose a subscriber that receives nothing because of QoS mismatch.
+  - id: "04.12"
+    slug: executors-and-callbacks
+    title: Executors, callback groups and timing
+    difficulty: intermediate
+    time: 55
+    requires: ["04.07"]
+    optional: ["FPY.05"]
+    hardware: []
+    software: [ros2, rclpy]
+    teaches: [executor, callback-group, multithreaded-executor, ros2-timers]
+    skip_if: You know why a service call inside a callback deadlocks a single-threaded executor.
+  - id: "04.13"
+    slug: debugging-and-introspection
+    title: Logging, debugging and introspection
+    difficulty: intermediate
+    time: 50
+    requires: ["04.10", "04.11"]
+    optional: []
+    hardware: []
+    software: [ros2, rqt]
+    teaches: [ros2-logging, rqt-graph, ros2-doctor, topic-hz-delay, ros2-debugging-method]
+    skip_if: You debug ROS systems methodically with the CLI, rqt and logs.
+  - id: "04.14"
+    slug: rosbag2
+    title: rosbag2 — record, replay and inspect
+    difficulty: beginner
+    time: 40
+    requires: ["04.13"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [rosbag2, mcap, replay-testing]
+    skip_if: You record and replay bags and use them for offline debugging.
+    version_sensitive: true
+  - id: "04.15"
+    slug: lifecycle-nodes
+    title: Lifecycle (managed) nodes
+    difficulty: intermediate
+    time: 45
+    requires: ["04.12"]
+    optional: []
+    hardware: []
+    software: [ros2, rclpy]
+    teaches: [lifecycle-node, managed-node-states]
+    skip_if: You can explain the lifecycle states Nav2 relies on.
+  - id: "04.16"
+    slug: your-robot-as-ros2-node
+    title: Your physical robot in ROS 2 — cmd_vel in, telemetry out
+    difficulty: intermediate
+    time: 120
+    requires: ["04.10", "04.08", "03.05"]
+    optional: []
+    hardware: [robot-base]
+    software: [ros2, rclpy, pyserial]
+    teaches: [base-driver-node, cmd-vel, teleop-twist-keyboard, battery-state-msg]
+    skip_if: Your robot moves from `teleop_twist_keyboard` and publishes BatteryState.
+
+# ---------------------------------------------------------------------------
+- id: "05"
+  dir: 05-frames-and-transforms
+  track: main
+  title: Coordinate frames and transformations
+  summary: "The single most important geometric skill in robotics: where is that thing relative to me? Frames, transforms, TF2, URDF and RViz."
+  lessons:
+  - id: "05.01"
+    slug: why-frames
+    title: Why frames? "The camera sees a bottle — where is it relative to the robot?"
+    difficulty: beginner
+    time: 35
+    requires: ["04.04"]
+    optional: ["FM.04", "FM.05"]
+    hardware: []
+    software: []
+    teaches: [coordinate-frame, world-frame, robot-frame, sensor-frame, relative-position]
+    skip_if: You already use transforms between frames confidently.
+  - id: "05.02"
+    slug: pose-in-2d
+    title: Position, orientation and pose in 2D (x, y, θ)
+    difficulty: beginner
+    time: 45
+    requires: ["05.01"]
+    optional: ["FM.02", "FM.03", "FM.04"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [pose-2d, heading, angle-wrapping, atan2-practice]
+    skip_if: You never forget to wrap angles and use atan2 instinctively.
+  - id: "05.03"
+    slug: rigid-transforms-2d
+    title: 2D rigid transforms — rotate, translate, compose, invert
+    difficulty: intermediate
+    time: 60
+    requires: ["05.02"]
+    optional: ["FM.07", "FM.08"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [rigid-transform-2d, transform-composition, transform-inverse, frame-notation]
+    skip_if: You can compose and invert 2D transforms and explain the notation T_a_b.
+  - id: "05.04"
+    slug: homogeneous-transforms
+    title: Homogeneous transforms in 2D and 3D
+    difficulty: intermediate
+    time: 60
+    requires: ["05.03"]
+    optional: ["FM.09"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [homogeneous-transform, transform-chain, se2-se3]
+    skip_if: You work with 4×4 transforms and transform chains routinely.
+  - id: "05.05"
+    slug: rotations-in-3d
+    title: 3D rotations in practice — matrices, roll-pitch-yaw and quaternions
+    difficulty: intermediate
+    time: 75
+    requires: ["05.04"]
+    optional: ["FM.10", "FM.11", "FM.12"]
+    hardware: []
+    software: [python, numpy, scipy]
+    teaches: [rotation-3d-practice, rpy-convention, quaternion-practice, scipy-rotation]
+    skip_if: You convert between RPY, matrices and quaternions without sign or order bugs.
+  - id: "05.06"
+    slug: frame-conventions-rep103-rep105
+    title: "Robot frame conventions: REP-103 and REP-105 (map, odom, base_link, optical frames)"
+    difficulty: intermediate
+    time: 45
+    requires: ["05.05"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [rep-103, rep-105, map-odom-base-link, camera-optical-frame, end-effector-frame]
+    skip_if: You can explain why map→odom jumps and odom→base_link never does.
+  - id: "05.07"
+    slug: tf2-broadcast-listen
+    title: TF2 — broadcasting and listening to transforms
+    difficulty: intermediate
+    time: 75
+    requires: ["05.06", "04.10"]
+    optional: []
+    hardware: []
+    software: [ros2, tf2]
+    teaches: [tf2, static-transform, dynamic-transform, tf-lookup, tf-buffer]
+    skip_if: You write TF2 broadcasters and listeners and handle lookup exceptions.
+  - id: "05.08"
+    slug: urdf-and-xacro
+    title: URDF and xacro — describing your robot
+    difficulty: intermediate
+    time: 90
+    requires: ["05.07"]
+    optional: ["FP.06"]
+    hardware: []
+    software: [ros2, xacro]
+    teaches: [urdf, xacro, links-joints, robot-state-publisher, inertia-tags]
+    skip_if: You have written a URDF with xacro macros for a mobile robot.
+  - id: "05.09"
+    slug: rviz
+    title: RViz — seeing frames, the robot model and sensor data
+    difficulty: beginner
+    time: 45
+    requires: ["05.08"]
+    optional: []
+    hardware: []
+    software: [ros2, rviz2]
+    teaches: [rviz2, fixed-frame, rviz-config]
+    skip_if: You use RViz daily.
+  - id: "05.10"
+    slug: object-from-camera-to-map
+    title: "Worked example: an object seen by the camera, expressed in base_link and map"
+    difficulty: intermediate
+    time: 60
+    requires: ["05.07", "05.06"]
+    optional: []
+    hardware: []
+    software: [ros2, tf2, python]
+    teaches: [transform-point, do-transform-point, camera-to-base-link]
+    skip_if: You can transform a PointStamped from camera_optical_frame to map by hand and with TF2.
+  - id: "05.11"
+    slug: debugging-tf
+    title: Debugging TF — missing frames, extrapolation, timestamps
+    difficulty: intermediate
+    time: 45
+    requires: ["05.09", "05.10"]
+    optional: []
+    hardware: []
+    software: [ros2, tf2]
+    teaches: [view-frames, tf2-echo, extrapolation-error, tf-tree-debugging]
+    skip_if: You can read an extrapolation-into-the-future error and fix its cause.
+
+# ---------------------------------------------------------------------------
+- id: "06"
+  dir: 06-simulation
+  track: main
+  title: Simulation
+  summary: Simulate before things get complicated — a tiny Python simulator, then Gazebo with ros2_control, simulated sensors and the sim-to-real gap.
+  lessons:
+  - id: "06.01"
+    slug: why-simulate
+    title: Why simulate, and choosing a simulator
+    difficulty: beginner
+    time: 35
+    requires: ["04.10"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [simulation-purpose, simulator-landscape, physics-engine]
+    skip_if: You know the trade-offs between Gazebo, Isaac Sim, MuJoCo and Webots.
+    version_sensitive: true
+  - id: "06.02"
+    slug: course-mini-simulator
+    title: The course mini-simulator — physics in 100 lines of Python
+    difficulty: intermediate
+    time: 60
+    requires: ["06.01", "03.05"]
+    optional: ["FP.01", "FM.18"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [pysim, time-stepping, motor-model-sim, noise-injection]
+    skip_if: You have written a kinematic simulator with a fixed time step.
+  - id: "06.03"
+    slug: gazebo-basics
+    title: Gazebo basics — worlds, models, SDF and the gz tools
+    difficulty: beginner
+    time: 60
+    requires: ["06.01", "04.02"]
+    optional: []
+    hardware: []
+    software: [gazebo]
+    teaches: [gazebo, sdf, gz-cli, world-file]
+    skip_if: You have built a Gazebo world and inspected it with gz topic.
+    version_sensitive: true
+  - id: "06.04"
+    slug: bridging-gazebo-ros2
+    title: Bridging Gazebo and ROS 2 (ros_gz, clock, use_sim_time)
+    difficulty: intermediate
+    time: 50
+    requires: ["06.03"]
+    optional: []
+    hardware: []
+    software: [gazebo, ros2, ros-gz]
+    teaches: [ros-gz-bridge, use-sim-time, clock-topic]
+    skip_if: You bridge Gazebo topics to ROS 2 and understand simulated time.
+    version_sensitive: true
+  - id: "06.05"
+    slug: robot-in-gazebo
+    title: Your robot in Gazebo — spawning a URDF with inertia, collision and friction
+    difficulty: intermediate
+    time: 75
+    requires: ["06.04", "05.08"]
+    optional: ["FP.02", "FP.03", "FP.06"]
+    hardware: []
+    software: [gazebo, ros2]
+    teaches: [spawn-urdf, collision-geometry, friction-parameters, inertia-sanity]
+    skip_if: Your URDF spawns in Gazebo and behaves physically plausibly.
+  - id: "06.06"
+    slug: ros2-control
+    title: ros2_control — the same controllers in simulation and on the real robot
+    difficulty: advanced
+    time: 90
+    requires: ["06.05"]
+    optional: []
+    hardware: []
+    software: [ros2, ros2-control, gz-ros2-control]
+    teaches: [ros2-control, hardware-interface, controller-manager, diff-drive-controller]
+    skip_if: You have configured diff_drive_controller with gz_ros2_control.
+    version_sensitive: true
+  - id: "06.07"
+    slug: simulated-sensors-and-noise
+    title: Simulated LiDAR, camera, depth and IMU — with realistic noise
+    difficulty: intermediate
+    time: 75
+    requires: ["06.06"]
+    optional: ["FM.14"]
+    hardware: []
+    software: [gazebo, ros2]
+    teaches: [gazebo-sensors, sensor-noise-models, gpu-lidar]
+    skip_if: Your simulated robot publishes noisy scan, image and IMU topics.
+  - id: "06.08"
+    slug: building-worlds
+    title: Building worlds for mapping and navigation labs
+    difficulty: beginner
+    time: 50
+    requires: ["06.03"]
+    optional: []
+    hardware: []
+    software: [gazebo]
+    teaches: [world-building, fuel-models, apartment-world]
+    skip_if: You can build an apartment-like world with obstacles.
+  - id: "06.09"
+    slug: same-code-sim-and-real
+    title: One codebase for simulation and the real robot
+    difficulty: intermediate
+    time: 60
+    requires: ["06.06", "04.16"]
+    optional: []
+    hardware: [robot-base]
+    software: [ros2]
+    teaches: [sim-real-launch-switch, hardware-interface-swap, use-sim-time-pitfalls]
+    skip_if: One launch argument switches your stack between Gazebo and the robot.
+  - id: "06.10"
+    slug: sim-to-real-gap
+    title: The sim-to-real gap — what transfers and what doesn't
+    difficulty: intermediate
+    time: 45
+    requires: ["06.07"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [sim-to-real, reality-gap, system-identification-intro, domain-randomization-intro]
+    skip_if: You can list the concrete ways your simulation lies to you.
+
+# ---------------------------------------------------------------------------
+- id: "07"
+  dir: 07-sensors
+  track: main
+  title: Sensors
+  summary: Encoders, ultrasonic, ToF, IMU, LiDAR, RGB and depth cameras — physics, noise, failure modes, latency, and real experiments.
+  lessons:
+  - id: "07.01"
+    slug: sensor-fundamentals
+    title: "Sensor fundamentals: accuracy, precision, noise, bias, latency, rate"
+    difficulty: beginner
+    time: 60
+    requires: ["01.13"]
+    optional: ["FM.13", "FM.14", "FM.21"]
+    hardware: [robot-base]
+    software: [python]
+    teaches: [accuracy-vs-precision, bias, noise, latency, sampling-rate, sensor-characterization]
+    skip_if: You characterize a new sensor's noise and bias before trusting it.
+  - id: "07.02"
+    slug: wheel-encoders-in-depth
+    title: Wheel encoders in depth — resolution, slip, velocity estimation
+    difficulty: intermediate
+    time: 50
+    requires: ["07.01", "01.12"]
+    optional: []
+    hardware: [robot-base]
+    software: [python]
+    teaches: [encoder-resolution, wheel-slip, velocity-from-ticks]
+    skip_if: You know the error sources of wheel encoders and how to estimate velocity from ticks.
+  - id: "07.03"
+    slug: ultrasonic-sensors
+    title: Ultrasonic sensors — sound, cones and ghost echoes
+    difficulty: beginner
+    time: 45
+    requires: ["07.01"]
+    optional: []
+    hardware: [robot-base]
+    software: [python]
+    teaches: [ultrasonic-physics, beam-cone, specular-reflection, crosstalk]
+    skip_if: You can predict which surfaces an ultrasonic sensor will miss.
+  - id: "07.04"
+    slug: tof-sensors
+    title: Optical time-of-flight sensors (VL53L1X)
+    difficulty: beginner
+    time: 45
+    requires: ["07.01"]
+    optional: []
+    hardware: [robot-base]
+    software: [python]
+    teaches: [tof-physics, region-of-interest, ambient-light-effects]
+    skip_if: You have compared ToF and ultrasonic on the same targets.
+  - id: "07.05"
+    slug: imu-fundamentals
+    title: IMU — accelerometer, gyroscope, magnetometer, bias and drift
+    difficulty: intermediate
+    time: 75
+    requires: ["07.01", "05.05"]
+    optional: ["FP.01", "FM.18"]
+    hardware: [imu]
+    software: [python]
+    teaches: [accelerometer, gyroscope, magnetometer, gyro-bias, drift, imu-calibration]
+    skip_if: You understand why integrating a gyro drifts and how to calibrate bias.
+  - id: "07.06"
+    slug: imu-in-ros2
+    title: The IMU in ROS 2 — sensor_msgs/Imu, covariance and orientation filters
+    difficulty: intermediate
+    time: 60
+    requires: ["07.05", "04.16"]
+    optional: ["FM.15", "FM.12"]
+    hardware: [imu]
+    software: [ros2, imu-tools]
+    teaches: [sensor-msgs-imu, imu-covariance, madgwick-filter, imu-frame-mounting]
+    skip_if: Your robot publishes a correctly framed Imu message with sane covariance.
+  - id: "07.07"
+    slug: 2d-lidar
+    title: 2D LiDAR — how it works, LaserScan data, and a ROS 2 driver
+    difficulty: intermediate
+    time: 75
+    requires: ["07.01", "05.07"]
+    optional: ["FM.04"]
+    hardware: [lidar]
+    software: [ros2]
+    teaches: [lidar-physics, laserscan, polar-to-cartesian-scan, lidar-driver]
+    skip_if: Your LiDAR publishes LaserScan in the right frame and you can convert it to points.
+  - id: "07.08"
+    slug: rgb-cameras
+    title: RGB cameras on the robot — exposure, rolling shutter, ROS image topics
+    difficulty: intermediate
+    time: 75
+    requires: ["07.01", "04.11"]
+    optional: ["FCV.01"]
+    hardware: [camera]
+    software: [ros2, camera-driver]
+    teaches: [exposure, rolling-shutter, image-transport, camera-info, compressed-images]
+    skip_if: Your camera streams to ROS 2 with CameraInfo and you know its latency.
+    version_sensitive: true
+  - id: "07.09"
+    slug: depth-cameras-and-point-clouds
+    title: Depth cameras and point clouds — stereo, structured light, ToF
+    difficulty: intermediate
+    time: 60
+    requires: ["07.08"]
+    optional: ["FCV.05"]
+    hardware: []
+    software: [ros2]
+    teaches: [stereo-depth, structured-light, tof-camera, point-cloud, depth-image]
+    skip_if: You know which depth technology fails outdoors, on glass, and at short range.
+  - id: "07.10"
+    slug: sensor-data-in-ros2
+    title: Sensor data done right in ROS 2 — timestamps, frame_ids, covariance, synchronization
+    difficulty: intermediate
+    time: 50
+    requires: ["07.06", "07.07"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [header-stamps, message-filters, time-synchronization-ros, covariance-conventions]
+    skip_if: All your sensor messages carry correct stamps, frames and covariance.
+  - id: "07.11"
+    slug: sensor-troubleshooting
+    title: Sensor troubleshooting — a systematic method
+    difficulty: intermediate
+    time: 40
+    requires: ["07.10"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [sensor-debugging-method]
+    skip_if: You debug sensors from physics to driver to message to consumer.
+
+# ---------------------------------------------------------------------------
+- id: "08"
+  dir: 08-control
+  track: main
+  title: Control
+  summary: Feedback control through experiments — observe the error, add P, then I, then D, then the math. Exact speed, straight lines and 90° turns.
+  lessons:
+  - id: "08.01"
+    slug: open-vs-closed-loop
+    title: Open loop vs closed loop — why your robot doesn't drive straight
+    difficulty: beginner
+    time: 45
+    requires: ["01.12", "06.02"]
+    optional: ["FCT.01"]
+    hardware: [robot-base]
+    software: [python]
+    teaches: [open-loop-control, closed-loop-control, feedback, setpoint, error]
+    skip_if: You can explain feedback and name the setpoint, measurement and error in any loop.
+  - id: "08.02"
+    slug: motor-step-response
+    title: Measuring a motor — step response, deadband and time constant
+    difficulty: intermediate
+    time: 60
+    requires: ["08.01", "03.07"]
+    optional: ["FCT.02"]
+    hardware: [robot-base]
+    software: [python, matplotlib]
+    teaches: [step-response, time-constant, deadband-measurement, first-order-model]
+    skip_if: You have measured and plotted a motor's step response and fitted a time constant.
+  - id: "08.03"
+    slug: wheel-speed-estimation
+    title: Estimating wheel speed from encoders — and filtering it
+    difficulty: intermediate
+    time: 50
+    requires: ["08.02", "07.02"]
+    optional: ["FM.17"]
+    hardware: [robot-base]
+    software: [python]
+    teaches: [velocity-estimation, low-pass-filter, moving-average, differentiation-noise]
+    skip_if: You produce a clean wheel-speed signal with known lag.
+  - id: "08.04"
+    slug: proportional-control
+    title: Proportional control — hold a wheel speed
+    difficulty: intermediate
+    time: 60
+    requires: ["08.03"]
+    optional: []
+    hardware: [robot-base]
+    software: [python]
+    teaches: [proportional-control, steady-state-error, gain]
+    skip_if: You have seen P-only control leave steady-state error and oscillate at high gain.
+  - id: "08.05"
+    slug: integral-control
+    title: Integral control — killing steady-state error (and integral windup)
+    difficulty: intermediate
+    time: 60
+    requires: ["08.04"]
+    optional: ["FM.18"]
+    hardware: [robot-base]
+    software: [python]
+    teaches: [integral-control, integral-windup, anti-windup]
+    skip_if: You implement anti-windup by reflex.
+  - id: "08.06"
+    slug: derivative-control
+    title: Derivative control — damping, noise and derivative kick
+    difficulty: intermediate
+    time: 50
+    requires: ["08.05"]
+    optional: ["FM.17"]
+    hardware: [robot-base]
+    software: [python]
+    teaches: [derivative-control, derivative-kick, filtered-derivative]
+    skip_if: You know why D is computed on the measurement and filtered.
+  - id: "08.07"
+    slug: pid-mathematics
+    title: PID mathematically — continuous, discrete, and what stability means
+    difficulty: intermediate
+    time: 60
+    requires: ["08.06"]
+    optional: ["FCT.03", "FCT.04", "FCT.05"]
+    hardware: []
+    software: [python]
+    teaches: [pid, discrete-pid, stability, overshoot, settling-time, rise-time, oscillation]
+    skip_if: You can derive the discrete PID update and relate gains to overshoot and settling.
+  - id: "08.08"
+    slug: tuning-pid
+    title: Tuning PID systematically
+    difficulty: intermediate
+    time: 75
+    requires: ["08.07"]
+    optional: []
+    hardware: [robot-base]
+    software: [python, matplotlib]
+    teaches: [pid-tuning, ziegler-nichols, tuning-by-logging]
+    skip_if: You tune loops from logged step responses, not by feel.
+  - id: "08.09"
+    slug: feedforward-exact-speed
+    title: "Feedforward + PID: drive at exactly 0.5 m/s"
+    difficulty: intermediate
+    time: 60
+    requires: ["08.08"]
+    optional: []
+    hardware: [robot-base]
+    software: [python]
+    teaches: [feedforward, velocity-control, motor-constant-feedforward]
+    skip_if: Your robot holds 0.5 m/s within a few percent on the floor.
+  - id: "08.10"
+    slug: straight-line-heading-control
+    title: Hold a straight line — cascaded heading control
+    difficulty: intermediate
+    time: 60
+    requires: ["08.09"]
+    optional: []
+    hardware: [robot-base]
+    software: [python]
+    teaches: [cascaded-control, heading-control, wheel-sync]
+    skip_if: Your robot drives 3 m straight within a few centimetres.
+  - id: "08.11"
+    slug: rotate-exactly-90
+    title: Rotate exactly 90° — motion profiles and IMU feedback
+    difficulty: intermediate
+    time: 60
+    requires: ["08.10", "07.05"]
+    optional: []
+    hardware: [robot-base, imu]
+    software: [python]
+    teaches: [trapezoidal-profile, heading-feedback-imu, settling-on-target]
+    skip_if: Your robot turns 90° within ±2° repeatably.
+  - id: "08.12"
+    slug: control-in-ros2
+    title: Control in ROS 2 — where loops run, rates, limits and ros2_control
+    difficulty: advanced
+    time: 60
+    requires: ["08.09", "06.06"]
+    optional: ["FC.07"]
+    hardware: [robot-base]
+    software: [ros2, ros2-control]
+    teaches: [control-loop-placement, velocity-acceleration-limits, ros2-control-hardware-interface-real]
+    skip_if: You know which loops belong on the microcontroller and which in ROS 2.
+
+# ---------------------------------------------------------------------------
+- id: "09"
+  dir: 09-odometry
+  track: main
+  title: Odometry
+  summary: From wheel ticks to pose — differential-drive kinematics, integration, calibration and drift, built from scratch then compared with ROS 2.
+  lessons:
+  - id: "09.01"
+    slug: diff-drive-kinematics
+    title: Differential-drive kinematics — wheel speeds to robot motion
+    difficulty: intermediate
+    time: 60
+    requires: ["05.02", "01.12"]
+    optional: ["FM.03", "FP.01"]
+    hardware: []
+    software: [python]
+    teaches: [differential-drive-kinematics, wheel-radius, wheelbase, icc]
+    skip_if: You can derive v and ω from left/right wheel speeds.
+  - id: "09.02"
+    slug: inverse-kinematics-cmd-vel
+    title: The other way — cmd_vel to wheel speeds (with saturation)
+    difficulty: intermediate
+    time: 40
+    requires: ["09.01"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [diff-drive-inverse-kinematics, wheel-speed-saturation]
+    skip_if: You convert Twist to wheel speeds and scale correctly when a wheel saturates.
+  - id: "09.03"
+    slug: dead-reckoning-integration
+    title: Dead reckoning — integrating motion (Euler, midpoint, exact arcs)
+    difficulty: intermediate
+    time: 60
+    requires: ["09.01"]
+    optional: ["FM.18"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [dead-reckoning, euler-integration, runge-kutta-2, exact-arc-integration]
+    skip_if: You know how integration method and time step affect pose error.
+  - id: "09.04"
+    slug: odometry-from-scratch
+    title: Build an odometry system from scratch (tested against the simulator)
+    difficulty: intermediate
+    time: 90
+    requires: ["09.02", "09.03", "06.02"]
+    optional: []
+    hardware: []
+    software: [python, pytest]
+    teaches: [odometry-implementation, tick-deltas, encoder-rollover]
+    skip_if: Your odometry passes the course tests and runs on your robot.
+  - id: "09.05"
+    slug: calibrating-odometry
+    title: Calibrating odometry — wheel radius, wheelbase and UMBmark
+    difficulty: intermediate
+    time: 75
+    requires: ["09.04"]
+    optional: ["FM.21"]
+    hardware: [robot-base]
+    software: [python]
+    teaches: [odometry-calibration, umbmark, systematic-vs-random-error]
+    skip_if: You calibrated wheel radius and wheelbase from measured runs.
+  - id: "09.06"
+    slug: accumulated-error
+    title: Accumulated error — why odometry always drifts
+    difficulty: intermediate
+    time: 50
+    requires: ["09.05"]
+    optional: ["FM.14", "FM.15"]
+    hardware: []
+    software: [python]
+    teaches: [odometry-drift, error-propagation, uncertainty-growth]
+    skip_if: You can explain why heading error dominates position error over distance.
+  - id: "09.07"
+    slug: odometry-in-ros2
+    title: Odometry in ROS 2 — nav_msgs/Odometry, odom→base_link, comparing implementations
+    difficulty: intermediate
+    time: 75
+    requires: ["09.04", "05.07", "04.16"]
+    optional: ["FM.12"]
+    hardware: [robot-base]
+    software: [ros2]
+    teaches: [nav-msgs-odometry, odom-tf, diff-drive-controller-odometry, odometry-covariance]
+    skip_if: Your robot publishes Odometry and odom→base_link that match reality in RViz.
+
+# ---------------------------------------------------------------------------
+- id: "10"
+  dir: 10-localization
+  track: main
+  title: Localization
+  summary: Knowing where you are despite noise — belief, Bayes filters, Kalman and Extended Kalman filters, sensor fusion, particle filters and AMCL.
+  lessons:
+  - id: "10.01"
+    slug: what-is-localization
+    title: Localization — belief instead of certainty
+    difficulty: intermediate
+    time: 40
+    requires: ["09.06"]
+    optional: ["FM.13"]
+    hardware: []
+    software: []
+    teaches: [localization, belief, landmarks, global-vs-local-localization, kidnapped-robot]
+    skip_if: You can explain belief, tracking vs global localization and the kidnapped robot problem.
+  - id: "10.02"
+    slug: uncertainty-gaussians
+    title: Representing uncertainty — Gaussians and covariance ellipses
+    difficulty: intermediate
+    time: 60
+    requires: ["10.01"]
+    optional: ["FM.14", "FM.15"]
+    hardware: []
+    software: [python, numpy, matplotlib]
+    teaches: [gaussian-belief, covariance-ellipse, uncertainty-visualization]
+    skip_if: You can draw a 2σ covariance ellipse from a 2×2 covariance matrix.
+  - id: "10.03"
+    slug: bayes-filter
+    title: The Bayes filter — predict and update on a 1D grid
+    difficulty: intermediate
+    time: 60
+    requires: ["10.02"]
+    optional: ["FM.16"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [bayes-filter, histogram-filter, motion-model, measurement-model]
+    skip_if: You have implemented a histogram filter.
+  - id: "10.04"
+    slug: kalman-filter-1d
+    title: The Kalman filter in 1D — numbers first
+    difficulty: intermediate
+    time: 60
+    requires: ["10.03"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [kalman-filter-1d, kalman-gain, process-noise, measurement-noise]
+    skip_if: You know Kalman filters already — take the knowledge check and move on.
+  - id: "10.05"
+    slug: kalman-filter-multivariate
+    title: The multivariate Kalman filter
+    difficulty: advanced
+    time: 75
+    requires: ["10.04"]
+    optional: ["FM.07", "FM.15"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [kalman-filter, state-transition-matrix, observation-matrix, innovation]
+    skip_if: You can write the KF predict/update equations from memory and explain each term.
+  - id: "10.06"
+    slug: extended-kalman-filter
+    title: The Extended Kalman Filter for a differential-drive robot
+    difficulty: advanced
+    time: 90
+    requires: ["10.05", "09.04"]
+    optional: ["FM.17"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [ekf, jacobian-linearization, landmark-ekf-localization]
+    skip_if: You have implemented EKF localization with range-bearing landmarks.
+  - id: "10.07"
+    slug: fusing-imu-and-odometry
+    title: Sensor fusion — IMU + wheel odometry with robot_localization
+    difficulty: intermediate
+    time: 75
+    requires: ["10.06", "07.06", "09.07"]
+    optional: []
+    hardware: [robot-base, imu]
+    software: [ros2, robot-localization]
+    teaches: [sensor-fusion, robot-localization-ekf-node, fusion-configuration, complementary-filter]
+    skip_if: Your robot runs robot_localization with a justified fusion config.
+    version_sensitive: true
+  - id: "10.08"
+    slug: particle-filter-mcl
+    title: Particle filters and Monte Carlo localization
+    difficulty: advanced
+    time: 90
+    requires: ["10.03", "07.07"]
+    optional: ["FM.14"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [particle-filter, monte-carlo-localization, resampling, likelihood-field]
+    skip_if: You have implemented MCL with low-variance resampling.
+  - id: "10.09"
+    slug: amcl-in-ros2
+    title: AMCL in ROS 2 — localizing on a known map
+    difficulty: intermediate
+    time: 60
+    requires: ["10.08", "06.07"]
+    optional: []
+    hardware: []
+    software: [ros2, nav2]
+    teaches: [amcl, map-server, initial-pose, map-odom-transform]
+    skip_if: You localize a robot on a saved map with AMCL and can tune it.
+    version_sensitive: true
+  - id: "10.10"
+    slug: fiducial-landmarks
+    title: Landmarks you can print — AprilTags for localization
+    difficulty: intermediate
+    time: 60
+    requires: ["10.06", "13.07"]
+    optional: []
+    hardware: [camera]
+    software: [ros2, apriltag]
+    teaches: [fiducial-localization, apriltag-landmarks]
+    skip_if: You have corrected robot pose using known tag positions.
+
+# ---------------------------------------------------------------------------
+- id: "11"
+  dir: 11-slam
+  track: main
+  title: Mapping and SLAM
+  summary: "Explore a room, build a map, save it, localize on it — occupancy grids, scan matching, pose graphs, loop closure, slam_toolbox and visual SLAM."
+  lessons:
+  - id: "11.01"
+    slug: map-representations
+    title: Map representations — occupancy grids, features, point clouds, voxels, graphs
+    difficulty: intermediate
+    time: 40
+    requires: ["10.01", "07.07"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [map-representation, occupancy-grid, feature-map, voxel-map, topological-map]
+    skip_if: You can choose a map representation for a given robot and task.
+  - id: "11.02"
+    slug: occupancy-grid-mapping
+    title: Occupancy grid mapping with known poses (log-odds and ray casting)
+    difficulty: intermediate
+    time: 75
+    requires: ["11.01", "05.04"]
+    optional: ["FM.16"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [occupancy-grid-mapping, log-odds, bresenham-ray-casting, inverse-sensor-model]
+    skip_if: You have implemented log-odds occupancy mapping.
+  - id: "11.03"
+    slug: the-slam-problem
+    title: The SLAM problem — front end, back end, and why it is hard
+    difficulty: intermediate
+    time: 45
+    requires: ["11.02", "10.06"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [slam, slam-front-end, slam-back-end, data-association]
+    skip_if: You can explain SLAM's chicken-and-egg problem and front/back-end split.
+  - id: "11.04"
+    slug: scan-matching-icp
+    title: Scan matching with ICP
+    difficulty: advanced
+    time: 75
+    requires: ["11.03"]
+    optional: ["FM.19", "FM.20"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [scan-matching, icp, svd-alignment, correspondence]
+    skip_if: You have implemented point-to-point ICP.
+  - id: "11.05"
+    slug: pose-graphs-loop-closure
+    title: Pose graphs and loop closure
+    difficulty: advanced
+    time: 75
+    requires: ["11.04"]
+    optional: ["FM.20"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [pose-graph, loop-closure, graph-optimization, least-squares-slam]
+    skip_if: You can explain how a loop closure corrects an entire trajectory.
+  - id: "11.06"
+    slug: slam-toolbox-simulation
+    title: LiDAR SLAM with slam_toolbox in simulation
+    difficulty: intermediate
+    time: 75
+    requires: ["11.03", "06.08", "09.07"]
+    optional: []
+    hardware: []
+    software: [ros2, slam-toolbox, gazebo]
+    teaches: [slam-toolbox, online-async-slam, map-saving]
+    skip_if: You have mapped a simulated world with slam_toolbox.
+    version_sensitive: true
+  - id: "11.07"
+    slug: mapping-your-room
+    title: "Map your real room: explore → map → save → localize"
+    difficulty: advanced
+    time: 120
+    requires: ["11.06", "10.07"]
+    optional: []
+    hardware: [robot-base, lidar]
+    software: [ros2, slam-toolbox]
+    teaches: [real-world-slam, map-serialization, localization-mode, lifelong-mapping]
+    skip_if: You have a saved map of your home and can localize the real robot on it.
+  - id: "11.08"
+    slug: visual-slam
+    title: Visual SLAM — ORB-SLAM3, RTAB-Map and friends
+    difficulty: advanced
+    time: 60
+    requires: ["11.05", "07.09", "13.04"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [visual-slam, visual-odometry, rtabmap, bundle-adjustment-intro]
+    skip_if: You know when visual SLAM beats LiDAR SLAM and which packages are maintained.
+    version_sensitive: true
+  - id: "11.09"
+    slug: slam-troubleshooting
+    title: SLAM troubleshooting — when maps smear, double or drift
+    difficulty: intermediate
+    time: 45
+    requires: ["11.07"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [slam-debugging, smeared-maps, featureless-corridors]
+    skip_if: You can diagnose a bad map from its appearance.
+
+# ---------------------------------------------------------------------------
+- id: "12"
+  dir: 12-navigation
+  track: main
+  title: Navigation
+  summary: '"Go to the kitchen." Path planning, costmaps, local planners, Nav2, waypoints and recovery behaviors — in simulation and on the real robot.'
+  lessons:
+  - id: "12.01"
+    slug: the-navigation-problem
+    title: The navigation problem — goals, waypoints, global and local planning
+    difficulty: beginner
+    time: 35
+    requires: ["11.01"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [navigation, global-planning, local-planning, waypoints, goals]
+    skip_if: You can explain why navigation is split into global and local planning.
+  - id: "12.02"
+    slug: grid-path-planning
+    title: Grid path planning — BFS, Dijkstra and A*
+    difficulty: intermediate
+    time: 75
+    requires: ["12.01"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [bfs, dijkstra, a-star, heuristics]
+    skip_if: You have implemented A* on an occupancy grid.
+  - id: "12.03"
+    slug: sampling-based-planning
+    title: Sampling-based planning — RRT and friends
+    difficulty: intermediate
+    time: 50
+    requires: ["12.02"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [rrt, rrt-star, configuration-space, probabilistic-completeness]
+    skip_if: You know when sampling-based planners beat grid search.
+  - id: "12.04"
+    slug: costmaps
+    title: Costmaps, inflation and the robot footprint
+    difficulty: intermediate
+    time: 50
+    requires: ["12.02"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [costmap, inflation-layer, footprint, obstacle-layer]
+    skip_if: You can tune inflation radius and cost scaling with intent.
+  - id: "12.05"
+    slug: local-planning-obstacle-avoidance
+    title: Local planning — pure pursuit, DWB, MPPI and obstacle avoidance
+    difficulty: advanced
+    time: 75
+    requires: ["12.04", "09.02"]
+    optional: ["FCT.06"]
+    hardware: []
+    software: [python]
+    teaches: [pure-pursuit, dynamic-window, mppi, obstacle-avoidance]
+    skip_if: You have implemented pure pursuit and know how DWB and MPPI choose velocities.
+  - id: "12.06"
+    slug: nav2-architecture
+    title: Nav2 architecture — servers, lifecycle and behavior trees
+    difficulty: intermediate
+    time: 50
+    requires: ["12.05", "04.15"]
+    optional: []
+    hardware: []
+    software: [ros2, nav2]
+    teaches: [nav2, bt-navigator, planner-server, controller-server, behavior-server]
+    skip_if: You can draw Nav2's server architecture and BT flow.
+    version_sensitive: true
+  - id: "12.07"
+    slug: nav2-in-simulation
+    title: Nav2 in simulation — go to pose
+    difficulty: intermediate
+    time: 90
+    requires: ["12.06", "10.09", "11.06"]
+    optional: []
+    hardware: []
+    software: [ros2, nav2, gazebo]
+    teaches: [nav2-bringup, navigate-to-pose, nav2-params]
+    skip_if: Your simulated robot navigates to goals clicked in RViz.
+    version_sensitive: true
+  - id: "12.08"
+    slug: nav2-on-the-real-robot
+    title: Nav2 on the real robot — tuning for a small, slow robot
+    difficulty: advanced
+    time: 120
+    requires: ["12.07", "11.07"]
+    optional: []
+    hardware: [robot-base, lidar]
+    software: [ros2, nav2]
+    teaches: [nav2-tuning, real-robot-navigation, velocity-smoother]
+    skip_if: Your real robot navigates your home reliably.
+  - id: "12.09"
+    slug: waypoints-and-missions
+    title: Waypoints and missions with the Nav2 Simple Commander API
+    difficulty: intermediate
+    time: 60
+    requires: ["12.07"]
+    optional: []
+    hardware: []
+    software: [ros2, nav2]
+    teaches: [simple-commander, waypoint-following, named-locations]
+    skip_if: You drive multi-waypoint missions from Python.
+  - id: "12.10"
+    slug: recovery-and-navigation-safety
+    title: Recovery behaviors, failure handling and navigation safety
+    difficulty: intermediate
+    time: 60
+    requires: ["12.08"]
+    optional: []
+    hardware: []
+    software: [ros2, nav2]
+    teaches: [recovery-behaviors, collision-monitor, speed-limits, keepout-zones]
+    skip_if: You configure collision monitoring and keepout zones and handle navigation failures.
+
+# ---------------------------------------------------------------------------
+- id: "13"
+  dir: 13-computer-vision
+  track: main
+  title: Computer vision
+  summary: From pixels and OpenCV through camera geometry and calibration to modern detection, segmentation, tracking, embeddings and vision-language models on a robot.
+  lessons:
+  - id: "13.01"
+    slug: images-as-data
+    title: Images as data — pixels, channels, RGB, grayscale, HSV
+    difficulty: beginner
+    time: 45
+    requires: ["03.01"]
+    optional: ["FCV.01", "FPY.02"]
+    hardware: []
+    software: [python, opencv]
+    teaches: [pixels, image-arrays, rgb, grayscale, hsv, bgr-gotcha]
+    skip_if: You manipulate images as numpy arrays and know OpenCV's BGR convention.
+  - id: "13.02"
+    slug: opencv-preprocessing
+    title: OpenCV fundamentals and preprocessing
+    difficulty: beginner
+    time: 60
+    requires: ["13.01"]
+    optional: ["FCV.02"]
+    hardware: []
+    software: [python, opencv]
+    teaches: [opencv, blur, thresholding, morphology, image-preprocessing]
+    skip_if: You build preprocessing pipelines with OpenCV.
+  - id: "13.03"
+    slug: classical-detection
+    title: Classical detection — color segmentation and contours (find the ball)
+    difficulty: beginner
+    time: 60
+    requires: ["13.02"]
+    optional: ["FCV.03"]
+    hardware: []
+    software: [python, opencv]
+    teaches: [color-segmentation, contours, blob-detection]
+    skip_if: You can detect a colored object robustly under changing light.
+  - id: "13.04"
+    slug: features-and-matching
+    title: Features — edges, corners, ORB and matching
+    difficulty: intermediate
+    time: 60
+    requires: ["13.02"]
+    optional: []
+    hardware: []
+    software: [python, opencv]
+    teaches: [feature-detection, edges, corners, orb, feature-matching, ransac-intro]
+    skip_if: You have matched ORB features between images with ratio test and RANSAC.
+  - id: "13.05"
+    slug: pinhole-camera-model
+    title: The pinhole camera model — projecting 3D to pixels and back
+    difficulty: intermediate
+    time: 75
+    requires: ["13.01", "05.04"]
+    optional: ["FCV.04", "FM.09"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [pinhole-model, camera-intrinsics, camera-extrinsics, projection, back-projection]
+    skip_if: You can project a 3D point to pixels with K and back-project with depth.
+  - id: "13.06"
+    slug: lens-distortion-calibration
+    title: Lenses, distortion and camera calibration
+    difficulty: intermediate
+    time: 75
+    requires: ["13.05"]
+    optional: []
+    hardware: [camera]
+    software: [python, opencv, ros2]
+    teaches: [lens-distortion, camera-calibration, checkerboard-calibration, reprojection-error]
+    skip_if: You calibrated your camera and know its reprojection error.
+  - id: "13.07"
+    slug: fiducial-markers
+    title: Fiducial markers — ArUco and AprilTag pose estimation
+    difficulty: intermediate
+    time: 60
+    requires: ["13.06"]
+    optional: []
+    hardware: [camera]
+    software: [python, opencv]
+    teaches: [aruco, apriltag, pnp, marker-pose]
+    skip_if: You estimate 6-DoF poses from printed tags.
+  - id: "13.08"
+    slug: depth-and-3d-vision
+    title: Depth and 3D vision — stereo, depth images and point clouds
+    difficulty: intermediate
+    time: 75
+    requires: ["13.05", "07.09"]
+    optional: ["FCV.05"]
+    hardware: []
+    software: [python, numpy, open3d]
+    teaches: [depth-to-point-cloud, stereo-disparity, plane-segmentation, 3d-vision]
+    skip_if: You convert depth images to point clouds and segment planes.
+  - id: "13.09"
+    slug: cnns-for-robot-vision
+    title: CNNs for robot vision — using pretrained networks
+    difficulty: intermediate
+    time: 60
+    requires: ["13.02"]
+    optional: ["FML.06", "FML.08"]
+    hardware: []
+    software: [python, pytorch]
+    teaches: [cnn-practice, pretrained-models, transfer-learning-intro, inference-latency]
+    skip_if: You run pretrained CNNs in PyTorch and understand their outputs.
+  - id: "13.10"
+    slug: object-detection-models
+    title: Object detection with modern models
+    difficulty: intermediate
+    time: 75
+    requires: ["13.09"]
+    optional: ["FCV.06"]
+    hardware: []
+    software: [python, pytorch]
+    teaches: [object-detection, bounding-boxes, nms, confidence-thresholds, model-licenses]
+    skip_if: You run and evaluate a current detector on your own images.
+    version_sensitive: true
+  - id: "13.11"
+    slug: segmentation
+    title: Segmentation — semantic, instance and promptable (SAM)
+    difficulty: intermediate
+    time: 60
+    requires: ["13.10"]
+    optional: []
+    hardware: []
+    software: [python, pytorch]
+    teaches: [semantic-segmentation, instance-segmentation, sam, masks]
+    skip_if: You produce instance masks and know promptable segmentation models.
+    version_sensitive: true
+  - id: "13.12"
+    slug: tracking
+    title: Tracking objects over time
+    difficulty: intermediate
+    time: 60
+    requires: ["13.10", "10.04"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [multi-object-tracking, iou-tracker, bytetrack, track-ids]
+    skip_if: You track detections with persistent IDs.
+  - id: "13.13"
+    slug: embeddings-open-vocabulary
+    title: Embeddings and open-vocabulary detection (CLIP, OWLv2, Grounding DINO)
+    difficulty: advanced
+    time: 60
+    requires: ["13.10"]
+    optional: ["FML.09"]
+    hardware: []
+    software: [python, pytorch, transformers]
+    teaches: [image-embeddings, clip, open-vocabulary-detection, zero-shot-detection]
+    skip_if: You detect objects by text query with an open-vocabulary model.
+    version_sensitive: true
+  - id: "13.14"
+    slug: vision-language-models
+    title: Vision-language models on a robot — describing and questioning the scene
+    difficulty: advanced
+    time: 60
+    requires: ["13.13"]
+    optional: ["FML.10"]
+    hardware: []
+    software: [python]
+    teaches: [vlm, visual-question-answering, vlm-grounding-limits, vlm-latency]
+    skip_if: You use VLMs for scene questions and know their spatial reasoning limits.
+    version_sensitive: true
+  - id: "13.15"
+    slug: vision-in-ros2
+    title: Vision in ROS 2 — cv_bridge, vision_msgs and performance on the robot
+    difficulty: intermediate
+    time: 75
+    requires: ["13.10", "07.08"]
+    optional: []
+    hardware: [camera]
+    software: [ros2, opencv, cv-bridge]
+    teaches: [cv-bridge, vision-msgs, detection-node, edge-inference-performance]
+    skip_if: You have a detection node publishing vision_msgs at a known rate on robot hardware.
+  - id: "13.16"
+    slug: detection-to-map-position
+    title: From detection to a 3D position in the map frame
+    difficulty: advanced
+    time: 90
+    requires: ["13.15", "13.08", "05.10"]
+    optional: []
+    hardware: [camera]
+    software: [ros2, tf2]
+    teaches: [detection-3d-localization, object-map-position, semantic-mapping-intro]
+    skip_if: Your robot reports the map coordinates of detected objects.
+
+# ---------------------------------------------------------------------------
+- id: "14"
+  dir: 14-robotic-arm
+  track: main
+  title: The robotic arm
+  summary: Joints, links, forward and inverse kinematics, Jacobians, trajectories and MoveIt 2 — on a real low-cost arm.
+  lessons:
+  - id: "14.01"
+    slug: arm-anatomy
+    title: Arm anatomy — joints, links, DOF, workspace, end effector
+    difficulty: beginner
+    time: 40
+    requires: ["05.06"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [joints, links, degrees-of-freedom, workspace, end-effector, gripper]
+    skip_if: You can count DOF and describe an arm's workspace.
+  - id: "14.02"
+    slug: buying-and-assembling-the-arm
+    title: Buying and assembling the arm; servo setup and calibration
+    difficulty: intermediate
+    time: 180
+    requires: ["14.01", "02.10"]
+    optional: []
+    hardware: [arm, tools]
+    software: [python]
+    teaches: [arm-assembly, servo-id-setup, joint-calibration]
+    skip_if: Your arm is assembled and calibrated.
+    version_sensitive: true
+  - id: "14.03"
+    slug: controlling-servos
+    title: Controlling the arm's servos — positions, speeds, torque and limits
+    difficulty: intermediate
+    time: 60
+    requires: ["14.02"]
+    optional: ["FE.11"]
+    hardware: [arm]
+    software: [python]
+    teaches: [bus-servo-control, joint-limits-software, torque-enable, servo-feedback]
+    skip_if: You command joint positions with software limits and read back positions and load.
+  - id: "14.04"
+    slug: forward-kinematics
+    title: Forward kinematics — from joint angles to gripper pose
+    difficulty: intermediate
+    time: 75
+    requires: ["14.01", "05.04"]
+    optional: ["FM.09", "FM.10"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [forward-kinematics, denavit-hartenberg, product-of-exponentials-intro, kinematic-chain]
+    skip_if: You compute FK for a serial arm from its URDF or DH table.
+  - id: "14.05"
+    slug: inverse-kinematics
+    title: Inverse kinematics — analytic and numerical
+    difficulty: advanced
+    time: 90
+    requires: ["14.04"]
+    optional: ["FM.20"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [inverse-kinematics, analytic-ik, numerical-ik, multiple-ik-solutions]
+    skip_if: You have implemented analytic 2-link IK and a numerical IK solver.
+  - id: "14.06"
+    slug: jacobian
+    title: The Jacobian — velocities, singularities and resolved-rate control
+    difficulty: advanced
+    time: 75
+    requires: ["14.05"]
+    optional: ["FM.17", "FM.19"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [jacobian, singularity, resolved-rate-control, damped-least-squares]
+    skip_if: You use Jacobians for velocity control and can detect singularities.
+  - id: "14.07"
+    slug: trajectories
+    title: Trajectories — joint vs Cartesian, trapezoidal and cubic profiles
+    difficulty: intermediate
+    time: 60
+    requires: ["14.05"]
+    optional: []
+    hardware: []
+    software: [python, numpy]
+    teaches: [trajectory-generation, joint-space-trajectory, cartesian-trajectory, cubic-polynomial]
+    skip_if: You generate smooth, time-parameterized trajectories.
+  - id: "14.08"
+    slug: arm-urdf-and-ros2-control
+    title: The arm in ROS 2 — URDF, joint states and ros2_control
+    difficulty: advanced
+    time: 90
+    requires: ["14.03", "05.08", "06.06"]
+    optional: []
+    hardware: [arm]
+    software: [ros2, ros2-control]
+    teaches: [arm-urdf, joint-state-publisher, joint-trajectory-controller]
+    skip_if: Your arm is driven by joint_trajectory_controller and mirrored in RViz.
+    version_sensitive: true
+  - id: "14.09"
+    slug: moveit2-motion-planning
+    title: MoveIt 2 — motion planning and collision checking
+    difficulty: advanced
+    time: 120
+    requires: ["14.08", "12.03"]
+    optional: []
+    hardware: []
+    software: [ros2, moveit2]
+    teaches: [moveit2, motion-planning-arm, collision-checking, planning-scene]
+    skip_if: You plan collision-free motions with MoveIt 2 from Python or C++.
+    version_sensitive: true
+  - id: "14.10"
+    slug: move-gripper-to-position
+    title: "Exercise lesson: move the gripper to a specified position"
+    difficulty: intermediate
+    time: 60
+    requires: ["14.09", "14.06"]
+    optional: []
+    hardware: [arm]
+    software: [ros2, moveit2]
+    teaches: [cartesian-goal, pose-goal-execution]
+    skip_if: Your arm reaches commanded Cartesian positions within a centimetre.
+  - id: "14.11"
+    slug: arm-safety
+    title: Arm safety — torque, speed, workspace limits and e-stop
+    difficulty: intermediate
+    time: 45
+    requires: ["14.03"]
+    optional: []
+    hardware: [arm]
+    software: []
+    teaches: [arm-safety, torque-limits, speed-limits, workspace-limits]
+    skip_if: Never skip — read before powering the arm near people.
+
+# ---------------------------------------------------------------------------
+- id: "15"
+  dir: 15-manipulation
+  track: main
+  title: Manipulation
+  summary: Grasping physics, grippers, object pose, grasp planning, hand–eye calibration, visual servoing and a complete pick-and-place system.
+  lessons:
+  - id: "15.01"
+    slug: physics-of-grasping
+    title: The physics of grasping — force, friction and friction cones
+    difficulty: intermediate
+    time: 50
+    requires: ["14.01"]
+    optional: ["FP.02", "FP.03"]
+    hardware: []
+    software: []
+    teaches: [grasp-physics, friction-cone, grip-force, force-closure]
+    skip_if: You can compute the grip force needed for an object and friction coefficient.
+  - id: "15.02"
+    slug: grippers
+    title: Grippers — parallel jaw, compliant, suction
+    difficulty: beginner
+    time: 40
+    requires: ["15.01"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [parallel-jaw-gripper, compliant-gripper, suction-gripper, gripper-selection]
+    skip_if: You know which gripper suits which objects.
+  - id: "15.03"
+    slug: hand-eye-calibration
+    title: Hand–eye calibration — eye-in-hand and eye-to-hand
+    difficulty: advanced
+    time: 90
+    requires: ["14.04", "13.07"]
+    optional: []
+    hardware: [arm, camera]
+    software: [python, opencv, ros2]
+    teaches: [hand-eye-calibration, eye-in-hand, eye-to-hand, camera-to-base-transform]
+    skip_if: You have calibrated a camera-to-arm transform.
+  - id: "15.04"
+    slug: object-pose-estimation
+    title: Object pose for grasping — from detections and depth to a 3D pose
+    difficulty: advanced
+    time: 75
+    requires: ["15.03", "13.16"]
+    optional: []
+    hardware: [camera]
+    software: [python, ros2]
+    teaches: [object-pose, tabletop-segmentation, centroid-and-principal-axis]
+    skip_if: You estimate graspable object poses from RGB-D data.
+  - id: "15.05"
+    slug: grasp-planning
+    title: Grasp planning — heuristics first, learned grasps second
+    difficulty: advanced
+    time: 60
+    requires: ["15.04", "15.02"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [grasp-planning, top-down-grasp, grasp-candidates, learned-grasp-models]
+    skip_if: You generate and rank grasp candidates.
+  - id: "15.06"
+    slug: visual-servoing
+    title: Visual servoing — closing the loop through the camera
+    difficulty: advanced
+    time: 60
+    requires: ["15.03", "14.06"]
+    optional: []
+    hardware: [arm, camera]
+    software: [python, ros2]
+    teaches: [visual-servoing, ibvs, pbvs]
+    skip_if: You have servoed an arm toward a visual target.
+  - id: "15.07"
+    slug: detect-and-approach
+    title: "Exercise lesson: detect an object and move the gripper toward it"
+    difficulty: advanced
+    time: 90
+    requires: ["15.04", "14.10"]
+    optional: []
+    hardware: [arm, camera]
+    software: [ros2, moveit2]
+    teaches: [vision-guided-reach, pre-grasp-pose]
+    skip_if: Your arm reaches a pre-grasp pose above a detected object.
+  - id: "15.08"
+    slug: pick-and-place-pipeline
+    title: A pick-and-place pipeline with a state machine
+    difficulty: advanced
+    time: 120
+    requires: ["15.07", "15.05"]
+    optional: []
+    hardware: [arm, camera]
+    software: [ros2, moveit2]
+    teaches: [pick-and-place, grasp-verification, task-state-machine]
+    skip_if: Your arm picks and places objects with failure detection and retries.
+  - id: "15.09"
+    slug: collision-avoidance-and-recovery
+    title: Collision avoidance, the planning scene and failure recovery
+    difficulty: advanced
+    time: 60
+    requires: ["15.08"]
+    optional: []
+    hardware: []
+    software: [ros2, moveit2]
+    teaches: [planning-scene-updates, attached-objects, manipulation-failure-recovery]
+    skip_if: Your pipeline adds obstacles to the planning scene and recovers from failed grasps.
+  - id: "15.10"
+    slug: mobile-manipulation
+    title: Mobile manipulation — the arm on the moving base
+    difficulty: advanced
+    time: 90
+    requires: ["15.08", "12.09"]
+    optional: ["FP.07"]
+    hardware: [robot-base, arm, camera]
+    software: [ros2, nav2, moveit2]
+    teaches: [mobile-manipulation, base-arm-coordination, stability-when-reaching]
+    skip_if: Your robot navigates to an object and picks it up.
+
+# ---------------------------------------------------------------------------
+- id: "16"
+  dir: 16-machine-learning
+  track: main
+  title: Machine learning for robots
+  summary: Where ML actually earns its place on a robot — data, fine-tuning, edge deployment, learned models of dynamics, and evaluating ML inside a physical system.
+  lessons:
+  - id: "16.01"
+    slug: where-ml-helps-robots
+    title: Where ML actually helps robots (and where classical methods win)
+    difficulty: beginner
+    time: 40
+    requires: ["13.10"]
+    optional: ["FML.01"]
+    hardware: []
+    software: []
+    teaches: [ml-in-robotics-map, learned-vs-engineered]
+    skip_if: You can argue for and against ML for each layer of the robotics stack.
+  - id: "16.02"
+    slug: robot-data
+    title: Data for robots — collecting, labeling, datasets from rosbags
+    difficulty: intermediate
+    time: 60
+    requires: ["16.01", "04.14"]
+    optional: ["FML.03"]
+    hardware: []
+    software: [python, ros2]
+    teaches: [robot-datasets, labeling, bag-to-dataset, data-versioning]
+    skip_if: You turn robot logs into versioned, labeled datasets.
+  - id: "16.03"
+    slug: fine-tuning-a-detector
+    title: Fine-tuning a detector on your own objects
+    difficulty: intermediate
+    time: 120
+    requires: ["16.02"]
+    optional: ["FML.05", "FML.07"]
+    hardware: []
+    software: [python, pytorch]
+    teaches: [fine-tuning, transfer-learning, detector-training, overfitting-in-practice]
+    skip_if: You have fine-tuned a detector and measured it on a held-out set.
+    version_sensitive: true
+  - id: "16.04"
+    slug: models-on-edge-compute
+    title: Running models on robot compute — ONNX, TensorRT and quantization
+    difficulty: advanced
+    time: 75
+    requires: ["16.03"]
+    optional: []
+    hardware: []
+    software: [python, onnxruntime]
+    teaches: [onnx, tensorrt, quantization, edge-inference]
+    skip_if: You deploy quantized models on edge hardware and measure latency.
+    version_sensitive: true
+  - id: "16.05"
+    slug: learning-dynamics
+    title: Learning a motor model — regression and system identification
+    difficulty: intermediate
+    time: 60
+    requires: ["16.01", "08.02"]
+    optional: ["FML.02", "FM.19"]
+    hardware: []
+    software: [python, numpy]
+    teaches: [system-identification, regression-on-robot-data, learned-feedforward]
+    skip_if: You have fit a dynamics model from logged robot data.
+  - id: "16.06"
+    slug: evaluating-ml-in-robots
+    title: Evaluating ML components inside a robot
+    difficulty: intermediate
+    time: 50
+    requires: ["16.03"]
+    optional: ["FCV.06"]
+    hardware: []
+    software: [python]
+    teaches: [ml-evaluation-robotics, distribution-shift, failure-analysis, closed-loop-metrics]
+    skip_if: You evaluate ML modules by closed-loop task success, not just offline metrics.
+
+# ---------------------------------------------------------------------------
+- id: "17"
+  dir: 17-reinforcement-learning
+  track: main
+  title: Reinforcement learning
+  summary: RL in simulation first — states, actions, rewards, Q-learning, policy gradients, actor-critic, reward design and sim-to-real.
+  lessons:
+  - id: "17.01"
+    slug: rl-framing
+    title: The RL framing — environment, state, action, reward, policy
+    difficulty: intermediate
+    time: 45
+    requires: ["16.01", "06.02"]
+    optional: ["FML.01"]
+    hardware: []
+    software: []
+    teaches: [reinforcement-learning, environment, state, action, reward, policy, episode, mdp]
+    skip_if: You can formulate a robot task as an MDP.
+  - id: "17.02"
+    slug: value-exploration
+    title: Value, return, exploration and exploitation
+    difficulty: intermediate
+    time: 50
+    requires: ["17.01"]
+    optional: ["FM.13"]
+    hardware: []
+    software: [python]
+    teaches: [value-function, return-discount, exploration-exploitation, epsilon-greedy, bandits]
+    skip_if: You understand discounting and epsilon-greedy exploration.
+  - id: "17.03"
+    slug: q-learning-gridworld
+    title: Q-learning on a gridworld robot
+    difficulty: intermediate
+    time: 75
+    requires: ["17.02"]
+    optional: []
+    hardware: []
+    software: [python, numpy]
+    teaches: [q-learning, bellman-equation, temporal-difference]
+    skip_if: You have implemented tabular Q-learning.
+  - id: "17.04"
+    slug: deep-q-networks
+    title: From tables to networks — DQN
+    difficulty: advanced
+    time: 60
+    requires: ["17.03"]
+    optional: ["FML.06", "FML.07"]
+    hardware: []
+    software: [python, pytorch]
+    teaches: [dqn, replay-buffer, target-network, function-approximation]
+    skip_if: You understand why DQN needs replay buffers and target networks.
+  - id: "17.05"
+    slug: policy-gradients
+    title: Policy gradients — REINFORCE intuitively and mathematically
+    difficulty: advanced
+    time: 75
+    requires: ["17.03"]
+    optional: ["FM.17", "FML.05"]
+    hardware: []
+    software: [python, pytorch]
+    teaches: [policy-gradient, reinforce, baseline, continuous-actions]
+    skip_if: You can derive the REINFORCE estimator.
+  - id: "17.06"
+    slug: actor-critic-ppo-sac
+    title: Actor-critic, PPO and SAC with Stable-Baselines3
+    difficulty: advanced
+    time: 75
+    requires: ["17.05", "17.04"]
+    optional: []
+    hardware: []
+    software: [python, stable-baselines3, gymnasium]
+    teaches: [actor-critic, ppo, sac, stable-baselines3]
+    skip_if: You train PPO/SAC agents with SB3 and read their learning curves.
+    version_sensitive: true
+  - id: "17.07"
+    slug: robot-gym-environment
+    title: Wrap the course simulator as a Gymnasium environment and train go-to-goal
+    difficulty: advanced
+    time: 120
+    requires: ["17.06"]
+    optional: []
+    hardware: []
+    software: [python, gymnasium, stable-baselines3]
+    teaches: [gymnasium-env, observation-action-spaces, training-a-robot-policy]
+    skip_if: You have trained a navigation policy in a custom Gymnasium environment.
+  - id: "17.08"
+    slug: reward-design
+    title: Reward design and reward hacking
+    difficulty: intermediate
+    time: 45
+    requires: ["17.07"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [reward-shaping, reward-hacking, sparse-vs-dense-rewards]
+    skip_if: You have seen a policy exploit a reward and fixed it.
+  - id: "17.09"
+    slug: rl-sim-to-real
+    title: Sim-to-real for RL — domain randomization, GPU simulators, safety
+    difficulty: advanced
+    time: 60
+    requires: ["17.08", "06.10"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [domain-randomization, rl-sim-to-real, gpu-parallel-simulation, safe-rl-deployment]
+    skip_if: You can plan a sim-to-real RL deployment with safety layers.
+    version_sensitive: true
+
+# ---------------------------------------------------------------------------
+- id: "18"
+  dir: 18-embodied-ai
+  track: main
+  title: Modern embodied AI
+  summary: "Imitation learning, ACT, diffusion policies, VLAs and robot foundation models — what is mature, what is research, and what you can run at home."
+  lessons:
+  - id: "18.01"
+    slug: embodied-ai-landscape
+    title: The embodied AI landscape — mature vs research (dated)
+    difficulty: intermediate
+    time: 45
+    requires: ["16.01"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [embodied-ai, robot-foundation-models-overview, maturity-assessment]
+    skip_if: You follow robot learning research closely.
+    version_sensitive: true
+  - id: "18.02"
+    slug: imitation-learning-behavior-cloning
+    title: Imitation learning and behavior cloning
+    difficulty: intermediate
+    time: 60
+    requires: ["18.01"]
+    optional: ["FML.02", "FML.04"]
+    hardware: []
+    software: [python, pytorch]
+    teaches: [imitation-learning, behavior-cloning, compounding-errors, dagger]
+    skip_if: You can explain compounding errors and DAgger.
+  - id: "18.03"
+    slug: teleop-data-collection
+    title: Teleoperation and demonstration data with a leader–follower arm (LeRobot)
+    difficulty: intermediate
+    time: 120
+    requires: ["18.02", "14.03"]
+    optional: []
+    hardware: [arm, camera]
+    software: [python, lerobot]
+    teaches: [leader-follower-teleop, demonstration-collection, lerobot-dataset]
+    skip_if: You have recorded a LeRobot dataset of your own demonstrations.
+    version_sensitive: true
+  - id: "18.04"
+    slug: action-chunking-transformers
+    title: ACT — action chunking with transformers
+    difficulty: advanced
+    time: 60
+    requires: ["18.02"]
+    optional: ["FML.10"]
+    hardware: []
+    software: []
+    teaches: [act-policy, action-chunking, temporal-ensembling]
+    skip_if: You know why action chunking reduces compounding error.
+  - id: "18.05"
+    slug: diffusion-policies
+    title: Diffusion policies
+    difficulty: advanced
+    time: 60
+    requires: ["18.02"]
+    optional: ["FML.12"]
+    hardware: []
+    software: []
+    teaches: [diffusion-policy, multimodal-action-distributions, denoising]
+    skip_if: You can explain why diffusion handles multimodal demonstrations.
+  - id: "18.06"
+    slug: train-first-policy-lerobot
+    title: Train and deploy your first policy with LeRobot
+    difficulty: advanced
+    time: 240
+    requires: ["18.03", "18.04"]
+    optional: []
+    hardware: [arm, camera]
+    software: [python, lerobot, pytorch]
+    teaches: [policy-training, policy-evaluation-real, lerobot-training]
+    skip_if: A policy you trained performs a task on your arm.
+    version_sensitive: true
+  - id: "18.07"
+    slug: vision-language-action-models
+    title: Vision-language-action models (VLAs)
+    difficulty: advanced
+    time: 60
+    requires: ["18.04", "13.14"]
+    optional: ["FML.10"]
+    hardware: []
+    software: []
+    teaches: [vla, action-tokenization, flow-matching-action-heads, generalist-policies]
+    skip_if: You can compare RT-2, OpenVLA, π0-family and SmolVLA architectures.
+    version_sensitive: true
+  - id: "18.08"
+    slug: fine-tuning-a-vla
+    title: Fine-tuning a small VLA on your own demonstrations
+    difficulty: advanced
+    time: 240
+    requires: ["18.07", "18.06"]
+    optional: []
+    hardware: [arm, camera]
+    software: [python, lerobot, pytorch]
+    teaches: [vla-fine-tuning, language-conditioned-policy, compute-budgeting]
+    skip_if: You fine-tuned and ran a VLA on your arm.
+    version_sensitive: true
+  - id: "18.09"
+    slug: foundation-models-world-models
+    title: Robot foundation models, world models and cross-embodiment data
+    difficulty: advanced
+    time: 50
+    requires: ["18.07"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [robot-foundation-models, world-models, cross-embodiment, open-x-embodiment]
+    skip_if: You follow cross-embodiment datasets and world-model research.
+    version_sensitive: true
+  - id: "18.10"
+    slug: evaluating-learned-policies
+    title: Evaluating and safely deploying learned policies
+    difficulty: advanced
+    time: 45
+    requires: ["18.06"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [policy-evaluation, learned-policy-safety, success-rate-statistics]
+    skip_if: You evaluate policies with enough trials and safety envelopes.
+
+# ---------------------------------------------------------------------------
+- id: "19"
+  dir: 19-llm-robot-agents
+  track: main
+  title: LLMs and robot agents
+  summary: '"Find the bottle and put it on the table." LLMs operating robots safely through tools, planners, behavior trees and deterministic controllers.'
+  lessons:
+  - id: "19.01"
+    slug: why-llms-dont-drive-motors
+    title: Why the LLM should not drive the motors — the layered agent architecture
+    difficulty: intermediate
+    time: 40
+    requires: ["12.01", "08.01"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [layered-robot-agent-architecture, llm-latency-vs-control-rates, deterministic-low-level-control]
+    skip_if: You can defend the layering between LLM, skills and controllers in a design review.
+  - id: "19.02"
+    slug: robot-skill-api
+    title: Designing the robot's skill API — the tools an LLM may call
+    difficulty: intermediate
+    time: 60
+    requires: ["19.01", "04.08"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [skill-api, tool-contracts, preconditions-postconditions, idempotent-skills]
+    skip_if: You design robot skills with explicit contracts, timeouts and failure modes.
+  - id: "19.03"
+    slug: tool-calling-sim-robot
+    title: Tool calling — an LLM operating the simulated robot
+    difficulty: intermediate
+    time: 90
+    requires: ["19.02", "12.09"]
+    optional: []
+    hardware: []
+    software: [python, ros2, llm-api]
+    teaches: [tool-calling-robots, agent-loop, llm-api-robotics]
+    skip_if: An LLM already drives your simulated robot via tools.
+    version_sensitive: true
+  - id: "19.04"
+    slug: state-machines
+    title: State machines for robot tasks
+    difficulty: intermediate
+    time: 50
+    requires: ["19.01"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [finite-state-machine, hierarchical-state-machine, task-execution]
+    skip_if: You model robot tasks as explicit state machines.
+  - id: "19.05"
+    slug: behavior-trees
+    title: Behavior trees
+    difficulty: intermediate
+    time: 75
+    requires: ["19.04", "12.06"]
+    optional: []
+    hardware: []
+    software: [python, py-trees]
+    teaches: [behavior-trees, sequence-fallback, blackboard, reactive-execution]
+    skip_if: You write behavior trees and know why Nav2 uses them.
+  - id: "19.06"
+    slug: task-planning-decomposition
+    title: Task planning and decomposition — LLM plans, validated execution
+    difficulty: advanced
+    time: 75
+    requires: ["19.03", "19.05"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [task-decomposition, plan-validation, llm-planner, plan-to-behavior-tree]
+    skip_if: Your LLM produces plans that are validated before execution.
+  - id: "19.07"
+    slug: perception-action-loops
+    title: Perception–action loops — verifying every step
+    difficulty: advanced
+    time: 60
+    requires: ["19.06", "13.16"]
+    optional: []
+    hardware: []
+    software: [python, ros2]
+    teaches: [perception-action-loop, closed-loop-agent, success-detection, replanning]
+    skip_if: Your agent checks the world after every action and replans on failure.
+  - id: "19.08"
+    slug: memory-and-world-model
+    title: Memory and the agent's world model — semantic maps and object memory
+    difficulty: advanced
+    time: 60
+    requires: ["19.07"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [agent-memory, semantic-map, object-permanence, rag-for-robots]
+    skip_if: Your agent remembers where it saw things and when.
+  - id: "19.09"
+    slug: agent-safety-boundaries
+    title: Safety boundaries for LLM-controlled robots
+    difficulty: advanced
+    time: 60
+    requires: ["19.06"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [agent-safety, action-allowlists, geofences, human-confirmation, prompt-injection-physical]
+    skip_if: Never skip.
+  - id: "19.10"
+    slug: ros2-for-agents-mcp
+    title: Exposing ROS 2 to agents — MCP servers and evaluation
+    difficulty: advanced
+    time: 60
+    requires: ["19.09"]
+    optional: []
+    hardware: []
+    software: [python, ros2]
+    teaches: [mcp-robotics, rosa, agent-evaluation-robots]
+    skip_if: You expose robot skills over MCP with the same safety layer.
+    version_sensitive: true
+  - id: "19.11"
+    slug: voice-interface
+    title: Talking to the robot — speech in, speech out
+    difficulty: intermediate
+    time: 45
+    requires: ["19.03"]
+    optional: []
+    hardware: []
+    software: [python]
+    teaches: [speech-to-text, text-to-speech, wake-word, voice-latency]
+    skip_if: You don't want a voice interface.
+    version_sensitive: true
+
+# ---------------------------------------------------------------------------
+- id: "20"
+  dir: 20-final-robot
+  track: main
+  title: The final robot — integration
+  summary: Putting it all together into one autonomous AI robot, with architecture, integration, a safety case, testing and the final demo.
+  lessons:
+  - id: "20.01"
+    slug: final-architecture
+    title: Final robot system architecture
+    difficulty: advanced
+    time: 60
+    requires: ["19.07", "15.10"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [system-architecture-final, interface-contracts, compute-allocation]
+    skip_if: Never — this is the capstone design.
+  - id: "20.02"
+    slug: hardware-integration
+    title: Hardware integration — mounting, power v2, compute, cabling
+    difficulty: advanced
+    time: 180
+    requires: ["20.01", "02.08"]
+    optional: ["FP.07", "F3D.05"]
+    hardware: [robot-base, lidar, camera, arm]
+    software: []
+    teaches: [mechanical-integration, power-architecture-v2, thermal-management]
+    skip_if: Never.
+  - id: "20.03"
+    slug: software-integration-bringup
+    title: Software integration — bringup, health monitoring and diagnostics
+    difficulty: advanced
+    time: 120
+    requires: ["20.01"]
+    optional: []
+    hardware: []
+    software: [ros2]
+    teaches: [bringup-design, ros2-diagnostics, health-monitoring, systemd-bringup]
+    skip_if: Never.
+  - id: "20.04"
+    slug: safety-case
+    title: The safety case — e-stop, watchdogs, safe shutdown and test procedures
+    difficulty: advanced
+    time: 90
+    requires: ["20.02", "20.03", "19.09", "14.11", "12.10"]
+    optional: []
+    hardware: [robot-base, estop]
+    software: [ros2]
+    teaches: [safety-case, hardware-estop, layered-watchdogs, safe-shutdown, hazard-analysis]
+    skip_if: Never.
+  - id: "20.05"
+    slug: testing-strategy
+    title: Testing the whole robot — sim scenarios, field tests, regressions
+    difficulty: advanced
+    time: 75
+    requires: ["20.03", "03.08"]
+    optional: []
+    hardware: []
+    software: [ros2, gazebo]
+    teaches: [scenario-testing, field-test-protocol, regression-bags]
+    skip_if: Never.
+  - id: "20.06"
+    slug: demo-and-beyond
+    title: The demo — and where to go next
+    difficulty: advanced
+    time: 60
+    requires: ["20.04", "20.05"]
+    optional: []
+    hardware: []
+    software: []
+    teaches: [demo-planning, next-steps-robotics]
+    skip_if: Never.
+
+# ===========================================================================
+# OPTIONAL FOUNDATIONS
+# ===========================================================================
+- id: FM
+  dir: optional-foundations/mathematics
+  track: foundations
+  title: "Foundations: mathematics"
+  summary: Exactly the math robotics uses, each concept tied to a robot example — trig, vectors, matrices, rotations, probability, calculus and optimization.
+  lessons:
+  - {id: FM.01, slug: algebra-refresher, title: "Algebra refresher for robotics formulas", difficulty: beginner, time: 40, requires: [], optional: [], hardware: [], software: [python], teaches: [algebra, rearranging-equations, units-in-formulas], skip_if: "You can rearrange formulas and solve simple linear systems by hand."}
+  - {id: FM.02, slug: angles-and-radians, title: "Angles, degrees and radians", difficulty: beginner, time: 30, requires: [], optional: [], hardware: [], software: [python], teaches: [angles, radians, angle-wrapping-math], skip_if: "You think in radians and can wrap angles to (-π, π]."}
+  - {id: FM.03, slug: trigonometry, title: "Trigonometry: sin, cos, tan and atan2", difficulty: beginner, time: 50, requires: [FM.02], optional: [], hardware: [], software: [python], teaches: [trigonometry, sine-cosine, atan2, unit-circle], skip_if: "You use atan2 correctly and know sin/cos on the unit circle."}
+  - {id: FM.04, slug: coordinate-systems, title: "Cartesian and polar coordinates", difficulty: beginner, time: 40, requires: [FM.03], optional: [], hardware: [], software: [python], teaches: [cartesian-coordinates, polar-coordinates, coordinate-systems], skip_if: "You convert between polar and Cartesian without thinking."}
+  - {id: FM.05, slug: vectors, title: "Vectors from zero", difficulty: beginner, time: 50, requires: [FM.04], optional: [], hardware: [], software: [python, numpy], teaches: [vectors, scalars, vector-addition, norm, unit-vector], skip_if: "You are comfortable with vector addition, scaling and norms."}
+  - {id: FM.06, slug: dot-and-cross-product, title: "Dot product and cross product", difficulty: beginner, time: 50, requires: [FM.05], optional: [], hardware: [], software: [python, numpy], teaches: [dot-product, cross-product, projection, angle-between-vectors], skip_if: "You use dot products for angles/projections and cross products for normals and torque."}
+  - {id: FM.07, slug: matrices, title: "Matrices and matrix multiplication", difficulty: beginner, time: 60, requires: [FM.05], optional: [], hardware: [], software: [python, numpy], teaches: [matrices, matrix-multiplication, identity, transpose, inverse], skip_if: "You can multiply matrices by hand and know why order matters."}
+  - {id: FM.08, slug: matrices-as-transformations, title: "Matrices as transformations and basis vectors", difficulty: intermediate, time: 60, requires: [FM.07, FM.06], optional: [], hardware: [], software: [python, numpy], teaches: [linear-transformation, basis-vectors, change-of-basis, determinant], skip_if: "You read a matrix's columns as where the basis vectors go."}
+  - {id: FM.09, slug: homogeneous-coordinates, title: "2D/3D transformations and homogeneous coordinates", difficulty: intermediate, time: 60, requires: [FM.08], optional: [], hardware: [], software: [python, numpy], teaches: [homogeneous-coordinates, affine-transform, transformation-3d], skip_if: "You understand why translation needs an extra dimension."}
+  - {id: FM.10, slug: rotation-matrices, title: "Rotation matrices", difficulty: intermediate, time: 60, requires: [FM.08, FM.03], optional: [], hardware: [], software: [python, numpy], teaches: [rotation-matrix, orthonormal-matrix, rotation-composition, so3], skip_if: "You know rotation matrices are orthonormal and how to compose them."}
+  - {id: FM.11, slug: euler-angles, title: "Euler angles, roll-pitch-yaw and gimbal lock", difficulty: intermediate, time: 50, requires: [FM.10], optional: [], hardware: [], software: [python, scipy], teaches: [euler-angles, roll-pitch-yaw, gimbal-lock, intrinsic-extrinsic-rotations], skip_if: "You can explain gimbal lock and intrinsic vs extrinsic conventions."}
+  - {id: FM.12, slug: quaternions, title: "Quaternions without the mysticism", difficulty: intermediate, time: 75, requires: [FM.11], optional: [], hardware: [], software: [python, scipy], teaches: [quaternions, quaternion-multiplication, slerp, axis-angle], skip_if: "You use quaternions and know q and -q represent the same rotation."}
+  - {id: FM.13, slug: probability-basics, title: "Probability from zero", difficulty: beginner, time: 50, requires: [], optional: [], hardware: [], software: [python, numpy], teaches: [probability, random-variables, conditional-probability, independence], skip_if: "You are comfortable with conditional probability."}
+  - {id: FM.14, slug: distributions-gaussians-noise, title: "Distributions, Gaussians, uncertainty and noise", difficulty: beginner, time: 60, requires: [FM.13], optional: [], hardware: [], software: [python, numpy, matplotlib], teaches: [probability-distributions, gaussian-distribution, variance, standard-deviation, noise-models, uncertainty], skip_if: "You can model sensor noise as a Gaussian and reason about σ."}
+  - {id: FM.15, slug: covariance-multivariate-gaussians, title: "Covariance and multivariate Gaussians", difficulty: intermediate, time: 60, requires: [FM.14, FM.07], optional: [], hardware: [], software: [python, numpy], teaches: [covariance, covariance-matrix, multivariate-gaussian, correlation], skip_if: "You can read correlations out of a covariance matrix."}
+  - {id: FM.16, slug: bayes-rule, title: "Bayes' rule — updating beliefs with evidence", difficulty: intermediate, time: 50, requires: [FM.13], optional: [], hardware: [], software: [python, numpy], teaches: [bayes-rule, prior, likelihood, posterior, normalization], skip_if: "You apply Bayes' rule to sensor updates."}
+  - {id: FM.17, slug: derivatives, title: "Calculus for robots: derivatives, rates and partial derivatives", difficulty: intermediate, time: 60, requires: [FM.01], optional: [], hardware: [], software: [python, numpy], teaches: [derivative, rate-of-change, partial-derivative, gradient, chain-rule, numerical-differentiation], skip_if: "You compute partial derivatives and gradients."}
+  - {id: FM.18, slug: integrals-numerical-integration, title: "Integrals and numerical integration (how simulators move time forward)", difficulty: intermediate, time: 50, requires: [FM.17], optional: [], hardware: [], software: [python, numpy], teaches: [integral, numerical-integration, euler-method, time-step-error], skip_if: "You know Euler integration and its error behavior."}
+  - {id: FM.19, slug: linear-systems-least-squares, title: "Linear systems and least squares", difficulty: intermediate, time: 60, requires: [FM.07], optional: [], hardware: [], software: [python, numpy], teaches: [linear-systems, least-squares, pseudo-inverse, svd-intro], skip_if: "You fit models with least squares and know the pseudo-inverse."}
+  - {id: FM.20, slug: optimization-basics, title: "Optimization for robotics and ML: gradient descent to nonlinear least squares", difficulty: intermediate, time: 75, requires: [FM.19, FM.17], optional: [], hardware: [], software: [python, numpy, scipy], teaches: [optimization, gradient-descent-math, gauss-newton, levenberg-marquardt, cost-function], skip_if: "You understand gradient descent and Gauss-Newton."}
+  - {id: FM.21, slug: statistics-for-experiments, title: "Statistics for robot experiments: mean, spread, RMSE, outliers", difficulty: beginner, time: 45, requires: [FM.14], optional: [], hardware: [], software: [python, numpy, scipy], teaches: [mean-median, rmse, outliers, confidence-intervals, repeated-trials], skip_if: "You report experiment results with spread and trial counts."}
+
+- id: FE
+  dir: optional-foundations/electronics
+  track: foundations
+  title: "Foundations: electronics"
+  summary: Only the electronics needed to build robots safely, with a practical experiment in almost every lesson.
+  lessons:
+  - {id: FE.01, slug: voltage-current-resistance-power, title: "Voltage, current, resistance and power", difficulty: beginner, time: 45, requires: [], optional: [], hardware: [], software: [], teaches: [voltage, current, resistance, power, electrical-circuit], skip_if: "You can explain voltage vs current with a correct analogy and compute power."}
+  - {id: FE.02, slug: ohms-law-series-parallel, title: "Ohm's law, series and parallel, voltage dividers", difficulty: beginner, time: 50, requires: [FE.01], optional: [], hardware: [], software: [], teaches: [ohms-law, series-circuits, parallel-circuits, voltage-divider], skip_if: "You can design a voltage divider for an ADC input."}
+  - {id: FE.03, slug: multimeter, title: "Using a multimeter safely", difficulty: beginner, time: 45, requires: [FE.02], optional: [], hardware: [tools], software: [], teaches: [multimeter, measuring-voltage, measuring-current, continuity], skip_if: "You measure voltage, current and continuity without blowing the meter's fuse."}
+  - {id: FE.04, slug: breadboards-and-connectors, title: "Breadboards, jumpers and connectors", difficulty: beginner, time: 40, requires: [FE.01], optional: [], hardware: [tools], software: [], teaches: [breadboard, dupont-jumpers, connectors, header-pins], skip_if: "You prototype on breadboards and know common connector families."}
+  - {id: FE.05, slug: digital-analog-gpio, title: "Digital vs analog signals and GPIO", difficulty: beginner, time: 45, requires: [FE.02], optional: [], hardware: [], software: [], teaches: [digital-signal, analog-signal, gpio, logic-high-low, input-output-pins], skip_if: "You understand GPIO input/output modes and logic thresholds."}
+  - {id: FE.06, slug: pull-up-pull-down, title: "Pull-up and pull-down resistors (and why inputs float)", difficulty: beginner, time: 35, requires: [FE.05], optional: [], hardware: [], software: [], teaches: [pull-up-resistor, pull-down-resistor, floating-input, open-drain], skip_if: "You know when inputs float and how open-drain buses work."}
+  - {id: FE.07, slug: pwm, title: "PWM — pulse-width modulation", difficulty: beginner, time: 40, requires: [FE.05], optional: [], hardware: [], software: [], teaches: [pwm, duty-cycle, pwm-frequency-basics], skip_if: "You know duty cycle vs frequency and what PWM does to a motor or LED."}
+  - {id: FE.08, slug: adc, title: "ADC — reading analog voltages", difficulty: beginner, time: 40, requires: [FE.05, FE.02], optional: [], hardware: [], software: [], teaches: [adc, resolution-bits, reference-voltage, sampling], skip_if: "You convert ADC counts to volts and know resolution limits."}
+  - {id: FE.09, slug: uart-i2c-spi, title: "Serial buses: UART, I²C and SPI", difficulty: beginner, time: 60, requires: [FE.06], optional: [], hardware: [], software: [], teaches: [uart, i2c, spi, baud-rate, bus-addressing], skip_if: "You can explain the wiring and trade-offs of UART, I²C and SPI."}
+  - {id: FE.10, slug: dc-motors, title: "DC motors: brushed vs brushless, gearboxes, stall current", difficulty: beginner, time: 50, requires: [FE.01], optional: [FP.04], hardware: [], software: [], teaches: [dc-motor, brushed-motor, brushless-motor, gearbox, stall-current, kv-rating], skip_if: "You can read a motor spec sheet and know brushed vs BLDC trade-offs."}
+  - {id: FE.11, slug: servos-and-steppers, title: "Servo motors and stepper motors", difficulty: beginner, time: 45, requires: [FE.07, FE.10], optional: [], hardware: [], software: [], teaches: [servo-motor, bus-servo, stepper-motor, microstepping], skip_if: "You know hobby servos vs bus servos vs steppers."}
+  - {id: FE.12, slug: h-bridges-motor-drivers, title: "H-bridges and motor drivers", difficulty: beginner, time: 45, requires: [FE.10, FE.07], optional: [], hardware: [], software: [], teaches: [h-bridge-basics, motor-driver, mosfet-switch], skip_if: "You know why a GPIO pin cannot drive a motor directly and how an H-bridge reverses it."}
+  - {id: FE.13, slug: batteries, title: "Batteries: chemistry, voltage, capacity, C-rating", difficulty: beginner, time: 50, requires: [FE.01], optional: [], hardware: [], software: [], teaches: [battery, li-ion, lipo, nimh, mah-capacity, c-rating, series-parallel-cells, bms], skip_if: "You can size a battery pack for a robot."}
+  - {id: FE.14, slug: lithium-battery-safety, title: "Li-ion and LiPo safety and charging", difficulty: beginner, time: 40, requires: [FE.13], optional: [], hardware: [], software: [], teaches: [lithium-safety, charging, balance-charging, storage-voltage, thermal-runaway], skip_if: "Never skip."}
+  - {id: FE.15, slug: voltage-regulators, title: "Voltage regulators: linear, buck and boost", difficulty: beginner, time: 40, requires: [FE.02], optional: [], hardware: [], software: [], teaches: [voltage-regulator, linear-regulator, buck-converter-basics, boost-converter, efficiency], skip_if: "You choose between LDO and buck converters knowingly."}
+  - {id: FE.16, slug: grounding, title: "Ground, common ground and why it matters", difficulty: beginner, time: 35, requires: [FE.02], optional: [], hardware: [], software: [], teaches: [ground, common-ground-basics, reference-voltage-ground], skip_if: "You never forget to connect grounds between boards."}
+  - {id: FE.17, slug: soldering, title: "Soldering from zero", difficulty: beginner, time: 90, requires: [FE.04], optional: [], hardware: [tools], software: [], teaches: [soldering, tinning, through-hole-soldering, desoldering, solder-safety], skip_if: "You solder clean through-hole joints."}
+  - {id: FE.18, slug: capacitors-diodes, title: "Capacitors, diodes and flyback protection — just enough", difficulty: intermediate, time: 45, requires: [FE.02], optional: [], hardware: [], software: [], teaches: [capacitor, diode, flyback-diode, reverse-polarity-protection], skip_if: "You know what decoupling caps and flyback diodes do."}
+  - {id: FE.19, slug: can-bus-concepts, title: "CAN bus concepts", difficulty: intermediate, time: 35, requires: [FE.09], optional: [], hardware: [], software: [], teaches: [can-bus, differential-signaling, can-frames, termination], skip_if: "You know CAN frames, arbitration and termination."}
+
+- id: FP
+  dir: optional-foundations/physics
+  track: foundations
+  title: "Foundations: physics"
+  summary: Motion, forces, friction, torque, energy and stability — the physics a robot builder trips over.
+  lessons:
+  - {id: FP.01, slug: kinematics-units, title: "Units, position, velocity and acceleration", difficulty: beginner, time: 45, requires: [], optional: [FM.17], hardware: [], software: [python], teaches: [si-units, velocity, acceleration, kinematics-physics], skip_if: "You are fluent with SI units and kinematic equations."}
+  - {id: FP.02, slug: forces-newton, title: "Forces, mass, weight and Newton's laws", difficulty: beginner, time: 45, requires: [FP.01], optional: [FM.05], hardware: [], software: [], teaches: [force, newtons-laws, mass-weight, free-body-diagram], skip_if: "You draw free-body diagrams comfortably."}
+  - {id: FP.03, slug: friction-traction, title: "Friction and traction", difficulty: beginner, time: 40, requires: [FP.02], optional: [], hardware: [], software: [], teaches: [friction, static-kinetic-friction, traction, wheel-slip-physics], skip_if: "You know why wheels slip and how weight affects traction."}
+  - {id: FP.04, slug: torque-gears-wheels, title: "Torque, gears and wheels — sizing motors", difficulty: beginner, time: 60, requires: [FP.02], optional: [FM.06], hardware: [], software: [python], teaches: [torque, gear-ratio, wheel-torque-force, motor-sizing], skip_if: "You can size a drive motor for a robot's mass, slope and acceleration."}
+  - {id: FP.05, slug: energy-power-efficiency, title: "Energy, power and efficiency — how long will the battery last?", difficulty: beginner, time: 45, requires: [FP.04], optional: [FE.01], hardware: [], software: [], teaches: [energy, mechanical-power, efficiency, runtime-estimation], skip_if: "You estimate runtime from mechanical and electrical loads."}
+  - {id: FP.06, slug: rotational-motion-inertia, title: "Rotational motion and moment of inertia", difficulty: intermediate, time: 50, requires: [FP.04], optional: [], hardware: [], software: [python], teaches: [angular-velocity, moment-of-inertia, inertia-tensor-intro], skip_if: "You can compute the inertia of simple shapes for a URDF."}
+  - {id: FP.07, slug: center-of-mass-stability, title: "Center of mass and tipping stability", difficulty: intermediate, time: 45, requires: [FP.02], optional: [], hardware: [], software: [], teaches: [center-of-mass, support-polygon, tipping, static-stability], skip_if: "You can tell if a mobile manipulator will tip when the arm extends."}
+
+- id: FL
+  dir: optional-foundations/linux-and-tools
+  track: foundations
+  title: "Foundations: Linux and the development environment"
+  summary: A complete beginner track for Ubuntu, the shell, permissions, processes, SSH, networking, packages, Python environments, Git and Docker.
+  lessons:
+  - {id: FL.01, slug: why-linux, title: "Why Linux runs robots — Ubuntu versions and LTS", difficulty: beginner, time: 30, requires: [], optional: [], hardware: [], software: [], teaches: [linux-in-robotics, ubuntu-lts, distro-versions], skip_if: "You already use Ubuntu daily.", version_sensitive: true}
+  - {id: FL.02, slug: installing-ubuntu, title: "Getting Ubuntu: dual boot, VM or WSL2", difficulty: beginner, time: 90, requires: [FL.01], optional: [], hardware: [], software: [ubuntu], teaches: [wsl2, dual-boot, virtual-machine, ubuntu-install], skip_if: "You have a working Ubuntu of the course's version.", version_sensitive: true}
+  - {id: FL.03, slug: shell-basics, title: "The shell for Windows developers", difficulty: beginner, time: 60, requires: [FL.02], optional: [], hardware: [], software: [ubuntu], teaches: [bash, shell-commands, pipes-redirection, environment-variables], skip_if: "You are comfortable in bash."}
+  - {id: FL.04, slug: filesystem, title: "The Linux filesystem and paths", difficulty: beginner, time: 40, requires: [FL.03], optional: [], hardware: [], software: [ubuntu], teaches: [filesystem-hierarchy, dev-files, symlinks, mounts], skip_if: "You know /dev, /etc, /opt and symlinks."}
+  - {id: FL.05, slug: permissions-users-groups, title: "Permissions, users, groups and sudo (dialout, gpio, video)", difficulty: beginner, time: 45, requires: [FL.04], optional: [], hardware: [], software: [ubuntu], teaches: [linux-permissions, groups, sudo, dialout-group, udev-intro], skip_if: "You fix \"permission denied\" on /dev/ttyACM0 in seconds."}
+  - {id: FL.06, slug: processes-systemd, title: "Processes, signals and systemd services", difficulty: beginner, time: 50, requires: [FL.03], optional: [], hardware: [], software: [ubuntu], teaches: [processes, signals, systemd, journalctl, autostart], skip_if: "You write systemd units and read journalctl."}
+  - {id: FL.07, slug: package-management, title: "Package management: apt, keys and repositories", difficulty: beginner, time: 40, requires: [FL.03], optional: [], hardware: [], software: [ubuntu], teaches: [apt, apt-repositories, signing-keys, snap], skip_if: "You add apt repositories with signed keys confidently."}
+  - {id: FL.08, slug: ssh-remote-dev, title: "SSH and remote development", difficulty: beginner, time: 50, requires: [FL.03], optional: [], hardware: [], software: [ssh], teaches: [ssh, ssh-keys, scp-rsync, vscode-remote-ssh], skip_if: "You use SSH keys and remote editing daily."}
+  - {id: FL.09, slug: networking-basics, title: "Networking basics: IP, Wi-Fi, ports, mDNS, ping", difficulty: beginner, time: 60, requires: [FL.03], optional: [], hardware: [], software: [ubuntu], teaches: [ip-addresses, subnets, ports, mdns, dhcp, network-debugging-tools, firewall], skip_if: "You debug home network connectivity with ip, ping and ss."}
+  - {id: FL.10, slug: python-environments-ubuntu, title: "Python environments on Ubuntu: apt, venv, uv and PEP 668", difficulty: beginner, time: 45, requires: [FL.07], optional: [], hardware: [], software: [python, uv], teaches: [python-venv, pep668-basics, uv-basics, system-python], skip_if: "You never pip install into system Python.", version_sensitive: true}
+  - {id: FL.11, slug: git-for-robotics, title: "Git for robotics: large files, bags and models", difficulty: beginner, time: 35, requires: [FL.03], optional: [], hardware: [], software: [git], teaches: [git-lfs, gitignore-robotics, submodules-vcs], skip_if: "You know what not to commit and how to handle large binaries."}
+  - {id: FL.12, slug: docker-for-robotics, title: "Docker for robotics: devices, GUIs and host networking", difficulty: intermediate, time: 60, requires: [FL.06], optional: [], hardware: [], software: [docker], teaches: [docker-robotics, device-passthrough, x11-wslg-gui, host-networking-dds], skip_if: "You run ROS GUIs and USB devices in containers.", version_sensitive: true}
+  - {id: FL.13, slug: tmux-headless, title: "Working headless: tmux and resilient remote sessions", difficulty: beginner, time: 30, requires: [FL.08], optional: [], hardware: [], software: [tmux], teaches: [tmux, headless-workflow], skip_if: "You use tmux."}
+
+- id: FPY
+  dir: optional-foundations/python
+  track: foundations
+  title: "Foundations: Python for C# developers"
+  summary: A fast, respectful Python track for an experienced C# engineer — the idioms, numpy, plotting, typing and asyncio that robotics code uses.
+  lessons:
+  - {id: FPY.01, slug: python-for-csharp-devs, title: "Python for C# developers — the fast tour", difficulty: beginner, time: 60, requires: [], optional: [], hardware: [], software: [python], teaches: [python-idioms, python-vs-csharp, duck-typing, context-managers], skip_if: "You write idiomatic Python."}
+  - {id: FPY.02, slug: numpy-essentials, title: "numpy essentials for robotics", difficulty: beginner, time: 60, requires: [FPY.01], optional: [], hardware: [], software: [python, numpy], teaches: [numpy, broadcasting, vectorization, array-shapes], skip_if: "You vectorize with broadcasting and never loop over pixels."}
+  - {id: FPY.03, slug: plotting-matplotlib, title: "Plotting robot data with matplotlib", difficulty: beginner, time: 40, requires: [FPY.02], optional: [], hardware: [], software: [python, matplotlib], teaches: [matplotlib, time-series-plots, live-plotting], skip_if: "You plot time series and 2D trajectories quickly."}
+  - {id: FPY.04, slug: typing-dataclasses-packaging, title: "Typing, dataclasses, protocols and packaging", difficulty: intermediate, time: 50, requires: [FPY.01], optional: [], hardware: [], software: [python], teaches: [type-hints, dataclasses, typing-protocol, pyproject], skip_if: "You write typed, packaged Python with pyproject.toml."}
+  - {id: FPY.05, slug: asyncio-for-csharp-devs, title: "asyncio for people who know async/await in C#", difficulty: intermediate, time: 50, requires: [FPY.01], optional: [], hardware: [], software: [python], teaches: [asyncio, event-loop, async-vs-threads-python], skip_if: "You know how asyncio differs from the .NET thread pool model."}
+  - {id: FPY.06, slug: python-performance, title: "Python performance: vectorization, profiling and when to leave Python", difficulty: intermediate, time: 45, requires: [FPY.02], optional: [], hardware: [], software: [python], teaches: [profiling, cprofile, numba-intro, python-performance-limits], skip_if: "You profile before optimizing and know Python's real-time limits."}
+
+- id: FC
+  dir: optional-foundations/cpp-and-embedded
+  track: foundations
+  title: "Foundations: embedded systems and C/C++"
+  summary: Microcontrollers, MicroPython, interrupts, PIO, real-time concepts, C++ for C# developers, CMake and micro-ROS.
+  lessons:
+  - {id: FC.01, slug: embedded-systems-101, title: "Embedded systems 101 — life without an operating system", difficulty: beginner, time: 45, requires: [], optional: [], hardware: [], software: [], teaches: [embedded-systems, bare-metal, firmware, flash-ram, peripherals], skip_if: "You have written firmware for a microcontroller."}
+  - {id: FC.02, slug: micropython-on-pico, title: "MicroPython on the Raspberry Pi Pico", difficulty: beginner, time: 60, requires: [FC.01], optional: [FPY.01], hardware: [robot-base], software: [micropython, mpremote], teaches: [micropython, machine-module, mpremote-tool, main-py-boot], skip_if: "You are productive in MicroPython.", version_sensitive: true}
+  - {id: FC.03, slug: cpp-for-csharp-devs, title: "C++ for C# developers: memory, RAII, headers, templates", difficulty: intermediate, time: 90, requires: [], optional: [], hardware: [], software: [cpp-compiler], teaches: [cpp, raii, smart-pointers, headers, references-pointers, templates-intro], skip_if: "You write modern C++."}
+  - {id: FC.04, slug: cmake-builds, title: "Building C++ with CMake", difficulty: intermediate, time: 45, requires: [FC.03], optional: [], hardware: [], software: [cmake], teaches: [cmake, build-systems, linking], skip_if: "You write CMakeLists.txt from scratch."}
+  - {id: FC.05, slug: interrupts-timers-pio, title: "Interrupts, timers and the Pico's PIO", difficulty: intermediate, time: 60, requires: [FC.02], optional: [], hardware: [robot-base], software: [micropython], teaches: [interrupts, isr-rules, hardware-timers, pio, debouncing], skip_if: "You write short, safe interrupt handlers and know when PIO is better."}
+  - {id: FC.06, slug: pico-c-sdk, title: "Moving firmware to C/C++ — the Pico SDK", difficulty: advanced, time: 90, requires: [FC.04, FC.05], optional: [], hardware: [robot-base], software: [pico-sdk, cmake], teaches: [pico-sdk, cross-compilation, uf2-flashing], skip_if: "You build and flash Pico C firmware.", version_sensitive: true}
+  - {id: FC.07, slug: real-time-concepts, title: "Real-time concepts: determinism, latency, jitter and watchdogs", difficulty: intermediate, time: 45, requires: [FC.01], optional: [], hardware: [], software: [], teaches: [real-time-systems, determinism, jitter-concept, hardware-watchdog, rtos-intro], skip_if: "You can explain hard vs soft real-time and design a watchdog."}
+  - {id: FC.08, slug: micro-ros, title: "micro-ROS: ROS 2 on microcontrollers", difficulty: advanced, time: 75, requires: [FC.06], optional: [], hardware: [robot-base], software: [micro-ros, ros2], teaches: [micro-ros, xrce-dds, micro-ros-agent], skip_if: "You have run a micro-ROS node on a microcontroller.", version_sensitive: true}
+
+- id: FCT
+  dir: optional-foundations/control-theory
+  track: foundations
+  title: "Foundations: control theory"
+  summary: Just enough control theory to understand what the control module does and to read Nav2/MPC documentation.
+  lessons:
+  - {id: FCT.01, slug: systems-signals-feedback, title: "Systems, signals and feedback — block diagrams", difficulty: beginner, time: 40, requires: [], optional: [], hardware: [], software: [], teaches: [system, signal, block-diagram, feedback-loop], skip_if: "You read block diagrams."}
+  - {id: FCT.02, slug: first-second-order-systems, title: "First- and second-order systems", difficulty: intermediate, time: 60, requires: [FCT.01], optional: [FM.17], hardware: [], software: [python], teaches: [first-order-system, second-order-system, damping-ratio, natural-frequency], skip_if: "You know time constants and damping ratios."}
+  - {id: FCT.03, slug: differential-equations-simulation, title: "Differential equations just enough — simulate them numerically", difficulty: intermediate, time: 50, requires: [FCT.02], optional: [FM.18], hardware: [], software: [python], teaches: [ode, numerical-ode-simulation, state-variables], skip_if: "You simulate ODEs numerically."}
+  - {id: FCT.04, slug: stability-intuition, title: "Stability: poles without the pain", difficulty: intermediate, time: 60, requires: [FCT.03], optional: [], hardware: [], software: [python], teaches: [stability-theory, poles, frequency-response-intuition, phase-lag], skip_if: "You can relate pole locations and delay to oscillation."}
+  - {id: FCT.05, slug: discrete-time-sampling, title: "Discrete time: sampling rates, delay and aliasing", difficulty: intermediate, time: 45, requires: [FCT.01], optional: [], hardware: [], software: [python], teaches: [sampling-theory, aliasing, zero-order-hold, loop-rate-selection], skip_if: "You choose loop rates with aliasing and delay in mind."}
+  - {id: FCT.06, slug: state-space-lqr-mpc, title: "State space, LQR and MPC — an introduction", difficulty: advanced, time: 75, requires: [FCT.04], optional: [FM.20], hardware: [], software: [python], teaches: [state-space, lqr, mpc, model-predictive-control], skip_if: "You understand MPC well enough to tune Nav2's MPPI."}
+
+- id: FML
+  dir: optional-foundations/machine-learning
+  track: foundations
+  title: "Foundations: machine learning"
+  summary: ML from absolute zero to transformers and diffusion — each topic ending with "why would a robot need this?"
+  lessons:
+  - {id: FML.01, slug: what-is-ml, title: "What machine learning is — and isn't", difficulty: beginner, time: 40, requires: [], optional: [], hardware: [], software: [], teaches: [machine-learning, model, training, inference], skip_if: "You can explain training vs inference and when ML is appropriate."}
+  - {id: FML.02, slug: supervised-learning, title: "Supervised learning: regression and classification", difficulty: beginner, time: 60, requires: [FML.01], optional: [FM.19], hardware: [], software: [python, numpy], teaches: [supervised-learning, regression, classification, features-labels], skip_if: "You have trained regression and classification models."}
+  - {id: FML.03, slug: train-validation-test, title: "Training, validation and test sets; overfitting", difficulty: beginner, time: 45, requires: [FML.02], optional: [], hardware: [], software: [python], teaches: [train-validation-test, overfitting, generalization, data-leakage], skip_if: "You split data correctly and recognize leakage."}
+  - {id: FML.04, slug: loss-functions, title: "Loss functions", difficulty: beginner, time: 40, requires: [FML.02], optional: [], hardware: [], software: [python], teaches: [loss-function, mse, cross-entropy], skip_if: "You know MSE vs cross-entropy and why."}
+  - {id: FML.05, slug: gradient-descent, title: "Gradient descent", difficulty: intermediate, time: 50, requires: [FML.04], optional: [FM.17], hardware: [], software: [python, numpy], teaches: [gradient-descent, learning-rate, sgd, adam], skip_if: "You have implemented gradient descent by hand."}
+  - {id: FML.06, slug: neural-networks, title: "Neural networks from zero", difficulty: intermediate, time: 60, requires: [FML.05], optional: [FM.07], hardware: [], software: [python, numpy], teaches: [neural-network, neuron, activation-function, mlp], skip_if: "You can build an MLP from scratch."}
+  - {id: FML.07, slug: backprop-pytorch, title: "Backpropagation and PyTorch basics", difficulty: intermediate, time: 75, requires: [FML.06], optional: [], hardware: [], software: [python, pytorch], teaches: [backpropagation, autograd, pytorch, training-loop], skip_if: "You write PyTorch training loops."}
+  - {id: FML.08, slug: cnns, title: "Convolutional neural networks", difficulty: intermediate, time: 60, requires: [FML.07], optional: [FCV.02], hardware: [], software: [python, pytorch], teaches: [cnn, convolution-layer, pooling, receptive-field], skip_if: "You know how CNNs process images."}
+  - {id: FML.09, slug: embeddings, title: "Embeddings", difficulty: intermediate, time: 45, requires: [FML.06], optional: [FM.06], hardware: [], software: [python], teaches: [embeddings, cosine-similarity, contrastive-learning], skip_if: "You use embeddings and similarity search."}
+  - {id: FML.10, slug: transformers-attention, title: "Transformers and attention", difficulty: intermediate, time: 75, requires: [FML.09, FML.07], optional: [], hardware: [], software: [python, pytorch], teaches: [transformer, attention, tokens, vision-transformer], skip_if: "You understand self-attention and ViTs."}
+  - {id: FML.11, slug: unsupervised-learning, title: "Unsupervised learning: clustering, PCA, autoencoders", difficulty: intermediate, time: 50, requires: [FML.06], optional: [FM.19, FML.07], hardware: [], software: [python, numpy, pytorch], teaches: [unsupervised-learning, clustering, pca, autoencoder], skip_if: "You use clustering and PCA."}
+  - {id: FML.12, slug: generative-models-diffusion, title: "Generative models: VAEs, diffusion and flow matching (intuition)", difficulty: advanced, time: 60, requires: [FML.10, FML.11], optional: [FM.14], hardware: [], software: [python, pytorch], teaches: [generative-models, diffusion-models, flow-matching, vae], skip_if: "You can explain denoising diffusion training and sampling."}
+
+- id: FCV
+  dir: optional-foundations/computer-vision
+  track: foundations
+  title: "Foundations: computer vision"
+  summary: How cameras form images, convolution, color, projective geometry, stereo and detection metrics.
+  lessons:
+  - {id: FCV.01, slug: how-cameras-form-images, title: "How cameras form images: light, sensors, Bayer filters, exposure", difficulty: beginner, time: 45, requires: [], optional: [], hardware: [], software: [python, numpy, opencv], teaches: [image-formation, image-sensor, bayer-filter, exposure-physics], skip_if: "You know how a CMOS sensor and Bayer filter create an RGB image."}
+  - {id: FCV.02, slug: convolution-kernels, title: "Image processing as array math: convolution and kernels", difficulty: beginner, time: 50, requires: [FCV.01], optional: [FPY.02], hardware: [], software: [python, numpy], teaches: [convolution, kernel, image-filtering, gradients-sobel], skip_if: "You can hand-compute a convolution."}
+  - {id: FCV.03, slug: color-spaces, title: "Color spaces: RGB, HSV, Lab", difficulty: beginner, time: 35, requires: [FCV.01], optional: [], hardware: [], software: [python, opencv], teaches: [color-spaces, hsv-theory, lab-color], skip_if: "You pick color spaces for segmentation knowingly."}
+  - {id: FCV.04, slug: projective-geometry, title: "Projective geometry lite: homogeneous points, homographies", difficulty: intermediate, time: 60, requires: [FCV.02], optional: [FM.09], hardware: [], software: [python, numpy], teaches: [projective-geometry, homography, vanishing-points], skip_if: "You compute and apply homographies."}
+  - {id: FCV.05, slug: stereo-epipolar, title: "Stereo vision and epipolar geometry intuition", difficulty: intermediate, time: 50, requires: [FCV.04], optional: [], hardware: [], software: [python], teaches: [stereo-vision, disparity, epipolar-geometry, baseline], skip_if: "You relate disparity, baseline and depth error."}
+  - {id: FCV.06, slug: detection-metrics, title: "Detection metrics: IoU, precision, recall, mAP", difficulty: beginner, time: 40, requires: [], optional: [], hardware: [], software: [python], teaches: [iou, precision-recall, map-metric, confusion-matrix], skip_if: "You compute IoU and interpret mAP."}
+
+- id: F3D
+  dir: optional-foundations/3d-printing-and-cad
+  track: foundations
+  title: "Foundations: 3D printing and CAD"
+  summary: When 3D printing becomes worth it, basic CAD, file formats, tolerances, brackets, gears and ordering prints in Israel.
+  lessons:
+  - {id: F3D.01, slug: why-3d-printing, title: "Why 3D printing matters in robotics — and when to buy a printer", difficulty: beginner, time: 30, requires: [], optional: [], hardware: [], software: [], teaches: [3d-printing-in-robotics, printer-buy-decision, print-services-israel], skip_if: "You already print robot parts.", version_sensitive: true}
+  - {id: F3D.02, slug: cad-basics, title: "CAD basics with Onshape or FreeCAD", difficulty: beginner, time: 90, requires: [F3D.01], optional: [], hardware: [], software: [cad], teaches: [cad, sketches-constraints, extrude, parametric-design], skip_if: "You design parametric parts in a CAD tool."}
+  - {id: F3D.03, slug: file-formats-slicers, title: "STL, 3MF, STEP and slicers", difficulty: beginner, time: 40, requires: [F3D.02], optional: [], hardware: [], software: [slicer], teaches: [stl, 3mf, step-files, slicer, infill-walls], skip_if: "You know which format to send where and how slicer settings affect strength."}
+  - {id: F3D.04, slug: tolerances-fits, title: "Tolerances, clearances and fits", difficulty: beginner, time: 40, requires: [F3D.03], optional: [], hardware: [], software: [], teaches: [tolerances, clearance-fit, press-fit, hole-compensation], skip_if: "Your printed parts fit on the first try."}
+  - {id: F3D.05, slug: mounting-bracket, title: "Exercise: design a sensor mounting bracket", difficulty: intermediate, time: 90, requires: [F3D.04], optional: [], hardware: [], software: [cad], teaches: [bracket-design, design-for-printing], skip_if: "You have designed and printed robot brackets."}
+  - {id: F3D.06, slug: gears-inserts-fasteners, title: "Gears, heat-set inserts and fasteners", difficulty: intermediate, time: 45, requires: [F3D.04], optional: [FP.04], hardware: [], software: [cad], teaches: [printed-gears, heat-set-inserts, metric-fasteners], skip_if: "You use heat-set inserts and print functional gears."}
+  - {id: F3D.07, slug: materials-chassis-ordering, title: "Materials, chassis parts and ordering prints in Israel", difficulty: beginner, time: 40, requires: [F3D.03], optional: [], hardware: [], software: [], teaches: [pla-petg-asa-tpu, chassis-printing, ordering-prints], skip_if: "You know which filament to use for which robot part.", version_sensitive: true}
+
+# ===========================================================================
+# PROJECTS — each proves a capability. Files live in projects/<id>-<slug>.md
+# ===========================================================================
+projects:
+  - {id: P01, slug: manual-drive, title: "Project 1 — Robot drives manually", requires: ["01.15"], hardware: [robot-base], difficulty: beginner, time: 120}
+  - {id: P02, slug: obstacle-avoidance, title: "Project 2 — Obstacle avoidance", requires: ["01.13", P01], hardware: [robot-base], difficulty: beginner, time: 180}
+  - {id: P03, slug: encoder-movement, title: "Project 3 — Encoder-based movement", requires: ["01.12"], hardware: [robot-base], difficulty: beginner, time: 180}
+  - {id: P04, slug: pid-movement, title: "Project 4 — PID-controlled movement", requires: ["08.10", P03], hardware: [robot-base], difficulty: intermediate, time: 240}
+  - {id: P05, slug: autonomous-square-path, title: "Project 5 — Autonomous square and path following", requires: ["08.11", "09.04", P04], hardware: [robot-base, imu], difficulty: intermediate, time: 240}
+  - {id: P06, slug: ros2-robot, title: "Project 6 — Your robot on ROS 2", requires: ["04.16"], hardware: [robot-base], difficulty: intermediate, time: 300}
+  - {id: P07, slug: simulated-robot, title: "Project 7 — The simulated twin", requires: ["06.09", P06], hardware: [], difficulty: intermediate, time: 300}
+  - {id: P08, slug: odometry, title: "Project 8 — Odometry you can trust", requires: ["09.07", P06], hardware: [robot-base], difficulty: intermediate, time: 240}
+  - {id: P09, slug: mapping, title: "Project 9 — Map your home", requires: ["11.07", P08], hardware: [robot-base, lidar], difficulty: advanced, time: 360}
+  - {id: P10, slug: localization, title: "Project 10 — Localize on your map", requires: ["10.09", "10.07", P09], hardware: [robot-base, lidar, imu], difficulty: advanced, time: 300}
+  - {id: P11, slug: autonomous-navigation, title: "Project 11 — Go to the kitchen: autonomous navigation", requires: ["12.10", P10], hardware: [robot-base, lidar], difficulty: advanced, time: 480}
+  - {id: P12, slug: camera-object-detection, title: "Project 12 — Camera object detection", requires: ["13.15"], hardware: [camera], difficulty: intermediate, time: 300}
+  - {id: P13, slug: robot-plus-vision, title: "Project 13 — Find objects and put them on the map", requires: ["13.16", P11, P12], hardware: [robot-base, lidar, camera], difficulty: advanced, time: 480}
+  - {id: P14, slug: robotic-arm, title: "Project 14 — The arm moves where you tell it", requires: ["14.10", "14.11"], hardware: [arm], difficulty: advanced, time: 480}
+  - {id: P15, slug: vision-guided-arm, title: "Project 15 — Vision-guided reaching", requires: ["15.07", P14], hardware: [arm, camera], difficulty: advanced, time: 480}
+  - {id: P16, slug: pick-and-place, title: "Project 16 — Pick and place", requires: ["15.09", P15], hardware: [arm, camera], difficulty: advanced, time: 600}
+  - {id: P17, slug: llm-controlled-robot, title: "Project 17 — The LLM-directed robot", requires: ["19.09", P13], hardware: [robot-base, lidar, camera], difficulty: advanced, time: 600}
+  - {id: P18, slug: final-autonomous-ai-robot, title: "Final project — the autonomous AI robot", requires: ["20.06", P16, P17], hardware: [robot-base, lidar, camera, imu, arm, estop], difficulty: advanced, time: 2400}
+
+# ===========================================================================
+# HARDWARE CATALOG — stage ids used by lessons. Details and prices: HARDWARE.md
+# ===========================================================================
+hardware:
+  tools:        {stage: 1, title: "Workbench tools (multimeter, soldering iron, crimper, screwdrivers)"}
+  robot-base:   {stage: 1, title: "Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors"}
+  imu:          {stage: 2, title: "IMU breakout"}
+  camera:       {stage: 2, title: "Camera (Raspberry Pi Camera Module 3 or USB webcam)"}
+  lidar:        {stage: 3, title: "2D LiDAR"}
+  jetson:       {stage: 4, title: "Optional: NVIDIA Jetson compute upgrade"}
+  depth-camera: {stage: 4, title: "Optional: RGB-D depth camera"}
+  arm:          {stage: 5, title: "Robotic arm (leader + follower kit)"}
+  estop:        {stage: 6, title: "Hardware emergency stop and final integration parts"}

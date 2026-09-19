@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+  The ros2_control description of karmel.
+
+  This is the one place where simulation and the real robot differ: the <hardware> plugin.
+  Everything above it (controller_manager, diff_drive_controller, joint_state_broadcaster,
+  their YAML) is identical in both worlds.
+
+    use_sim:=true   gz_ros2_control/GazeboSimSystem  – Gazebo applies the wheel velocity commands
+    use_sim:=false  karmel_hardware/KarmelSystem     – protocol v1 "V" commands over serial to the Pico
+
+  Each wheel joint exports:
+    command interface  velocity  [rad/s]
+    state interfaces   position  [rad], velocity [rad/s]
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="wheel_interfaces" params="joint">
+    <joint name="${joint}">
+      <command_interface name="velocity">
+        <param name="min">${-max_wheel_speed}</param>
+        <param name="max">${max_wheel_speed}</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="karmel_ros2_control" params="use_sim">
+    <ros2_control name="KarmelSystem" type="system">
+      <hardware>
+        <xacro:if value="${use_sim}">
+          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </xacro:if>
+        <xacro:unless value="${use_sim}">
+          <plugin>karmel_hardware/KarmelSystem</plugin>
+          <!-- serial_device:=... overrides serial.device from robot.yaml -->
+          <param name="device">${serial_device_arg if serial_device_arg else serial_cfg['device']}</param>
+          <param name="baud">${serial_cfg['baud']}</param>
+          <param name="ticks_per_rev">${ticks_per_rev}</param>
+          <param name="watchdog_ms">${serial_cfg['watchdog_ms']}</param>
+          <param name="telemetry_timeout_ms">500</param>
+        </xacro:unless>
+      </hardware>
+      <xacro:wheel_interfaces joint="left_wheel_joint"/>
+      <xacro:wheel_interfaces joint="right_wheel_joint"/>
+    </ros2_control>
+  </xacro:macro>
+
+</robot>

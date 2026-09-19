@@ -1,0 +1,64 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  course:
+    name: Course structure, links and Python labs
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install lab dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r labs/requirements.txt
+          pip install -e labs/python
+      - name: Generated files are up to date
+        run: python tools/build.py --check
+      - name: Lessons are well-formed and links resolve
+        run: python tools/validate.py --links --final --quiet
+      - name: course.py smoke test
+        env:
+          COURSE_PROGRESS_FILE: /tmp/progress.json
+          COURSE_PROGRESS_MD: /tmp/PROGRESS.md
+        run: |
+          python course.py next
+          python course.py complete 00.01
+          python course.py why 11.07
+          python course.py status
+      - name: Labs tests (robotlab, firmware logic, protocol)
+        run: pytest -q labs/python/tests
+      - name: Auto-graded exercises pass with reference solutions
+        env:
+          COURSE_USE_SOLUTION: "1"
+        run: pytest -q labs/exercises
+      - name: Firmware compiles
+        run: python -m compileall -q labs/firmware/pico
+
+  ros2:
+    name: ROS 2 Jazzy workspace builds
+    runs-on: ubuntu-24.04
+    container: ros:jazzy-ros-base
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies with rosdep
+        shell: bash
+        run: |
+          apt-get update
+          rosdep update
+          rosdep install --from-paths labs/ros2_ws/src --ignore-src -y -r
+      - name: Build and test
+        shell: bash
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          cd labs/ros2_ws
+          colcon build --event-handlers console_direct+
+          colcon test --packages-select karmel_base --event-handlers console_direct+
+          colcon test-result --verbose

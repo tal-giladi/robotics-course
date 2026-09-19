@@ -1,0 +1,38 @@
+# ros_gz_bridge configuration: which Gazebo topics become which ROS topics.
+#
+# Direction GZ_TO_ROS = Gazebo publishes, ROS subscribes. The robot's cmd_vel does NOT go through
+# the bridge: gz_ros2_control runs diff_drive_controller inside Gazebo, which subscribes to the
+# ROS topic directly.
+#
+# Check a topic on the Gazebo side:   gz topic -l ;  gz topic -e -t /scan -n 1
+
+# Simulation time. Every node in a simulation must use it (use_sim_time:=true).
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/scan"
+  gz_topic_name: "/scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/imu"
+  gz_topic_name: "/imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/camera/image_raw"
+  gz_topic_name: "/camera/image_raw"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/camera/camera_info"
+  gz_topic_name: "/camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS

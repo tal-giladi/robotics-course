@@ -1,0 +1,24 @@
+# Place the held object at a named location or at an explicit pose.
+
+# Goal
+string location_name           # e.g. "table", "bin"; used when target_pose.header.frame_id is empty
+geometry_msgs/PoseStamped target_pose
+float32 timeout_s              # 0 = no timeout
+---
+# Result
+uint8 SUCCEEDED=0
+uint8 NOT_HOLDING_OBJECT=1
+uint8 UNKNOWN_LOCATION=2
+uint8 OUT_OF_REACH=3
+uint8 PLANNING_FAILED=4
+uint8 TIMEOUT=5
+uint8 CANCELED=6
+uint8 FAILED=7
+bool success
+uint8 error_code
+string message
+geometry_msgs/PoseStamped placed_pose
+---
+# Feedback
+string stage                   # "approaching" | "lowering" | "releasing" | "retreating" | "verifying"
+float32 progress               # 0..1

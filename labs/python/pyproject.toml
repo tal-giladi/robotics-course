@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robotlab"
+version = "0.1.0"
+description = "The robotics course's pure-Python library: HAL, SE(2) geometry, config and a 2D differential-drive simulator."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "matplotlib>=3.8",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+robot = ["pyserial>=3.5"]
+
+[tool.setuptools.packages.find]
+include = ["robotlab*"]

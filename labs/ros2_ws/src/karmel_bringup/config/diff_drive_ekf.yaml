@@ -1,0 +1,5 @@
+# Override loaded after controllers.yaml when robot.launch.py use_ekf:=true.
+# robot_localization's EKF publishes odom -> base_footprint; two publishers of one transform make TF flicker.
+diff_drive_controller:
+  ros__parameters:
+    enable_odom_tf: false

@@ -1,0 +1,6 @@
+# Bench-test profile: warn early so LOW shows up within seconds (lesson 04.10).
+/**/battery_health:
+  ros__parameters:
+    low_threshold_v: 12.3
+    critical_v: 11.5
+    filter_alpha: 0.5

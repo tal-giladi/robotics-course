@@ -1,0 +1,16 @@
+# Ask the object memory / perception node where an object is.
+# Example (LLM tool): get_object_pose(label="red cup", target_frame="map")
+
+string label                   # object label to look for (ignored if object_id is set)
+string object_id               # specific tracked object ("" = best match for label)
+string target_frame            # frame to express the pose in, e.g. "map" or "base_link"
+float32 min_confidence         # ignore detections below this (0 = accept all)
+float32 max_age_s              # ignore sightings older than this (0 = any age)
+---
+bool success
+string message                 # human/LLM readable reason on failure, e.g. "no 'red cup' seen in 30 s"
+geometry_msgs/PoseStamped pose # in target_frame
+string object_id
+string label
+float32 confidence
+builtin_interfaces/Time last_seen

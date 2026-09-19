@@ -1,0 +1,27 @@
+# 06.04 — ros_gz_bridge configuration for 06-simulation/code/gazebo/first_world.sdf
+#
+#   ros2 run ros_gz_bridge parameter_bridge --ros-args -p config_file:=first_world_bridge.yaml
+#
+# One entry per topic. direction: GZ_TO_ROS | ROS_TO_GZ | BIDIRECTIONAL.
+
+# Simulated time: every ROS node in a simulation runs on it (use_sim_time:=true).
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# Pose of drop_box as TF (first_world -> drop_box). The PosePublisher system in the world fills in
+# the frame names. (Bridging /world/first_world/dynamic_pose/info instead gives transforms with
+# EMPTY frame_id and child_frame_id: that topic carries model names but no frame header.)
+- ros_topic_name: "/tf"
+  gz_topic_name: "/model/drop_box/pose"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS
+
+# A Gazebo *service* exposed as a ROS service: pause, step, reset the world from ROS.
+- service_name: "/world/first_world/control"
+  ros_type_name: "ros_gz_interfaces/srv/ControlWorld"
+  gz_req_type_name: "gz.msgs.WorldControl"
+  gz_rep_type_name: "gz.msgs.Boolean"

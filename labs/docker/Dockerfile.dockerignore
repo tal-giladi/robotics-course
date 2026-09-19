@@ -1,0 +1,11 @@
+# BuildKit reads <Dockerfile>.dockerignore next to the Dockerfile. Context = labs/.
+# Only the ROS workspace sources, the robot config and the entrypoint go into the image.
+*
+!docker/entrypoint.sh
+!config/
+!python/robotlab/protocol.py
+!ros2_ws/src/
+!ros2_ws/check_config_sync.py
+ros2_ws/src/**/__pycache__
+ros2_ws/src/**/.pytest_cache
+!ros2_ws/tools/

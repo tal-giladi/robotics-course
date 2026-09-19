@@ -1,0 +1,16 @@
+# Drive straight for a given distance (lesson 04.08). Served by
+# karmel_tutorial/drive_distance_server on /drive_distance (simulated motion).
+
+# Goal
+float32 distance_m            # signed: positive = forward, negative = backward [m]
+float32 speed_m_s             # magnitude, 0 < speed <= 0.5 [m/s]
+---
+# Result
+float32 distance_travelled_m  # absolute distance actually covered [m]
+float32 elapsed_s             # wall time from start to finish/cancel/abort [s]
+string message
+---
+# Feedback
+float32 distance_travelled_m  # [m]
+float32 distance_remaining_m  # [m]
+float32 progress              # 0.0 .. 1.0

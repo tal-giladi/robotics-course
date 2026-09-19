@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>course_bag_examples</name>
+  <version>0.1.0</version>
+  <description>Lesson 04.14: reading rosbag2 (MCAP) files from Python for replay tests.</description>
+  <maintainer email="course@example.com">Robotics course</maintainer>
+  <license>Apache-2.0</license>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>rosbag2_py</exec_depend>
+  <exec_depend>rosidl_runtime_py</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>karmel_tutorial</exec_depend>
+  <exec_depend>karmel_tutorial_interfaces</exec_depend>
+
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

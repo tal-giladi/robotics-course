@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <material name="karmel_blue"><color rgba="0.15 0.35 0.75 1.0"/></material>
+  <material name="karmel_black"><color rgba="0.08 0.08 0.08 1.0"/></material>
+  <material name="karmel_grey"><color rgba="0.6 0.6 0.6 1.0"/></material>
+  <material name="karmel_green"><color rgba="0.1 0.6 0.25 1.0"/></material>
+</robot>

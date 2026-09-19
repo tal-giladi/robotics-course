@@ -1,0 +1,10 @@
+# Parameters for course_params_examples/battery_health_params (lesson 04.09).
+# The top-level key is the NODE NAME (with namespace, if any). A typo here is silently ignored.
+battery_health:
+  ros__parameters:
+    cells_series: 3          # read-only: can only be set here or on the command line
+    full_v: 12.6             # labs/config/karmel.yaml battery.full_v
+    low_threshold_v: 10.5    # battery.low_warning_v
+    critical_v: 9.9          # battery.cutoff_v
+    hysteresis_v: 0.2
+    filter_alpha: 0.3
