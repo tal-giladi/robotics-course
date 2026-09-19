@@ -1,0 +1,48 @@
+# Named places for the course simulator's apartment (robotlab.sim.World.apartment(),
+# 6 x 5 m, origin at the bottom-left corner). Lesson 12.09 loads this file.
+#
+#   y=5 +----------------+----------------------+
+#       | study  [desk]  |      [   bed   ]     |
+#   3.2 +----  ----------+ door                 |
+#       |                |                      |
+#       | living room    +-------   ------------+ y=2.8
+#       |                door    kitchen  (tbl) |
+#       |        (tbl)   |                [ctr] |
+#       | [sofa]         |                      |
+#   y=0 +----------------+----------------------+
+#      x=0             x=3.5                   x=6
+#
+# Poses are where the ROBOT stands, not where the furniture is: 40-60 cm clear of everything, so
+# the inflated costmap leaves a goal cell the planner will accept (12.04). yaw is in radians and
+# says which way the robot faces on arrival (e.g. facing the desk in the study).
+#
+# On the real robot you build this file by driving the robot to each spot and reading
+#   ros2 topic echo --once /amcl_pose --field pose.pose
+# or by clicking in RViz and copying the goal. Lesson 12.09, exercise E3.
+
+frame_id: map
+places:
+  home:
+    x: 1.0
+    y: 1.3
+    yaw: 0.0
+  kitchen:
+    x: 5.0
+    y: 2.3
+    yaw: 1.5708
+  bedroom:
+    x: 5.0
+    y: 3.2
+    yaw: 0.0
+  study:
+    x: 0.8
+    y: 3.8
+    yaw: 1.5708
+  sofa:
+    x: 1.0
+    y: 1.6
+    yaw: -1.5708
+  doorway_kitchen:
+    x: 3.5
+    y: 1.65
+    yaw: 0.0
