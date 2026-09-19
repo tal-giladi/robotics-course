@@ -301,7 +301,8 @@ def demo_parameters() -> None:
     T = camera_above(tilt_deg=60.0)
     scene = demo_scene()
     clean = scene.depth(cam, T)
-    print("--- plane threshold: 4 objects on the table, the flattest is the 10 mm phone ---")
+    truth = len(scene.objects)
+    print(f"--- plane threshold: {truth} objects on the table, the flattest is the 10 mm phone ---")
     print(f"{'plane thr mm':>13}{'objects found':>15}  notes")
     for thr_mm in (2, 6, 12, 25):
         found = []
@@ -311,8 +312,8 @@ def demo_parameters() -> None:
                                         plane_threshold_m=thr_mm / 1000, rng=rng)
             found.append(len(poses))
         n = float(np.mean(found))
-        note = ("table fragments survive as fake objects" if n > 4.2 else
-                "flat objects are swallowed by the plane" if n < 3.8 else "")
+        note = ("table fragments survive as fake objects" if n > truth + 0.2 else
+                "flat objects are swallowed by the plane" if n < truth - 0.2 else "")
         print(f"{thr_mm:>13}{n:>15.1f}  {note}")
     print()
 

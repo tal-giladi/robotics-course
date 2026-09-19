@@ -272,8 +272,11 @@ def demo_clutter() -> None:
         print(f"{gap_mm:>7}{len(plans):>9}{len(all_g):>12}{blocked:>9}"
               f"{math.degrees(best.yaw) if best else float('nan'):>10.0f}"
               f"{best.score if best else 0.0:>12.3f}")
-    print("  the blocks are side by side along y, so closing along y (yaw 90 deg) drives a pad into\n"
-          "  the neighbour. With a small gap the planner must close along x (yaw 0 deg) instead.\n")
+    print("  the blocks are side by side along y, and the only closing direction the 45 mm jaw can use is\n"
+          "  across their 30 mm short axis -- which is along y, straight into the neighbour. At a 12 mm gap\n"
+          "  EVERY candidate is blocked and the best score drops from 0.634 to 0.489. There is no better yaw\n"
+          "  to pick: closing along x needs 60 mm of stroke. Clutter this tight is not a planning problem,\n"
+          "  it is a 'move the neighbour first, or use thinner fingers' problem (15.08).\n")
 
 
 def demo_friction() -> None:
