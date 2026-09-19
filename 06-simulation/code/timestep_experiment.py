@@ -15,14 +15,20 @@ from __future__ import annotations
 
 import argparse
 import math
+import sys
 from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 
-from robotlab.config import load_config
-from robotlab.sim import DiffDriveParams, DiffDriveSim, SensorParams, World
-from robotlab.sim.components import deadband_speed, first_order_alpha
+_LABS_PYTHON = Path(__file__).resolve().parent.parent.parent / "labs" / "python"
+if str(_LABS_PYTHON) not in sys.path:  # robotlab without `pip install -e labs/python`
+    sys.path.insert(0, str(_LABS_PYTHON))
+
+from robotlab.config import load_config  # noqa: E402
+from robotlab.sim import DiffDriveParams, DiffDriveSim, SensorParams, World  # noqa: E402
+from robotlab.sim.components import deadband_speed, first_order_alpha  # noqa: E402
 
 MOTOR_STEPS = (0.001, 0.01, 0.02, 0.04, 0.08, 0.12, 0.2)
 ROBOT_STEPS = (0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2)

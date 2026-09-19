@@ -104,9 +104,10 @@ def plot_tour(log, dr, run, path) -> None:
     plt.close(fig)
 
 
-def plot_sigma(log, runs, path) -> None:
+def plot_sigma(runs, path) -> None:
+    """``runs``: (label, tour log, localize() result, color) — each run has its own time base."""
     fig, axes = plt.subplots(2, 1, figsize=(8, 5.5), sharex=True)
-    for label, run, color in runs:
+    for label, log, run, color in runs:
         axes[0].plot(log.t, run["pos_err"] * 100, color=color, label=f"{label}: error")
         sigma = np.sqrt(run["cov"][:, 0, 0] + run["cov"][:, 1, 1]) * 100
         axes[0].plot(log.t, 2 * sigma, color=color, linestyle=":", label=f"{label}: 2 sigma (x, y)")
@@ -146,7 +147,7 @@ def main(argv: list[str] | None = None) -> dict:
     results["tour"] = {"dr_rmse": float(np.sqrt(np.mean(dr_err**2))), "ekf5": {k: v for k, v in run5.items() if np.isscalar(v)},
                        "ekf1": {k: v for k, v in run1.items() if np.isscalar(v)}}
     plot_tour(log, dr, run5, out / "ekf_tour.png")
-    plot_sigma(log, [("5 Hz", run5, "tab:blue"), ("1 Hz", run1, "tab:red")], out / "ekf_sigma.png")
+    plot_sigma([("5 Hz", log, run5, "tab:blue"), ("1 Hz", log_1hz, run1, "tab:red")], out / "ekf_sigma.png")
 
     # 3. tuning k ----------------------------------------------------------------------------------
     print(f"\n3) Wheel-noise constant k, mean over {args.seeds} seeds (tags at 5 Hz)")
