@@ -501,7 +501,7 @@ Exactly the math robotics uses, each concept tied to a robot example — trig, v
 | Id | Lesson | Level | Time | Needs | Hardware |
 |---|---|---|---|---|---|
 | FM.01 | [Algebra refresher for robotics formulas](optional-foundations/mathematics/FM.01-algebra-refresher.md) | beginner | 40 min | — | — |
-| FM.02 | [Angles](optional-foundations/mathematics/FM.02-angles-and-radians.md) | beginner | 30 min | — | — |
+| FM.02 | [Angles, degrees and radians](optional-foundations/mathematics/FM.02-angles-and-radians.md) | beginner | 30 min | — | — |
 | FM.03 | [Trigonometry: sin, cos, tan and atan2](optional-foundations/mathematics/FM.03-trigonometry.md) | beginner | 50 min | FM.02 | — |
 | FM.04 | [Cartesian and polar coordinates](optional-foundations/mathematics/FM.04-coordinate-systems.md) | beginner | 40 min | FM.03 | — |
 | FM.05 | [Vectors from zero](optional-foundations/mathematics/FM.05-vectors.md) | beginner | 50 min | FM.04 | — |
@@ -510,7 +510,7 @@ Exactly the math robotics uses, each concept tied to a robot example — trig, v
 | FM.08 | [Matrices as transformations and basis vectors](optional-foundations/mathematics/FM.08-matrices-as-transformations.md) | intermediate | 1 h | FM.07, FM.06 | — |
 | FM.09 | [2D/3D transformations and homogeneous coordinates](optional-foundations/mathematics/FM.09-homogeneous-coordinates.md) | intermediate | 1 h | FM.08 | — |
 | FM.10 | [Rotation matrices](optional-foundations/mathematics/FM.10-rotation-matrices.md) | intermediate | 1 h | FM.08, FM.03 | — |
-| FM.11 | [Euler angles](optional-foundations/mathematics/FM.11-euler-angles.md) | intermediate | 50 min | FM.10 | — |
+| FM.11 | [Euler angles, roll-pitch-yaw and gimbal lock](optional-foundations/mathematics/FM.11-euler-angles.md) | intermediate | 50 min | FM.10 | — |
 | FM.12 | [Quaternions without the mysticism](optional-foundations/mathematics/FM.12-quaternions.md) | intermediate | 1 h 15 min | FM.11 | — |
 | FM.13 | [Probability from zero](optional-foundations/mathematics/FM.13-probability-basics.md) | beginner | 50 min | — | — |
 | FM.14 | [Distributions, Gaussians, uncertainty and noise](optional-foundations/mathematics/FM.14-distributions-gaussians-noise.md) | beginner | 1 h | FM.13 | — |
@@ -638,7 +638,7 @@ ML from absolute zero to transformers and diffusion — each topic ending with "
 | FML.07 | [Backpropagation and PyTorch basics](optional-foundations/machine-learning/FML.07-backprop-pytorch.md) | intermediate | 1 h 15 min | FML.06 | — |
 | FML.08 | [Convolutional neural networks](optional-foundations/machine-learning/FML.08-cnns.md) | intermediate | 1 h | FML.07 | — |
 | FML.09 | [Embeddings](optional-foundations/machine-learning/FML.09-embeddings.md) | intermediate | 45 min | FML.06 | — |
-| FML.10 | [Transformers and attention](optional-foundations/machine-learning/FML.10-transformers-attention.md) | intermediate | 1 h 15 min | FML.09 | — |
+| FML.10 | [Transformers and attention](optional-foundations/machine-learning/FML.10-transformers-attention.md) | intermediate | 1 h 15 min | FML.09, FML.07 | — |
 | FML.11 | [Unsupervised learning: clustering, PCA, autoencoders](optional-foundations/machine-learning/FML.11-unsupervised-learning.md) | intermediate | 50 min | FML.06 | — |
 | FML.12 | [Generative models: VAEs, diffusion and flow matching (intuition)](optional-foundations/machine-learning/FML.12-generative-models-diffusion.md) | advanced | 1 h | FML.10, FML.11 | — |
 

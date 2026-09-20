@@ -7,7 +7,7 @@
 - [Glossary](references/glossary.md)
 
 - **Main path**
-  - **00 · Orientation — what robotics actually is**
+  - [**00 · Orientation — what robotics actually is**](00-orientation/README.md)
     - [00.01 What is a robot? The sense–think–act loop](00-orientation/00.01-what-is-a-robot.md)
     - [00.02 The robotics stack from AI down to motors](00-orientation/00.02-the-robotics-stack.md)
     - [00.03 Field guide: motors, servos, encoders, IMUs, cameras, LiDAR, ToF, ultrasonic](00-orientation/00.03-actuators-and-sensors-field-guide.md)
@@ -15,7 +15,7 @@
     - [00.05 ROS 2 and robot middleware in one page](00-orientation/00.05-ros2-in-one-page.md)
     - [00.06 The safety mindset for home robotics](00-orientation/00.06-safety-mindset.md)
     - [00.07 How to study this course with an AI teacher and the progress tool](00-orientation/00.07-how-to-use-this-course.md)
-  - **01 · Your first physical robot**
+  - [**01 · Your first physical robot**](01-first-robot/README.md)
     - [01.01 Plan the build — the architecture of your first robot](01-first-robot/01.01-plan-the-build.md)
     - [01.02 Stage 1 shopping list: buying the parts in Israel](01-first-robot/01.02-buying-hardware-in-israel.md)
     - [01.03 Your workbench: tools, multimeter and first soldering](01-first-robot/01.03-workbench-and-tools.md)
@@ -31,7 +31,7 @@
     - [01.13 Ultrasonic and ToF sensors — stop before hitting things](01-first-robot/01.13-distance-sensors-stop.md)
     - [01.14 Measure and report battery state; low-battery shutdown](01-first-robot/01.14-battery-monitoring.md)
     - [01.15 Drive it from your laptop — keyboard teleop over the network](01-first-robot/01.15-teleop-from-laptop.md)
-  - **02 · Robot electronics in practice**
+  - [**02 · Robot electronics in practice**](02-robot-electronics/README.md)
     - [02.01 Reading datasheets and pinouts without drowning](02-robot-electronics/02.01-datasheets-and-pinouts.md)
     - [02.02 Power budgets and power architecture (why the Pi reboots when motors start)](02-robot-electronics/02.02-power-budget.md)
     - [02.03 Motor drivers in depth — H-bridges, PWM frequency, current, braking](02-robot-electronics/02.03-motor-drivers-in-depth.md)
@@ -42,7 +42,7 @@
     - [02.08 From breadboard to a soldered robot board](02-robot-electronics/02.08-from-breadboard-to-perfboard.md)
     - [02.09 Systematic electrical debugging: the motor doesn't move](02-robot-electronics/02.09-electrical-debugging-method.md)
     - [02.10 CAN bus and smart actuators — when bigger robots need them](02-robot-electronics/02.10-can-bus-and-smart-actuators.md)
-  - **03 · Software engineering for robots**
+  - [**03 · Software engineering for robots**](03-robot-software/README.md)
     - [03.01 The Python robotics ecosystem (a map for C# developers)](03-robot-software/03.01-python-robotics-ecosystem.md)
     - [03.02 Project layout, environments and version pinning on Ubuntu](03-robot-software/03.02-environments-and-pinning.md)
     - [03.03 Robust serial communication — framing, timeouts, reconnection](03-robot-software/03.03-robust-serial-communication.md)
@@ -54,7 +54,7 @@
     - [03.09 Where C and C++ are used in robotics — and enough C++ to read it](03-robot-software/03.09-where-cpp-is-used.md)
     - [03.10 Networking for robots — Wi-Fi, latency, discovery, time sync](03-robot-software/03.10-networking-for-robots.md)
     - [03.11 Git workflow, CI and reproducibility for a robot repo](03-robot-software/03.11-ci-and-reproducibility.md)
-  - **04 · ROS 2**
+  - [**04 · ROS 2**](04-ros2/README.md)
     - [04.01 Why middleware? ROS 2 through a distributed-systems lens](04-ros2/04.01-why-middleware.md)
     - [04.02 Installing ROS 2 — native Ubuntu, Docker on Windows, and the Pi](04-ros2/04.02-installing-ros2.md)
     - [04.03 Nodes and the ros2 command line](04-ros2/04.03-nodes-and-cli.md)
@@ -71,7 +71,7 @@
     - [04.14 rosbag2 — record, replay and inspect](04-ros2/04.14-rosbag2.md)
     - [04.15 Lifecycle (managed) nodes](04-ros2/04.15-lifecycle-nodes.md)
     - [04.16 Your physical robot in ROS 2 — cmd_vel in, telemetry out](04-ros2/04.16-your-robot-as-ros2-node.md)
-  - **05 · Coordinate frames and transformations**
+  - [**05 · Coordinate frames and transformations**](05-frames-and-transforms/README.md)
     - [05.01 Why frames? "The camera sees a bottle — where is it relative to the robot?"](05-frames-and-transforms/05.01-why-frames.md)
     - [05.02 Position, orientation and pose in 2D (x, y, θ)](05-frames-and-transforms/05.02-pose-in-2d.md)
     - [05.03 2D rigid transforms — rotate, translate, compose, invert](05-frames-and-transforms/05.03-rigid-transforms-2d.md)
@@ -83,7 +83,7 @@
     - [05.09 RViz — seeing frames, the robot model and sensor data](05-frames-and-transforms/05.09-rviz.md)
     - [05.10 Worked example: an object seen by the camera, expressed in base_link and map](05-frames-and-transforms/05.10-object-from-camera-to-map.md)
     - [05.11 Debugging TF — missing frames, extrapolation, timestamps](05-frames-and-transforms/05.11-debugging-tf.md)
-  - **06 · Simulation**
+  - [**06 · Simulation**](06-simulation/README.md)
     - [06.01 Why simulate, and choosing a simulator](06-simulation/06.01-why-simulate.md)
     - [06.02 The course mini-simulator — physics in 100 lines of Python](06-simulation/06.02-course-mini-simulator.md)
     - [06.03 Gazebo basics — worlds, models, SDF and the gz tools](06-simulation/06.03-gazebo-basics.md)
@@ -94,7 +94,7 @@
     - [06.08 Building worlds for mapping and navigation labs](06-simulation/06.08-building-worlds.md)
     - [06.09 One codebase for simulation and the real robot](06-simulation/06.09-same-code-sim-and-real.md)
     - [06.10 The sim-to-real gap — what transfers and what doesn't](06-simulation/06.10-sim-to-real-gap.md)
-  - **07 · Sensors**
+  - [**07 · Sensors**](07-sensors/README.md)
     - [07.01 Sensor fundamentals: accuracy, precision, noise, bias, latency, rate](07-sensors/07.01-sensor-fundamentals.md)
     - [07.02 Wheel encoders in depth — resolution, slip, velocity estimation](07-sensors/07.02-wheel-encoders-in-depth.md)
     - [07.03 Ultrasonic sensors — sound, cones and ghost echoes](07-sensors/07.03-ultrasonic-sensors.md)
@@ -106,7 +106,7 @@
     - [07.09 Depth cameras and point clouds — stereo, structured light, ToF](07-sensors/07.09-depth-cameras-and-point-clouds.md)
     - [07.10 Sensor data done right in ROS 2 — timestamps, frame_ids, covariance, synchronization](07-sensors/07.10-sensor-data-in-ros2.md)
     - [07.11 Sensor troubleshooting — a systematic method](07-sensors/07.11-sensor-troubleshooting.md)
-  - **08 · Control**
+  - [**08 · Control**](08-control/README.md)
     - [08.01 Open loop vs closed loop — why your robot doesn't drive straight](08-control/08.01-open-vs-closed-loop.md)
     - [08.02 Measuring a motor — step response, deadband and time constant](08-control/08.02-motor-step-response.md)
     - [08.03 Estimating wheel speed from encoders — and filtering it](08-control/08.03-wheel-speed-estimation.md)
@@ -119,7 +119,7 @@
     - [08.10 Hold a straight line — cascaded heading control](08-control/08.10-straight-line-heading-control.md)
     - [08.11 Rotate exactly 90° — motion profiles and IMU feedback](08-control/08.11-rotate-exactly-90.md)
     - [08.12 Control in ROS 2 — where loops run, rates, limits and ros2_control](08-control/08.12-control-in-ros2.md)
-  - **09 · Odometry**
+  - [**09 · Odometry**](09-odometry/README.md)
     - [09.01 Differential-drive kinematics — wheel speeds to robot motion](09-odometry/09.01-diff-drive-kinematics.md)
     - [09.02 The other way — cmd_vel to wheel speeds (with saturation)](09-odometry/09.02-inverse-kinematics-cmd-vel.md)
     - [09.03 Dead reckoning — integrating motion (Euler, midpoint, exact arcs)](09-odometry/09.03-dead-reckoning-integration.md)
@@ -127,7 +127,7 @@
     - [09.05 Calibrating odometry — wheel radius, wheelbase and UMBmark](09-odometry/09.05-calibrating-odometry.md)
     - [09.06 Accumulated error — why odometry always drifts](09-odometry/09.06-accumulated-error.md)
     - [09.07 Odometry in ROS 2 — nav_msgs/Odometry, odom→base_link, comparing implementations](09-odometry/09.07-odometry-in-ros2.md)
-  - **10 · Localization**
+  - [**10 · Localization**](10-localization/README.md)
     - [10.01 Localization — belief instead of certainty](10-localization/10.01-what-is-localization.md)
     - [10.02 Representing uncertainty — Gaussians and covariance ellipses](10-localization/10.02-uncertainty-gaussians.md)
     - [10.03 The Bayes filter — predict and update on a 1D grid](10-localization/10.03-bayes-filter.md)
@@ -138,7 +138,7 @@
     - [10.08 Particle filters and Monte Carlo localization](10-localization/10.08-particle-filter-mcl.md)
     - [10.09 AMCL in ROS 2 — localizing on a known map](10-localization/10.09-amcl-in-ros2.md)
     - [10.10 Landmarks you can print — AprilTags for localization](10-localization/10.10-fiducial-landmarks.md)
-  - **11 · Mapping and SLAM**
+  - [**11 · Mapping and SLAM**](11-slam/README.md)
     - [11.01 Map representations — occupancy grids, features, point clouds, voxels, graphs](11-slam/11.01-map-representations.md)
     - [11.02 Occupancy grid mapping with known poses (log-odds and ray casting)](11-slam/11.02-occupancy-grid-mapping.md)
     - [11.03 The SLAM problem — front end, back end, and why it is hard](11-slam/11.03-the-slam-problem.md)
@@ -148,7 +148,7 @@
     - [11.07 Map your real room: explore → map → save → localize](11-slam/11.07-mapping-your-room.md)
     - [11.08 Visual SLAM — ORB-SLAM3, RTAB-Map and friends](11-slam/11.08-visual-slam.md)
     - [11.09 SLAM troubleshooting — when maps smear, double or drift](11-slam/11.09-slam-troubleshooting.md)
-  - **12 · Navigation**
+  - [**12 · Navigation**](12-navigation/README.md)
     - [12.01 The navigation problem — goals, waypoints, global and local planning](12-navigation/12.01-the-navigation-problem.md)
     - [12.02 Grid path planning — BFS, Dijkstra and A*](12-navigation/12.02-grid-path-planning.md)
     - [12.03 Sampling-based planning — RRT and friends](12-navigation/12.03-sampling-based-planning.md)
@@ -159,7 +159,7 @@
     - [12.08 Nav2 on the real robot — tuning for a small, slow robot](12-navigation/12.08-nav2-on-the-real-robot.md)
     - [12.09 Waypoints and missions with the Nav2 Simple Commander API](12-navigation/12.09-waypoints-and-missions.md)
     - [12.10 Recovery behaviors, failure handling and navigation safety](12-navigation/12.10-recovery-and-navigation-safety.md)
-  - **13 · Computer vision**
+  - [**13 · Computer vision**](13-computer-vision/README.md)
     - [13.01 Images as data — pixels, channels, RGB, grayscale, HSV](13-computer-vision/13.01-images-as-data.md)
     - [13.02 OpenCV fundamentals and preprocessing](13-computer-vision/13.02-opencv-preprocessing.md)
     - [13.03 Classical detection — color segmentation and contours (find the ball)](13-computer-vision/13.03-classical-detection.md)
@@ -176,7 +176,7 @@
     - [13.14 Vision-language models on a robot — describing and questioning the scene](13-computer-vision/13.14-vision-language-models.md)
     - [13.15 Vision in ROS 2 — cv_bridge, vision_msgs and performance on the robot](13-computer-vision/13.15-vision-in-ros2.md)
     - [13.16 From detection to a 3D position in the map frame](13-computer-vision/13.16-detection-to-map-position.md)
-  - **14 · The robotic arm**
+  - [**14 · The robotic arm**](14-robotic-arm/README.md)
     - [14.01 Arm anatomy — joints, links, DOF, workspace, end effector](14-robotic-arm/14.01-arm-anatomy.md)
     - [14.02 Buying and assembling the arm; servo setup and calibration](14-robotic-arm/14.02-buying-and-assembling-the-arm.md)
     - [14.03 Controlling the arm's servos — positions, speeds, torque and limits](14-robotic-arm/14.03-controlling-servos.md)
@@ -188,7 +188,7 @@
     - [14.09 MoveIt 2 — motion planning and collision checking](14-robotic-arm/14.09-moveit2-motion-planning.md)
     - [14.10 Exercise lesson: move the gripper to a specified position](14-robotic-arm/14.10-move-gripper-to-position.md)
     - [14.11 Arm safety — torque, speed, workspace limits and e-stop](14-robotic-arm/14.11-arm-safety.md)
-  - **15 · Manipulation**
+  - [**15 · Manipulation**](15-manipulation/README.md)
     - [15.01 The physics of grasping — force, friction and friction cones](15-manipulation/15.01-physics-of-grasping.md)
     - [15.02 Grippers — parallel jaw, compliant, suction](15-manipulation/15.02-grippers.md)
     - [15.03 Hand–eye calibration — eye-in-hand and eye-to-hand](15-manipulation/15.03-hand-eye-calibration.md)
@@ -199,14 +199,14 @@
     - [15.08 A pick-and-place pipeline with a state machine](15-manipulation/15.08-pick-and-place-pipeline.md)
     - [15.09 Collision avoidance, the planning scene and failure recovery](15-manipulation/15.09-collision-avoidance-and-recovery.md)
     - [15.10 Mobile manipulation — the arm on the moving base](15-manipulation/15.10-mobile-manipulation.md)
-  - **16 · Machine learning for robots**
+  - [**16 · Machine learning for robots**](16-machine-learning/README.md)
     - [16.01 Where ML actually helps robots (and where classical methods win)](16-machine-learning/16.01-where-ml-helps-robots.md)
     - [16.02 Data for robots — collecting, labeling, datasets from rosbags](16-machine-learning/16.02-robot-data.md)
     - [16.03 Fine-tuning a detector on your own objects](16-machine-learning/16.03-fine-tuning-a-detector.md)
     - [16.04 Running models on robot compute — ONNX, TensorRT and quantization](16-machine-learning/16.04-models-on-edge-compute.md)
     - [16.05 Learning a motor model — regression and system identification](16-machine-learning/16.05-learning-dynamics.md)
     - [16.06 Evaluating ML components inside a robot](16-machine-learning/16.06-evaluating-ml-in-robots.md)
-  - **17 · Reinforcement learning**
+  - [**17 · Reinforcement learning**](17-reinforcement-learning/README.md)
     - [17.01 The RL framing — environment, state, action, reward, policy](17-reinforcement-learning/17.01-rl-framing.md)
     - [17.02 Value, return, exploration and exploitation](17-reinforcement-learning/17.02-value-exploration.md)
     - [17.03 Q-learning on a gridworld robot](17-reinforcement-learning/17.03-q-learning-gridworld.md)
@@ -216,7 +216,7 @@
     - [17.07 Wrap the course simulator as a Gymnasium environment and train go-to-goal](17-reinforcement-learning/17.07-robot-gym-environment.md)
     - [17.08 Reward design and reward hacking](17-reinforcement-learning/17.08-reward-design.md)
     - [17.09 Sim-to-real for RL — domain randomization, GPU simulators, safety](17-reinforcement-learning/17.09-rl-sim-to-real.md)
-  - **18 · Modern embodied AI**
+  - [**18 · Modern embodied AI**](18-embodied-ai/README.md)
     - [18.01 The embodied AI landscape — mature vs research (dated)](18-embodied-ai/18.01-embodied-ai-landscape.md)
     - [18.02 Imitation learning and behavior cloning](18-embodied-ai/18.02-imitation-learning-behavior-cloning.md)
     - [18.03 Teleoperation and demonstration data with a leader–follower arm (LeRobot)](18-embodied-ai/18.03-teleop-data-collection.md)
@@ -227,7 +227,7 @@
     - [18.08 Fine-tuning a small VLA on your own demonstrations](18-embodied-ai/18.08-fine-tuning-a-vla.md)
     - [18.09 Robot foundation models, world models and cross-embodiment data](18-embodied-ai/18.09-foundation-models-world-models.md)
     - [18.10 Evaluating and safely deploying learned policies](18-embodied-ai/18.10-evaluating-learned-policies.md)
-  - **19 · LLMs and robot agents**
+  - [**19 · LLMs and robot agents**](19-llm-robot-agents/README.md)
     - [19.01 Why the LLM should not drive the motors — the layered agent architecture](19-llm-robot-agents/19.01-why-llms-dont-drive-motors.md)
     - [19.02 Designing the robot's skill API — the tools an LLM may call](19-llm-robot-agents/19.02-robot-skill-api.md)
     - [19.03 Tool calling — an LLM operating the simulated robot](19-llm-robot-agents/19.03-tool-calling-sim-robot.md)
@@ -239,7 +239,7 @@
     - [19.09 Safety boundaries for LLM-controlled robots](19-llm-robot-agents/19.09-agent-safety-boundaries.md)
     - [19.10 Exposing ROS 2 to agents — MCP servers and evaluation](19-llm-robot-agents/19.10-ros2-for-agents-mcp.md)
     - [19.11 Talking to the robot — speech in, speech out](19-llm-robot-agents/19.11-voice-interface.md)
-  - **20 · The final robot — integration**
+  - [**20 · The final robot — integration**](20-final-robot/README.md)
     - [20.01 Final robot system architecture](20-final-robot/20.01-final-architecture.md)
     - [20.02 Hardware integration — mounting, power v2, compute, cabling](20-final-robot/20.02-hardware-integration.md)
     - [20.03 Software integration — bringup, health monitoring and diagnostics](20-final-robot/20.03-software-integration-bringup.md)
@@ -268,9 +268,9 @@
   - [Final project — the autonomous AI robot](projects/P18-final-autonomous-ai-robot.md)
 - **Optional foundations**
   - [Foundations overview](optional-foundations/README.md)
-  - **mathematics**
+  - [**mathematics**](optional-foundations/mathematics/README.md)
     - [FM.01 Algebra refresher for robotics formulas](optional-foundations/mathematics/FM.01-algebra-refresher.md)
-    - [FM.02 Angles](optional-foundations/mathematics/FM.02-angles-and-radians.md)
+    - [FM.02 Angles, degrees and radians](optional-foundations/mathematics/FM.02-angles-and-radians.md)
     - [FM.03 Trigonometry: sin, cos, tan and atan2](optional-foundations/mathematics/FM.03-trigonometry.md)
     - [FM.04 Cartesian and polar coordinates](optional-foundations/mathematics/FM.04-coordinate-systems.md)
     - [FM.05 Vectors from zero](optional-foundations/mathematics/FM.05-vectors.md)
@@ -279,7 +279,7 @@
     - [FM.08 Matrices as transformations and basis vectors](optional-foundations/mathematics/FM.08-matrices-as-transformations.md)
     - [FM.09 2D/3D transformations and homogeneous coordinates](optional-foundations/mathematics/FM.09-homogeneous-coordinates.md)
     - [FM.10 Rotation matrices](optional-foundations/mathematics/FM.10-rotation-matrices.md)
-    - [FM.11 Euler angles](optional-foundations/mathematics/FM.11-euler-angles.md)
+    - [FM.11 Euler angles, roll-pitch-yaw and gimbal lock](optional-foundations/mathematics/FM.11-euler-angles.md)
     - [FM.12 Quaternions without the mysticism](optional-foundations/mathematics/FM.12-quaternions.md)
     - [FM.13 Probability from zero](optional-foundations/mathematics/FM.13-probability-basics.md)
     - [FM.14 Distributions, Gaussians, uncertainty and noise](optional-foundations/mathematics/FM.14-distributions-gaussians-noise.md)
@@ -290,7 +290,7 @@
     - [FM.19 Linear systems and least squares](optional-foundations/mathematics/FM.19-linear-systems-least-squares.md)
     - [FM.20 Optimization for robotics and ML: gradient descent to nonlinear least squares](optional-foundations/mathematics/FM.20-optimization-basics.md)
     - [FM.21 Statistics for robot experiments: mean, spread, RMSE, outliers](optional-foundations/mathematics/FM.21-statistics-for-experiments.md)
-  - **electronics**
+  - [**electronics**](optional-foundations/electronics/README.md)
     - [FE.01 Voltage, current, resistance and power](optional-foundations/electronics/FE.01-voltage-current-resistance-power.md)
     - [FE.02 Ohm's law, series and parallel, voltage dividers](optional-foundations/electronics/FE.02-ohms-law-series-parallel.md)
     - [FE.03 Using a multimeter safely](optional-foundations/electronics/FE.03-multimeter.md)
@@ -310,7 +310,7 @@
     - [FE.17 Soldering from zero](optional-foundations/electronics/FE.17-soldering.md)
     - [FE.18 Capacitors, diodes and flyback protection — just enough](optional-foundations/electronics/FE.18-capacitors-diodes.md)
     - [FE.19 CAN bus concepts](optional-foundations/electronics/FE.19-can-bus-concepts.md)
-  - **physics**
+  - [**physics**](optional-foundations/physics/README.md)
     - [FP.01 Units, position, velocity and acceleration](optional-foundations/physics/FP.01-kinematics-units.md)
     - [FP.02 Forces, mass, weight and Newton's laws](optional-foundations/physics/FP.02-forces-newton.md)
     - [FP.03 Friction and traction](optional-foundations/physics/FP.03-friction-traction.md)
@@ -318,7 +318,7 @@
     - [FP.05 Energy, power and efficiency — how long will the battery last?](optional-foundations/physics/FP.05-energy-power-efficiency.md)
     - [FP.06 Rotational motion and moment of inertia](optional-foundations/physics/FP.06-rotational-motion-inertia.md)
     - [FP.07 Center of mass and tipping stability](optional-foundations/physics/FP.07-center-of-mass-stability.md)
-  - **Linux and the development environment**
+  - [**Linux and the development environment**](optional-foundations/linux-and-tools/README.md)
     - [FL.01 Why Linux runs robots — Ubuntu versions and LTS](optional-foundations/linux-and-tools/FL.01-why-linux.md)
     - [FL.02 Getting Ubuntu: dual boot, VM or WSL2](optional-foundations/linux-and-tools/FL.02-installing-ubuntu.md)
     - [FL.03 The shell for Windows developers](optional-foundations/linux-and-tools/FL.03-shell-basics.md)
@@ -332,14 +332,14 @@
     - [FL.11 Git for robotics: large files, bags and models](optional-foundations/linux-and-tools/FL.11-git-for-robotics.md)
     - [FL.12 Docker for robotics: devices, GUIs and host networking](optional-foundations/linux-and-tools/FL.12-docker-for-robotics.md)
     - [FL.13 Working headless: tmux and resilient remote sessions](optional-foundations/linux-and-tools/FL.13-tmux-headless.md)
-  - **Python for C# developers**
+  - [**Python for C# developers**](optional-foundations/python/README.md)
     - [FPY.01 Python for C# developers — the fast tour](optional-foundations/python/FPY.01-python-for-csharp-devs.md)
     - [FPY.02 numpy essentials for robotics](optional-foundations/python/FPY.02-numpy-essentials.md)
     - [FPY.03 Plotting robot data with matplotlib](optional-foundations/python/FPY.03-plotting-matplotlib.md)
     - [FPY.04 Typing, dataclasses, protocols and packaging](optional-foundations/python/FPY.04-typing-dataclasses-packaging.md)
     - [FPY.05 asyncio for people who know async/await in C#](optional-foundations/python/FPY.05-asyncio-for-csharp-devs.md)
     - [FPY.06 Python performance: vectorization, profiling and when to leave Python](optional-foundations/python/FPY.06-python-performance.md)
-  - **embedded systems and C/C++**
+  - [**embedded systems and C/C++**](optional-foundations/cpp-and-embedded/README.md)
     - [FC.01 Embedded systems 101 — life without an operating system](optional-foundations/cpp-and-embedded/FC.01-embedded-systems-101.md)
     - [FC.02 MicroPython on the Raspberry Pi Pico](optional-foundations/cpp-and-embedded/FC.02-micropython-on-pico.md)
     - [FC.03 C++ for C# developers: memory, RAII, headers, templates](optional-foundations/cpp-and-embedded/FC.03-cpp-for-csharp-devs.md)
@@ -348,14 +348,14 @@
     - [FC.06 Moving firmware to C/C++ — the Pico SDK](optional-foundations/cpp-and-embedded/FC.06-pico-c-sdk.md)
     - [FC.07 Real-time concepts: determinism, latency, jitter and watchdogs](optional-foundations/cpp-and-embedded/FC.07-real-time-concepts.md)
     - [FC.08 micro-ROS: ROS 2 on microcontrollers](optional-foundations/cpp-and-embedded/FC.08-micro-ros.md)
-  - **control theory**
+  - [**control theory**](optional-foundations/control-theory/README.md)
     - [FCT.01 Systems, signals and feedback — block diagrams](optional-foundations/control-theory/FCT.01-systems-signals-feedback.md)
     - [FCT.02 First- and second-order systems](optional-foundations/control-theory/FCT.02-first-second-order-systems.md)
     - [FCT.03 Differential equations just enough — simulate them numerically](optional-foundations/control-theory/FCT.03-differential-equations-simulation.md)
     - [FCT.04 Stability: poles without the pain](optional-foundations/control-theory/FCT.04-stability-intuition.md)
     - [FCT.05 Discrete time: sampling rates, delay and aliasing](optional-foundations/control-theory/FCT.05-discrete-time-sampling.md)
     - [FCT.06 State space, LQR and MPC — an introduction](optional-foundations/control-theory/FCT.06-state-space-lqr-mpc.md)
-  - **machine learning**
+  - [**machine learning**](optional-foundations/machine-learning/README.md)
     - [FML.01 What machine learning is — and isn't](optional-foundations/machine-learning/FML.01-what-is-ml.md)
     - [FML.02 Supervised learning: regression and classification](optional-foundations/machine-learning/FML.02-supervised-learning.md)
     - [FML.03 Training, validation and test sets; overfitting](optional-foundations/machine-learning/FML.03-train-validation-test.md)
@@ -368,14 +368,14 @@
     - [FML.10 Transformers and attention](optional-foundations/machine-learning/FML.10-transformers-attention.md)
     - [FML.11 Unsupervised learning: clustering, PCA, autoencoders](optional-foundations/machine-learning/FML.11-unsupervised-learning.md)
     - [FML.12 Generative models: VAEs, diffusion and flow matching (intuition)](optional-foundations/machine-learning/FML.12-generative-models-diffusion.md)
-  - **computer vision**
+  - [**computer vision**](optional-foundations/computer-vision/README.md)
     - [FCV.01 How cameras form images: light, sensors, Bayer filters, exposure](optional-foundations/computer-vision/FCV.01-how-cameras-form-images.md)
     - [FCV.02 Image processing as array math: convolution and kernels](optional-foundations/computer-vision/FCV.02-convolution-kernels.md)
     - [FCV.03 Color spaces: RGB, HSV, Lab](optional-foundations/computer-vision/FCV.03-color-spaces.md)
     - [FCV.04 Projective geometry lite: homogeneous points, homographies](optional-foundations/computer-vision/FCV.04-projective-geometry.md)
     - [FCV.05 Stereo vision and epipolar geometry intuition](optional-foundations/computer-vision/FCV.05-stereo-epipolar.md)
     - [FCV.06 Detection metrics: IoU, precision, recall, mAP](optional-foundations/computer-vision/FCV.06-detection-metrics.md)
-  - **3D printing and CAD**
+  - [**3D printing and CAD**](optional-foundations/3d-printing-and-cad/README.md)
     - [F3D.01 Why 3D printing matters in robotics — and when to buy a printer](optional-foundations/3d-printing-and-cad/F3D.01-why-3d-printing.md)
     - [F3D.02 CAD basics with Onshape or FreeCAD](optional-foundations/3d-printing-and-cad/F3D.02-cad-basics.md)
     - [F3D.03 STL, 3MF, STEP and slicers](optional-foundations/3d-printing-and-cad/F3D.03-file-formats-slicers.md)

@@ -9,7 +9,7 @@
 | **Difficulty** | Beginner |
 | **Time** | 45 min |
 | **Hardware** | none |
-| **Software** | none |
+| **Software** | python, numpy, opencv |
 | **Prerequisites** | none |
 | **Skip if** | You know how a CMOS sensor and Bayer filter create an RGB image. |
 

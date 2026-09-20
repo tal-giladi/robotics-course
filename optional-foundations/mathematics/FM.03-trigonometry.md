@@ -10,7 +10,7 @@
 | **Time** | 50 min |
 | **Hardware** | none |
 | **Software** | python |
-| **Prerequisites** | [FM.02 Angles](FM.02-angles-and-radians.md) |
+| **Prerequisites** | [FM.02 Angles, degrees and radians](FM.02-angles-and-radians.md) |
 | **Skip if** | You use atan2 correctly and know sin/cos on the unit circle. |
 
 <!-- glance:end -->
@@ -34,7 +34,7 @@ The single most valuable habit from this lesson: **always use `atan2(y, x)`, nev
 
 You need these first:
 
-- [FM.02 Angles](FM.02-angles-and-radians.md)
+- [FM.02 Angles, degrees and radians](FM.02-angles-and-radians.md)
 
 ### Optional prerequisite links
 

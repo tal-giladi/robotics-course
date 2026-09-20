@@ -10,7 +10,7 @@
 | **Time** | 1 h 15 min |
 | **Hardware** | none |
 | **Software** | python, scipy |
-| **Prerequisites** | [FM.11 Euler angles](FM.11-euler-angles.md) |
+| **Prerequisites** | [FM.11 Euler angles, roll-pitch-yaw and gimbal lock](FM.11-euler-angles.md) |
 | **Skip if** | You use quaternions and know q and -q represent the same rotation. |
 
 <!-- glance:end -->
@@ -34,7 +34,7 @@ You don't need 4D geometry to use them well. You need four facts, two formulas a
 
 You need these first:
 
-- [FM.11 Euler angles](FM.11-euler-angles.md)
+- [FM.11 Euler angles, roll-pitch-yaw and gimbal lock](FM.11-euler-angles.md)
 
 ### Optional prerequisite links
 

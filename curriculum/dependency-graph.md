@@ -6,7 +6,7 @@ The course is a directed acyclic graph. **Solid arrows** are hard prerequisites;
 The same data is in [`graph.json`](graph.json) for tools and AI agents. From the command line:
 
 ```bash
-python course.py why 11.07      # everything 11.07 depends on, with your status
+python course.py why 11.07          # everything 11.07 depends on, with your status
 python course.py learn quaternions  # which lesson teaches a concept, and what it needs
 ```
 
@@ -234,6 +234,7 @@ flowchart LR
   n_01_10 --> n_01_11
   n_FP_01 -.-> n_01_11
   n_01_11 --> n_01_12
+  n_FM_01 -.-> n_01_12
   n_FM_02 -.-> n_01_12
   n_FM_03 -.-> n_01_12
   n_01_11 --> n_01_13
@@ -245,7 +246,8 @@ flowchart LR
   n_01_11 --> n_01_15
   n_FL_09 -.-> n_01_15
   n_00_04(["00.04 Robot computers: microcontrollers, single-board computers and GPUs"])
-  n_FM_02(["FM.02 Angles"])
+  n_FM_01(["FM.01 Algebra refresher for robotics formulas"])
+  n_FM_02(["FM.02 Angles, degrees and radians"])
   n_FM_03(["FM.03 Trigonometry: sin, cos, tan and atan2"])
   n_FE_01(["FE.01 Voltage, current, resistance and power"])
   n_FE_02(["FE.02 Ohm's law, series and parallel, voltage dividers"])
@@ -286,7 +288,7 @@ flowchart LR
 | 01.09 Read the wheel encoders — ticks, direction, counts per revolution | 01.08 | FC.05, FE.06 | 01.10 |
 | 01.10 Design the Pi ↔ Pico serial protocol (with a watchdog) | 01.09 | FE.09, FPY.01 | 01.11, 01.14, 03.03 |
 | 01.11 Drive forward, backward and rotate in place (open loop) | 01.10 | FP.01 | 01.12, 01.13, 01.15, 03.01 |
-| 01.12 Use encoders to drive exact distances and angles — drive a square | 01.11 | FM.02, FM.03 | 07.02, 08.01, 09.01, P03 |
+| 01.12 Use encoders to drive exact distances and angles — drive a square | 01.11 | FM.01, FM.02, FM.03 | 07.02, 08.01, 09.01, P03 |
 | 01.13 Ultrasonic and ToF sensors — stop before hitting things | 01.11 | FE.09, FE.05 | 02.04, 07.01, P02 |
 | 01.14 Measure and report battery state; low-battery shutdown | 01.10 | FE.08, FE.02 | — |
 | 01.15 Drive it from your laptop — keyboard teleop over the network | 01.11 | FL.09 | 03.10, P01 |
@@ -549,7 +551,7 @@ flowchart LR
   n_05_10 --> n_05_11
   n_04_04(["04.04 Topics — writing publishers and subscribers in Python"])
   n_04_10(["04.10 Launch files — starting a system"])
-  n_FM_02(["FM.02 Angles"])
+  n_FM_02(["FM.02 Angles, degrees and radians"])
   n_FM_03(["FM.03 Trigonometry: sin, cos, tan and atan2"])
   n_FM_04(["FM.04 Cartesian and polar coordinates"])
   n_FM_05(["FM.05 Vectors from zero"])
@@ -557,7 +559,7 @@ flowchart LR
   n_FM_08(["FM.08 Matrices as transformations and basis vectors"])
   n_FM_09(["FM.09 2D/3D transformations and homogeneous coordinates"])
   n_FM_10(["FM.10 Rotation matrices"])
-  n_FM_11(["FM.11 Euler angles"])
+  n_FM_11(["FM.11 Euler angles, roll-pitch-yaw and gimbal lock"])
   n_FM_12(["FM.12 Quaternions without the mysticism"])
   n_FP_06(["FP.06 Rotational motion and moment of inertia"])
 ```
@@ -666,6 +668,7 @@ flowchart LR
   n_07_05 --> n_07_06
   n_04_16 --> n_07_06
   n_FM_15 -.-> n_07_06
+  n_FM_12 -.-> n_07_06
   n_07_01 --> n_07_07
   n_05_07 --> n_07_07
   n_FM_04 -.-> n_07_07
@@ -684,6 +687,7 @@ flowchart LR
   n_05_05(["05.05 3D rotations in practice — matrices, roll-pitch-yaw and quaternions"])
   n_05_07(["05.07 TF2 — broadcasting and listening to transforms"])
   n_FM_04(["FM.04 Cartesian and polar coordinates"])
+  n_FM_12(["FM.12 Quaternions without the mysticism"])
   n_FM_13(["FM.13 Probability from zero"])
   n_FM_14(["FM.14 Distributions, Gaussians, uncertainty and noise"])
   n_FM_15(["FM.15 Covariance and multivariate Gaussians"])
@@ -701,7 +705,7 @@ flowchart LR
 | 07.03 Ultrasonic sensors — sound, cones and ghost echoes | 07.01 | — | — |
 | 07.04 Optical time-of-flight sensors (VL53L1X) | 07.01 | — | — |
 | 07.05 IMU — accelerometer, gyroscope, magnetometer, bias and drift | 07.01, 05.05 | FP.01, FM.18 | 07.06, 08.11 |
-| 07.06 The IMU in ROS 2 — sensor_msgs/Imu, covariance and orientation filters | 07.05, 04.16 | FM.15 | 07.10, 10.07 |
+| 07.06 The IMU in ROS 2 — sensor_msgs/Imu, covariance and orientation filters | 07.05, 04.16 | FM.15, FM.12 | 07.10, 10.07 |
 | 07.07 2D LiDAR — how it works, LaserScan data, and a ROS 2 driver | 07.01, 05.07 | FM.04 | 07.10, 10.08, 11.01 |
 | 07.08 RGB cameras on the robot — exposure, rolling shutter, ROS image topics | 07.01, 04.11 | FCV.01 | 07.09, 13.15 |
 | 07.09 Depth cameras and point clouds — stereo, structured light, ToF | 07.08 | FCV.05 | 11.08, 13.08 |
@@ -810,12 +814,14 @@ flowchart LR
   n_09_04 --> n_09_07
   n_05_07 --> n_09_07
   n_04_16 --> n_09_07
+  n_FM_12 -.-> n_09_07
   n_01_12(["01.12 Use encoders to drive exact distances and angles — drive a square"])
   n_04_16(["04.16 Your physical robot in ROS 2 — cmd_vel in, telemetry out"])
   n_05_02(["05.02 Position, orientation and pose in 2D (x, y, θ)"])
   n_05_07(["05.07 TF2 — broadcasting and listening to transforms"])
   n_06_02(["06.02 The course mini-simulator — physics in 100 lines of Python"])
   n_FM_03(["FM.03 Trigonometry: sin, cos, tan and atan2"])
+  n_FM_12(["FM.12 Quaternions without the mysticism"])
   n_FM_14(["FM.14 Distributions, Gaussians, uncertainty and noise"])
   n_FM_15(["FM.15 Covariance and multivariate Gaussians"])
   n_FM_18(["FM.18 Integrals and numerical integration (how simulators move time forward)"])
@@ -831,7 +837,7 @@ flowchart LR
 | 09.04 Build an odometry system from scratch (tested against the simulator) | 09.02, 09.03, 06.02 | — | 09.05, 09.07, 10.06, P05 |
 | 09.05 Calibrating odometry — wheel radius, wheelbase and UMBmark | 09.04 | FM.21 | 09.06 |
 | 09.06 Accumulated error — why odometry always drifts | 09.05 | FM.14, FM.15 | 10.01 |
-| 09.07 Odometry in ROS 2 — nav_msgs/Odometry, odom→base_link, comparing implementations | 09.04, 05.07, 04.16 | — | 10.07, 11.06, P08 |
+| 09.07 Odometry in ROS 2 — nav_msgs/Odometry, odom→base_link, comparing implementations | 09.04, 05.07, 04.16 | FM.12 | 10.07, 11.06, P08 |
 
 ## 10 · Localization
 
@@ -1489,7 +1495,7 @@ flowchart LR
 ```mermaid
 flowchart LR
   n_FM_01["FM.01 Algebra refresher for robotics formulas"]
-  n_FM_02["FM.02 Angles"]
+  n_FM_02["FM.02 Angles, degrees and radians"]
   n_FM_03["FM.03 Trigonometry: sin, cos, tan and atan2"]
   n_FM_04["FM.04 Cartesian and polar coordinates"]
   n_FM_05["FM.05 Vectors from zero"]
@@ -1498,7 +1504,7 @@ flowchart LR
   n_FM_08["FM.08 Matrices as transformations and basis vectors"]
   n_FM_09["FM.09 2D/3D transformations and homogeneous coordinates"]
   n_FM_10["FM.10 Rotation matrices"]
-  n_FM_11["FM.11 Euler angles"]
+  n_FM_11["FM.11 Euler angles, roll-pitch-yaw and gimbal lock"]
   n_FM_12["FM.12 Quaternions without the mysticism"]
   n_FM_13["FM.13 Probability from zero"]
   n_FM_14["FM.14 Distributions, Gaussians, uncertainty and noise"]
@@ -1536,7 +1542,7 @@ flowchart LR
 | Lesson | Requires | Optional | Unlocks |
 |---|---|---|---|
 | FM.01 Algebra refresher for robotics formulas | — | — | FM.17 |
-| FM.02 Angles | — | — | FM.03 |
+| FM.02 Angles, degrees and radians | — | — | FM.03 |
 | FM.03 Trigonometry: sin, cos, tan and atan2 | FM.02 | — | FM.04, FM.10 |
 | FM.04 Cartesian and polar coordinates | FM.03 | — | FM.05 |
 | FM.05 Vectors from zero | FM.04 | — | FM.06, FM.07 |
@@ -1545,7 +1551,7 @@ flowchart LR
 | FM.08 Matrices as transformations and basis vectors | FM.07, FM.06 | — | FM.09, FM.10 |
 | FM.09 2D/3D transformations and homogeneous coordinates | FM.08 | — | — |
 | FM.10 Rotation matrices | FM.08, FM.03 | — | FM.11 |
-| FM.11 Euler angles | FM.10 | — | FM.12 |
+| FM.11 Euler angles, roll-pitch-yaw and gimbal lock | FM.10 | — | FM.12 |
 | FM.12 Quaternions without the mysticism | FM.11 | — | — |
 | FM.13 Probability from zero | — | — | FM.14, FM.16 |
 | FM.14 Distributions, Gaussians, uncertainty and noise | FM.13 | — | FM.15, FM.21 |
@@ -1833,8 +1839,10 @@ flowchart LR
   n_FML_06 --> n_FML_09
   n_FM_06 -.-> n_FML_09
   n_FML_09 --> n_FML_10
+  n_FML_07 --> n_FML_10
   n_FML_06 --> n_FML_11
   n_FM_19 -.-> n_FML_11
+  n_FML_07 -.-> n_FML_11
   n_FML_10 --> n_FML_12
   n_FML_11 --> n_FML_12
   n_FM_14 -.-> n_FML_12
@@ -1854,11 +1862,11 @@ flowchart LR
 | FML.04 Loss functions | FML.02 | — | FML.05 |
 | FML.05 Gradient descent | FML.04 | FM.17 | FML.06 |
 | FML.06 Neural networks from zero | FML.05 | FM.07 | FML.07, FML.09, FML.11 |
-| FML.07 Backpropagation and PyTorch basics | FML.06 | — | FML.08 |
+| FML.07 Backpropagation and PyTorch basics | FML.06 | — | FML.08, FML.10 |
 | FML.08 Convolutional neural networks | FML.07 | FCV.02 | — |
 | FML.09 Embeddings | FML.06 | FM.06 | FML.10 |
-| FML.10 Transformers and attention | FML.09 | — | FML.12 |
-| FML.11 Unsupervised learning: clustering, PCA, autoencoders | FML.06 | FM.19 | FML.12 |
+| FML.10 Transformers and attention | FML.09, FML.07 | — | FML.12 |
+| FML.11 Unsupervised learning: clustering, PCA, autoencoders | FML.06 | FM.19, FML.07 | FML.12 |
 | FML.12 Generative models: VAEs, diffusion and flow matching (intuition) | FML.10, FML.11 | FM.14 | — |
 
 ## FCV · Foundations: computer vision
