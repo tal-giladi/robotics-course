@@ -8,7 +8,9 @@ import math
 import pytest
 
 import path_error
+import rate_check
 import report
+import safety_envelope
 
 
 # ---------------------------------------------------------------- report.py
@@ -186,3 +188,153 @@ def test_cli_reads_a_pose_log(tmp_path, capsys):
     out = capsys.readouterr().out
     assert "closing error" in out
     assert "worst XTE" in out
+
+
+# ------------------------------------------------------- safety_envelope.py
+
+
+def test_braking_distance_is_quadratic_in_speed():
+    # Doubling the speed quadruples the braking distance. This is the whole point.
+    slow = safety_envelope.braking_distance_m(0.20, 1.0)
+    fast = safety_envelope.braking_distance_m(0.40, 1.0)
+    assert slow == pytest.approx(0.02)
+    assert fast == pytest.approx(4.0 * slow)
+
+
+def test_stopping_distance_splits_blind_and_braking():
+    e = safety_envelope.envelope(0.30, reaction_s=0.16, decel_m_s2=1.0)
+    assert e.reaction_distance_m == pytest.approx(0.048)
+    assert e.braking_distance_m == pytest.approx(0.045)
+    assert e.stopping_distance_m == pytest.approx(0.093)
+    assert e.fits_in(0.10) and not e.fits_in(0.05)
+
+
+def test_max_safe_speed_inverts_stopping_distance():
+    for clearance in (0.10, 0.35, 1.0):
+        v = safety_envelope.max_safe_speed_m_s(clearance, reaction_s=0.16, decel_m_s2=1.0)
+        assert safety_envelope.stopping_distance_m(v, 0.16, 1.0) == pytest.approx(clearance)
+
+
+def test_max_safe_speed_with_no_latency_is_the_textbook_root():
+    # r = 0 collapses to v = sqrt(2 a d).
+    assert safety_envelope.max_safe_speed_m_s(0.5, 0.0, 1.0) == pytest.approx(math.sqrt(1.0))
+
+
+def test_reaction_time_adds_the_parts():
+    # 30 ms link p99 + one 20 Hz period + 80 ms motor + 100 ms blocking sensor read.
+    assert safety_envelope.reaction_time_s(0.030, 20.0, 0.08, 0.10) == pytest.approx(0.26)
+
+
+def test_decel_from_coast_matches_braking_distance():
+    a = safety_envelope.decel_from_coast_m_s2(0.30, 0.045)
+    assert a == pytest.approx(1.0)
+    assert safety_envelope.braking_distance_m(0.30, a) == pytest.approx(0.045)
+
+
+@pytest.mark.parametrize("call", [
+    lambda: safety_envelope.stopping_distance_m(-0.1, 0.2, 1.0),
+    lambda: safety_envelope.stopping_distance_m(0.1, -0.2, 1.0),
+    lambda: safety_envelope.stopping_distance_m(0.1, 0.2, 0.0),
+    lambda: safety_envelope.max_safe_speed_m_s(-1.0, 0.2, 1.0),
+    lambda: safety_envelope.decel_from_coast_m_s2(0.3, 0.0),
+    lambda: safety_envelope.reaction_time_s(0.01, 0.0),
+])
+def test_safety_envelope_rejects_impossible_inputs(call):
+    with pytest.raises(ValueError):
+        call()
+
+
+def test_safety_envelope_cli_verdict(capsys):
+    ok = safety_envelope.main(["--speeds", "0.10,0.20", "--reaction", "0.16", "--clearance", "0.15"])
+    bad = safety_envelope.main(["--speeds", "0.10,0.50", "--reaction", "0.16", "--clearance", "0.15"])
+    assert (ok, bad) == (0, 1)
+    out = capsys.readouterr().out
+    assert "**no**" in out
+    assert "fastest speed that stops within 15 cm" in out
+
+
+# ------------------------------------------------------------ rate_check.py
+
+
+def test_gaps_of_a_steady_stream():
+    times = [i * 0.05 for i in range(21)]
+    gaps = rate_check.gaps_ms(times)
+    assert len(gaps) == 20
+    assert max(gaps) == pytest.approx(50.0)
+
+
+def test_gaps_need_two_timestamps():
+    with pytest.raises(ValueError):
+        rate_check.gaps_ms([1.0])
+
+
+def test_out_of_order_arrivals_are_sorted_not_negative():
+    gaps = rate_check.gaps_ms([0.0, 0.10, 0.05, 0.15])
+    assert min(gaps) > 0.0
+    assert gaps == pytest.approx([50.0, 50.0, 50.0])
+
+
+def test_a_good_mean_rate_can_hide_a_stall():
+    # 40 Hz for 2 s, then nothing for 2 s: 20 Hz on average, and unusable.
+    times = [i * 0.025 for i in range(81)] + [4.0]
+    rate, gaps = rate_check.summarize("/odom", times)
+    assert rate.mean_hz == pytest.approx(20.25, abs=0.1)
+    assert rate.max_gap_ms == pytest.approx(2000.0)
+    assert rate.gaps_over(150.0, gaps) == 1
+
+
+def test_expectation_parsing():
+    assert rate_check.Expectation.parse("/odom=20") == rate_check.Expectation("/odom", 20.0, None)
+    assert rate_check.Expectation.parse(" /battery_state = 1:2000 ") == \
+        rate_check.Expectation("/battery_state", 1.0, 2000.0)
+
+
+@pytest.mark.parametrize("text", ["/odom", "=20", "/odom=0", "/odom=20:0", "/odom=x"])
+def test_expectation_rejects_nonsense(text):
+    with pytest.raises(ValueError):
+        rate_check.Expectation.parse(text)
+
+
+def test_evaluate_passes_a_healthy_topic_and_fails_a_stalling_one():
+    steady = [i * 0.05 for i in range(101)]
+    rate, gaps = rate_check.summarize("/odom", steady)
+    expectation = rate_check.Expectation.parse("/odom=20")
+    verdicts = rate_check.evaluate(rate, gaps, expectation, default_max_gap_ms=150.0)
+    assert [v.passed for v in verdicts] == [True, True]
+
+    stalling = steady + [6.0]
+    rate, gaps = rate_check.summarize("/odom", stalling)
+    verdicts = rate_check.evaluate(rate, gaps, expectation, default_max_gap_ms=150.0)
+    assert [v.passed for v in verdicts] == [False, False]
+
+
+def test_evaluate_skips_the_gap_check_when_no_limit_is_given():
+    rate, gaps = rate_check.summarize("/odom", [i * 0.05 for i in range(21)])
+    verdicts = rate_check.evaluate(rate, gaps, rate_check.Expectation.parse("/odom=20"))
+    assert len(verdicts) == 1
+
+
+def test_read_stamps_groups_by_topic_and_checks_columns(tmp_path):
+    csv_path = tmp_path / "stamps.csv"
+    csv_path.write_text("topic,t\n/odom,0.0\n/odom,0.05\n/battery_state,0.01\n,\n", encoding="utf-8")
+    stamps = rate_check.read_stamps(csv_path)
+    assert stamps["/odom"] == [0.0, 0.05]
+    assert stamps["/battery_state"] == [0.01]
+
+    wrong = tmp_path / "wrong.csv"
+    wrong.write_text("name,time\na,1\n", encoding="utf-8")
+    with pytest.raises(KeyError):
+        rate_check.read_stamps(wrong)
+
+
+def test_rate_check_cli_reports_a_missing_topic_as_a_failure(tmp_path, capsys):
+    csv_path = tmp_path / "stamps.csv"
+    rows = ["topic,t"] + [f"/odom,{i * 0.05:.3f}" for i in range(101)]
+    csv_path.write_text("\n".join(rows) + "\n", encoding="utf-8")
+
+    ok = rate_check.main([str(csv_path), "--expect", "/odom=20", "--max-gap", "150"])
+    missing = rate_check.main([str(csv_path), "--expect", "/scan=10"])
+    assert (ok, missing) == (0, 1)
+    out = capsys.readouterr().out
+    assert "not published" in out
+    assert "| Topic | n | Window | Mean rate |" in out
