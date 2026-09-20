@@ -29,7 +29,9 @@ chassis:
   width_m: 0.20
   height_m: 0.07
   ground_clearance_m: 0.012
-  caster_offset_x_m: -0.10      # ball caster behind the wheels
+  caster_offset_x_m: 0.10       # ball caster in FRONT of the wheels: the centre of mass is
+                                # marginally ahead of the axle, so a caster behind it lets the
+                                # chassis tip nose-down onto its front edge (lesson 11.09 Level 3b)
 
 sensors:
   range_front:

@@ -63,6 +63,42 @@ def test_ekf_override_disables_controller_tf():
     assert load(PKG / 'config' / 'ekf.yaml')['ekf_filter_node']['ros__parameters']['publish_tf'] is True
 
 
+def test_diff_drive_uses_current_acceleration_parameters():
+    """min_acceleration is deprecated in ros2_controllers 4.x; max_deceleration replaces it."""
+    ddc = load(PKG / 'config' / 'controllers.yaml')['diff_drive_controller']['ros__parameters']
+    for axis in ('linear.x', 'angular.z'):
+        assert f'{axis}.min_acceleration' not in ddc, f'{axis}.min_acceleration is deprecated'
+        assert ddc[f'{axis}.max_acceleration'] > 0, axis      # forward, m/s^2 or rad/s^2
+        assert ddc[f'{axis}.max_deceleration'] < 0, axis      # braking, same sign convention
+
+
+def test_global_costmap_marks_only_nearby_lidar_returns():
+    """A far return lands in the wrong cell (localization error grows with range).
+
+    At obstacle_max_range 3.5 m the smeared marks closed the apartment's 0.8 m doorways and
+    every cross-room goal failed with NO_VALID_PATH (208). Mark near, clear far.
+    """
+    nav2 = load(PKG / 'config' / 'nav2_params.yaml')
+    scan = nav2['global_costmap']['global_costmap']['ros__parameters']['obstacle_layer']['scan']
+    assert scan['obstacle_max_range'] <= 1.5
+    assert scan['raytrace_max_range'] > scan['obstacle_max_range'], 'clearing must outrange marking'
+
+
+def test_map_thresholds_keep_unknown_cells_unknown():
+    """map_server turns pixel 205 (unknown grey) into occ 0.196; free_thresh must stay below it.
+
+    With free_thresh 0.25 the 2,607 unknown cells of the apartment map were served as FREE,
+    so the planner happily routed through unexplored space.
+    """
+    unknown_occ = (255 - 205) / 255.0
+    for path in (PKG / 'maps').glob('*.yaml'):
+        meta = load(path)
+        assert meta['free_thresh'] <= unknown_occ, f'{path.name}: unknown cells would be free'
+        assert meta['occupied_thresh'] > unknown_occ, path.name
+    saver = load(PKG / 'config' / 'nav2_params.yaml')['map_saver']['ros__parameters']
+    assert saver['free_thresh_default'] <= unknown_occ
+
+
 def test_all_yaml_parses():
     for path in list((PKG / 'config').glob('*.yaml')) + list((PKG / 'maps').glob('*.yaml')):
         assert load(path) is not None, path

@@ -83,6 +83,52 @@ def test_every_massive_link_has_positive_inertia():
     assert math.isclose(total, load(COPY)['robot']['mass_kg'], rel_tol=1e-6)
 
 
+def link_com_x(robot):
+    """Return (total_mass, centre-of-mass x) of the assembled robot, in base_link."""
+    # No joint in this tree rotates about z, and joints are declared parent-before-child, so a
+    # link's x in base_link is just the sum of the joint origin x values down to it.
+    parent_x = {'base_footprint': 0.0}
+    for joint in robot.findall('joint'):
+        child = joint.find('child').get('link')
+        origin = joint.find('origin')
+        x = float(origin.get('xyz').split()[0]) if origin is not None else 0.0
+        parent = joint.find('parent').get('link')
+        parent_x[child] = parent_x.get(parent, 0.0) + x
+    total = 0.0
+    moment = 0.0
+    for link in robot.findall('link'):
+        inertial = link.find('inertial')
+        if inertial is None:
+            continue
+        m = float(inertial.find('mass').get('value'))
+        origin = inertial.find('origin')
+        local_x = float(origin.get('xyz').split()[0]) if origin is not None else 0.0
+        total += m
+        moment += m * (parent_x.get(link.get('name'), 0.0) + local_x)
+    return total, moment / total
+
+
+def test_centre_of_mass_is_inside_the_support_polygon():
+    """The robot must rest level: CoM between the wheel contacts and the caster contact.
+
+    karmel stands on two wheels (contact at x = 0) and one ball caster. If the centre of mass
+    is on the far side of the axle from the caster, the chassis tips onto an edge until the
+    ground clearance runs out — 5.6 deg nose-down, which points the LiDAR at the floor.
+    See lesson 11.09 Level 3b; this test is the regression guard for that defect.
+    """
+    robot = render(use_sim='false')
+    cfg = load(COPY)
+    caster_x = cfg['chassis']['caster_offset_x_m']
+    total, com_x = link_com_x(robot)
+    assert math.isclose(total, cfg['robot']['mass_kg'], rel_tol=1e-6)
+    lo, hi = sorted((0.0, caster_x))
+    assert lo < com_x < hi, (
+        f'centre of mass x={com_x:+.4f} m is outside the support polygon '
+        f'[{lo:+.3f}, {hi:+.3f}] (wheel contacts at 0, caster at {caster_x:+.3f}): '
+        'the robot will rest pitched onto an edge'
+    )
+
+
 def test_camera_optical_frame_convention():
     robot = render(use_sim='false')
     joint = next(j for j in robot.findall('joint') if j.get('name') == 'camera_optical_joint')
