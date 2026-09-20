@@ -239,7 +239,8 @@ Workbench tools are extra: see [tools.md](tools.md) (≈ ₪870 recommended, ≈
 | Why | Third contact point for a 2-wheel differential drive |
 | Price | **₪21.10** (4Project) |
 | Buy in Israel | https://www.4project.co.il/product/986 |
-| Compatibility | **Match heights**: the wheel axle sits ≈ 45 mm above the floor minus the bracket offset. You'll likely need M3 spacers under the caster so the robot sits level. A caster that is too high makes the robot rock; too low lifts a drive wheel. |
+| **Where to bolt it: in FRONT of the wheel axle** | `labs/config/karmel.yaml` has **`caster_offset_x_m: +0.10`** — 100 mm **ahead** of the axle, not behind it. Most two-wheel chassis kits (and most tutorials) put the caster at the back; on karmel that tips the robot nose-down, because the camera and the front range sensor put the centre of mass ≈ 1.7 mm *ahead* of the axle, and with the only third contact behind, the support polygon does not contain it. Measured in simulation (`labs/TESTED.md` §3.1): the robot rested **5.6° nose-down**, `/imu` reported −1.01 m/s² on x standing still, and the LiDAR's 0° ray returned **1.55 m of floor** instead of the wall at 1.95 m. With the caster in front: 0.000° pitch and 1.95 m. If your chassis plate is only drilled at the back, drill the front — this is a 10-minute job that silently poisons every scan, every odometry run and every map if you skip it. |
+| Compatibility | **Match heights**: the wheel axle sits ≈ 45 mm above the floor minus the bracket offset. You'll likely need M3 spacers under the caster so the robot sits level. A caster that is too high makes the robot rock; too low lifts a drive wheel. Ground clearance is only 12 mm over a 125 mm half-length, so 5.5° of pitch is all it takes to land on the chassis edge. |
 | Tools | Calipers or a ruler |
 | Spares | None |
 
@@ -252,7 +253,7 @@ Workbench tools are extra: see [tools.md](tools.md) (≈ ₪870 recommended, ≈
 | Why | Holds everything. Target ≈ 250 × 200 mm (`karmel.yaml` chassis). |
 | Price | **≈ ₪50** (from Piitel's search listing; the product page didn't show a price) |
 | Buy in Israel | https://piitel.co.il/shop/smart-robot-car-chassis-kit-2-wheels/ |
-| Compatibility | TT-motor plates **aren't drilled for 37 mm motors, so expect to drill**. Plan the upper deck now. |
+| Compatibility | TT-motor plates **aren't drilled for 37 mm motors, so expect to drill**. Plan the upper deck now — and drill the **caster hole 100 mm ahead of the wheel axle**, not at the back (B5). |
 | Tools | Drill and bits (3 mm, 3.2 mm), file, marker |
 | Ask the seller | Confirm the price and the plate dimensions. |
 

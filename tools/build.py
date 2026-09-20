@@ -116,7 +116,7 @@ def build_graph(syl: dict) -> dict:
             "requires": [str(x) for x in proj.get("requires", [])],
             "optional": [],
             "hardware": list(proj.get("hardware", [])),
-            "software": [],
+            "software": list(proj.get("software", [])),
             "teaches": [],
             "skip_if": "",
             "version_sensitive": False,

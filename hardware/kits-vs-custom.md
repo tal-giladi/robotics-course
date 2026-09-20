@@ -27,7 +27,9 @@ Back to [HARDWARE.md](../HARDWARE.md) · [Stage 1 BOM](stage-1-first-robot.md)
    drive motors, read encoders, drive a square and monitor the battery. A sealed kit hides exactly those parts.
 2. **Right geometry for odometry.** Two driven wheels plus a caster is the textbook
    differential drive that `diff_drive_controller`, odometry calibration (UMBmark) and Nav2 assume.
-   Skid-steer 4WD, tracks and mecanum all add slip.
+   Skid-steer 4WD, tracks and mecanum all add slip. (karmel's caster goes **in front of** the axle,
+   not behind it — see [stage-1-first-robot.md](stage-1-first-robot.md) B5 for why, and check where
+   a kit put its caster before you trust the kit's chassis.)
 3. **Encoders are non-negotiable.** Closed-loop speed control (module 08) and odometry (module 09)
    need wheel encoders; the cheapest metal kit (WAVE ROVER) appears to have none.
 4. **Israeli availability and repairs.** Every karmel part is sold by Piitel, 4Project,

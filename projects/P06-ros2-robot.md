@@ -9,7 +9,7 @@
 | **Difficulty** | Intermediate |
 | **Time** | 5 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1) |
-| **Software** | none |
+| **Software** | ros2, rclpy, python |
 | **Prerequisites** | [04.16 Your physical robot in ROS 2 — cmd_vel in, telemetry out](../04-ros2/04.16-your-robot-as-ros2-node.md) |
 
 <!-- glance:end -->

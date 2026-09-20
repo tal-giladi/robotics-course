@@ -66,7 +66,7 @@ modules:
     optional: []
     hardware: []
     software: []
-    teaches: [robotics-stack, perception, planning, control, localization, middleware]
+    teaches: [robotics-stack, perception, planning, control, middleware]
     skip_if: You can draw the layers from an LLM planner down to a PWM signal and say what runs at which rate.
   - id: "00.03"
     slug: actuators-and-sensors-field-guide
@@ -77,7 +77,7 @@ modules:
     optional: []
     hardware: []
     software: []
-    teaches: [actuator, sensor, motor, servo, encoder, imu, camera, lidar, tof, ultrasonic, motor-controller, battery]
+    teaches: [actuator, sensor, motor, servo, encoder, imu, camera, lidar, tof, ultrasonic, motor-controller]
     skip_if: You know what each of these parts measures or moves and roughly what it costs.
   - id: "00.04"
     slug: robot-computers
@@ -90,6 +90,7 @@ modules:
     software: []
     teaches: [microcontroller, sbc, embedded-computer, real-time, edge-gpu]
     skip_if: You can explain why a robot typically has both a Raspberry Pi and a microcontroller.
+    version_sensitive: true
   - id: "00.05"
     slug: ros2-in-one-page
     title: ROS 2 and robot middleware in one page
@@ -327,7 +328,7 @@ modules:
     optional: ["FE.15", "FP.05"]
     hardware: [robot-base]
     software: []
-    teaches: [power-budget, brownout, stall-current, battery-runtime, separate-rails]
+    teaches: [power-budget, brownout, worst-case-current, battery-runtime, separate-rails]
     skip_if: You can compute worst-case current per rail and runtime for your robot.
   - id: "02.03"
     slug: motor-drivers-in-depth
@@ -534,7 +535,7 @@ modules:
     optional: ["FL.09"]
     hardware: [robot-base]
     software: [chrony]
-    teaches: [wifi-latency, mdns, time-synchronization, network-partitions]
+    teaches: [wifi-latency, robot-hostname-resolution, time-synchronization, network-partitions]
     skip_if: Your robot and laptop share synchronized clocks and you have measured Wi-Fi latency.
   - id: "03.11"
     slug: ci-and-reproducibility
@@ -1686,7 +1687,7 @@ modules:
     optional: []
     hardware: []
     software: [ros2, nav2]
-    teaches: [recovery-behaviors, collision-monitor, speed-limits, keepout-zones]
+    teaches: [recovery-behaviors, collision-monitor, speed-restriction-zones, keepout-zones]
     skip_if: You configure collision monitoring and keepout zones and handle navigation failures.
 
 # ---------------------------------------------------------------------------
@@ -1749,7 +1750,7 @@ modules:
     optional: ["FCV.04", "FM.09"]
     hardware: []
     software: [python, numpy]
-    teaches: [pinhole-model, camera-intrinsics, camera-extrinsics, projection, back-projection]
+    teaches: [pinhole-model, camera-intrinsics, camera-extrinsics, perspective-projection, back-projection]
     skip_if: You can project a 3D point to pixels with K and back-project with depth.
   - id: "13.06"
     slug: lens-distortion-calibration
@@ -1784,6 +1785,7 @@ modules:
     software: [python, numpy, open3d]
     teaches: [depth-to-point-cloud, stereo-disparity, plane-segmentation, 3d-vision]
     skip_if: You convert depth images to point clouds and segment planes.
+    version_sensitive: true
   - id: "13.09"
     slug: cnns-for-robot-vision
     title: CNNs for robot vision — using pretrained networks
@@ -1795,6 +1797,7 @@ modules:
     software: [python, pytorch]
     teaches: [cnn-practice, pretrained-models, transfer-learning-intro, inference-latency]
     skip_if: You run pretrained CNNs in PyTorch and understand their outputs.
+    version_sensitive: true
   - id: "13.10"
     slug: object-detection-models
     title: Object detection with modern models
@@ -2342,6 +2345,7 @@ modules:
     software: [python, pytorch]
     teaches: [imitation-learning, behavior-cloning, compounding-errors, dagger]
     skip_if: You can explain compounding errors and DAgger.
+    version_sensitive: true
   - id: "18.03"
     slug: teleop-data-collection
     title: Teleoperation and demonstration data with a leader–follower arm (LeRobot)
@@ -2510,6 +2514,7 @@ modules:
     software: [python]
     teaches: [task-decomposition, plan-validation, llm-planner, plan-to-behavior-tree]
     skip_if: Your LLM produces plans that are validated before execution.
+    version_sensitive: true
   - id: "19.07"
     slug: perception-action-loops
     title: Perception–action loops — verifying every step
@@ -2693,7 +2698,7 @@ modules:
   - {id: FE.12, slug: h-bridges-motor-drivers, title: "H-bridges and motor drivers", difficulty: beginner, time: 45, requires: [FE.10, FE.07], optional: [], hardware: [], software: [], teaches: [h-bridge-basics, motor-driver, mosfet-switch], skip_if: "You know why a GPIO pin cannot drive a motor directly and how an H-bridge reverses it."}
   - {id: FE.13, slug: batteries, title: "Batteries: chemistry, voltage, capacity, C-rating", difficulty: beginner, time: 50, requires: [FE.01], optional: [], hardware: [], software: [], teaches: [battery, li-ion, lipo, nimh, mah-capacity, c-rating, series-parallel-cells, bms], skip_if: "You can size a battery pack for a robot."}
   - {id: FE.14, slug: lithium-battery-safety, title: "Li-ion and LiPo safety and charging", difficulty: beginner, time: 40, requires: [FE.13], optional: [], hardware: [], software: [], teaches: [lithium-safety, charging, balance-charging, storage-voltage, thermal-runaway], skip_if: "Never skip."}
-  - {id: FE.15, slug: voltage-regulators, title: "Voltage regulators: linear, buck and boost", difficulty: beginner, time: 40, requires: [FE.02], optional: [], hardware: [], software: [], teaches: [voltage-regulator, linear-regulator, buck-converter-basics, boost-converter, efficiency], skip_if: "You choose between LDO and buck converters knowingly."}
+  - {id: FE.15, slug: voltage-regulators, title: "Voltage regulators: linear, buck and boost", difficulty: beginner, time: 40, requires: [FE.02], optional: [], hardware: [], software: [], teaches: [voltage-regulator, linear-regulator, buck-converter-basics, boost-converter, regulator-efficiency], skip_if: "You choose between LDO and buck converters knowingly."}
   - {id: FE.16, slug: grounding, title: "Ground, common ground and why it matters", difficulty: beginner, time: 35, requires: [FE.02], optional: [], hardware: [], software: [], teaches: [ground, common-ground-basics, reference-voltage-ground], skip_if: "You never forget to connect grounds between boards."}
   - {id: FE.17, slug: soldering, title: "Soldering from zero", difficulty: beginner, time: 90, requires: [FE.04], optional: [], hardware: [tools], software: [], teaches: [soldering, tinning, through-hole-soldering, desoldering, solder-safety], skip_if: "You solder clean through-hole joints."}
   - {id: FE.18, slug: capacitors-diodes, title: "Capacitors, diodes and flyback protection — just enough", difficulty: intermediate, time: 45, requires: [FE.02], optional: [], hardware: [], software: [], teaches: [capacitor, diode, flyback-diode, reverse-polarity-protection], skip_if: "You know what decoupling caps and flyback diodes do."}
@@ -2729,9 +2734,9 @@ modules:
   - {id: FL.08, slug: ssh-remote-dev, title: "SSH and remote development", difficulty: beginner, time: 50, requires: [FL.03], optional: [], hardware: [], software: [ssh], teaches: [ssh, ssh-keys, scp-rsync, vscode-remote-ssh], skip_if: "You use SSH keys and remote editing daily."}
   - {id: FL.09, slug: networking-basics, title: "Networking basics: IP, Wi-Fi, ports, mDNS, ping", difficulty: beginner, time: 60, requires: [FL.03], optional: [], hardware: [], software: [ubuntu], teaches: [ip-addresses, subnets, ports, mdns, dhcp, network-debugging-tools, firewall], skip_if: "You debug home network connectivity with ip, ping and ss."}
   - {id: FL.10, slug: python-environments-ubuntu, title: "Python environments on Ubuntu: apt, venv, uv and PEP 668", difficulty: beginner, time: 45, requires: [FL.07], optional: [], hardware: [], software: [python, uv], teaches: [python-venv, pep668-basics, uv-basics, system-python], skip_if: "You never pip install into system Python.", version_sensitive: true}
-  - {id: FL.11, slug: git-for-robotics, title: "Git for robotics: large files, bags and models", difficulty: beginner, time: 35, requires: [FL.03], optional: [], hardware: [], software: [git], teaches: [git-lfs, gitignore-robotics, submodules-vcs], skip_if: "You know what not to commit and how to handle large binaries."}
+  - {id: FL.11, slug: git-for-robotics, title: "Git for robotics: large files, bags and models", difficulty: beginner, time: 35, requires: [FL.03], optional: [], hardware: [], software: [git], teaches: [git-lfs, gitignore-robotics, submodules-vcs], skip_if: "You know what not to commit and how to handle large binaries.", version_sensitive: true}
   - {id: FL.12, slug: docker-for-robotics, title: "Docker for robotics: devices, GUIs and host networking", difficulty: intermediate, time: 60, requires: [FL.06], optional: [], hardware: [], software: [docker], teaches: [docker-robotics, device-passthrough, x11-wslg-gui, host-networking-dds], skip_if: "You run ROS GUIs and USB devices in containers.", version_sensitive: true}
-  - {id: FL.13, slug: tmux-headless, title: "Working headless: tmux and resilient remote sessions", difficulty: beginner, time: 30, requires: [FL.08], optional: [], hardware: [], software: [tmux], teaches: [tmux, headless-workflow], skip_if: "You use tmux."}
+  - {id: FL.13, slug: tmux-headless, title: "Working headless: tmux and resilient remote sessions", difficulty: beginner, time: 30, requires: [FL.08], optional: [], hardware: [], software: [tmux], teaches: [tmux, headless-workflow], skip_if: "You use tmux.", version_sensitive: true}
 
 - id: FPY
   dir: optional-foundations/python
@@ -2803,7 +2808,7 @@ modules:
   - {id: FCV.02, slug: convolution-kernels, title: "Image processing as array math: convolution and kernels", difficulty: beginner, time: 50, requires: [FCV.01], optional: [FPY.02], hardware: [], software: [python, numpy], teaches: [convolution, kernel, image-filtering, gradients-sobel], skip_if: "You can hand-compute a convolution."}
   - {id: FCV.03, slug: color-spaces, title: "Color spaces: RGB, HSV, Lab", difficulty: beginner, time: 35, requires: [FCV.01], optional: [], hardware: [], software: [python, opencv], teaches: [color-spaces, hsv-theory, lab-color], skip_if: "You pick color spaces for segmentation knowingly."}
   - {id: FCV.04, slug: projective-geometry, title: "Projective geometry lite: homogeneous points, homographies", difficulty: intermediate, time: 60, requires: [FCV.02], optional: [FM.09], hardware: [], software: [python, numpy], teaches: [projective-geometry, homography, vanishing-points], skip_if: "You compute and apply homographies."}
-  - {id: FCV.05, slug: stereo-epipolar, title: "Stereo vision and epipolar geometry intuition", difficulty: intermediate, time: 50, requires: [FCV.04], optional: [], hardware: [], software: [python], teaches: [stereo-vision, disparity, epipolar-geometry, baseline], skip_if: "You relate disparity, baseline and depth error."}
+  - {id: FCV.05, slug: stereo-epipolar, title: "Stereo vision and epipolar geometry intuition", difficulty: intermediate, time: 50, requires: [FCV.04], optional: [], hardware: [], software: [python], teaches: [stereo-vision, disparity, epipolar-geometry, stereo-baseline], skip_if: "You relate disparity, baseline and depth error."}
   - {id: FCV.06, slug: detection-metrics, title: "Detection metrics: IoU, precision, recall, mAP", difficulty: beginner, time: 40, requires: [], optional: [], hardware: [], software: [python], teaches: [iou, precision-recall, map-metric, confusion-matrix], skip_if: "You compute IoU and interpret mAP."}
 
 - id: F3D
@@ -2824,24 +2829,24 @@ modules:
 # PROJECTS — each proves a capability. Files live in projects/<id>-<slug>.md
 # ===========================================================================
 projects:
-  - {id: P01, slug: manual-drive, title: "Project 1 — Robot drives manually", requires: ["01.15"], hardware: [robot-base], difficulty: beginner, time: 120}
-  - {id: P02, slug: obstacle-avoidance, title: "Project 2 — Obstacle avoidance", requires: ["01.13", P01], hardware: [robot-base], difficulty: beginner, time: 180}
-  - {id: P03, slug: encoder-movement, title: "Project 3 — Encoder-based movement", requires: ["01.12"], hardware: [robot-base], difficulty: beginner, time: 180}
-  - {id: P04, slug: pid-movement, title: "Project 4 — PID-controlled movement", requires: ["08.10", P03], hardware: [robot-base], difficulty: intermediate, time: 240}
-  - {id: P05, slug: autonomous-square-path, title: "Project 5 — Autonomous square and path following", requires: ["08.11", "09.04", P04], hardware: [robot-base, imu], difficulty: intermediate, time: 240}
-  - {id: P06, slug: ros2-robot, title: "Project 6 — Your robot on ROS 2", requires: ["04.16"], hardware: [robot-base], difficulty: intermediate, time: 300}
-  - {id: P07, slug: simulated-robot, title: "Project 7 — The simulated twin", requires: ["06.09", P06], hardware: [], difficulty: intermediate, time: 300}
-  - {id: P08, slug: odometry, title: "Project 8 — Odometry you can trust", requires: ["09.07", P06], hardware: [robot-base], difficulty: intermediate, time: 240}
-  - {id: P09, slug: mapping, title: "Project 9 — Map your home", requires: ["11.07", P08], hardware: [robot-base, lidar], difficulty: advanced, time: 360}
-  - {id: P10, slug: localization, title: "Project 10 — Localize on your map", requires: ["10.09", "10.07", P09], hardware: [robot-base, lidar, imu], difficulty: advanced, time: 300}
-  - {id: P11, slug: autonomous-navigation, title: "Project 11 — Go to the kitchen: autonomous navigation", requires: ["12.10", P10], hardware: [robot-base, lidar], difficulty: advanced, time: 480}
-  - {id: P12, slug: camera-object-detection, title: "Project 12 — Camera object detection", requires: ["13.15"], hardware: [camera], difficulty: intermediate, time: 300}
-  - {id: P13, slug: robot-plus-vision, title: "Project 13 — Find objects and put them on the map", requires: ["13.16", P11, P12], hardware: [robot-base, lidar, camera], difficulty: advanced, time: 480}
-  - {id: P14, slug: robotic-arm, title: "Project 14 — The arm moves where you tell it", requires: ["14.10", "14.11"], hardware: [arm], difficulty: advanced, time: 480}
-  - {id: P15, slug: vision-guided-arm, title: "Project 15 — Vision-guided reaching", requires: ["15.07", P14], hardware: [arm, camera], difficulty: advanced, time: 480}
-  - {id: P16, slug: pick-and-place, title: "Project 16 — Pick and place", requires: ["15.09", P15], hardware: [arm, camera], difficulty: advanced, time: 600}
-  - {id: P17, slug: llm-controlled-robot, title: "Project 17 — The LLM-directed robot", requires: ["19.09", P13], hardware: [robot-base, lidar, camera], difficulty: advanced, time: 600}
-  - {id: P18, slug: final-autonomous-ai-robot, title: "Final project — the autonomous AI robot", requires: ["20.06", P16, P17], hardware: [robot-base, lidar, camera, imu, arm, estop], difficulty: advanced, time: 2400}
+  - {id: P01, slug: manual-drive, title: "Project 1 — Robot drives manually", requires: ["01.15"], hardware: [robot-base], software: [python, micropython, ubuntu], difficulty: beginner, time: 120}
+  - {id: P02, slug: obstacle-avoidance, title: "Project 2 — Obstacle avoidance", requires: ["01.13", P01], hardware: [robot-base], software: [python], difficulty: beginner, time: 180}
+  - {id: P03, slug: encoder-movement, title: "Project 3 — Encoder-based movement", requires: ["01.12"], hardware: [robot-base], software: [python], difficulty: beginner, time: 180}
+  - {id: P04, slug: pid-movement, title: "Project 4 — PID-controlled movement", requires: ["08.10", P03], hardware: [robot-base], software: [python, matplotlib], difficulty: intermediate, time: 240}
+  - {id: P05, slug: autonomous-square-path, title: "Project 5 — Autonomous square and path following", requires: ["08.11", "09.04", P04], hardware: [robot-base, imu], software: [python, matplotlib], difficulty: intermediate, time: 240}
+  - {id: P06, slug: ros2-robot, title: "Project 6 — Your robot on ROS 2", requires: ["04.16"], hardware: [robot-base], software: [ros2, rclpy, python], difficulty: intermediate, time: 300}
+  - {id: P07, slug: simulated-robot, title: "Project 7 — The simulated twin", requires: ["06.09", P06], hardware: [], software: [ros2, gazebo, ros-gz, xacro], difficulty: intermediate, time: 300}
+  - {id: P08, slug: odometry, title: "Project 8 — Odometry you can trust", requires: ["09.07", P06], hardware: [robot-base], software: [ros2, robot-localization, python], difficulty: intermediate, time: 240}
+  - {id: P09, slug: mapping, title: "Project 9 — Map your home", requires: ["11.07", P08], hardware: [robot-base, lidar], software: [ros2, slam-toolbox, nav2], difficulty: advanced, time: 360}
+  - {id: P10, slug: localization, title: "Project 10 — Localize on your map", requires: ["10.09", "10.07", P09], hardware: [robot-base, lidar, imu], software: [ros2, nav2, robot-localization], difficulty: advanced, time: 300}
+  - {id: P11, slug: autonomous-navigation, title: "Project 11 — Go to the kitchen: autonomous navigation", requires: ["12.10", P10], hardware: [robot-base, lidar], software: [ros2, nav2], difficulty: advanced, time: 480}
+  - {id: P12, slug: camera-object-detection, title: "Project 12 — Camera object detection", requires: ["13.15"], hardware: [camera], software: [ros2, opencv, cv-bridge, python], difficulty: intermediate, time: 300}
+  - {id: P13, slug: robot-plus-vision, title: "Project 13 — Find objects and put them on the map", requires: ["13.16", P11, P12], hardware: [robot-base, lidar, camera], software: [ros2, opencv, cv-bridge, tf2], difficulty: advanced, time: 480}
+  - {id: P14, slug: robotic-arm, title: "Project 14 — The arm moves where you tell it", requires: ["14.10", "14.11"], hardware: [arm, estop, tools], software: [ros2, moveit2, python], difficulty: advanced, time: 480}
+  - {id: P15, slug: vision-guided-arm, title: "Project 15 — Vision-guided reaching", requires: ["15.07", P14], hardware: [arm, camera], software: [ros2, moveit2, tf2, python], difficulty: advanced, time: 480}
+  - {id: P16, slug: pick-and-place, title: "Project 16 — Pick and place", requires: ["15.09", P15], hardware: [arm, camera], software: [ros2, moveit2, python], difficulty: advanced, time: 600}
+  - {id: P17, slug: llm-controlled-robot, title: "Project 17 — The LLM-directed robot", requires: ["19.09", P13], hardware: [robot-base, lidar, camera, estop], software: [ros2, nav2, python, llm-api], difficulty: advanced, time: 600}
+  - {id: P18, slug: final-autonomous-ai-robot, title: "Final project — the autonomous AI robot", requires: ["20.06", P16, P17], hardware: [robot-base, lidar, camera, imu, arm, estop], software: [ros2, nav2, moveit2, python], difficulty: advanced, time: 2400}
 
 # ===========================================================================
 # HARDWARE CATALOG — stage ids used by lessons. Details and prices: HARDWARE.md

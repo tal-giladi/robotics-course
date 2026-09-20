@@ -76,7 +76,7 @@ delivery fees (estimated) or international shipping (not verified).
 | Battery monitor | Resistor divider into the Pico ADC | INA219 (₪40) | Measures current as well as voltage |
 | ToF sensor | Deferred to Stage 2 (Adafruit ₪80) | Pololu VL53L1X in Stage 1 (₪107.80) | Lesson 01.13 uses both range sensors |
 | Bench PSU | None | Official 27 W PSU (₪70) | Desk work without the battery |
-| IMU | Waveshare ICM20948 module (₪81) | BNO055 (₪135, restock) / SparkFun ICM-20948 (₪152) | BNO055 has an apt ROS 2 driver and on-chip fusion |
+| IMU | Waveshare ICM20948 module (₪81) | BNO055 (₪135, restock) / SparkFun ICM-20948 (₪152) | BNO055 has an apt ROS 2 driver and on-chip fusion. Bosch marks it **"not recommended for new designs"** (checked 2026-09-20); the course uses it knowingly — see [stage-2](hardware/stage-2-imu-and-camera.md) for why and for the replacement path |
 | LiDAR | RPLIDAR C1 imported ($69) | RPLIDAR C1 at Hackstore (₪1,050) | Local stock, warranty, no courier risk; import if you can wait and shipping works |
 | Arm | SO-101 WowRobo Package 1 ($199) | SO-101 WowRobo Package 2 ($259) | Unassembled leader + follower **with camera**, clearer contents |
 | Final power | Keep the Stage 1 pack; 10 A relay | 3S 5000 mAh LiPo + balance charger + 20 A relay | Runtime and current headroom for base + arm |

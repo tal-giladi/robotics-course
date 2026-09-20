@@ -37,6 +37,18 @@ Lessons [14.02 Buying and assembling the arm](../14-robotic-arm/14.02-buying-and
 > [SAFETY.md](../SAFETY.md) and lesson [14.11](../14-robotic-arm/14.11-arm-safety.md): torque and
 > speed limits in software first, face out of the workspace, power switch within reach.
 
+> [!IMPORTANT]
+> **The arm eats karmel's forward tipping margin, and the front caster is what pays for it.**
+> karmel's ball caster sits **ahead** of the wheel axle (`labs/config/karmel.yaml`:
+> `caster_offset_x_m: +0.10`), because even without an arm the centre of mass is already ≈ 1.7 mm
+> forward of the axle — see [stage-1-first-robot.md](stage-1-first-robot.md) B5 and `labs/TESTED.md`
+> §3.1, where a *rear* caster left the robot resting 5.6° nose-down. A 700 g arm reaching forward
+> moves the centre of mass further forward still, and the support polygon's front edge is that
+> caster. Two consequences when you mount the arm ([15.10](../15-manipulation/15.10-mobile-manipulation.md),
+> Stage 6): **mount it low and as close to the axle as the workspace allows**, and **move the
+> battery rearward** to counterweight it. When you bench-test a table-mounted arm this does not
+> matter; the first time the arm extends on the moving base, it is the whole problem.
+
 ---
 
 ## 1. SO-101 leader + follower kit (LeRobot) — Buy now (at Stage 5)
