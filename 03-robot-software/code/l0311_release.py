@@ -49,8 +49,9 @@ TRACKED_FILES = (
 
 
 # --- git, without ever raising ------------------------------------------------------------------
-def git(*args: str, root: Path = REPO_ROOT) -> str | None:
+def git(*args: str, root: Path | None = None) -> str | None:
     """Run a git command; None if git is missing, this is not a checkout, or the command fails."""
+    root = REPO_ROOT if root is None else root      # read at call time, so tests can repoint it
     try:
         result = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True, timeout=15)
     except (OSError, subprocess.SubprocessError):
@@ -72,7 +73,8 @@ class GitState:
     dirty_files: list[str] = field(default_factory=list)
 
 
-def git_state(root: Path = REPO_ROOT, max_dirty_listed: int = 20) -> GitState:
+def git_state(root: Path | None = None, max_dirty_listed: int = 20) -> GitState:
+    root = REPO_ROOT if root is None else root
     status = git("status", "--porcelain", root=root)
     dirty_files = [line[3:] for line in (status or "").splitlines() if line.strip()]
     return GitState(
@@ -95,7 +97,8 @@ def file_sha256(path: Path) -> str:
         return "missing"
 
 
-def hash_files(paths: tuple[str, ...], root: Path = REPO_ROOT) -> dict[str, str]:
+def hash_files(paths: tuple[str, ...], root: Path | None = None) -> dict[str, str]:
+    root = REPO_ROOT if root is None else root
     return {name: file_sha256(root / name) for name in paths}
 
 
@@ -117,8 +120,9 @@ class Release:
 
 
 def make_release(label: str = "", calibration: Path | None = None, notes: str = "",
-                 tests: dict[str, Any] | None = None, root: Path = REPO_ROOT,
-                 files: tuple[str, ...] = TRACKED_FILES) -> Release:
+                 tests: dict[str, Any] | None = None, root: Path | None = None,
+                 files: tuple[str, ...] | None = None) -> Release:
+    files = TRACKED_FILES if files is None else files
     state = git_state(root)
     return Release(
         recorded_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -143,8 +147,9 @@ class Difference:
         return f"{self.what:<34} recorded {self.recorded!r}  now {self.now!r}"
 
 
-def compare(recorded: dict[str, Any], root: Path = REPO_ROOT) -> list[Difference]:
+def compare(recorded: dict[str, Any], root: Path | None = None) -> list[Difference]:
     """What changed between a recorded release and the tree in front of you, most important first."""
+    root = REPO_ROOT if root is None else root
     differences: list[Difference] = []
     state = asdict(git_state(root))
     for key in ("commit", "branch", "tag"):
