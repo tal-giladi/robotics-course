@@ -17,7 +17,7 @@ drive:
   gear_ratio: 56.0              # 205 RPM version (1:56). The 333 RPM version is 1:30 — set yours
   quadrature_multiplier: 4      # counting both edges of both channels
   # ticks per wheel revolution = 11 * 56 * 4 = 2464
-  max_wheel_speed_rad_s: 17.0   # loaded, at ~11 V (no-load 205 RPM = 21.5 rad/s); ≈ 0.77 m/s at the rim
+  max_wheel_speed_rad_s: 17.0   # loaded, at 10.8 V nominal (no-load 205 RPM = 21.5 rad/s); ≈ 0.77 m/s at the rim
   motor_time_constant_s: 0.08
   duty_deadband: 0.12           # below this |duty| the motor does not turn
   max_linear_speed_m_s: 0.5     # software limit
