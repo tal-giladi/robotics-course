@@ -9,14 +9,15 @@ braked and driven into a chair leg. This file holds the whole thing:
 * **branches** — every wire that carries real current, with gauge, length, voltage drop and the
   fuse that protects it;
 * **runtime** from a duty-cycle profile instead of one optimistic average;
-* **mass and centre of gravity**, because an arm bolted to the front of a 1.6 kg robot tips it.
+* **mass and centre of gravity**, because karmel's only third contact is a ball caster 100 mm in
+  FRONT of the axle, so every gram behind the axle is a gram nothing is holding up.
 
     py 20-final-robot/code/power_budget_v2.py rails        # current per domain and rail
     py 20-final-robot/code/power_budget_v2.py branches     # wire gauge, drop, fuse, relay
     py 20-final-robot/code/power_budget_v2.py runtime      # session profile -> minutes
     py 20-final-robot/code/power_budget_v2.py mass         # CG, support polygon, tipping
     py 20-final-robot/code/power_budget_v2.py check        # every rule; exit 1 if any fails
-    py 20-final-robot/code/power_budget_v2.py whatif arm-forward   # the arm mounted at the front
+    py 20-final-robot/code/power_budget_v2.py whatif arm-back      # the arm mounted at the rear
     py 20-final-robot/code/power_budget_v2.py whatif jetson        # Jetson Orin Nano added
 
 Every number is either (datasheet), (measured) or (estimate). Replace the estimates with your own
@@ -194,19 +195,20 @@ class Part:
 def karmel_v2_parts() -> list[Part]:
     """Where the mass is. Weigh yours on a kitchen scale; these are the course build (estimate)."""
     return [
-        Part("chassis plate + motors + wheels", 0.90, -0.010, 0.0, 0.030),
-        Part("3S battery pack", 0.45, -0.060, 0.0, 0.035),
-        Part("Raspberry Pi 5 + cooler + board", 0.18, -0.030, 0.0, 0.060),
+        Part("chassis plate + motors + wheels", 0.90, 0.000, 0.0, 0.030),
+        Part("3S battery pack", 0.45, 0.060, 0.0, 0.035),
+        Part("Raspberry Pi 5 + cooler + board", 0.18, 0.010, 0.0, 0.060),
         Part("RPLIDAR C1 on its riser", 0.12, 0.000, 0.0, 0.120),
         Part("camera + mount", 0.06, 0.100, 0.0, 0.100),
-        Part("e-stop box + relay + harness", 0.15, -0.080, 0.0, 0.070),
-        Part("arm base plate", 0.10, -0.040, 0.0, 0.050),
-        Part("SO-101 arm, folded", 0.70, -0.030, 0.0, 0.140),
+        Part("e-stop box + relay + harness", 0.15, -0.060, 0.0, 0.070),
+        Part("arm base plate", 0.10, 0.030, 0.0, 0.050),
+        Part("SO-101 arm, folded", 0.70, 0.040, 0.0, 0.140),
     ]
 
 
-# The three ground contacts of karmel: two drive wheels on the axle, one ball caster behind.
-CONTACTS: tuple[tuple[float, float], ...] = ((0.0, 0.100), (0.0, -0.100), (-0.100, 0.0))
+# The three ground contacts of karmel: two drive wheels on the axle, one ball caster 100 mm in
+# FRONT of them (labs/config/karmel.yaml: chassis.caster_offset_x_m = 0.10).
+CONTACTS: tuple[tuple[float, float], ...] = ((0.0, 0.100), (0.0, -0.100), (0.100, 0.0))
 
 
 @dataclass(frozen=True)
@@ -228,16 +230,25 @@ def centre_of_gravity(parts: list[Part]) -> CentreOfGravity:
     )
 
 
-def tipping_decel_m_s2(cg: CentreOfGravity) -> float:
-    """Braking deceleration that lifts the caster and puts the robot on its nose.
+def tipping_accel_m_s2(cg: CentreOfGravity) -> float:
+    """Forward acceleration that lifts the caster and sits the robot back on its tail.
 
-    Inertia acts forward at the CG height, gravity acts down at the CG. The robot pivots about
-    the wheel axle (x = 0) when $m a z_{cg} > m g |x_{cg}|$, so $a_{tip} = g |x_{cg}| / z_{cg}$.
-    A CG at or in front of the axle means $a_{tip} \\le 0$: it tips at any braking at all.
+    The caster is 100 mm in FRONT of the axle, so the unsupported end is the rear. Inertia acts
+    backwards at the CG height while accelerating, gravity acts down at the CG, and the robot
+    pivots about the wheel axle (x = 0) when $m a z_{cg} > m g x_{cg}$, so
+    $a_{tip} = g x_{cg} / z_{cg}$. A CG at or behind the axle means $a_{tip} \\le 0$: the
+    robot is already resting on its tail.
     """
-    if cg.x_m >= 0.0:
+    if cg.x_m <= 0.0:
         return 0.0
-    return G * abs(cg.x_m) / cg.z_m
+    return G * cg.x_m / cg.z_m
+
+
+def tipping_decel_m_s2(cg: CentreOfGravity, caster_x_m: float = 0.100) -> float:
+    """Braking deceleration that walks the CG past the caster and puts the robot on its nose."""
+    if cg.x_m >= caster_x_m:
+        return 0.0
+    return G * (caster_x_m - cg.x_m) / cg.z_m
 
 
 def stability_margin_m(cg: CentreOfGravity) -> float:
@@ -317,12 +328,15 @@ def check(loads: list[Load], branches: list[Branch], parts: list[Part]) -> list[
             problems.append(f"{b.name}: {fuse:g} A fuse on {b.awg} AWG — the wire is the fuse")
 
     cg = centre_of_gravity(parts)
-    if cg.x_m >= 0.0:
-        problems.append(f"centre of gravity is {cg.x_m * 1000:.0f} mm forward of the wheel axle: "
-                        "nothing supports the robot in front — it rests on its nose")
-    elif tipping_decel_m_s2(cg) < 2.0 * 1.0:   # 2x karmel's 1.0 m/s^2 deceleration limit
-        problems.append(f"tips forward at {tipping_decel_m_s2(cg):.1f} m/s^2, less than 2x the "
-                        f"configured 1.0 m/s^2 braking limit — move mass back or down")
+    if cg.x_m <= 0.0:
+        problems.append(f"centre of gravity is {-cg.x_m * 1000:.0f} mm behind the wheel axle: "
+                        "nothing supports the robot there — it rests back on its tail")
+    elif tipping_accel_m_s2(cg) < 2.0 * 1.0:   # 2x karmel's 1.0 m/s^2 acceleration limit
+        problems.append(f"rears up at {tipping_accel_m_s2(cg):.1f} m/s^2, less than 2x the "
+                        f"configured 1.0 m/s^2 acceleration limit — move mass forward or down")
+    elif tipping_decel_m_s2(cg) < 2.0 * 1.0:
+        problems.append(f"noses over the caster at {tipping_decel_m_s2(cg):.1f} m/s^2 of braking, "
+                        f"less than 2x the configured 1.0 m/s^2 limit — move mass back or down")
     if stability_margin_m(cg) < 0.020:
         problems.append(f"stability margin {stability_margin_m(cg) * 1000:.0f} mm (want >= 20 mm)")
     return problems
@@ -333,22 +347,22 @@ def check(loads: list[Load], branches: list[Branch], parts: list[Part]) -> list[
 # ==============================================================================================
 def whatif(name: str) -> tuple[str, list[Load], list[Part]]:
     loads, parts = karmel_v2_loads(), karmel_v2_parts()
-    if name == "arm-forward":
-        parts = [replace(p, x_m=0.085, z_m=0.155) if "SO-101" in p.name else p for p in parts]
-        return "The arm bolted to the FRONT deck instead of behind the wheel axle", loads, parts
+    if name == "arm-back":
+        parts = [replace(p, x_m=-0.085, z_m=0.155) if "SO-101" in p.name else p for p in parts]
+        return "The arm bolted to the REAR deck instead of ahead of the wheel axle", loads, parts
     if name == "arm-extended":
         parts = [replace(p, x_m=0.160, z_m=0.180) if "SO-101" in p.name else p for p in parts]
         return "The arm reaching forward at full extension (payload in the gripper)", loads, parts
     if name == "jetson":
         loads = loads + [Load("Jetson Orin Nano Super (15 W mode)", COMPUTE, 5.0, 2.40, 3.00, 1.0,
                               "15 W module power / 5 V, plus board overhead (estimate)")]
-        parts = parts + [Part("Jetson + carrier + fan", 0.30, -0.050, 0.0, 0.075)]
+        parts = parts + [Part("Jetson + carrier + fan", 0.30, 0.020, 0.0, 0.075)]
         return "Jetson Orin Nano added to the compute deck", loads, parts
     if name == "no-arm":
         parts = [p for p in parts if "SO-101" not in p.name and "arm base" not in p.name]
         loads = [x for x in loads if "servo" not in x.name]
         return "Base only: no arm fitted", loads, parts
-    raise SystemExit(f"unknown scenario '{name}' (try: arm-forward, arm-extended, jetson, no-arm)")
+    raise SystemExit(f"unknown scenario '{name}' (try: arm-back, arm-extended, jetson, no-arm)")
 
 
 # ==============================================================================================
@@ -390,8 +404,9 @@ def print_mass(parts: list[Part]) -> None:
     print(f"\ntotal mass          {cg.mass_kg:.2f} kg")
     print(f"centre of gravity   x {cg.x_m * 1000:+.0f} mm   y {cg.y_m * 1000:+.0f} mm   z {cg.z_m * 1000:.0f} mm")
     print(f"stability margin    {stability_margin_m(cg) * 1000:.0f} mm to the nearest support edge")
-    print(f"tips forward at     {tipping_decel_m_s2(cg):.2f} m/s^2 braking "
+    print(f"rears up at         {tipping_accel_m_s2(cg):.2f} m/s^2 accelerating "
           f"(karmel's configured limit is 1.0 m/s^2)")
+    print(f"noses over at       {tipping_decel_m_s2(cg):.2f} m/s^2 braking")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -399,7 +414,7 @@ def main(argv: list[str] | None = None) -> int:
         sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("command", choices=["rails", "branches", "runtime", "mass", "check", "whatif"])
-    ap.add_argument("scenario", nargs="?", default="arm-forward")
+    ap.add_argument("scenario", nargs="?", default="arm-back")
     ap.add_argument("--capacity-ah", type=float, default=3.35, help="35E minimum capacity (datasheet)")
     args = ap.parse_args(argv)
 

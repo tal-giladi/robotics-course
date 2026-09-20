@@ -187,14 +187,17 @@ Forty hours, eight milestones. Do them in order; each one is a gate on the next.
 
 1. Lay out the decks so the LiDAR has a clear 360° plane, the camera sees the floor in front of the
    robot, and the arm can reach the table height you care about.
-2. **Compute the centre of gravity and the tipping margin** with the arm at its worst commanded pose.
-   This is not optional arithmetic: karmel's two drive wheels sit on an axle at $x = 0$ with the
-   caster *behind* them, so the forward edge of the support polygon **is** the wheel axle — and a
-   0.63 kg arm reaching 300 mm forward puts the combined centre of mass 28 mm in *front* of it. The
-   robot tips. Statically. With an empty gripper.
-3. Fix it mechanically — move mass back, shorten the reach, add a forward caster — and re-compute
-   until the margin is positive with headroom. Then add the software rule: **the arm extends only
-   with the base stopped**, and the workspace box is tightened accordingly.
+2. **Compute the centre of gravity and the tipping margin** with the arm at its worst commanded pose
+   — and work out which pose that is, because it is probably not the one you expect. karmel's two
+   drive wheels sit on an axle at $x = 0$ with the ball caster 100 mm *in front* of them, so the
+   **rear** edge of the support polygon **is** the wheel axle. Reaching forward is therefore the
+   safe direction; the 0.63 kg arm *folded for driving* is what walks the combined centre of mass
+   back onto that edge, and mounting it 80 mm behind the axle puts it 11 mm outside the polygon,
+   statically, with an empty gripper ([15.10](../15-manipulation/15.10-mobile-manipulation.md)).
+3. Fix it mechanically — move mass forward, move the arm mount forward, add a rear caster — and
+   re-compute until the margin is positive with headroom at **both** ends: folded and fully
+   extended with a payload. Then add the software rule: **the arm extends only with the base
+   stopped**, and the workspace box is tightened accordingly.
 4. Split the power into two domains — always-on compute, switched actuators — and wire the e-stop so
    that one button removes energy from **both** the motor driver and the arm's servo bus while the Pi
    and the Pico stay powered to log it.

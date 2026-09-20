@@ -89,33 +89,33 @@ def test_it_reproduces_karmels_centre_of_gravity(impl):
     assert (total, x, y, z) == pytest.approx(
         (reference.mass_kg, reference.x_m, reference.y_m, reference.z_m))
     assert total == pytest.approx(2.66, abs=0.01)
-    assert x == pytest.approx(-0.027, abs=0.002), "the CG must sit BEHIND the wheel axle"
+    assert x == pytest.approx(0.021, abs=0.002), "the CG must sit AHEAD of the wheel axle"
 
 
-# --- tipping_decel ----------------------------------------------------------------------------
+# --- tipping_accel ----------------------------------------------------------------------------
 def test_the_formula(impl):
-    assert impl.tipping_decel(-0.10, 0.10) == pytest.approx(9.81)
-    assert impl.tipping_decel(-0.027, 0.070) == pytest.approx(9.81 * 0.027 / 0.070)
+    assert impl.tipping_accel(0.10, 0.10) == pytest.approx(9.81)
+    assert impl.tipping_accel(0.021, 0.070) == pytest.approx(9.81 * 0.021 / 0.070)
 
 
 def test_a_higher_centre_of_gravity_tips_sooner(impl):
-    assert impl.tipping_decel(-0.03, 0.20) < impl.tipping_decel(-0.03, 0.05)
+    assert impl.tipping_accel(0.03, 0.20) < impl.tipping_accel(0.03, 0.05)
 
 
-def test_a_centre_of_gravity_on_or_ahead_of_the_axle_is_already_over(impl):
-    assert impl.tipping_decel(0.0, 0.07) == 0.0
-    assert impl.tipping_decel(0.02, 0.07) == 0.0
-    assert impl.tipping_decel(-0.03, 0.0) == 0.0
+def test_a_centre_of_gravity_on_or_behind_the_axle_is_already_over(impl):
+    assert impl.tipping_accel(0.0, 0.07) == 0.0
+    assert impl.tipping_accel(-0.02, 0.07) == 0.0
+    assert impl.tipping_accel(0.03, 0.0) == 0.0
 
 
-def test_karmel_as_built_survives_its_own_braking_limit(impl):
+def test_karmel_as_built_survives_its_own_acceleration_limit(impl):
     cg = pb.centre_of_gravity(pb.karmel_v2_parts())
-    a_tip = impl.tipping_decel(cg.x_m, cg.z_m)
-    assert a_tip == pytest.approx(pb.tipping_decel_m_s2(cg))
-    assert a_tip > 2.0, "less than 2x the configured 1.0 m/s^2 braking limit is not enough margin"
+    a_tip = impl.tipping_accel(cg.x_m, cg.z_m)
+    assert a_tip == pytest.approx(pb.tipping_accel_m_s2(cg))
+    assert a_tip > 2.0, "less than 2x the configured 1.0 m/s^2 acceleration limit is not enough margin"
 
 
-def test_the_arm_on_the_front_deck_tips_it(impl):
-    _, _, parts = pb.whatif("arm-forward")
+def test_the_arm_on_the_rear_deck_tips_it(impl):
+    _, _, parts = pb.whatif("arm-back")
     _, x, _, z = impl.centre_of_gravity([(p.mass_kg, p.x_m, p.y_m, p.z_m) for p in parts])
-    assert x > 0.0 and impl.tipping_decel(x, z) == 0.0
+    assert x < 0.0 and impl.tipping_accel(x, z) == 0.0

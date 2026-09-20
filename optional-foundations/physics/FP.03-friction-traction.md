@@ -54,9 +54,9 @@ $\mu$ (mu) is the **friction coefficient**. It describes the *pair* of materials
 
 A driven wheel that rolls without slipping uses **static** friction. The contact patch is momentarily at rest on the floor, like a foot during walking. That is the good case: the floor can push the robot with any force up to $\mu_s N_w$. Ask for more and the patch breaks loose. The wheel spins, the grip drops to the kinetic value, and the encoder counts distance the robot never travelled. The way a spinning car tyre loses control is exactly this jump from static to kinetic friction.
 
-Here is the key design insight. **The motor can often push harder than the floor allows.** Karmel's gear motors stall at about 33 N of rim force (both wheels together), but on a good floor the tyres can only transmit about 5 N. So above a certain acceleration karmel is *traction-limited*: more torque only means more wheel spin. That is why acceleration limits exist, and why a "floor it" command ruins odometry.
+Here is the key design insight. **The motor can often push harder than the floor allows.** Karmel's gear motors stall at about 33 N of rim force (both wheels together), but on a good floor the tyres can only transmit about 7 N. So above a certain acceleration karmel is *traction-limited*: more torque only means more wheel spin. That is why acceleration limits exist, and why a "floor it" command ruins odometry.
 
-**Traction** is the usable forward force: $\mu \times$ the normal force *on the driven wheels*. The caster's share of the weight gives no traction at all. As [FP.02](FP.02-forces-newton.md) showed, accelerating and climbing shift weight *towards* the rear caster, so traction is lowest when you need it most.
+**Traction** is the usable forward force: $\mu \times$ the normal force *on the driven wheels*. The caster's share of the weight gives no traction at all. As [FP.02](FP.02-forces-newton.md) showed, karmel's caster is in *front* of the axle, so accelerating and climbing shift weight backwards, **onto** the drive wheels — traction is highest exactly when you are asking for it. The price is paid on the other side: braking and going downhill shift it forward onto the caster, so this robot stops worse than it starts.
 
 > [!TIP]
 > **Ask your teacher:** "Why doesn't friction depend on contact area in the simple model, and when does that break down for rubber tyres?"
@@ -85,39 +85,41 @@ The mass cancels out. *Example:* a spare tyre strapped to a small weight starts 
 
 ### Level 3 — Traction limits with load transfer
 
-From [FP.02](FP.02-forces-newton.md), with $d_g = 0.04$ m (CoM behind the axle), $d_c = 0.10$ m (caster behind the axle) and $h = 0.05$ m (CoM height), the caster load while accelerating at $a$ is
+From [FP.02](FP.02-forces-newton.md), with $d_g = 0.04$ m (CoM **ahead of** the axle), $d_c = 0.10$ m (the ball caster, also **ahead of** the axle) and $h = 0.05$ m (CoM height), the caster load while accelerating at $a$ is
 
-$$N_c = \frac{W d_g + m a h}{d_c}, \qquad N_w = W - N_c$$
+$$N_c = \frac{W d_g - m a h}{d_c}, \qquad N_w = W - N_c$$
 
-The wheels do not slip as long as the traction needed stays below the limit:
+Note the **minus**: the caster is in front, so accelerating tips load off it and onto the drive wheels, like a rear-wheel-drive car squatting at a green light. The wheels do not slip as long as the traction needed stays below the limit:
 
 $$m a + c_{rr} W \le \mu N_w$$
 
 Substituting $N_w$ and solving for $a$ gives the **maximum acceleration on the flat**:
 
-$$a_{max} = g\,\frac{\mu\,(1 - d_g/d_c) - c_{rr}}{1 + \mu\, h/d_c}$$
+$$a_{max} = g\,\frac{\mu\,(1 - d_g/d_c) - c_{rr}}{1 - \mu\, h/d_c}$$
 
-*Example, μ = 0.6:* $a_{max} = 9.81 \times \frac{0.6 \times 0.6 - 0.02}{1 + 0.6 \times 0.5} = 9.81 \times \frac{0.34}{1.30} = 2.566$ m/s². The 1.0 m/s² software limit has a comfortable margin.
+*Example, μ = 0.6:* $a_{max} = 9.81 \times \frac{0.6 \times 0.6 - 0.02}{1 - 0.6 \times 0.5} = 9.81 \times \frac{0.34}{0.70} = 4.765$ m/s². The 1.0 m/s² software limit has a very comfortable margin.
 
-*Example, μ = 0.2 (freshly mopped floor):* $a_{max} = 9.81 \times \frac{0.10}{1.10} = 0.892$ m/s². **The software limit is now too aggressive** and every start slips.
+*Example, μ = 0.2 (freshly mopped floor):* $a_{max} = 9.81 \times \frac{0.10}{0.90} = 1.090$ m/s². **The software limit is now right at the edge** — 9% of margin, and any patch worse than that slips.
 
-Three things to notice:
+Four things to notice:
 
 1. **Mass cancels.** A heavier robot does not accelerate harder, because traction and inertia both scale with mass. Only *where* the mass sits matters, through $d_g/d_c$ and $h/d_c$.
-2. **Moving the CoM over the drive axle helps a lot.** With $d_g = 0.01$ m and μ = 0.3, $a_{max}$ rises from 1.365 to 2.133 m/s².
-3. **Braking is easier than accelerating** for this layout. Braking shifts load *onto* the wheels, so the load-transfer term in the denominator changes sign:
+2. **The denominator is the load transfer, and its sign is the caster's position.** With the caster in front it is $1 - \mu h/d_c < 1$, so the transfer is self-reinforcing and helps. Put the caster behind (karmel's layout until 2026-09) and it becomes $1 + \mu h/d_c$, and the same robot on the same floor manages only 2.566 m/s² at μ = 0.6 instead of 4.765.
+3. **Accelerating is easier than braking** for this layout — the exact reverse of a rear-caster robot. Braking shifts load forward, *off* the drive wheels and onto the caster:
 
-$$b_{max} = g\,\frac{\mu(1 - d_g/d_c) + c_{rr}}{1 - \mu h/d_c}$$
+$$b_{max} = g\,\frac{\mu(1 - d_g/d_c) + c_{rr}}{1 + \mu h/d_c}$$
 
-At μ = 0.6 that is 5.33 m/s². There is a second limit: past $g\,d_g/h = 7.85$ m/s² the caster lifts and the robot pitches onto its nose ([FP.07](FP.07-center-of-mass-stability.md)).
+   At μ = 0.6 that is 2.868 m/s². Braking is now the tighter of the two, and the `max_deceleration: -1.0` in `controllers.yaml` is the one worth checking on a slippery floor.
+
+4. **There are two more limits, from tipping rather than grip** ([FP.07](FP.07-center-of-mass-stability.md)): past $g\,d_g/h = 7.85$ m/s² of *acceleration* the caster lifts and the robot rears back onto its tail, and past $g\,(d_c-d_g)/h = 11.77$ m/s² of braking the CoM passes the caster and it noses over. `max_accel` and `max_brake` in the code below return the smaller of the grip and tipping limits. At μ = 0.8 grip still wins, but only just — 7.521 against 7.85 — and on a grippier surface (μ = 1.0, a rubber mat) grip would allow 11.4 m/s² and the robot would rear up instead. Moving the battery *back* towards the axle to chase traction runs into the rearing limit fast: at $d_g = 0.01$ m it is only 1.96 m/s², well below what grip would permit.
 
 ### Level 3b — Pushing, and why karmel is traction-limited
 
-Karmel pushes against a wall, or a kitchen scale, at bumper height $h_p = 0.04$ m. The wall pushes back with $P$ at that height, which also shifts load to the caster:
+Karmel pushes against a wall, or a kitchen scale, at bumper height $h_p = 0.04$ m. The wall pushes back with $P$ at that height, which shifts load *off* the front caster and onto the drive wheels — the same sign as acceleration:
 
-$$P_{max} = \frac{\mu W (1 - d_g/d_c)}{1 + \mu h_p/d_c}$$
+$$P_{max} = \frac{\mu W (1 - d_g/d_c)}{1 - \mu h_p/d_c}$$
 
-At μ = 0.6: $P_{max} = \frac{0.6 \times 15.696 \times 0.6}{1.24} = 4.56$ N, which reads as **465 g** on a scale.
+At μ = 0.6: $P_{max} = \frac{0.6 \times 15.696 \times 0.6}{1 - 0.24} = 7.44$ N, which reads as **758 g** on a scale. (With the caster behind, the same robot managed 465 g. Pushing is one of the places a front caster is worth real money.)
 
 What can the motors do? The Yahboom 520 1:56 datasheet gives a stall torque of 8.3 kg·cm = 0.814 N·m at 12 V, which is about 0.733 N·m at the 10.8 V nominal. At the rim of a 45 mm-radius wheel that is $0.733/0.045 = 16.3$ N per wheel, **32.6 N for both**. That is about 7× what the floor can take. Wheels spin long before the motors stall, which is also good news for the motors ([FP.04](FP.04-torque-gears-wheels.md) does the sizing).
 
@@ -138,7 +140,7 @@ The friction curve, force the floor delivers against the force requested:
  traction force
  delivered [N]
       │                 static limit μs·N_w
- 4.6 ─┤. . . . . . . . ●
+ 7.4 ─┤. . . . . . . . ●
       │               ╱ ╲___________________  kinetic ≈ μk·N_w (wheel spinning)
       │             ╱
       │           ╱   rolling without slip:
@@ -147,7 +149,7 @@ The friction curve, force the floor delivers against the force requested:
       │     ╱
       │   ╱
       └─╱─────────────────┬──────────────────► traction requested (m·a + losses)
-      0                  4.6
+      0                  7.4
 ```
 
 What decides whether karmel's start is clean or ruins odometry:
@@ -192,9 +194,9 @@ G = 9.81
 class Robot:
     mass_kg: float = 1.6
     wheel_radius_m: float = 0.045
-    com_behind_axle_m: float = 0.04     # d_g
+    com_ahead_axle_m: float = 0.04      # d_g, POSITIVE = in front of the axle
     com_height_m: float = 0.05          # h
-    caster_behind_axle_m: float = 0.10  # d_c
+    caster_ahead_axle_m: float = 0.10   # d_c, karmel's caster is in FRONT of the axle
     c_rr: float = 0.02
     wheel_inertia_kgm2: float = 6.0e-3  # both wheels incl. gearbox + rotor, seen at the wheel (FP.06 estimate)
 
@@ -202,25 +204,32 @@ class Robot:
 def max_accel(r: Robot, mu: float) -> float:
     """Largest forward acceleration on the flat before the drive wheels slip (load transfer included).
 
-    mu (W - N_c) = m a + c_rr W,   N_c = (W d_g + m a h) / d_c
+    mu (W - N_c) = m a + c_rr W,   N_c = (W d_g - m a h) / d_c
+
+    With the caster in FRONT, accelerating unloads it and loads the drive wheels, so the load
+    transfer helps: the denominator is (1 - mu h/d_c), not (1 + ...). The second limit is FP.07's:
+    past g d_g / h the caster lifts and the robot rears up.
     """
-    return G * (mu * (1 - r.com_behind_axle_m / r.caster_behind_axle_m) - r.c_rr) / (
-        1 + mu * r.com_height_m / r.caster_behind_axle_m)
+    a = G * (mu * (1 - r.com_ahead_axle_m / r.caster_ahead_axle_m) - r.c_rr) / (
+        1 - mu * r.com_height_m / r.caster_ahead_axle_m)
+    a_tip = G * r.com_ahead_axle_m / r.com_height_m
+    return min(a, a_tip)
 
 
 def max_brake(r: Robot, mu: float) -> float:
-    """Largest deceleration on the flat before the wheels skid (braking moves load onto the wheels)."""
-    b = G * (mu * (1 - r.com_behind_axle_m / r.caster_behind_axle_m) + r.c_rr) / (
-        1 - mu * r.com_height_m / r.caster_behind_axle_m)
-    b_tip = G * r.com_behind_axle_m / r.com_height_m     # beyond this the caster lifts (FP.07)
+    """Largest deceleration on the flat before the wheels skid (braking moves load onto the caster)."""
+    b = G * (mu * (1 - r.com_ahead_axle_m / r.caster_ahead_axle_m) + r.c_rr) / (
+        1 + mu * r.com_height_m / r.caster_ahead_axle_m)
+    # beyond this the CoM passes the caster and the robot noses over it (FP.07)
+    b_tip = G * (r.caster_ahead_axle_m - r.com_ahead_axle_m) / r.com_height_m
     return min(b, b_tip)
 
 
 def max_push(r: Robot, mu: float, push_height_m: float) -> float:
     """Force the robot can push against a wall (or a scale) before its wheels spin."""
     W = r.mass_kg * G
-    return mu * W * (1 - r.com_behind_axle_m / r.caster_behind_axle_m) / (
-        1 + mu * push_height_m / r.caster_behind_axle_m)
+    return mu * W * (1 - r.com_ahead_axle_m / r.caster_ahead_axle_m) / (
+        1 - mu * push_height_m / r.caster_ahead_axle_m)
 
 
 def simulate_drive(r: Robot, mu: float, duty: float, ramp_s: float, t_end: float = 1.5, dt: float = 1e-4,
@@ -240,7 +249,7 @@ def simulate_drive(r: Robot, mu: float, duty: float, ramp_s: float, t_end: float
         t = i * dt
         d = duty if ramp_s <= 0 else duty * min(1.0, t / ramp_s)
         torque = 2 * stall_nm * (d - w / no_load_rad_s)
-        n_wheels = W - (W * r.com_behind_axle_m + m * a_prev * r.com_height_m) / r.caster_behind_axle_m
+        n_wheels = W - (W * r.com_ahead_axle_m - m * a_prev * r.com_height_m) / r.caster_ahead_axle_m
         f_limit = mu * n_wheels
         f_wanted = stiffness_n_per_m_s * (w * R - v)
         F = max(-f_limit, min(f_limit, f_wanted))
@@ -270,13 +279,14 @@ def main() -> None:
     print("\nfull duty, 1.5 s                             true[m]  odom[m]  error   slipping")
     for label, mu, ramp in (("step, mu=0.6 (no acceleration limit)", 0.6, 0.0),
                             ("ramp over 0.8 s, mu=0.6", 0.6, 0.8),
+                            ("step, dusty floor mu=0.2", 0.2, 0.0),
                             ("ramp over 0.8 s, dusty floor mu=0.2", 0.2, 0.8)):
         x, odo, slip = simulate_drive(k, mu, 1.0, ramp)
         print(f"  {label:40s} {x:6.3f}  {odo:6.3f}  {(odo - x) / x * 100:5.1f} %  {slip:.2f} s")
 
     ramps = np.linspace(0.0, 1.2, 13)
     fig, ax = plt.subplots(figsize=(7, 4))
-    for mu in (0.2, 0.4, 0.6):
+    for mu in (0.15, 0.2, 0.3):
         errs = []
         for ramp in ramps:
             x, odo, _ = simulate_drive(k, mu, 1.0, ramp)
@@ -300,25 +310,26 @@ Output:
 
 ```text
 mu    a_max[m/s^2]  brake_max[m/s^2]  push@4cm[N] (reads on a scale)
-0.2        0.892           1.526      1.744  (178 g)
-0.3        1.365           2.308      2.523  (257 g)
-0.6        2.566           5.325      4.557  (465 g)
-0.8        3.223           7.848      5.708  (582 g)
+0.2        1.090           1.249      2.047  (209 g)
+0.3        1.847           1.706      3.211  (327 g)
+0.6        4.765           2.868      7.435  (758 g)
+0.8        7.521           3.504     11.080  (1129 g)
 tilt test: slides at 31.0 deg -> mu_s = tan(31.0 deg) = 0.601
-motor stall force at the rim (both wheels): 32.6 N vs traction limit 4.56 N at mu=0.6
+motor stall force at the rim (both wheels): 32.6 N vs traction limit 7.43 N at mu=0.6
 
 full duty, 1.5 s                             true[m]  odom[m]  error   slipping
-  step, mu=0.6 (no acceleration limit)      1.134   1.187    4.7 %  0.28 s
+  step, mu=0.6 (no acceleration limit)      1.181   1.187    0.5 %  0.09 s
   ramp over 0.8 s, mu=0.6                   0.837   0.839    0.2 %  0.00 s
-  ramp over 0.8 s, dusty floor mu=0.2       0.799   0.839    5.0 %  0.78 s
+  step, dusty floor mu=0.2                  0.946   1.187   25.4 %  0.75 s
+  ramp over 0.8 s, dusty floor mu=0.2       0.837   0.839    0.2 %  0.00 s
 saved fp03_slip.png
 ```
 
-**The plot `fp03_slip.png`** shows odometry overestimate (%) against how long the duty ramp takes, from 0 (a step) to 1.2 s, for μ = 0.2, 0.4 and 0.6.
+**The plot `fp03_slip.png`** shows odometry overestimate (%) against how long the duty ramp takes, from 0 (a step) to 1.2 s, for μ = 0.15, 0.2 and 0.3. (Higher μ is not plotted because with the caster in front this robot barely slips above μ ≈ 0.4 — see the discussion above.)
 
-- **μ = 0.6:** the error starts at about 5% for a step and drops to zero once the ramp is 0.4 s or longer.
-- **μ = 0.4:** it starts at about 10% and reaches zero at about 0.5 s.
-- **μ = 0.2:** it starts at about 36% and needs a full 1.0 s ramp before it reaches zero.
+- **μ = 0.3:** the error starts at 9.7% for a step and reaches zero at about a 0.5 s ramp.
+- **μ = 0.2:** it starts at 25.4% and reaches zero at about 0.8 s.
+- **μ = 0.15:** it starts at 50.4% and still has 2% left at a 1.1 s ramp.
 
 The lines fall roughly linearly. The lesson in one picture: a gentler acceleration buys correct odometry, and a slippery floor needs a much gentler one. The remaining 0.2% at long ramps is tyre creep.
 
@@ -334,14 +345,14 @@ Hardware: none. Your tilt test gave a slip angle of 24.2° for a karmel tyre on 
 
 ### Exercise FP.03-E2 — Find the gentlest safe start `[coding]`
 
-Hardware: none. Using `simulate_drive` on a μ = 0.4 floor, find the shortest duty ramp time, to 0.02 s resolution, for which the robot spends **zero** time slipping. Compare the average acceleration during that ramp with `max_accel(Robot(), 0.4)`. Then change the model so the CoM sits only 0.01 m behind the axle, and find the new shortest ramp.
+Hardware: none. Using `simulate_drive` on a μ = 0.4 floor, find the shortest duty ramp time, to 0.02 s resolution, for which the robot spends **zero** time slipping. Compare it with `max_accel(Robot(), 0.4)`. Then slide the battery forward, towards the caster, so the CoM sits 0.07 m ahead of the axle instead of 0.04 m, and find the new shortest ramp.
 
 ### Exercise FP.03-E3 — Predict: heavier, and battery moved `[predict]`
 
 Hardware: none. Before computing, predict whether each change *raises*, *lowers* or *leaves unchanged* $a_{max}$ at μ = 0.3:
 
 1. Add 0.5 kg of payload exactly at the existing CoM (total 2.1 kg).
-2. Move the battery so the CoM sits 0.01 m instead of 0.04 m behind the axle.
+2. Move the battery so the CoM sits 0.07 m instead of 0.04 m ahead of the axle — towards the caster.
 3. Add 0.5 kg at the existing CoM: what happens to $P_{max}$, the pushing force?
 
 Then check each with the functions above.
@@ -355,23 +366,23 @@ Hardware: `robot-base` and a kitchen scale. No-hardware alternative: tilt-test a
 
 1. Fix the kitchen scale vertically against a wall, for example taped to a heavy book standing on edge.
 2. Drive karmel slowly into it at 40% duty and watch the reading climb until the wheels spin.
-3. Repeat three times on your floor and once on a rug. Estimate μ using $P_{max}$ solved for μ: $\mu = \frac{P}{W(1-d_g/d_c) - P h_p/d_c}$.
+3. Repeat three times on your floor and once on a rug. Estimate μ using $P_{max}$ solved for μ: $\mu = \frac{P}{W(1-d_g/d_c) + P h_p/d_c}$.
 
 ## Expected result
 
 **FP.03-E1:**
 1. $\mu_s = \tan 24.2° = 0.449 \approx 0.45$.
-2. $a_{max} = 2.00$ m/s², $b_{max} = 3.67$ m/s², $P_{max} = 3.59$ N (366 g).
-3. Yes, with a factor of 2 margin. A dusty patch (μ ≈ 0.25) would bring $a_{max}$ down to about 1.1 m/s², so there is less margin than it seems.
+2. $a_{max} = 3.16$ m/s², $b_{max} = 2.32$ m/s², $P_{max} = 5.16$ N (526 g). Note which of the first two is smaller: with the caster in front, **braking** is the tighter limit.
+3. Yes, with a factor of 3 margin on acceleration and 2.3 on braking. A dusty patch (μ ≈ 0.25) brings $a_{max}$ down to 1.46 m/s² and $b_{max}$ to 1.45, so the margin is thinner than it looks — and it disappears on the braking side first.
 
 **FP.03-E2:**
-- **CoM 0.04 m behind the axle:** the shortest slip-free ramp is **0.50 s** (0.48 s still slips for about 0.07 s). The robot's *peak* acceleration during that ramp is about 1.75 m/s², just under `max_accel(Robot(), 0.4)` = 1.80 m/s². Differentiate the position twice to see it. The average is lower, because the motors still need time to spin up the heavy gearbox.
-- **CoM 0.01 m behind the axle:** the limit rises to 2.78 m/s² and the shortest slip-free ramp drops to **0.30 s** (0.28 s still slips for about 0.04 s). Accept ±0.02 s if you changed the time step.
+- **CoM 0.04 m ahead of the axle:** `max_accel(Robot(), 0.4)` = 2.698 m/s², and the shortest slip-free ramp is **0.30 s** (0.28 s still slips for about 0.04 s).
+- **CoM 0.07 m ahead of the axle:** the limit *falls* to 1.226 m/s², because only 30 % of the weight is now on the drive wheels, and the shortest slip-free ramp more than doubles to **0.72 s** (0.70 s slips for 0.17 s). Sliding the battery towards the caster is the one adjustment that makes a front-caster robot worse at everything. Accept ±0.02 s if you changed the time step.
 
 **FP.03-E3:**
-1. **Unchanged:** 1.365 m/s² at both 1.6 kg and 2.1 kg. Mass cancels.
-2. **Raises** it, from 1.365 to 2.133 m/s².
-3. **Raises** $P_{max}$ in proportion to weight, by a factor of 2.1/1.6. At μ = 0.6 it goes from 4.56 N to 5.98 N. The pushing force depends on weight; acceleration does not.
+1. **Unchanged:** 1.847 m/s² at both 1.6 kg and 2.1 kg. Mass cancels.
+2. **Lowers** it, from 1.847 to 1.226 m/s². Predicting "raises" is the natural mistake: on a *rear*-caster robot moving the CoM towards the caster does load the drive wheels, but karmel's caster is at the front, so it unloads them.
+3. **Raises** $P_{max}$ in proportion to weight, by a factor of 2.1/1.6. At μ = 0.6 it goes from 7.44 N to 9.76 N. The pushing force depends on weight; acceleration does not.
 
 **FP.03-E4:** On clean tile or wood, expect peak readings of about 350–550 g, which gives μ ≈ 0.45–0.7. On a rug, the wheels may sink and grip better or worse; the readings vary by more than ±20% between tries. The wheels spinning *before* the motors stall is the expected, traction-limited behaviour.
 
@@ -425,16 +436,16 @@ Hardware: `robot-base` and a kitchen scale. No-hardware alternative: tilt-test a
    The available traction is proportional to weight ($\mu N_w$, and $N_w \propto m g$). The force needed to accelerate is proportional to mass ($m a$). Both scale with $m$, so it cancels. Only the geometry of the weight distribution ($d_g$, $h$, $d_c$) and μ remain.
    </details>
 
-4. Karmel's motors can deliver about 33 N at the rims, but it only pushes a scale to about 465 g on tile. What limits it, and what happens to the extra torque?
+4. Karmel's motors can deliver about 33 N at the rims, but it only pushes a scale to about 758 g on tile. What limits it, and what happens to the extra torque?
    <details><summary>Answer</summary>
 
-   Traction limits it: $\mu N_w \approx 4.6$ N. The extra torque spins the wheels, turning it into slip and heat instead of force.
+   Traction limits it: $\mu N_w \approx 7.4$ N. The extra torque spins the wheels, turning it into slip and heat instead of force.
    </details>
 
 5. Predict: you mop the floor (μ drops from 0.6 to 0.2) and keep the 1.0 m/s² acceleration limit. What happens to odometry?
    <details><summary>Answer</summary>
 
-   $a_{max}$ drops to about 0.89 m/s², below the 1.0 m/s² limit, so every full start slips. Odometry over-counts distance, by several percent per start in the simulation, and unequal slip adds heading errors.
+   $a_{max}$ drops to 1.090 m/s², *just* above the 1.0 m/s² limit, so a clean start still works — with 9 % of margin, which is nothing. A dusty patch at μ = 0.15 takes it to 0.742 m/s² and every full start slips: odometry over-counts distance by up to 50 % in the simulation's step case, and unequal slip adds heading errors. The braking side is worse: $b_{max}$ at μ = 0.2 is 1.249 m/s² against a configured `max_deceleration` of 1.0, so the same mopping leaves 25 % of margin on stops. Check both limits, not just the one the config file names first.
    </details>
 
 6. Debugging: the robot turns fine on the real floor, but in Gazebo it barely rotates in place and the wheels spin. What do you check first?
@@ -446,7 +457,7 @@ Hardware: `robot-base` and a kitchen scale. No-hardware alternative: tilt-test a
 7. Which gives more traction for accelerating forwards: moving the battery 3 cm towards the axle, or adding a 300 g weight at the current CoM? Explain.
    <details><summary>Answer</summary>
 
-   Moving the battery towards the axle. It puts a larger fraction of the weight on the drive wheels and raises $a_{max}$. Adding mass at the CoM raises traction and inertia equally, so $a_{max}$ does not change.
+   **Moving the battery towards the axle** — and on karmel that means moving it *backwards*, away from the caster, because the caster is at the front. It puts a larger fraction of the weight on the drive wheels and raises $a_{max}$, though not past the rearing limit $g\,d_g/h$, which falls as the CoM approaches the axle. Adding mass at the CoM raises traction and inertia equally, so $a_{max}$ does not change at all.
    </details>
 
 ## Practical challenge
@@ -456,12 +467,12 @@ Build an **automatic slip detector** in simulation. Take the ideas from `simulat
 **Acceptance criteria:**
 - On the step start at μ = 0.6, the detector flags slip within 50 ms of its onset and clears within 50 ms of the end of the true slipping period.
 - On the 0.8 s ramp at μ = 0.6 it raises **no** flags.
-- On the 0.8 s ramp at μ = 0.2 it flags slip for at least 70% of the true slipping time.
+- On the **step** start at μ = 0.2 it flags slip for at least 70% of the true slipping time (the 0.8 s ramp at μ = 0.2 does not slip at all on this robot — check that it raises no flags there either).
 - You report precision and recall against the simulator's ground-truth slip flag in a short table, and discuss one false-positive source (for example, encoder noise differentiated at 50 Hz, see [FP.01](FP.01-kinematics-units.md)).
 
 ## You can skip this if…
 
-You get knowledge-check questions 3, 5 and 7 right without looking, and you can derive $a_{max}$ with load transfer for a robot with a rear caster.
+You get knowledge-check questions 3, 5 and 7 right without looking, and you can derive $a_{max}$ with load transfer for a robot with a caster at either end, getting the sign of the transfer right without being told.
 
 `python course.py skip FP.03 --reason "know static/kinetic friction, traction and slip"`
 

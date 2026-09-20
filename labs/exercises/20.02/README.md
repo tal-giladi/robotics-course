@@ -12,7 +12,7 @@ stall". Each one has a standard mistake, and the tests pin all four.
 | `wire_drop_v(awg, length_m, amps)` | voltage lost in a run — **both** conductors |
 | `fuse_rating_a(continuous_a, ampacity_a)` | the standard blade fuse that protects the wire |
 | `centre_of_gravity(parts)` | `(mass, x, y, z)` of a list of `(mass, x, y, z)` parts |
-| `tipping_decel(x_cg_m, z_cg_m)` | the braking that puts karmel on its nose |
+| `tipping_accel(x_cg_m, z_cg_m)` | the acceleration that sits karmel back on its tail |
 
 ## Check
 
@@ -23,7 +23,7 @@ python course.py check 20.02 --solution
 
 The last tests compare your numbers with
 [`20-final-robot/code/power_budget_v2.py`](../../../20-final-robot/code/power_budget_v2.py) for
-the robot as built, and for the same robot with the arm mounted on the front deck.
+the robot as built, and for the same robot with the arm mounted on the rear deck.
 
 ## Hints
 
@@ -34,5 +34,7 @@ the robot as built, and for the same robot with the arm mounted on the front dec
   below the wire's ampacity so the fuse — not the wire — is the weak point. When no standard
   value satisfies both, the answer is thicker wire, so raise `ValueError`.
 * The centre of gravity is a weighted mean; there is no geometry in it.
-* For tipping, draw the free-body diagram first: gravity down at the CG, inertia forward at the
-  CG, the pivot at the wheel axle. `x_cg >= 0` means nothing in front holds the nose down at all.
+* For tipping, draw the free-body diagram first: gravity down at the CG, inertia **backwards** at
+  the CG while accelerating forwards, the pivot at the wheel axle. karmel's ball caster is 100 mm
+  in *front* of the axle, so the axle is the rear edge of the support triangle and `x_cg <= 0`
+  means nothing behind holds the tail down at all.

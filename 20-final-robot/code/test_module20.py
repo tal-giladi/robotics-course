@@ -94,18 +94,19 @@ def test_voltage_drop_counts_both_conductors():
 def test_centre_of_gravity_and_tipping():
     cg = pb.centre_of_gravity(pb.karmel_v2_parts())
     assert cg.mass_kg == pytest.approx(2.66, abs=0.01)
-    assert -0.05 < cg.x_m < 0.0                                  # behind the axle, as it must be
-    assert pb.tipping_decel_m_s2(cg) == pytest.approx(pb.G * abs(cg.x_m) / cg.z_m)
-    assert pb.tipping_decel_m_s2(cg) > 2.0                       # 2x the configured braking limit
+    assert 0.0 < cg.x_m < 0.05                                   # ahead of the axle, as it must be
+    assert pb.tipping_accel_m_s2(cg) == pytest.approx(pb.G * cg.x_m / cg.z_m)
+    assert pb.tipping_accel_m_s2(cg) > 2.0                       # 2x the configured accel limit
+    assert pb.tipping_decel_m_s2(cg) > 2.0                       # and the caster is far enough ahead
 
 
-def test_mounting_the_arm_at_the_front_tips_the_robot():
-    _, loads, parts = pb.whatif("arm-forward")
+def test_mounting_the_arm_at_the_rear_tips_the_robot():
+    _, loads, parts = pb.whatif("arm-back")
     cg = pb.centre_of_gravity(parts)
-    assert cg.x_m > 0.0
+    assert cg.x_m < 0.0
     assert pb.stability_margin_m(cg) < 0.0
-    assert pb.tipping_decel_m_s2(cg) == 0.0
-    assert any("nose" in p for p in pb.check(loads, pb.karmel_v2_branches(loads), parts))
+    assert pb.tipping_accel_m_s2(cg) == 0.0
+    assert any("tail" in p for p in pb.check(loads, pb.karmel_v2_branches(loads), parts))
 
 
 def test_adding_a_jetson_breaks_the_5v_rail():
