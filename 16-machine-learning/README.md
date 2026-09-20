@@ -11,7 +11,7 @@ Where ML actually earns its place on a robot — data, fine-tuning, edge deploym
 | 16.01 | [Where ML actually helps robots (and where classical methods win)](16.01-where-ml-helps-robots.md) | beginner | 40 min | 13.10 | — |
 | 16.02 | [Data for robots — collecting, labeling, datasets from rosbags](16.02-robot-data.md) | intermediate | 1 h | 16.01, 04.14 | — |
 | 16.03 | [Fine-tuning a detector on your own objects](16.03-fine-tuning-a-detector.md) | intermediate | 2 h | 16.02 | — |
-| 16.04 | [Running models on robot compute — ONNX, TensorRT and quantization](16.04-models-on-edge-compute.md) | advanced | 1 h 15 min | 16.03 | — |
+| 16.04 | [Running models on robot compute — ONNX, TensorRT and quantization](16.04-models-on-edge-compute.md) | advanced | 1 h 15 min | 16.03 | jetson |
 | 16.05 | [Learning a motor model — regression and system identification](16.05-learning-dynamics.md) | intermediate | 1 h | 16.01, 08.02 | — |
 | 16.06 | [Evaluating ML components inside a robot](16.06-evaluating-ml-in-robots.md) | intermediate | 50 min | 16.03 | — |
 

@@ -5931,7 +5931,9 @@
    "optional": [
     "FCV.05"
    ],
-   "hardware": [],
+   "hardware": [
+    "depth-camera"
+   ],
    "software": [
     "ros2"
    ],
@@ -11476,7 +11478,9 @@
     "16.03"
    ],
    "optional": [],
-   "hardware": [],
+   "hardware": [
+    "jetson"
+   ],
    "software": [
     "python",
     "onnxruntime"

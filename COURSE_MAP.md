@@ -270,7 +270,7 @@ Encoders, ultrasonic, ToF, IMU, LiDAR, RGB and depth cameras — physics, noise,
 | 07.06 | [The IMU in ROS 2 — sensor_msgs/Imu, covariance and orientation filters](07-sensors/07.06-imu-in-ros2.md) | intermediate | 1 h | 07.05, 04.16 | imu |
 | 07.07 | [2D LiDAR — how it works, LaserScan data, and a ROS 2 driver](07-sensors/07.07-2d-lidar.md) | intermediate | 1 h 15 min | 07.01, 05.07 | lidar |
 | 07.08 | [RGB cameras on the robot — exposure, rolling shutter, ROS image topics](07-sensors/07.08-rgb-cameras.md) | intermediate | 1 h 15 min | 07.01, 04.11 | camera |
-| 07.09 | [Depth cameras and point clouds — stereo, structured light, ToF](07-sensors/07.09-depth-cameras-and-point-clouds.md) | intermediate | 1 h | 07.08 | — |
+| 07.09 | [Depth cameras and point clouds — stereo, structured light, ToF](07-sensors/07.09-depth-cameras-and-point-clouds.md) | intermediate | 1 h | 07.08 | depth-camera |
 | 07.10 | [Sensor data done right in ROS 2 — timestamps, frame_ids, covariance, synchronization](07-sensors/07.10-sensor-data-in-ros2.md) | intermediate | 50 min | 07.06, 07.07 | — |
 | 07.11 | [Sensor troubleshooting — a systematic method](07-sensors/07.11-sensor-troubleshooting.md) | intermediate | 40 min | 07.10 | — |
 
@@ -424,7 +424,7 @@ Where ML actually earns its place on a robot — data, fine-tuning, edge deploym
 | 16.01 | [Where ML actually helps robots (and where classical methods win)](16-machine-learning/16.01-where-ml-helps-robots.md) | beginner | 40 min | 13.10 | — |
 | 16.02 | [Data for robots — collecting, labeling, datasets from rosbags](16-machine-learning/16.02-robot-data.md) | intermediate | 1 h | 16.01, 04.14 | — |
 | 16.03 | [Fine-tuning a detector on your own objects](16-machine-learning/16.03-fine-tuning-a-detector.md) | intermediate | 2 h | 16.02 | — |
-| 16.04 | [Running models on robot compute — ONNX, TensorRT and quantization](16-machine-learning/16.04-models-on-edge-compute.md) | advanced | 1 h 15 min | 16.03 | — |
+| 16.04 | [Running models on robot compute — ONNX, TensorRT and quantization](16-machine-learning/16.04-models-on-edge-compute.md) | advanced | 1 h 15 min | 16.03 | jetson |
 | 16.05 | [Learning a motor model — regression and system identification](16-machine-learning/16.05-learning-dynamics.md) | intermediate | 1 h | 16.01, 08.02 | — |
 | 16.06 | [Evaluating ML components inside a robot](16-machine-learning/16.06-evaluating-ml-in-robots.md) | intermediate | 50 min | 16.03 | — |
 

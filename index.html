@@ -30,8 +30,14 @@
       maxLevel: 4,
       relativePath: true,
       alias: { '/.*/_sidebar.md': '/_sidebar.md' },
-      search: { placeholder: 'Search the course...', noData: 'No results.', depth: 3,
-                paths: 'auto' },
+      // Full-text over every lesson is ~12 MB, which blows the localStorage quota and
+      // makes the index rebuild on every page load. Index the reference pages instead:
+      // the glossary and concept index name the lesson that owns each term.
+      search: { placeholder: 'Search glossary and guides...', noData: 'No results — try the glossary.',
+                depth: 3,
+                paths: ['/README.md', '/COURSE_MAP.md', '/SAFETY.md', '/HARDWARE.md',
+                        '/references/glossary.md', '/references/troubleshooting/README.md',
+                        '/curriculum/concept-index.md', '/curriculum/dependency-graph.md'] },
       copyCode: { buttonText: 'Copy', errorText: 'Error', successText: 'Copied' },
       'flexible-alerts': {
         style: 'flat',

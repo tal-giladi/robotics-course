@@ -1089,7 +1089,7 @@ modules:
     time: 60
     requires: ["07.08"]
     optional: ["FCV.05"]
-    hardware: []
+    hardware: [depth-camera]
     software: [ros2]
     teaches: [stereo-depth, structured-light, tof-camera, point-cloud, depth-image]
     skip_if: You know which depth technology fails outdoors, on glass, and at short range.
@@ -2178,7 +2178,7 @@ modules:
     time: 75
     requires: ["16.03"]
     optional: []
-    hardware: []
+    hardware: [jetson]
     software: [python, onnxruntime]
     teaches: [onnx, tensorrt, quantization, edge-inference]
     skip_if: You deploy quantized models on edge hardware and measure latency.

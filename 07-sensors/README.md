@@ -16,7 +16,7 @@ Encoders, ultrasonic, ToF, IMU, LiDAR, RGB and depth cameras — physics, noise,
 | 07.06 | [The IMU in ROS 2 — sensor_msgs/Imu, covariance and orientation filters](07.06-imu-in-ros2.md) | intermediate | 1 h | 07.05, 04.16 | imu |
 | 07.07 | [2D LiDAR — how it works, LaserScan data, and a ROS 2 driver](07.07-2d-lidar.md) | intermediate | 1 h 15 min | 07.01, 05.07 | lidar |
 | 07.08 | [RGB cameras on the robot — exposure, rolling shutter, ROS image topics](07.08-rgb-cameras.md) | intermediate | 1 h 15 min | 07.01, 04.11 | camera |
-| 07.09 | [Depth cameras and point clouds — stereo, structured light, ToF](07.09-depth-cameras-and-point-clouds.md) | intermediate | 1 h | 07.08 | — |
+| 07.09 | [Depth cameras and point clouds — stereo, structured light, ToF](07.09-depth-cameras-and-point-clouds.md) | intermediate | 1 h | 07.08 | depth-camera |
 | 07.10 | [Sensor data done right in ROS 2 — timestamps, frame_ids, covariance, synchronization](07.10-sensor-data-in-ros2.md) | intermediate | 50 min | 07.06, 07.07 | — |
 | 07.11 | [Sensor troubleshooting — a systematic method](07.11-sensor-troubleshooting.md) | intermediate | 40 min | 07.10 | — |
 
