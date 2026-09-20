@@ -8,7 +8,10 @@ import math
 
 import numpy as np
 import pytest
-import torch
+
+# torch is not in labs/requirements.txt (it is a multi-hundred-MB install and only these
+# lessons need it), so skip this module rather than fail collection when it is absent.
+torch = pytest.importorskip("torch")
 
 import compute_budget as cb
 import il_lab
