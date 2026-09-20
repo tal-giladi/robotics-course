@@ -9,7 +9,7 @@
 | **Difficulty** | Advanced |
 | **Time** | 8 h |
 | **Hardware** | Robotic arm (leader + follower kit) (stage 5), Camera (Raspberry Pi Camera Module 3 or USB webcam) (stage 2) |
-| **Software** | none |
+| **Software** | ros2, moveit2, tf2, python |
 | **Prerequisites** | [15.07 Exercise lesson: detect an object and move the gripper toward it](../15-manipulation/15.07-detect-and-approach.md)<br>[P14 Project 14 — The arm moves where you tell it](P14-robotic-arm.md) |
 
 <!-- glance:end -->

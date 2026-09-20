@@ -9,7 +9,7 @@
 | **Difficulty** | Advanced |
 | **Time** | 40 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1), 2D LiDAR (stage 3), Camera (Raspberry Pi Camera Module 3 or USB webcam) (stage 2), IMU breakout (stage 2), Robotic arm (leader + follower kit) (stage 5), Hardware emergency stop and final integration parts (stage 6) |
-| **Software** | none |
+| **Software** | ros2, nav2, moveit2, python |
 | **Prerequisites** | [20.06 The demo — and where to go next](../20-final-robot/20.06-demo-and-beyond.md)<br>[P16 Project 16 — Pick and place](P16-pick-and-place.md)<br>[P17 Project 17 — The LLM-directed robot](P17-llm-controlled-robot.md) |
 
 <!-- glance:end -->

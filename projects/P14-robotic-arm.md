@@ -8,8 +8,8 @@
 | **Track** | Project |
 | **Difficulty** | Advanced |
 | **Time** | 8 h |
-| **Hardware** | Robotic arm (leader + follower kit) (stage 5) |
-| **Software** | none |
+| **Hardware** | Robotic arm (leader + follower kit) (stage 5), Hardware emergency stop and final integration parts (stage 6), Workbench tools (multimeter, soldering iron, crimper, screwdrivers) (stage 1) |
+| **Software** | ros2, moveit2, python |
 | **Prerequisites** | [14.10 Exercise lesson: move the gripper to a specified position](../14-robotic-arm/14.10-move-gripper-to-position.md)<br>[14.11 Arm safety — torque, speed, workspace limits and e-stop](../14-robotic-arm/14.11-arm-safety.md) |
 
 <!-- glance:end -->

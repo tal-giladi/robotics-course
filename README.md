@@ -49,15 +49,27 @@ practical challenge · "you can skip this if…" · go deeper · progress checkp
 ## Start here
 
 1. Read [00.07 How to study this course](00-orientation/00.07-how-to-use-this-course.md) (25 min).
-2. Check where you are and what's next:
+2. Check where you are and what's next (`course.py` is standard library only — nothing to install):
 
    ```bash
    python course.py status
    python course.py next
    ```
 
-3. Start [00.01 What is a robot?](00-orientation/00.01-what-is-a-robot.md) — no hardware needed for
+3. Install the lab dependencies once, before the first lesson with runnable code (module 01).
+   `course.py check`, the simulator and the auto-graded exercises need them:
+
+   ```bash
+   pip install -r labs/requirements.txt
+   pip install -e labs/python
+   pytest labs/python/tests
+   ```
+
+4. Start [00.01 What is a robot?](00-orientation/00.01-what-is-a-robot.md) — no hardware needed for
    the orientation module, and you can do much of the course in simulation before buying anything.
+
+On Windows use `py` instead of `python`. ROS 2 lessons (module 04 onward) run on Ubuntu 24.04 or in
+the dev container in [`labs/docker/`](labs/docker/) — [labs/README.md](labs/README.md) has the detail.
 
 ### Study with an AI teacher
 

@@ -9,7 +9,7 @@
 | **Difficulty** | Advanced |
 | **Time** | 5 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1), 2D LiDAR (stage 3), IMU breakout (stage 2) |
-| **Software** | none |
+| **Software** | ros2, nav2, robot-localization |
 | **Prerequisites** | [10.09 AMCL in ROS 2 — localizing on a known map](../10-localization/10.09-amcl-in-ros2.md)<br>[10.07 Sensor fusion — IMU + wheel odometry with robot_localization](../10-localization/10.07-fusing-imu-and-odometry.md)<br>[P09 Project 9 — Map your home](P09-mapping.md) |
 
 <!-- glance:end -->

@@ -465,18 +465,24 @@ def cmd_show(p: dict, g: dict, args) -> None:
 
 def cmd_list(p: dict, g: dict, args) -> None:
     sel = (args.filter or "main").upper()
+    shown = False
     for mod in g["modules"]:
         if sel == "ALL" or (sel == "MAIN" and mod["track"] == "main") or (sel in ("FOUNDATIONS", "F") and mod["track"] == "foundations") \
                 or mod["id"] == sel or mod["id"] == sel.zfill(2):
+            shown = True
             print(f"{mod['id']} · {mod['title']}")
             for lid in mod["lessons"]:
                 n = g["nodes"][lid]
                 print(f"  {ICON[status(p, lid)]} {lid} {n['title']} ({fmt_time(n['time'])})")
     if sel in ("PROJECTS", "P", "ALL"):
+        shown = True
         for n in g["nodes"].values():
             if n["kind"] == "project":
                 st = p["projects"].get(n["id"], {}).get("status", "not-started")
                 print(f"  {st:12} {n['id']} {n['title']}")
+    if not shown:
+        sys.exit(f"Nothing to list for '{args.filter}'. Use: main, foundations, projects, all, "
+                 f"or a module id ({', '.join(m['id'] for m in g['modules'])}).")
 
 
 def cmd_project(p: dict, g: dict, args) -> None:
@@ -545,7 +551,7 @@ def cmd_check(p: dict, g: dict, args) -> None:
     if args.solution:
         env["COURSE_USE_SOLUTION"] = "1"
     cmd = [sys.executable, "-m", "pytest", "-q", str(target)]
-    print("$ " + " ".join(cmd))
+    print("$ " + " ".join(cmd), flush=True)
     try:
         rc = subprocess.call(cmd, cwd=ROOT, env=env)
     except FileNotFoundError:
@@ -578,7 +584,8 @@ def cmd_skills(p: dict, g: dict, _args) -> None:
 
 
 def cmd_log(p: dict, _g: dict, args) -> None:
-    for e in p["log"][-args.n:]:
+    entries = p["log"] if args.n <= 0 else p["log"][-args.n:]
+    for e in entries:
         print(f"{e['date']}  {e['event']}")
 
 
@@ -759,7 +766,7 @@ def main(argv: list[str] | None = None) -> None:
     s.add_argument("--solution", action="store_true", help="run the tests against the reference solution")
     sub.add_parser("skills")
     s = sub.add_parser("log")
-    s.add_argument("-n", type=int, default=20)
+    s.add_argument("-n", type=int, default=20, help="how many entries to show (0 or less = all)")
     s = sub.add_parser("reset")
     s.add_argument("id")
     sub.add_parser("render")

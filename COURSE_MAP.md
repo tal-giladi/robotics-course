@@ -686,10 +686,10 @@ When 3D printing becomes worth it, basic CAD, file formats, tolerances, brackets
 | P11 | [Project 11 — Go to the kitchen: autonomous navigation](projects/P11-autonomous-navigation.md) | advanced | 8 h | 12.10, P10 | robot-base, lidar |
 | P12 | [Project 12 — Camera object detection](projects/P12-camera-object-detection.md) | intermediate | 5 h | 13.15 | camera |
 | P13 | [Project 13 — Find objects and put them on the map](projects/P13-robot-plus-vision.md) | advanced | 8 h | 13.16, P11, P12 | robot-base, lidar, camera |
-| P14 | [Project 14 — The arm moves where you tell it](projects/P14-robotic-arm.md) | advanced | 8 h | 14.10, 14.11 | arm |
+| P14 | [Project 14 — The arm moves where you tell it](projects/P14-robotic-arm.md) | advanced | 8 h | 14.10, 14.11 | arm, estop, tools |
 | P15 | [Project 15 — Vision-guided reaching](projects/P15-vision-guided-arm.md) | advanced | 8 h | 15.07, P14 | arm, camera |
 | P16 | [Project 16 — Pick and place](projects/P16-pick-and-place.md) | advanced | 10 h | 15.09, P15 | arm, camera |
-| P17 | [Project 17 — The LLM-directed robot](projects/P17-llm-controlled-robot.md) | advanced | 10 h | 19.09, P13 | robot-base, lidar, camera |
+| P17 | [Project 17 — The LLM-directed robot](projects/P17-llm-controlled-robot.md) | advanced | 10 h | 19.09, P13 | robot-base, lidar, camera, estop |
 | P18 | [Final project — the autonomous AI robot](projects/P18-final-autonomous-ai-robot.md) | advanced | 40 h | 20.06, P16, P17 | robot-base, lidar, camera, imu, arm, estop |
 
 ## Totals

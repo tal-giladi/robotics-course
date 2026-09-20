@@ -9,7 +9,7 @@
 | **Difficulty** | Advanced |
 | **Time** | 8 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1), 2D LiDAR (stage 3) |
-| **Software** | none |
+| **Software** | ros2, nav2 |
 | **Prerequisites** | [12.10 Recovery behaviors, failure handling and navigation safety](../12-navigation/12.10-recovery-and-navigation-safety.md)<br>[P10 Project 10 — Localize on your map](P10-localization.md) |
 
 <!-- glance:end -->

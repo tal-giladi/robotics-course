@@ -8,8 +8,8 @@
 | **Track** | Project |
 | **Difficulty** | Advanced |
 | **Time** | 10 h |
-| **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1), 2D LiDAR (stage 3), Camera (Raspberry Pi Camera Module 3 or USB webcam) (stage 2) |
-| **Software** | none |
+| **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1), 2D LiDAR (stage 3), Camera (Raspberry Pi Camera Module 3 or USB webcam) (stage 2), Hardware emergency stop and final integration parts (stage 6) |
+| **Software** | ros2, nav2, python, llm-api |
 | **Prerequisites** | [19.09 Safety boundaries for LLM-controlled robots](../19-llm-robot-agents/19.09-agent-safety-boundaries.md)<br>[P13 Project 13 — Find objects and put them on the map](P13-robot-plus-vision.md) |
 
 <!-- glance:end -->

@@ -9,7 +9,7 @@
 | **Difficulty** | Beginner |
 | **Time** | 2 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1) |
-| **Software** | none |
+| **Software** | python, micropython, ubuntu |
 | **Prerequisites** | [01.15 Drive it from your laptop — keyboard teleop over the network](../01-first-robot/01.15-teleop-from-laptop.md) |
 
 <!-- glance:end -->

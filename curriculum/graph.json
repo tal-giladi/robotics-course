@@ -728,7 +728,6 @@
     "perception",
     "planning",
     "control",
-    "localization",
     "middleware"
    ],
    "skip_if": "You can draw the layers from an LLM planner down to a PWM signal and say what runs at which rate.",
@@ -786,8 +785,7 @@
     "lidar",
     "tof",
     "ultrasonic",
-    "motor-controller",
-    "battery"
+    "motor-controller"
    ],
    "skip_if": "You know what each of these parts measures or moves and roughly what it costs.",
    "version_sensitive": false,
@@ -846,7 +844,7 @@
     "edge-gpu"
    ],
    "skip_if": "You can explain why a robot typically has both a Raspberry Pi and a microcontroller.",
-   "version_sensitive": false,
+   "version_sensitive": true,
    "order": 3,
    "exercises": [
     {
@@ -1996,7 +1994,7 @@
    "teaches": [
     "power-budget",
     "brownout",
-    "stall-current",
+    "worst-case-current",
     "battery-runtime",
     "separate-rails"
    ],
@@ -3096,7 +3094,7 @@
    ],
    "teaches": [
     "wifi-latency",
-    "mdns",
+    "robot-hostname-resolution",
     "time-synchronization",
     "network-partitions"
    ],
@@ -9043,7 +9041,7 @@
    "teaches": [
     "recovery-behaviors",
     "collision-monitor",
-    "speed-limits",
+    "speed-restriction-zones",
     "keepout-zones"
    ],
    "skip_if": "You configure collision monitoring and keepout zones and handle navigation failures.",
@@ -9337,7 +9335,7 @@
     "pinhole-model",
     "camera-intrinsics",
     "camera-extrinsics",
-    "projection",
+    "perspective-projection",
     "back-projection"
    ],
    "skip_if": "You can project a 3D point to pixels with K and back-project with depth.",
@@ -9518,7 +9516,7 @@
     "3d-vision"
    ],
    "skip_if": "You convert depth images to point clouds and segment planes.",
-   "version_sensitive": false,
+   "version_sensitive": true,
    "order": 146,
    "exercises": [
     {
@@ -9578,7 +9576,7 @@
     "inference-latency"
    ],
    "skip_if": "You run pretrained CNNs in PyTorch and understand their outputs.",
-   "version_sensitive": false,
+   "version_sensitive": true,
    "order": 147,
    "exercises": [
     {
@@ -12241,7 +12239,7 @@
     "dagger"
    ],
    "skip_if": "You can explain compounding errors and DAgger.",
-   "version_sensitive": false,
+   "version_sensitive": true,
    "order": 192,
    "exercises": [
     {
@@ -12964,7 +12962,7 @@
     "plan-to-behavior-tree"
    ],
    "skip_if": "Your LLM produces plans that are validated before execution.",
-   "version_sensitive": false,
+   "version_sensitive": true,
    "order": 206,
    "exercises": [
     {
@@ -15525,7 +15523,7 @@
     "linear-regulator",
     "buck-converter-basics",
     "boost-converter",
-    "efficiency"
+    "regulator-efficiency"
    ],
    "skip_if": "You choose between LDO and buck converters knowingly.",
    "version_sensitive": false,
@@ -16625,7 +16623,7 @@
     "submodules-vcs"
    ],
    "skip_if": "You know what not to commit and how to handle large binaries.",
-   "version_sensitive": false,
+   "version_sensitive": true,
    "order": 275,
    "exercises": [
     {
@@ -16721,7 +16719,7 @@
     "headless-workflow"
    ],
    "skip_if": "You use tmux.",
-   "version_sensitive": false,
+   "version_sensitive": true,
    "order": 277,
    "exercises": [
     {
@@ -18659,7 +18657,7 @@
     "stereo-vision",
     "disparity",
     "epipolar-geometry",
-    "baseline"
+    "stereo-baseline"
    ],
    "skip_if": "You relate disparity, baseline and depth error.",
    "version_sensitive": false,
@@ -19103,7 +19101,11 @@
    "hardware": [
     "robot-base"
    ],
-   "software": [],
+   "software": [
+    "python",
+    "micropython",
+    "ubuntu"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19129,7 +19131,9 @@
    "hardware": [
     "robot-base"
    ],
-   "software": [],
+   "software": [
+    "python"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19152,7 +19156,9 @@
    "hardware": [
     "robot-base"
    ],
-   "software": [],
+   "software": [
+    "python"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19178,7 +19184,10 @@
    "hardware": [
     "robot-base"
    ],
-   "software": [],
+   "software": [
+    "python",
+    "matplotlib"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19206,7 +19215,10 @@
     "robot-base",
     "imu"
    ],
-   "software": [],
+   "software": [
+    "python",
+    "matplotlib"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19229,7 +19241,11 @@
    "hardware": [
     "robot-base"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "rclpy",
+    "python"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19254,7 +19270,12 @@
    ],
    "optional": [],
    "hardware": [],
-   "software": [],
+   "software": [
+    "ros2",
+    "gazebo",
+    "ros-gz",
+    "xacro"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19278,7 +19299,11 @@
    "hardware": [
     "robot-base"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "robot-localization",
+    "python"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19305,7 +19330,11 @@
     "robot-base",
     "lidar"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "slam-toolbox",
+    "nav2"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19334,7 +19363,11 @@
     "lidar",
     "imu"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "nav2",
+    "robot-localization"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19361,7 +19394,10 @@
     "robot-base",
     "lidar"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "nav2"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19386,7 +19422,12 @@
    "hardware": [
     "camera"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "opencv",
+    "cv-bridge",
+    "python"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19415,7 +19456,12 @@
     "lidar",
     "camera"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "opencv",
+    "cv-bridge",
+    "tf2"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19439,9 +19485,15 @@
    ],
    "optional": [],
    "hardware": [
-    "arm"
+    "arm",
+    "estop",
+    "tools"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "moveit2",
+    "python"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19468,7 +19520,12 @@
     "arm",
     "camera"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "moveit2",
+    "tf2",
+    "python"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19495,7 +19552,11 @@
     "arm",
     "camera"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "moveit2",
+    "python"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19521,9 +19582,15 @@
    "hardware": [
     "robot-base",
     "lidar",
-    "camera"
+    "camera",
+    "estop"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "nav2",
+    "python",
+    "llm-api"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19555,7 +19622,12 @@
     "arm",
     "estop"
    ],
-   "software": [],
+   "software": [
+    "ros2",
+    "nav2",
+    "moveit2",
+    "python"
+   ],
    "teaches": [],
    "skip_if": "",
    "version_sensitive": false,
@@ -19776,8 +19848,7 @@
    "04.16"
   ],
   "baseline": [
-   "17.05",
-   "FCV.05"
+   "17.05"
   ],
   "bash": [
    "FL.03"
@@ -19789,7 +19860,6 @@
    "FM.08"
   ],
   "battery": [
-   "00.03",
    "FE.13"
   ],
   "battery-runtime": [
@@ -20480,7 +20550,6 @@
    "13.04"
   ],
   "efficiency": [
-   "FE.15",
    "FP.05"
   ],
   "ekf": [
@@ -21306,7 +21375,6 @@
    "12.01"
   ],
   "localization": [
-   "00.02",
    "10.01"
   ],
   "localization-mode": [
@@ -21412,7 +21480,6 @@
    "19.10"
   ],
   "mdns": [
-   "03.10",
    "FL.09"
   ],
   "mdp": [
@@ -21814,6 +21881,9 @@
   "peripherals": [
    "FC.01"
   ],
+  "perspective-projection": [
+   "13.05"
+  ],
   "phase-lag": [
    "FCT.04"
   ],
@@ -21995,7 +22065,6 @@
    "FPY.06"
   ],
   "projection": [
-   "13.05",
    "FM.06"
   ],
   "projective-geometry": [
@@ -22169,6 +22238,9 @@
   "regression-on-robot-data": [
    "16.05"
   ],
+  "regulator-efficiency": [
+   "FE.15"
+  ],
   "reinforce": [
    "17.05"
   ],
@@ -22273,6 +22345,9 @@
   ],
   "robot-frame": [
    "05.01"
+  ],
+  "robot-hostname-resolution": [
+   "03.10"
   ],
   "robot-localization-ekf-node": [
    "10.07"
@@ -22659,8 +22734,10 @@
    "19.11"
   ],
   "speed-limits": [
-   "12.10",
    "14.11"
+  ],
+  "speed-restriction-zones": [
+   "12.10"
   ],
   "spi": [
    "FE.09"
@@ -22687,7 +22764,6 @@
    "17.06"
   ],
   "stall-current": [
-   "02.02",
    "FE.10"
   ],
   "standard-deviation": [
@@ -22734,6 +22810,9 @@
   ],
   "stepper-motor": [
    "FE.11"
+  ],
+  "stereo-baseline": [
+   "FCV.05"
   ],
   "stereo-depth": [
    "07.09"
@@ -23286,6 +23365,9 @@
   ],
   "world-models": [
    "18.09"
+  ],
+  "worst-case-current": [
+   "02.02"
   ],
   "wsl2": [
    "FL.02"

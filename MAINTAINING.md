@@ -24,8 +24,10 @@ python tools/validate.py                # lesson structure, exercises, knowledge
 python tools/validate.py --links --final  # every relative link in the repo must resolve
 python tools/validate.py --versions     # list every Version-sensitive marker (audit list)
 python tools/validate.py --external     # HTTP-check external URLs (slow)
-pytest                                  # labs: robotlab, firmware logic, exercises (reference solutions)
+pytest                                  # labs: robotlab, firmware logic (exercises skip: student.py is empty)
 COURSE_USE_SOLUTION=1 pytest labs/exercises   # every auto-graded exercise passes with its solution
+pytest -o testpaths= --ignore-glob='*/code/src' --ignore-glob='*/code/ros2' \
+       [0-2][0-9]-*/code projects/code   # the code shipped with the lessons and projects
 ```
 
 The ROS 2 workspace is tested in Docker — see [`labs/ros2_ws/README.md`](labs/ros2_ws/README.md)

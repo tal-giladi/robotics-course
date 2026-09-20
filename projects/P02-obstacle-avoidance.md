@@ -9,7 +9,7 @@
 | **Difficulty** | Beginner |
 | **Time** | 3 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1) |
-| **Software** | none |
+| **Software** | python |
 | **Prerequisites** | [01.13 Ultrasonic and ToF sensors — stop before hitting things](../01-first-robot/01.13-distance-sensors-stop.md)<br>[P01 Project 1 — Robot drives manually](P01-manual-drive.md) |
 
 <!-- glance:end -->

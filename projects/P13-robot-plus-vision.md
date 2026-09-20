@@ -9,7 +9,7 @@
 | **Difficulty** | Advanced |
 | **Time** | 8 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1), 2D LiDAR (stage 3), Camera (Raspberry Pi Camera Module 3 or USB webcam) (stage 2) |
-| **Software** | none |
+| **Software** | ros2, opencv, cv-bridge, tf2 |
 | **Prerequisites** | [13.16 From detection to a 3D position in the map frame](../13-computer-vision/13.16-detection-to-map-position.md)<br>[P11 Project 11 — Go to the kitchen: autonomous navigation](P11-autonomous-navigation.md)<br>[P12 Project 12 — Camera object detection](P12-camera-object-detection.md) |
 
 <!-- glance:end -->

@@ -9,7 +9,7 @@
 | **Difficulty** | Intermediate |
 | **Time** | 5 h |
 | **Hardware** | none |
-| **Software** | none |
+| **Software** | ros2, gazebo, ros-gz, xacro |
 | **Prerequisites** | [06.09 One codebase for simulation and the real robot](../06-simulation/06.09-same-code-sim-and-real.md)<br>[P06 Project 6 — Your robot on ROS 2](P06-ros2-robot.md) |
 
 <!-- glance:end -->

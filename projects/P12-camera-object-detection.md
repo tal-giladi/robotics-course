@@ -9,7 +9,7 @@
 | **Difficulty** | Intermediate |
 | **Time** | 5 h |
 | **Hardware** | Camera (Raspberry Pi Camera Module 3 or USB webcam) (stage 2) |
-| **Software** | none |
+| **Software** | ros2, opencv, cv-bridge, python |
 | **Prerequisites** | [13.15 Vision in ROS 2 — cv_bridge, vision_msgs and performance on the robot](../13-computer-vision/13.15-vision-in-ros2.md) |
 
 <!-- glance:end -->

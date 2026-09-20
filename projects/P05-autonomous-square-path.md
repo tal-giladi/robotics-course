@@ -9,7 +9,7 @@
 | **Difficulty** | Intermediate |
 | **Time** | 4 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1), IMU breakout (stage 2) |
-| **Software** | none |
+| **Software** | python, matplotlib |
 | **Prerequisites** | [08.11 Rotate exactly 90° — motion profiles and IMU feedback](../08-control/08.11-rotate-exactly-90.md)<br>[09.04 Build an odometry system from scratch (tested against the simulator)](../09-odometry/09.04-odometry-from-scratch.md)<br>[P04 Project 4 — PID-controlled movement](P04-pid-movement.md) |
 
 <!-- glance:end -->

@@ -9,7 +9,7 @@
 | **Difficulty** | Beginner |
 | **Time** | 3 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1) |
-| **Software** | none |
+| **Software** | python |
 | **Prerequisites** | [01.12 Use encoders to drive exact distances and angles — drive a square](../01-first-robot/01.12-encoder-distance-and-square.md) |
 
 <!-- glance:end -->

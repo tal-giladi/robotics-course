@@ -39,6 +39,13 @@ jobs:
         env:
           COURSE_USE_SOLUTION: "1"
         run: pytest -q labs/exercises
+      # The per-module code/ folders and projects/code are plain pytest. The ROS packages that
+      # live under <module>/code/src and <module>/code/ros2 are built by the ros2 job instead.
+      - name: Module and project code examples
+        run: |
+          pytest -q -o testpaths= \
+            --ignore-glob='*/code/src' --ignore-glob='*/code/ros2' \
+            [0-2][0-9]-*/code projects/code
       - name: Firmware compiles
         run: python -m compileall -q labs/firmware/pico
 
@@ -60,5 +67,6 @@ jobs:
           source /opt/ros/jazzy/setup.bash
           cd labs/ros2_ws
           colcon build --event-handlers console_direct+
-          colcon test --packages-select karmel_base --event-handlers console_direct+
+          colcon test --packages-select karmel_base karmel_bringup karmel_description \
+            --event-handlers console_direct+
           colcon test-result --verbose

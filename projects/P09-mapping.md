@@ -9,7 +9,7 @@
 | **Difficulty** | Advanced |
 | **Time** | 6 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1), 2D LiDAR (stage 3) |
-| **Software** | none |
+| **Software** | ros2, slam-toolbox, nav2 |
 | **Prerequisites** | [11.07 Map your real room: explore → map → save → localize](../11-slam/11.07-mapping-your-room.md)<br>[P08 Project 8 — Odometry you can trust](P08-odometry.md) |
 
 <!-- glance:end -->

@@ -9,7 +9,7 @@
 | **Difficulty** | Advanced |
 | **Time** | 10 h |
 | **Hardware** | Robotic arm (leader + follower kit) (stage 5), Camera (Raspberry Pi Camera Module 3 or USB webcam) (stage 2) |
-| **Software** | none |
+| **Software** | ros2, moveit2, python |
 | **Prerequisites** | [15.09 Collision avoidance, the planning scene and failure recovery](../15-manipulation/15.09-collision-avoidance-and-recovery.md)<br>[P15 Project 15 — Vision-guided reaching](P15-vision-guided-arm.md) |
 
 <!-- glance:end -->

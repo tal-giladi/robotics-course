@@ -9,7 +9,7 @@
 | **Difficulty** | Intermediate |
 | **Time** | 4 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1) |
-| **Software** | none |
+| **Software** | python, matplotlib |
 | **Prerequisites** | [08.10 Hold a straight line — cascaded heading control](../08-control/08.10-straight-line-heading-control.md)<br>[P03 Project 3 — Encoder-based movement](P03-encoder-movement.md) |
 
 <!-- glance:end -->

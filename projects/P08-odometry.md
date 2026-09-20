@@ -9,7 +9,7 @@
 | **Difficulty** | Intermediate |
 | **Time** | 4 h |
 | **Hardware** | Stage 1 robot: Pi 5, Pico, encoder motors, driver, chassis, battery, distance sensors (stage 1) |
-| **Software** | none |
+| **Software** | ros2, robot-localization, python |
 | **Prerequisites** | [09.07 Odometry in ROS 2 — nav_msgs/Odometry, odom→base_link, comparing implementations](../09-odometry/09.07-odometry-in-ros2.md)<br>[P06 Project 6 — Your robot on ROS 2](P06-ros2-robot.md) |
 
 <!-- glance:end -->

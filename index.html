@@ -54,6 +54,48 @@
             if (window.mermaid) {
               window.mermaid.run({ querySelector: '.markdown-section .mermaid' });
             }
+            // KaTeX: rendered here rather than through a markdown plugin so that it does not
+            // depend on docsify's bundled marked version. Code blocks are skipped, so `$PATH`
+            // in a shell snippet is left alone.
+            if (window.renderMathInElement) {
+              document.querySelectorAll('.markdown-section').forEach(function (el) {
+                window.renderMathInElement(el, {
+                  delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false }
+                  ],
+                  ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+                  throwOnError: false
+                });
+              });
+            }
+          });
+        },
+        // relativePath:true is what makes the lessons' own ../ links work, but it also resolves
+        // the single root _sidebar.md against the *current* folder, so every sidebar link
+        // becomes /<current-folder>/<sidebar-path> — a 404 as soon as you open a lesson.
+        // The prefix docsify added is exactly the current folder, so strip it back off.
+        // Synchronous, because the search plugin reads these hrefs on the first render.
+        function (hook, vm) {
+          hook.doneEach(function () {
+            var path = (vm.router.getCurrentPath() || '/').split(/[?#]/)[0];
+            var dir = path.slice(0, path.lastIndexOf('/'));
+            if (!dir) { return; }                       // a page at the root: already correct
+            var prefix = '#' + dir + '/';
+            document.querySelectorAll('.sidebar-nav a').forEach(function (a) {
+              var href = a.getAttribute('href') || '';
+              if (href.indexOf(prefix) !== 0) { return; }
+              var to = '/' + href.slice(prefix.length);
+              if (to === '/README') { to = '/'; }
+              a.setAttribute('href', '#' + to);
+              var on = to === path;
+              a.classList.toggle('active', on);
+              if (a.parentNode && a.parentNode.tagName === 'LI') {
+                a.parentNode.classList.toggle('active', on);
+              }
+            });
           });
         }
       ]
@@ -64,8 +106,9 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-plugin-flexible-alerts"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-plugin-flexible-alerts@1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
