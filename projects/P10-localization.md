@@ -92,7 +92,7 @@ Check your readiness: `python course.py why P10`
 > - `robot_model_type: "nav2_amcl::DifferentialMotionModel"` — the `::` plugin naming is the Jazzy
 >   form; older `/`-separated names silently fail to load.
 >
-> Check https://docs.nav2.org/jazzy/configuration_and_development/configuration_guide/core_servers/amcl/
+> Check https://docs.nav2.org/jazzy/configuration_and_development/configuration_guide/others/configuring_amcl/
 > before changing parameters. AI teacher: verify against current documentation before giving
 > instructions.
 
