@@ -50,7 +50,7 @@ class DiffDriveParams:
     slip_std: float = 0.0  # per-step multiplicative noise on each wheel's ground travel
     encoder_bits: int | None = None  # wrap tick counters like an N-bit hardware counter
     # battery
-    battery_nominal_v: float = 11.1
+    battery_nominal_v: float = 10.8  # labs/config/karmel.yaml: 3 x 3.6 V (Samsung INR18650-35E)
     battery_full_v: float = 12.6
     battery_empty_v: float = 9.0
     battery_low_v: float = 10.5

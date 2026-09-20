@@ -6,8 +6,10 @@ Three questions that do not exist when the arm is bolted to a table:
     where the arm is far from its limits and far from a singularity.
   * **What does the navigation error do?** Nav2 lands within a tolerance; that tolerance becomes a
     position error in the arm's frame, and it is an order of magnitude bigger than 15.07's budget.
-  * **Does it tip?** A 0.63 kg arm reaching 300 mm in front of a 1.6 kg robot whose support
-    polygon ends at the wheel axle is not a rhetorical question.
+  * **Does it tip?** A 0.63 kg arm on a 1.6 kg robot whose support polygon is a triangle — two
+    wheels on the axle and one ball caster 100 mm in front of them — is not a rhetorical question.
+    The polygon's REAR edge is the axle, so the danger is not the extended arm; it is the stowed
+    one, and acceleration.
 
     py mobile_manip.py                    every table printed in the lesson
     py mobile_manip.py --only stability   the tipping analysis
@@ -68,8 +70,8 @@ class MobileManipulator:
     """A differential-drive base with an arm bolted on at ``mount_xyz`` (base_link frame).
 
     ``support`` is the support polygon in the base frame — for karmel that is a **triangle**: two
-    drive wheels on the axle at x = 0 and one caster behind. There is nothing in front of the
-    wheels, which is the single most important fact in this lesson.
+    drive wheels on the axle at x = 0 and one caster 100 mm in front of them. There is nothing
+    behind the wheels, which is the single most important fact in this lesson.
     """
 
     base_mass_kg: float
@@ -117,16 +119,19 @@ class MobileManipulator:
         return (self.T_base_arm() @ np.append(self.chain.fk(q)[:3, 3], 1.0))[:3]
 
 
-def karmel_with_so101(mount_x: float = 0.0, front_caster_x: float | None = None,
+def karmel_with_so101(mount_x: float = 0.0, extra_caster_x: float | None = None,
                       cfg: dict | None = None) -> MobileManipulator:
-    """The course robot with the arm mounted ``mount_x`` forward of the wheel axle."""
+    """The course robot with the arm mounted ``mount_x`` forward of the wheel axle.
+
+    ``extra_caster_x`` fits a *pair* of extra casters at that x, at the same +/- y as the wheels.
+    Negative values put them behind the axle, which is the end karmel has nothing on.
+    """
     cfg = cfg or load_karmel()
     half_track = cfg["drive"]["wheel_separation_m"] / 2.0
     caster_x = cfg["chassis"]["caster_offset_x_m"]
     support = [(0.0, +half_track), (0.0, -half_track), (caster_x, 0.0)]
-    if front_caster_x is not None:
-        support = [(front_caster_x, +half_track), (front_caster_x, -half_track),
-                   (0.0, +half_track), (0.0, -half_track), (caster_x, 0.0)]
+    if extra_caster_x is not None:
+        support += [(extra_caster_x, +half_track), (extra_caster_x, -half_track)]
     return MobileManipulator(
         base_mass_kg=cfg["robot"]["mass_kg"],
         base_com=(0.0, 0.0, cfg["chassis"]["height_m"] / 2.0),
@@ -268,8 +273,9 @@ def demo_stability() -> None:
     print(f"  support polygon: {[(round(a, 3), round(b, 3)) for a, b in robot.support]}")
     print(f"  base {robot.base_mass_kg:.2f} kg, arm {robot.arm_mass_kg:.3f} kg "
           f"(sum of the SO-101 URDF link masses)")
-    print("  NOTE: nothing supports the robot in FRONT of the wheel axle. The forward edge of the")
-    print("  support polygon IS the line x = 0, so the combined CoM must stay BEHIND the axle.\n")
+    print("  NOTE: the caster is in FRONT, so nothing supports the robot BEHIND the wheel axle.")
+    print("  The rear edge of the support polygon IS the line x = 0, and the base's own CoM sits")
+    print("  on it. Reaching forward BUYS margin here; stowing the arm and accelerating spends it.\n")
 
     print("--- tipping margin while reaching forward (arm mounted at the axle, x = 0) ---")
     print(f"{'reach mm':>10}{'tool x mm':>11}{'CoM x mm':>10}{'margin mm':>11}{'verdict':>14}")
@@ -288,26 +294,27 @@ def demo_stability() -> None:
     print("  against its own joint limits. The workspace is an annulus, not a disc (see")
     print("  --only placement).\n")
 
-    print("--- where to mount the arm, and what a front caster buys (reaching 300 mm) ---")
-    print(f"{'mount x mm':>12}{'no front caster':>18}{'front caster at +120 mm':>26}")
+    print("--- where to mount the arm: extended at 300 mm, and stowed ---")
+    print(f"{'mount x mm':>12}{'reaching 300 mm':>18}{'arm folded for driving':>24}"
+          f"{'folded + rear casters':>24}")
+    #: the travel pose: shoulder back to its limit, elbow and wrist folded, tool over the deck
+    stow = np.radians([0.0, -100.0, 96.0, -95.0, 0.0])
     for mount_mm in (-80, -40, 0, 40, 80):
-        row = [f"{mount_mm:>12}"]
-        for front in (None, 0.120):
-            r = karmel_with_so101(mount_x=mount_mm / 1000, front_caster_x=front)
-            res = reach_forward(r.chain, 0.300)
-            _, com = r.com(res.q)
-            margin = stability_margin(r.support, com)
-            row.append(f"{f'{margin * 1000:+.0f} mm':>18}" if front is None
-                       else f"{f'{margin * 1000:+.0f} mm':>26}")
-        print("".join(row))
-    print("  Every number in the left column is NEGATIVE. As specified in labs/config/karmel.yaml,")
-    print("  this base cannot hold an SO-101 out at 300 mm at ANY mount position: the support")
-    print("  polygon simply ends at the wheel axle. A single 120 mm front caster - a two-shekel")
-    print("  part - turns -28 mm into +90 mm. That is the lesson: mobile manipulation is a")
-    print("  MECHANICAL problem before it is a software one.\n")
+        r = karmel_with_so101(mount_x=mount_mm / 1000)
+        rc = karmel_with_so101(mount_x=mount_mm / 1000, extra_caster_x=-0.100)
+        res = reach_forward(r.chain, 0.300)
+        _, com_out = r.com(res.q)
+        _, com_in = r.com(stow)
+        print(f"{mount_mm:>12}{f'{stability_margin(r.support, com_out) * 1000:+.0f} mm':>18}"
+              f"{f'{stability_margin(r.support, com_in) * 1000:+.0f} mm':>24}"
+              f"{f'{stability_margin(rc.support, com_in) * 1000:+.0f} mm':>24}")
+    print("  The middle column is the one that bites, and it is the OPPOSITE of what a rear-caster")
+    print("  base does. Reaching forward is safe on this robot; parking the arm over or behind the")
+    print("  axle walks the CoM onto the rear edge, where there is no contact at all. A pair of")
+    print("  rear casters - two-shekel parts - is what buys that back.\n")
 
-    print("--- payload, at a 250 mm reach, with the front caster fitted (mount 40 mm behind) ---")
-    r = karmel_with_so101(mount_x=-0.040, front_caster_x=0.120)
+    print("--- payload, at a 250 mm reach, arm mounted 40 mm behind the axle ---")
+    r = karmel_with_so101(mount_x=-0.040)
     res = reach_forward(r.chain, 0.250)
     print(f"{'payload g':>11}{'total kg':>10}{'CoM x mm':>10}{'margin mm':>11}{'verdict':>14}")
     for payload_g in (0, 100, 200, 400, 800, 1500):
@@ -317,7 +324,7 @@ def demo_stability() -> None:
               f"{('STABLE' if margin > 0 else 'TIPS'):>14}")
     print("  The static margin is not the whole story: accelerating the arm outward adds an")
     print("  inertial term the same sign as gravity. Keep 30 mm of static margin AND move slowly")
-    print("  when extended (14.11). If you cannot, the answer is a front caster or a longer base.\n")
+    print("  when extended (14.11). If you cannot, the answer is another contact or a longer base.\n")
 
 
 def demo_placement() -> None:
@@ -386,8 +393,8 @@ def demo_nav_error() -> None:
 
 
 def demo_decision() -> None:
-    print("--- move the base, or move the arm? (front caster fitted, 200 g payload) ---")
-    robot = karmel_with_so101(mount_x=-0.040, front_caster_x=0.120)
+    print("--- move the base, or move the arm? (karmel as shipped, 200 g payload) ---")
+    robot = karmel_with_so101(mount_x=-0.040)
     obj = np.array([1.50, 0.40, 0.030])
     print(f"{'object at mm':>13}{'reach with arm':>16}{'manipulability':>16}"
           f"{'margin mm':>11}  decision")
@@ -405,12 +412,26 @@ def demo_decision() -> None:
         good = p.manipulability > 0.010 and margin > 30
         print(f"{dist_mm:>13}{'yes':>16}{p.manipulability:>16.4f}{margin:>11.1f}  "
               f"{'use the arm' if good else 're-dock the base'}")
-    print("  Note what does NOT appear here: a LATERAL offset. The arm's first joint is vertical,")
-    print("  so panning to a target 50 mm to the side gives exactly the same manipulability and")
-    print("  the same stability margin - the decision is about RADIAL distance, not about angle.")
+    print("\n  the same 250 mm reach, swung sideways instead of straight ahead:")
+    docked = (obj[0] - 0.250, obj[1], 0.0)
+    for lateral_mm in (0, 50, 100):
+        target = np.array([obj[0], obj[1] + lateral_mm / 1000, obj[2]])
+        p = evaluate_placement(robot, docked, target, max_iterations=60)
+        res = ak.ik_dls(robot.chain, object_in_arm_frame(robot, docked, target),
+                        np.radians([0, -30, 60, 30, 0.0]), target_pitch=math.radians(80.0),
+                        max_iterations=60)
+        _, com = robot.com(res.q, payload_kg=0.2)
+        print(f"    lateral {lateral_mm:>3} mm: manipulability {p.manipulability:.4f}, "
+              f"CoM y {com[1] * 1000:+.1f} mm, margin {stability_margin(robot.support, com) * 1000:.1f} mm")
+    print("  The arm's first joint is vertical, so panning costs nothing in manipulability - it")
+    print("  even helps slightly. On a four-contact base it would cost nothing in margin either.")
+    print("  But karmel's polygon narrows towards the caster, so swinging 100 mm to the side")
+    print("  throws away 15 mm of margin that the same reach straight ahead keeps.")
     print("  The rule that falls out: use the arm while the manipulability stays healthy AND the")
-    print("  stability margin stays above 30 mm; re-dock otherwise. Re-docking costs 5-15 s and a")
-    print("  fresh perception cycle, and it is almost always cheaper than a tipped robot.\n")
+    print("  stability margin stays above 30 mm; re-dock otherwise. Note that the two constraints")
+    print("  close in from OPPOSITE ends - 200 mm fails on manipulability, 300 mm on margin - so")
+    print("  the usable band here is narrow. Re-docking costs 5-15 s and a fresh perception")
+    print("  cycle, and it is almost always cheaper than a tipped robot.\n")
 
 
 def main(argv: list[str] | None = None) -> int:

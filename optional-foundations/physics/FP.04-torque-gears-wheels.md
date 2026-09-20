@@ -122,7 +122,7 @@ $$P_{max} = \frac{\tau_s \omega_0}{4}$$
 
 Read it critically. By the straight-line model, 6.5 kg·cm is 78% of stall, which would need about 3.1 A and leave the motor turning at only about 45 rpm. It cannot be a continuous rating at 0.3 A. The "rated current" is also identical for every gear ratio. Cheap datasheets often mix no-load and loaded figures like this. **Trust the no-load speed and the stall torque and current; treat "rated" figures as unreliable.** Then measure: no-load speed with encoders ([08.02](../../08-control/08.02-motor-step-response.md)), and current with the INA219 ([02.02](../../02-robot-electronics/02.02-power-budget.md)).
 
-At the 11.1 V nominal battery voltage, the 1:56 model becomes $\omega_0 = 19.86$ rad/s (0.894 m/s at the rim), $\tau_s = 0.753$ N·m, $I_s = 3.70$ A and $P_{max} = 3.74$ W. Karmel's config uses 17 rad/s as the loaded maximum, which is consistent with this.
+At the 10.8 V nominal battery voltage (3 × 3.6 V for the Samsung 35E cells, not the 3.7 V/cell that generic "11.1 V" LiPo labels assume), the 1:56 model becomes $\omega_0 = 19.32$ rad/s (0.869 m/s at the rim), $\tau_s = 0.733$ N·m, $I_s = 3.60$ A and $P_{max} = 3.54$ W. Karmel's config uses 17 rad/s as the loaded maximum, which is consistent with this.
 
 ### Level 3b — Sizing rules
 
@@ -136,12 +136,12 @@ For each operating point (torque $\tau$ and speed $\omega$ per wheel), check:
 The ideal duty for an operating point comes from the line: $d = \omega/\omega_0 + \tau/\tau_s$.
 
 *Example, scenario B (5° ramp, 0.3 m/s², 0.3 m/s) on the 1:56 motor:*
-- Torque is $0.0686/0.753 = 9.1\%$ of stall.
-- The available speed at that torque is $19.86 \times (1 - 0.091) = 18.05$ rad/s. We need 6.67 rad/s, so there is plenty of headroom.
-- Duty is $6.67/19.86 + 0.091 = 0.43$.
+- Torque is $0.0686/0.733 = 9.4\%$ of stall.
+- The available speed at that torque is $19.32 \times (1 - 0.094) = 17.51$ rad/s. We need 6.67 rad/s, so there is plenty of headroom.
+- Duty is $6.67/19.32 + 0.094 = 0.44$.
 - Verdict: comfortably sized.
 
-*Low-speed example:* crawling at 0.1 m/s on the flat needs a duty of 0.12 on the 1:56 motor, right at the deadband. On the 1:30 motor it needs 0.085, below the deadband, so it cannot crawl smoothly without closed-loop tricks. That is a real reason to prefer the higher ratio on a slow indoor robot.
+*Low-speed example:* crawling at 0.1 m/s on the flat needs a duty of 0.125 on the 1:56 motor, barely above the deadband. On the 1:30 motor it needs 0.087, below the deadband, so it cannot crawl smoothly without closed-loop tricks. That is a real reason to prefer the higher ratio on a slow indoor robot.
 
 ### Level 4 — Choosing between gear ratios
 
@@ -149,10 +149,10 @@ The script below evaluates four scenarios for both motors:
 
 | Scenario (per wheel) | Torque | Speed | 1:56 % stall / duty | 1:30 % stall / duty |
 |---|---|---|---|---|
-| A: cruise 0.5 m/s, flat | 0.0071 N·m | 11.1 rad/s | 0.9% / 0.57 | 1.6% / 0.36 |
-| B: 5°, 0.3 m/s², 0.3 m/s | 0.0686 N·m | 6.67 rad/s | 9.1% / 0.43 | 15.8% / 0.36 |
-| C: 1.0 m/s² to 0.5 m/s, flat | 0.1097 N·m | 11.1 rad/s | 14.6% / 0.71 | **25.2%**, runs hot |
-| D: with arm, 2.25 kg, 10°, 0.3 m/s² | 0.1312 N·m | 6.67 rad/s | 17.4% / 0.51 | **30.1%**, runs hot |
+| A: cruise 0.5 m/s, flat | 0.0071 N·m | 11.1 rad/s | 1.0% / 0.58 | 1.7% / 0.37 |
+| B: 5°, 0.3 m/s², 0.3 m/s | 0.0686 N·m | 6.67 rad/s | 9.4% / 0.44 | 16.2% / 0.37 |
+| C: 1.0 m/s² to 0.5 m/s, flat | 0.1097 N·m | 11.1 rad/s | 15.0% / 0.72 | **25.9%**, runs hot |
+| D: with arm, 2.25 kg, 10°, 0.3 m/s² | 0.1312 N·m | 6.67 rad/s | 17.9% / 0.52 | **31.0%**, runs hot |
 
 Look at scenario C: of its 0.110 N·m, 0.055 N·m, fully half, only spins up the motor rotors through the gearbox. On a high-ratio drive, the motor's own inertia is a big part of the load.
 
@@ -169,17 +169,17 @@ The chain from electrons to floor force, with karmel's numbers for scenario B:
 
 ```mermaid
 flowchart LR
-    B["battery 11.1 V<br/>duty 0.43"] --> M["motor rotor<br/>≈ 3565 rpm<br/>≈ 1.75 mN·m"]
+    B["battery 10.8 V<br/>duty 0.44"] --> M["motor rotor<br/>≈ 3565 rpm<br/>≈ 1.75 mN·m"]
     M -->|"gearbox 1:56, η ≈ 0.7<br/>speed ÷56, torque ×39"| O["output shaft<br/>6.67 rad/s (63.7 rpm)<br/>0.069 N·m (0.020 of it<br/>spins up the rotor)"]
     O -->|"wheel r = 0.045 m<br/>v = ωr, F = τ/r"| F["floor<br/>0.30 m/s<br/>1.08 N per wheel"]
 ```
 
-The speed-torque line of the 520 1:56 at 11.1 V, with scenario operating points:
+The speed-torque line of the 520 1:56 at 10.8 V, with scenario operating points:
 
 ```text
  wheel speed
  [rad/s]
-  19.9 ●  no-load
+  19.3 ●  no-load
        │ ╲
        │   ╲
   11.1 │ A  C ╲            A cruise   0.007 N·m @ 11.1 rad/s
@@ -188,13 +188,13 @@ The speed-torque line of the 520 1:56 at 11.1 V, with scenario operating points:
        │     ┆       ╲     D +arm 10° 0.131 N·m @ 6.67 rad/s
        │     ┆          ╲
      0 └─────┆────────────●──────► torque per wheel [N·m]
-       0   0.188        0.753 stall
+       0   0.183        0.733 stall
            25% of stall: keep continuous operation left of this line
 ```
 
 ## Code
 
-Save as `fp04_motor_sizing.py` and run `python fp04_motor_sizing.py`. It computes per-wheel requirements for the four scenarios, builds the straight-line model of both 520 variants at 11.1 V, and marks each scenario as OK, hot (above 25% of stall) or too slow.
+Save as `fp04_motor_sizing.py` and run `python fp04_motor_sizing.py`. It computes per-wheel requirements for the four scenarios, builds the straight-line model of both 520 variants at 10.8 V, and marks each scenario as OK, hot (above 25% of stall) or too slow.
 
 ```python
 """FP.04 — size karmel's drive motors: torque and speed per wheel for real scenarios.
@@ -256,7 +256,7 @@ def main() -> None:
                  Scenario("B 5 deg ramp, 0.3 m/s^2, 0.3 m/s", 1.6, 5.0, 0.3, 0.3),
                  Scenario("C 1.0 m/s^2 up to 0.5 m/s, flat", 1.6, 0.0, 1.0, 0.5),
                  Scenario("D +arm 2.25 kg, 10 deg, 0.3 m/s^2", 2.25, 10.0, 0.3, 0.3)]
-    battery_v = 11.1
+    battery_v = 10.8   # labs/config/karmel.yaml: battery.nominal_v (3 x 3.6 V)
 
     print("per-wheel requirements (r = 0.045 m):")
     reqs = []
@@ -311,27 +311,27 @@ per-wheel requirements (r = 0.045 m):
   D +arm 2.25 kg, 10 deg, 0.3 m/s^2    torque 0.1312 N*m (1.338 kg*cm)  speed  6.67 rad/s ( 63.7 rpm)
 scenario B at the motor shaft (1:56, gearbox efficiency 0.7 assumed): 1.75 mN*m at 3565 rpm
 
-520 1:56 (205 rpm) at 11.1 V: no-load 19.86 rad/s (0.894 m/s rim), stall 0.7529 N*m, stall current 3.70 A, max output power 3.74 W
-  A cruise 0.5 m/s, flat               torque   0.9 % of stall, speed 11.11/19.67 rad/s, duty 0.57  -> OK
-  B 5 deg ramp, 0.3 m/s^2, 0.3 m/s     torque   9.1 % of stall, speed  6.67/18.05 rad/s, duty 0.43  -> OK
-  C 1.0 m/s^2 up to 0.5 m/s, flat      torque  14.6 % of stall, speed 11.11/16.96 rad/s, duty 0.71  -> OK
-  D +arm 2.25 kg, 10 deg, 0.3 m/s^2    torque  17.4 % of stall, speed  6.67/16.40 rad/s, duty 0.51  -> OK
+520 1:56 (205 rpm) at 10.8 V: no-load 19.32 rad/s (0.869 m/s rim), stall 0.7326 N*m, stall current 3.60 A, max output power 3.54 W
+  A cruise 0.5 m/s, flat               torque   1.0 % of stall, speed 11.11/19.13 rad/s, duty 0.58  -> OK
+  B 5 deg ramp, 0.3 m/s^2, 0.3 m/s     torque   9.4 % of stall, speed  6.67/17.51 rad/s, duty 0.44  -> OK
+  C 1.0 m/s^2 up to 0.5 m/s, flat      torque  15.0 % of stall, speed 11.11/16.43 rad/s, duty 0.72  -> OK
+  D +arm 2.25 kg, 10 deg, 0.3 m/s^2    torque  17.9 % of stall, speed  6.67/15.86 rad/s, duty 0.52  -> OK
 
-520 1:30 (333 rpm) at 11.1 V: no-load 32.26 rad/s (1.452 m/s rim), stall 0.4354 N*m, stall current 2.77 A, max output power 3.51 W
-  A cruise 0.5 m/s, flat               torque   1.6 % of stall, speed 11.11/31.73 rad/s, duty 0.36  -> OK
-  B 5 deg ramp, 0.3 m/s^2, 0.3 m/s     torque  15.8 % of stall, speed  6.67/27.17 rad/s, duty 0.36  -> OK
-  C 1.0 m/s^2 up to 0.5 m/s, flat      torque  25.2 % of stall, speed 11.11/24.13 rad/s, duty 0.60  -> hot
-  D +arm 2.25 kg, 10 deg, 0.3 m/s^2    torque  30.1 % of stall, speed  6.67/22.54 rad/s, duty 0.51  -> hot
+520 1:30 (333 rpm) at 10.8 V: no-load 31.38 rad/s (1.412 m/s rim), stall 0.4236 N*m, stall current 2.70 A, max output power 3.32 W
+  A cruise 0.5 m/s, flat               torque   1.7 % of stall, speed 11.11/30.86 rad/s, duty 0.37  -> OK
+  B 5 deg ramp, 0.3 m/s^2, 0.3 m/s     torque  16.2 % of stall, speed  6.67/26.30 rad/s, duty 0.37  -> OK
+  C 1.0 m/s^2 up to 0.5 m/s, flat      torque  25.9 % of stall, speed 11.11/23.26 rad/s, duty 0.61  -> hot
+  D +arm 2.25 kg, 10 deg, 0.3 m/s^2    torque  31.0 % of stall, speed  6.67/21.66 rad/s, duty 0.52  -> hot
 
 saved fp04_speed_torque.png
 ```
 
 **The plot `fp04_speed_torque.png`** shows two straight lines falling from their no-load speed to their stall torque:
 
-- **1:56 (solid):** from 19.9 rad/s down to 0.753 N·m.
-- **1:30 (dashed):** from 32.3 rad/s down to 0.435 N·m. It is steeper and crosses the 1:56 line near 0.26 N·m.
+- **1:56 (solid):** from 19.3 rad/s down to 0.733 N·m.
+- **1:30 (dashed):** from 31.4 rad/s down to 0.424 N·m. It is steeper and crosses the 1:56 line near 0.25 N·m.
 
-Grey vertical lines mark 25% of each motor's stall torque (0.188 and 0.109 N·m). The four operating points sit in the lower-left corner. Points C and D sit on or just right of the 1:30's grey line, and well to the left of the 1:56's.
+Grey vertical lines mark 25% of each motor's stall torque (0.183 and 0.106 N·m). The four operating points sit in the lower-left corner. Points C and D sit on or just right of the 1:30's grey line, and well to the left of the 1:56's.
 
 ## Exercise
 
@@ -342,11 +342,11 @@ Hardware: none. A friend's 3.0 kg robot uses the same 90 mm wheels ($r = 0.045$ 
 1. The total traction force.
 2. The torque per wheel in N·m and kg·cm.
 3. The torque at the motor shaft for a 1:56 gearbox with η = 0.7.
-4. Whether the 520 1:56 passes the 25%-of-stall rule at 11.1 V.
+4. Whether the 520 1:56 passes the 25%-of-stall rule at 10.8 V.
 
 ### Exercise FP.04-E2 — Steepest ramp within the thermal rule `[coding]`
 
-Hardware: none. Using `wheel_requirement` and `scipy.optimize.brentq`, find the steepest ramp each motor (1:56 and 1:30, at 11.1 V) can climb at 0.3 m/s² and 0.3 m/s while staying at or below 25% of stall torque. Do it for karmel alone (1.6 kg) and with the arm (2.25 kg).
+Hardware: none. Using `wheel_requirement` and `scipy.optimize.brentq`, find the steepest ramp each motor (1:56 and 1:30, at 10.8 V) can climb at 0.3 m/s² and 0.3 m/s while staying at or below 25% of stall torque. Do it for karmel alone (1.6 kg) and with the arm (2.25 kg).
 
 ### Exercise FP.04-E3 — Predict: smaller wheels `[predict]`
 
@@ -373,14 +373,14 @@ After [01.09](../../01-first-robot/01.09-reading-encoders.md), drive both wheels
 1. $F = 3.0 \times (0.5 + 9.81\sin 8° + 0.02 \times 9.81\cos 8°) = 3.0 \times (0.5 + 1.365 + 0.194) = 6.18$ N.
 2. Per wheel: $3.089 \times 0.045 + 3.0\times10^{-3} \times (0.5/0.045) = 0.1390 + 0.0333 = 0.1723$ N·m = **1.76 kg·cm**.
 3. At the motor shaft: $0.1723/(56 \times 0.7) = 4.40$ mN·m.
-4. $0.1723/0.753 = 22.9\%$ of stall, so it **passes**, barely. Also check traction: with karmel's weight distribution scaled up, the drive wheels need μ ≥ 0.42, so a dusty floor would fail first.
+4. $0.1723/0.733 = 23.5\%$ of stall, so it **passes**, barely. Also check traction: with karmel's weight distribution scaled up, the drive wheels need μ ≥ 0.42, so a dusty floor would fail first.
 
-**FP.04-E2:** 1:56: **25.3°** alone, **16.8°** with the arm. 1:30: **11.6°** alone, **7.4°** with the arm. In practice traction (FP.03) limits karmel alone to about 13° at μ = 0.6, before the 1:56's thermal rule does. With the 1:30, the thermal rule bites first.
+**FP.04-E2:** 1:56: **24.4°** alone, **16.2°** with the arm. 1:30: **11.1°** alone, **7.0°** with the arm. In practice traction (FP.03) limits karmel alone to about 13° at μ = 0.6, before the 1:56's thermal rule does. With the 1:30, the thermal rule bites first.
 
 **FP.04-E3:**
-- (a) Rim speed **drops**, from 0.894 to 0.645 m/s.
+- (a) Rim speed **drops**, from 0.869 to 0.628 m/s.
 - (b) Torque **drops**, from 0.0686 to 0.0628 N·m. The force part shrinks with the shorter lever (0.0486 to 0.0351 N·m), but the rotor part grows (0.020 to 0.028 N·m), because the wheel must spin up faster for the same acceleration.
-- (c) Duty **rises**, from 0.43 to 0.55: the wheel must turn faster, 9.23 rad/s instead of 6.67, to reach the same 0.3 m/s. Smaller wheels trade top speed for torque, much like a higher gear ratio.
+- (c) Duty **rises**, from 0.44 to 0.56: the wheel must turn faster, 9.23 rad/s instead of 6.67, to reach the same 0.3 m/s. Smaller wheels trade top speed for torque, much like a higher gear ratio.
 
 **FP.04-E4:** Expect 19–21.5 rad/s (180–205 rpm) after scaling to 12 V. Readings 5–10% below 205 rpm are normal: gearbox friction, tolerance (± 10 rpm) and driver voltage drop. If the two wheels differ by more than about 5%, note it. That difference is what makes the robot curve in open loop ([08.01](../../08-control/08.01-open-vs-closed-loop.md)).
 
@@ -435,16 +435,16 @@ After [01.09](../../01-first-robot/01.09-reading-encoders.md), drive both wheels
    Torque = 0.7 × 56 × 2.0 = **78.4 mN·m**. Speed = 5000/56 = **89.3 rpm** (9.35 rad/s).
    </details>
 
-4. What is the maximum mechanical output power of the 520 1:56 at 11.1 V, and at what speed and torque does it occur?
+4. What is the maximum mechanical output power of the 520 1:56 at 10.8 V, and at what speed and torque does it occur?
    <details><summary>Answer</summary>
 
-   It occurs at half the no-load speed (9.93 rad/s) and half the stall torque (0.376 N·m): **3.74 W**, which is τ_s·ω_0/4.
+   It occurs at half the no-load speed (9.66 rad/s) and half the stall torque (0.366 N·m): **3.54 W**, which is τ_s·ω_0/4.
    </details>
 
 5. Predict: you fit a 1:30 gearbox instead of 1:56 and keep everything else the same. What happens to top speed, to torque margin with the arm on a 10° ramp, and to the slowest smooth speed?
    <details><summary>Answer</summary>
 
-   Top speed rises by about 62% (32.3 against 19.9 rad/s no-load at 11.1 V). The torque margin with the arm drops: 30% of stall instead of 17%, which runs hot. The slowest smooth speed gets worse: 0.1 m/s needs about 0.085 duty, below the 0.12 deadband.
+   Top speed rises by about 62% (31.4 against 19.3 rad/s no-load at 10.8 V). The torque margin with the arm drops: 31% of stall instead of 18%, which runs hot. The slowest smooth speed gets worse: 0.1 m/s needs about 0.087 duty, below the 0.12 deadband.
    </details>
 
 6. Debugging: a motor's datasheet says 6.5 kg·cm rated torque at 0.3 A, and 8.3 kg·cm stall at 4 A. Why don't you trust the rated line?
@@ -464,7 +464,7 @@ After [01.09](../../01-first-robot/01.09-reading-encoders.md), drive both wheels
 Write `size_drive.py`, a small command-line tool. It reads robot mass, wheel radius and a list of scenarios (slope, acceleration, speed) from a YAML file, plus a list of candidate motors (no-load rpm, stall kg·cm, stall A, rated V). For each candidate it prints a table with percent of stall, duty, speed headroom and a traction check (use FP.03's load-transfer formula with a given μ). It then recommends the best motor that passes every scenario.
 
 **Acceptance criteria:**
-- For karmel's four scenarios at 11.1 V with μ = 0.6, it recommends the 520 1:56 and flags the 1:30 as "hot" in scenarios C and D.
+- For karmel's four scenarios at 10.8 V with μ = 0.6, it recommends the 520 1:56 and flags the 1:30 as "hot" in scenarios C and D.
 - It flags a traction failure for a 15° ramp at 0.3 m/s² on karmel.
 - It rejects a candidate whose duty for 0.1 m/s is below the configured deadband of 0.12.
 - It has pytest tests for the unit conversions and the straight-line model (for example, output power at half stall equals τ_s·ω_0/4).

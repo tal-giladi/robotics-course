@@ -109,8 +109,8 @@ $$h_1 = \mathrm{ReLU}(1.6u - 2.08),\quad h_2 = \mathrm{ReLU}(1.6u - 20.08),\quad
 
 | duty, battery | $u$ (V) | $h_1$ | $h_2$ | $\hat y$ (rad/s) | meaning |
 |---|---|---|---|---|---|
-| 0.10, 11.1 V | 1.11 | ReLU(−0.304) = 0 | 0 | 0 | inside the deadband |
-| 0.50, 11.1 V | 5.55 | 6.80 | 0 | 6.80 | linear region |
+| 0.10, 10.8 V | 1.08 | ReLU(−0.352) = 0 | 0 | 0 | inside the deadband |
+| 0.50, 10.8 V | 5.40 | 6.56 | 0 | 6.56 | linear region |
 | 1.00, 12.6 V | 12.6 | 18.08 | ReLU(0.08) = 0.08 | 18.00 | saturation at 18 rad/s |
 
 Two neurons: deadband, slope and saturation. Training finds numbers like these automatically, from data.
@@ -255,9 +255,9 @@ def main() -> None:
         print(f"hidden={hidden:2d} relu={relu!s:5}  params={model.n_params()}  "
               f"test RMSE {rmse:.2f} rad/s  ({time.perf_counter() - t0:.1f} s)")
 
-    q = (np.array([[0.05, 11.1], [0.10, 11.1], [0.20, 11.1], [0.50, 11.1]]) - mean) / std
-    print("duty 0.05/0.10/0.20/0.50 at 11.1 V ->", np.round(model.forward(theta, q), 2),
-          "(truth 0.00 0.00 1.47 6.80)")
+    q = (np.array([[0.05, 10.8], [0.10, 10.8], [0.20, 10.8], [0.50, 10.8]]) - mean) / std
+    print("duty 0.05/0.10/0.20/0.50 at 10.8 V ->", np.round(model.forward(theta, q), 2),
+          "(truth 0.00 0.00 1.38 6.56)")
 
 
 if __name__ == "__main__":
@@ -269,10 +269,10 @@ Output (Python 3.14, numpy 2.5; the seconds depend on your machine and on what e
 ```text
 hidden= 8 relu=False  params=33  test RMSE 0.57 rad/s  (1.0 s)
 hidden= 8 relu=True   params=33  test RMSE 0.36 rad/s  (1.0 s)
-duty 0.05/0.10/0.20/0.50 at 11.1 V -> [-0.28  0.35  1.6   6.95] (truth 0.00 0.00 1.47 6.80)
+duty 0.05/0.10/0.20/0.50 at 10.8 V -> [-0.27  0.35  1.61  6.57] (truth 0.00 0.00 1.38 6.56)
 ```
 
-Compare with FML.02: the linear model on raw features had RMSE 0.57 — the network without activations gets *exactly* that, because it is a linear model. With ReLU, 0.36, close to the 0.30 noise floor and without anyone designing the duty·volts or deadband features. The predictions near the deadband are the hardest part (−0.28 and 0.35 instead of 0): only 300 samples, few of them in the deadband, and 8 kinks to share.
+Compare with FML.02: the linear model on raw features had RMSE 0.57 — the network without activations gets *exactly* that, because it is a linear model. With ReLU, 0.36, close to the 0.30 noise floor and without anyone designing the duty·volts or deadband features. The predictions near the deadband are the hardest part (−0.27 and 0.35 instead of 0): only 300 samples, few of them in the deadband, and 8 kinks to share.
 
 ## Exercise
 

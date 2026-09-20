@@ -50,11 +50,11 @@ def convex_hull_2d(points: list[tuple[float, float]]) -> list[tuple[float, float
 
 
 def support_polygon(wheel_separation_m: float, caster_x_m: float,
-                    front_caster_x_m: float | None = None) -> list[tuple[float, float]]:
+                    extra_caster_x_m: float | None = None) -> list[tuple[float, float]]:
     half = wheel_separation_m / 2.0
     contacts = [(0.0, +half), (0.0, -half), (caster_x_m, 0.0)]
-    if front_caster_x_m is not None:
-        contacts += [(front_caster_x_m, +half), (front_caster_x_m, -half)]
+    if extra_caster_x_m is not None:
+        contacts += [(extra_caster_x_m, +half), (extra_caster_x_m, -half)]
     return convex_hull_2d(contacts)
 
 

@@ -81,7 +81,7 @@ $$V = I \cdot R \qquad I = \frac{V}{R} \qquad R = \frac{V}{I}$$
 Examples:
 - 12.6 V across 122 kΩ: $I = 12.6 / 122{,}000 = 0.000103$ A = **103 µA**.
 - 1.67 mA through 3 kΩ: $V = 0.00167 \times 3{,}000 =$ **5.0 V**.
-- A motor winding draws 3.5 A when stalled at 11.1 V: $R = 11.1 / 3.5 ≈$ **3.2 Ω**. (When the motor
+- A motor winding draws 3.4 A when stalled at 10.8 V: $R = 10.8 / 3.4 ≈$ **3.2 Ω**. (When the motor
   turns, it generates a back-voltage and draws far less — [FE.10](FE.10-dc-motors.md).)
 
 ### Level 2 — Series and parallel
@@ -135,7 +135,7 @@ $$V_{out} = V_{in} \cdot \frac{R_{bottom}}{R_{top} + R_{bottom}}$$
 | Battery | $V_{out} = V_{in} \times 22/122$ |
 |---|---|
 | 12.6 V (full) | **2.272 V** |
-| 11.1 V (nominal) | 2.002 V |
+| 10.8 V (nominal) | 1.948 V |
 | 9.9 V (course cutoff) | 1.785 V |
 | 9.0 V (empty) | 1.623 V |
 
@@ -279,7 +279,7 @@ def design(v_in_max: float, v_out_max: float, i_max: float,
 
 if __name__ == "__main__":
     course = Divider(100_000, 22_000)  # labs/config/karmel.yaml: battery_adc
-    for v in (12.6, 11.1, 9.9, 9.0):
+    for v in (12.6, 10.8, 9.9, 9.0):
         print(f"battery {v:5.2f} V -> ADC pin {course.v_out(v):.3f} V")
     print(f"current at 12.6 V: {course.current(12.6) * 1e6:.0f} uA, "
           f"source resistance {course.source_resistance / 1e3:.1f} kOhm, "
@@ -298,7 +298,7 @@ Output:
 
 ```text
 battery 12.60 V -> ADC pin 2.272 V
-battery 11.10 V -> ADC pin 2.002 V
+battery 10.80 V -> ADC pin 1.948 V
 battery  9.90 V -> ADC pin 1.785 V
 battery  9.00 V -> ADC pin 1.623 V
 current at 12.6 V: 103 uA, source resistance 18.0 kOhm, pin reaches 3.3 V at 18.3 V

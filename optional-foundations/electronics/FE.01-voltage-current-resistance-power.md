@@ -83,7 +83,7 @@ circuit, which you will use in [FE.02](FE.02-ohms-law-series-parallel.md).
 
 | Robot part | Electrical role | Typical numbers on karmel |
 |---|---|---|
-| 3S Li-ion pack | voltage source | 9.0 V empty … 11.1 V nominal … 12.6 V full |
+| 3S Li-ion pack | voltage source | 9.0 V empty … 10.8 V nominal … 12.6 V full |
 | Buck converter | converts battery voltage to 5.0 V for the Pi | delivers up to 5 A |
 | Raspberry Pi 5 | load | about 5.1 V × 1–2 A while busy |
 | Motor (Yahboom 520, 12 V) | load, current varies with torque | a few hundred mA cruising, 3–4 A stalled |
@@ -144,18 +144,18 @@ $$P = I^2 R = \frac{V^2}{R}$$
 Worked examples with karmel's parts:
 
 1. **Raspberry Pi 5 while busy**: 5.1 V × 1.5 A = **7.65 W**.
-2. **Motor stalled** (wheel blocked; the Yahboom 520 stalls at about 3–4 A): 11.1 V × 3.5 A = **38.85 W**
-   per motor. Two stalled motors ≈ 78 W — more than ten times the Pi. Stall current decides fuse, wire
+2. **Motor stalled** (wheel blocked; the Yahboom 520 stalls at about 3–4 A): 10.8 V × 3.5 A = **37.8 W**
+   per motor. Two stalled motors ≈ 76 W — about ten times the Pi. Stall current decides fuse, wire
    and driver sizes ([02.02 Power budget](../../02-robot-electronics/02.02-power-budget.md)).
 3. **LED resistor**: a 330 Ω resistor with 1.3 V across it: $P = V^2/R = 1.3^2 / 330 = 0.0051$ W =
    **5.1 mW**. A standard ¼ W (250 mW) resistor won't even get warm.
-4. **Current from power**: a 10 W load on the 11.1 V battery draws $I = P/V = 10/11.1 ≈$ **0.90 A**.
+4. **Current from power**: a 10 W load on the 10.8 V battery draws $I = P/V = 10/10.8 ≈$ **0.93 A**.
    The same 10 W at 5 V draws 2 A. Lower voltage → more current for the same power → thicker wires.
 
 **Energy** is power × time: $E = P \cdot t$. A battery's energy is $E = V_{nominal} \cdot Q$.
 
-Example: karmel's pack stores 11.1 V × 3.5 Ah = **38.85 Wh**. If the whole robot averages 18 W,
-runtime ≈ 38.85 / 18 ≈ **2.2 h** (upper bound: you shouldn't drain the pack to empty, and converters
+Example: karmel's pack stores 10.8 V × 3.5 Ah = **37.8 Wh**. If the whole robot averages 18 W,
+runtime ≈ 37.8 / 18 ≈ **2.1 h** (upper bound: you shouldn't drain the pack to empty, and converters
 waste some power — the code below includes a 90 % efficient buck converter).
 
 ### Level 4 — Why a 12 V battery is dangerous
@@ -197,9 +197,9 @@ lesson.
 
 ```mermaid
 flowchart LR
-    B["3S Li-ion pack<br/>11.1 V nominal, 38.85 Wh"] --> F["Fuse"] --> S["Switch"]
+    B["3S Li-ion pack<br/>10.8 V nominal, 37.8 Wh"] --> F["Fuse"] --> S["Switch"]
     S --> M["Motor driver + 2 motors<br/>~9 W cruising, ~78 W stalled"]
-    S --> K["Buck converter 90 %<br/>11.1 V → 5 V"]
+    S --> K["Buck converter 90 %<br/>10.8 V → 5 V"]
     K --> P["Raspberry Pi 5<br/>~7.7 W busy"]
     P -->|"USB 5 V"| C["Pico 2 + sensors<br/>~0.5 W"]
 ```
@@ -226,7 +226,7 @@ class Load:
         return self.volts * self.amps
 
 
-BATTERY_NOMINAL_V = 11.1   # labs/config/karmel.yaml: battery.nominal_v
+BATTERY_NOMINAL_V = 10.8   # labs/config/karmel.yaml: battery.nominal_v (3 x 3.6 V, Samsung 35E)
 BATTERY_CAPACITY_AH = 3.5  # labs/config/karmel.yaml: battery.capacity_ah
 BUCK_EFFICIENCY = 0.90     # assumption: a decent buck converter (FE.15)
 
@@ -235,8 +235,8 @@ loads_5v = [
     Load("Pico 2 + sensors", 5.0, 0.1),
 ]
 loads_battery = [
-    Load("left motor (cruising)", 11.1, 0.4),
-    Load("right motor (cruising)", 11.1, 0.4),
+    Load("left motor (cruising)", 10.8, 0.4),
+    Load("right motor (cruising)", 10.8, 0.4),
 ]
 
 p_5v = sum(l.watts for l in loads_5v)
@@ -258,11 +258,11 @@ Output:
 ```text
 Raspberry Pi 5 (busy)        5.1 V x 1.50 A =  7.65 W
 Pico 2 + sensors             5.0 V x 0.10 A =  0.50 W
-left motor (cruising)       11.1 V x 0.40 A =  4.44 W
-right motor (cruising)      11.1 V x 0.40 A =  4.44 W
+left motor (cruising)       10.8 V x 0.40 A =  4.32 W
+right motor (cruising)      10.8 V x 0.40 A =  4.32 W
 5 V rail total              8.15 W -> buck input  9.06 W
-Total from battery         17.94 W = 1.62 A at 11.1 V
-Battery energy             38.85 Wh -> runtime ~ 2.17 h
+Total from battery         17.70 W = 1.64 A at 10.8 V
+Battery energy             37.80 Wh -> runtime ~ 2.14 h
 ```
 
 The load currents are illustrative assumptions, not measurements. In [FE.03](FE.03-multimeter.md) you
@@ -276,7 +276,7 @@ Hardware: none. Compute (by hand first, then check with Python):
 
 1. The Pico 2's 3.3 V pin powers a sensor that draws 20 mA. What power does the sensor use?
 2. A buck converter delivers 5.0 V at 3.0 A to the Pi. It is 90 % efficient. How much power does it take
-   from the battery, and what current is that at 11.1 V?
+   from the battery, and what current is that at 10.8 V?
 3. A 22 kΩ resistor has 2.27 V across it. What current flows, and what power does it dissipate?
 4. How many times more current does one stalled motor (3.5 A) need than a Pico GPIO pin's 4 mA design
    current?
@@ -310,7 +310,7 @@ Hardware: none. Modify `fe01_power_budget.py`:
 
 **FE.01-E1:**
 1. $P = 3.3 \times 0.020 = 0.066$ W = **66 mW**.
-2. Output 15.0 W → input $15.0/0.9 ≈$ **16.7 W** → $16.7/11.1 ≈$ **1.50 A** from the battery.
+2. Output 15.0 W → input $15.0/0.9 ≈$ **16.7 W** → $16.7/10.8 ≈$ **1.54 A** from the battery.
 3. $I = 2.27/22{,}000 ≈$ **103 µA**; $P = V^2/R = 2.27^2/22{,}000 ≈$ **0.23 mW**.
 4. $3.5 / 0.004 =$ **875 times**.
 5. $12.6 \times 0.8 =$ **10.1 W**.
@@ -321,10 +321,10 @@ current order. Without a resistor nothing sets the current: 3.3 V is well above 
 curve lets the current climb to tens of mA or more, limited only by the regulator and the LED's small
 internal resistance. The LED overheats and fails. Always use a resistor.
 
-**FE.01-E3:** stalled: motors 2 × 11.1 × 3.5 = 77.7 W, total ≈ **86.8 W**, ≈ **7.8 A** from the battery,
+**FE.01-E3:** stalled: motors 2 × 10.8 × 3.5 = 75.6 W, total ≈ **84.7 W**, ≈ **7.8 A** from the battery,
 "runtime" ≈ 0.45 h (a stall that long would overheat the motors and trip the fuse — the number shows why
 stall is an emergency, not a scenario). With the LiDAR: 5 V rail 10.65 W → buck input ≈ 11.83 W → total
-≈ 20.71 W, runtime ≈ **1.88 h**. At 17.94 W: 12.6 V → **1.42 A**; 9.9 V → **1.81 A** — as the battery
+≈ 20.47 W, runtime ≈ **1.85 h**. At 17.70 W: 12.6 V → **1.40 A**; 9.9 V → **1.79 A** — as the battery
 empties, the same power needs more current.
 
 ## Troubleshooting
@@ -355,8 +355,8 @@ turns this into a proper estimate.
   doesn't force 5 A into the Pi; the Pi takes what it needs.
 - **Talking about "the voltage at a point"** without a reference. Always "between X and GND" — or between
   two named points. Probing a pin with the meter's black lead not on GND gives nonsense.
-- **Confusing Ah (charge) with Wh (energy).** A 3.5 Ah pack at 11.1 V and a 3.5 Ah phone cell at 3.7 V
-  are very different: 38.85 Wh vs 12.95 Wh.
+- **Confusing Ah (charge) with Wh (energy).** A 3.5 Ah pack at 10.8 V and a 3.5 Ah phone cell at 3.7 V
+  are very different: 37.8 Wh vs 12.95 Wh.
 - **Believing low voltage means no danger.** The shock risk is low; the fire risk from a short circuit is
   high. Fuse and insulate.
 - **Sizing wires and fuses for average current.** Size for the worst realistic case (stall, startup
@@ -376,11 +376,11 @@ turns this into a proper estimate.
 
    $I = P/V = 7.65 / 5.1 =$ **1.5 A**.
    </details>
-3. A robot uses 20 W on average. Its battery is 11.1 V, 3.5 Ah. Ignoring losses and reserve, how long does it
+3. A robot uses 20 W on average. Its battery is 10.8 V, 3.5 Ah. Ignoring losses and reserve, how long does it
    run?
    <details><summary>Answer</summary>
 
-   Energy = 11.1 × 3.5 = 38.85 Wh; 38.85 / 20 ≈ **1.94 h**. Real runtime will be shorter: you stop at the
+   Energy = 10.8 × 3.5 = 37.8 Wh; 37.8 / 20 ≈ **1.89 h**. Real runtime will be shorter: you stop at the
    cutoff voltage and converters waste power.
    </details>
 4. Why does a short circuit on a 12.6 V Li-ion pack cause a fire risk while touching both terminals with

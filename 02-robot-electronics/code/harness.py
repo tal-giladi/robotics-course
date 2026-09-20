@@ -53,9 +53,9 @@ class Run:
 
 
 KARMEL_RUNS = [
-    Run("battery -> fuse -> switch -> power board", 8.0, 0.30, 11.1, 0.03),
-    Run("power board -> each DRV8874 VIN", 3.0, 0.15, 11.1, 0.02),
-    Run("DRV8874 OUT -> motor", 3.0, 0.25, 11.1, 0.03),
+    Run("battery -> fuse -> switch -> power board", 8.0, 0.30, 10.8, 0.03),
+    Run("power board -> each DRV8874 VIN", 3.0, 0.15, 10.8, 0.02),
+    Run("DRV8874 OUT -> motor", 3.0, 0.25, 10.8, 0.03),
     Run("5 V regulator -> Pi 5 (USB-C pigtail)", 3.8, 0.15, 5.0, 0.02),
     Run("Pico 3V3 -> sensors", 0.1, 0.30, 3.3, 0.02),
 ]

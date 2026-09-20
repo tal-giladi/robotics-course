@@ -75,8 +75,8 @@ A **free-body diagram** (FBD) is a drawing of one body with every external force
 
 Model values from [`labs/config/karmel.yaml`](../../labs/config/karmel.yaml) and this lesson:
 
-- Mass 1.6 kg. Caster 0.10 m behind the wheel axle.
-- Centre of mass (CoM) 0.04 m behind the axle and 0.05 m above the ground. This is a modelling assumption: the battery and Pi sit behind the axle. Exercise E4 shows how to measure the real value.
+- Mass 1.6 kg. Caster 0.10 m **in front of** the wheel axle (`chassis.caster_offset_x_m: 0.10`).
+- Centre of mass (CoM) 0.04 m in front of the axle and 0.05 m above the ground. This is a modelling assumption: the battery sits between the axle and the caster, which is where it has to be if the caster is to carry any load at all. Exercise E4 shows how to measure the real value.
 - Rolling-resistance coefficient $c_{rr} = 0.02$, a typical value for rubber tyres on a hard floor. Treat it as an assumption and measure yours if it matters.
 
 Forces:
@@ -112,25 +112,27 @@ Perpendicular to the ramp nothing accelerates, so the normal forces carry the pe
 
 $$N_w + N_c = W\cos\theta$$
 
-The robot also does not pitch (rotate nose-up or nose-down), so the **moments** about any point must balance. A moment is force × lever arm; [FP.04](FP.04-torque-gears-wheels.md) calls it torque. Take moments about the wheel contact point, where $F$ and $N_w$ have zero lever arm. Let $d_c = 0.10$ m be the caster distance, $d_g = 0.04$ m the CoM distance behind the axle, and $h = 0.05$ m the CoM height:
+The robot also does not pitch (rotate nose-up or nose-down), so the **moments** about any point must balance. A moment is force × lever arm; [FP.04](FP.04-torque-gears-wheels.md) calls it torque. Take moments about the wheel contact point, where $F$ and $N_w$ have zero lever arm. Let $d_c = 0.10$ m be the caster distance *ahead* of the axle, $d_g = 0.04$ m the CoM distance ahead of the axle, and $h = 0.05$ m the CoM height:
 
-$$N_c \, d_c = W\cos\theta \, d_g + (W\sin\theta + m a)\, h$$
+$$N_c \, d_c = W\cos\theta \, d_g - (W\sin\theta + m a)\, h$$
 
-The last term is the key insight. The downhill pull and the "inertial" pull $m a$ act at the CoM, *above* the floor. So they tilt load backwards onto the caster, away from the drive wheels.
+The **minus** sign is the key insight, and it is the one that flips when you move the caster. The downhill pull and the "inertial" pull $m a$ act at the CoM, *above* the floor, so they tilt load backwards — away from the front contact and onto the drive wheels. With the caster in front, climbing and accelerating *help* traction. (Put the caster behind, as karmel had it until 2026-09, and the same two terms take load off the drive wheels exactly when you need grip.)
 
 *Worked example (5°, 0.3 m/s²):*
 
-$$N_c = \frac{15.636 \times 0.04 + (1.368 + 0.480)\times 0.05}{0.10} = \frac{0.6254 + 0.0924}{0.10} = 7.18\ \text{N}$$
+$$N_c = \frac{15.636 \times 0.04 - (1.368 + 0.480)\times 0.05}{0.10} = \frac{0.6254 - 0.0924}{0.10} = 5.33\ \text{N}$$
 
-$$N_w = 15.636 - 7.18 = 8.46\ \text{N}$$
+$$N_w = 15.636 - 5.33 = 10.31\ \text{N}$$
 
-Standing still on the flat, the wheels carry 9.42 N and the caster 6.28 N. On the ramp while accelerating, the wheels lose 0.96 N of load, about 10%. Traction is proportional to the load on the *driven* wheels ([FP.03](FP.03-friction-traction.md)). So a rear caster works against you exactly when you need grip.
+Standing still on the flat, the wheels carry 9.42 N and the caster 6.28 N. On the ramp while accelerating, the wheels **gain** 0.89 N of load, about 9%. Traction is proportional to the load on the *driven* wheels ([FP.03](FP.03-friction-traction.md)), so the front caster is working for you here.
+
+It is not free. The same equation says $N_c$ reaches **zero** — the caster lifts and the robot rocks back onto its tail — when $a = g\,d_g/h = 9.81 \times 0.04/0.05 = 7.9$ m/s² on the flat, far above karmel's 1.0 m/s² limit for this model. But the simulated robot's URDF puts its CoM only 1.7 mm ahead of the axle, which gives 0.33 m/s², and it does visibly rock nose-up under a full-rate acceleration step ([`labs/TESTED.md`](../../labs/TESTED.md) §3.1). $d_g$ is the number that decides it, and $d_g$ is where you put the battery.
 
 ### Level 4 — A free-body diagram is a linear system
 
 Three unknowns ($F$, $N_w$, $N_c$) and three equations (forces along the slope, forces perpendicular to it, moments) make a 3×3 linear system $A\mathbf{x} = \mathbf{b}$:
 
-$$\begin{bmatrix}1 & -c_{rr} & -c_{rr}\\ 0 & 1 & 1\\ 0 & 0 & d_c\end{bmatrix}\begin{bmatrix}F\\N_w\\N_c\end{bmatrix} = \begin{bmatrix} m a + W\sin\theta\\ W\cos\theta\\ W\cos\theta\, d_g + (W\sin\theta + m a) h\end{bmatrix}$$
+$$\begin{bmatrix}1 & -c_{rr} & -c_{rr}\\ 0 & 1 & 1\\ 0 & 0 & d_c\end{bmatrix}\begin{bmatrix}F\\N_w\\N_c\end{bmatrix} = \begin{bmatrix} m a + W\sin\theta\\ W\cos\theta\\ W\cos\theta\, d_g - (W\sin\theta + m a) h\end{bmatrix}$$
 
 `numpy.linalg.solve` does the rest ([FM.19](../mathematics/FM.19-linear-systems-least-squares.md) explains why that works). Writing it this way scales well: add the arm as another mass and it is just more terms in **b**.
 
@@ -144,17 +146,18 @@ Karmel climbing a ramp, seen from its left side (x forward and uphill):
                                      W cos θ  (into the floor)
                                   inertial term m·a (acts like a backwards pull at the CoM)
                      ┌───────────────────────────────────┐
-                     │                ● CoM              │  h = 0.05 m above the floor
-                     └───○──────────────────────────(O)──┘
-                  caster ○                          (O) drive wheel, r = 0.045 m
-                         ▲ N_c                       ▲ N_w      ──► F (traction, floor on wheel)
-       ══════════════════╧═══════════════════════════╧════════════════ floor, tilted up by θ
-                    x = −0.10 m       x = −0.04 m    x = 0 (axle)
-                    (caster)          (CoM)
+                     │              ● CoM                │  h = 0.05 m above the floor
+                     └──(O)──────────────────────────○───┘
+        drive wheel, r = 0.045 m (O)                 ○ caster
+                              ▲ N_w                  ▲ N_c
+       ═══════════════════════╧══════════════════════╧═════════════════ floor, tilted up by θ
+                        x = 0 (axle)  x = +0.04 m   x = +0.10 m
+                                      (CoM)         (caster)
+                   ──► F (traction, floor on wheel), robot driving towards +x, to the right
 
   Along the floor:              F − W sin θ − c_rr·W cos θ = m·a
   Perpendicular to the floor:   N_w + N_c = W cos θ
-  Moments about wheel contact:  N_c·0.10 = W cos θ·0.04 + (W sin θ + m·a)·0.05
+  Moments about wheel contact:  N_c·0.10 = W cos θ·0.04 − (W sin θ + m·a)·0.05
 ```
 
 How the three laws enter the calculation:
@@ -194,9 +197,9 @@ G = 9.81  # m/s^2
 @dataclass(frozen=True)
 class Robot:
     mass_kg: float = 1.6
-    com_x_m: float = -0.04        # centre of mass, forward of the wheel axle (negative = behind)
+    com_x_m: float = 0.04         # centre of mass, forward of the wheel axle (negative = behind)
     com_h_m: float = 0.05         # centre of mass height above the ground
-    caster_x_m: float = -0.10     # ball caster position (karmel.yaml)
+    caster_x_m: float = 0.10      # ball caster (karmel.yaml): +0.10 = IN FRONT of the axle
     c_rr: float = 0.02            # rolling-resistance coefficient (assumed: hard floor, rubber tyres)
 
 
@@ -207,19 +210,22 @@ def solve_fbd(robot: Robot, slope_deg: float, accel: float) -> dict[str, float]:
     Equations (Newton's 2nd law along x, equilibrium along z, no pitching about the wheel contact):
       F - W sin(th) - c_rr (N_w + N_c) = m a
       N_w + N_c - W cos(th)            = 0
-      N_c * (-caster_x) - W cos(th) * (-com_x) - (W sin(th) + m a) * com_h = 0
+      N_c * caster_x - W cos(th) * com_x + (W sin(th) + m a) * com_h = 0
+
+    The third equation is written for a signed caster_x, so it is correct for a caster at either
+    end; only the sign of the load transfer changes.
     """
     th = math.radians(slope_deg)
     m, W = robot.mass_kg, robot.mass_kg * G
     A = np.array([
         [1.0, -robot.c_rr, -robot.c_rr],
         [0.0, 1.0, 1.0],
-        [0.0, 0.0, -robot.caster_x_m],
+        [0.0, 0.0, robot.caster_x_m],
     ])
     b = np.array([
         m * accel + W * math.sin(th),
         W * math.cos(th),
-        W * math.cos(th) * (-robot.com_x_m) + (W * math.sin(th) + m * accel) * robot.com_h_m,
+        W * math.cos(th) * robot.com_x_m - (W * math.sin(th) + m * accel) * robot.com_h_m,
     ])
     F, N_w, N_c = np.linalg.solve(A, b)
     return {"weight": W, "gravity_along": W * math.sin(th), "inertial": m * accel,
@@ -276,19 +282,19 @@ Output:
 ```text
 case                                  W  W sin    m a   roll      F    N_w    N_c   [N]
 standing, flat                   15.696  0.000  0.000  0.314  0.314  9.418  6.278
-0.3 m/s^2, flat                  15.696  0.000  0.480  0.314  0.794  9.178  6.518
-0.3 m/s^2, 5 deg ramp            15.696  1.368  0.480  0.313  2.161  8.458  7.179
-1.0 m/s^2, flat                  15.696  0.000  1.600  0.314  1.914  8.618  7.078
+0.3 m/s^2, flat                  15.696  0.000  0.480  0.314  0.794  9.658  6.038
+0.3 m/s^2, 5 deg ramp            15.696  1.368  0.480  0.313  2.161 10.306  5.331
+1.0 m/s^2, flat                  15.696  0.000  1.600  0.314  1.914 10.218  5.478
 1.0 N push on the flat: a = 0.4288 m/s^2, v(2 s) = 0.858 m/s
 saved fp02_ramp.png
 ```
 
 **The plot `fp02_ramp.png`** shows two straight-ish lines against ramp angle (0–20°):
 
-- The traction force needed climbs from 0.79 N on the flat to about 6.1 N at 20°.
-- The normal force on the drive wheels *falls* from 9.18 N to about 5.9 N.
+- The traction force needed climbs from 0.79 N on the flat to about 6.14 N at 20°.
+- The normal force on the drive wheels *rises* too, from 9.66 N to about 11.77 N, because a front caster sheds load backwards onto the drive wheels as the slope steepens.
 
-The lines cross near 19.5°. Past that point the wheels would need more friction force than the load pressing on them, a friction coefficient above 1. Ordinary rubber on a household floor cannot do that ([FP.03](FP.03-friction-traction.md)).
+The lines therefore never cross in this range: at 20° the ratio $F/N_w$ is only **0.52**, and it reaches a typical rubber-on-hardfloor $\mu = 0.8$ at about **36°**. Traction is not what stops karmel climbing; motor torque is ([FP.04](FP.04-torque-gears-wheels.md)). Redraw the same plot with `caster_x_m = -0.10` and the picture inverts — $N_w$ falls, the lines cross near 19.5°, and grip becomes the limit. One sign in one config file, two different robots.
 
 ## Exercise
 
@@ -317,7 +323,7 @@ Hardware: `robot-base` plus a kitchen scale. No-hardware alternative: use the nu
 
 1. Weigh the whole robot.
 2. Put only the caster on the scale. Rest both wheels on a book whose top is at the same height as the scale's surface, and read the scale.
-3. Compute $N_c$ in newtons. The CoM distance behind the axle follows from the moment balance on the flat: $d_g = d_c\,N_c/W$.
+3. Compute $N_c$ in newtons. The CoM distance *ahead* of the axle follows from the moment balance on the flat: $d_g = d_c\,N_c/W$, with $d_c = +0.10$ m.
 
 ## Expected result
 
@@ -325,20 +331,20 @@ Hardware: `robot-base` plus a kitchen scale. No-hardware alternative: use the nu
 - (a) $W\sin 10° = 15.696 \times 0.17365 = 2.726$ N.
 - (b) $0.02 \times 15.696 \times \cos10° = 0.309$ N.
 - (c) $F = 0.800 + 2.726 + 0.309 = 3.835$ N.
-- (d) $N_c = 7.946$ N and $N_w = 7.512$ N. The caster now carries *more* than both drive wheels together.
+- (d) $N_c = 4.420$ N and $N_w = 11.037$ N. The drive wheels now carry 70% of the weight — more than on the flat, because climbing tips load off the front caster and onto them.
 
 `solve_fbd` agrees to three decimals.
 
-**FP.02-E2:** $F = -2.655$ N, $N_w = 10.866$ N, $N_c = 4.771$ N.
+**FP.02-E2:** $F = -2.655$ N, $N_w = 7.898$ N, $N_c = 7.739$ N.
 - $F$ is negative: the floor must push the robot *backwards* (uphill) through the wheels to slow it. That braking force is the inertial term plus the downhill pull, minus the rolling resistance that helps.
-- The wheels carry more load because braking tilts the load forward over the axle. This is the same effect that tips a robot onto its nose ([FP.07](FP.07-center-of-mass-stability.md)).
+- The wheels carry **less** load than when standing still (7.90 N against 9.42 N), because braking and the downhill pull both tilt load forward, onto the front caster. That is the direction that eventually noses a robot over ([FP.07](FP.07-center-of-mass-stability.md)) — but with the caster 0.10 m in front of the axle, this robot runs out of grip long before it runs out of support.
 
 **FP.02-E3:**
 1. Yes, exactly: 4.321 N against 2.161 N. Every term is proportional to mass, and the output shows 4.321 because of rounding.
-2. Up: 7.078 N against 6.278 N. Acceleration shifts load backwards onto the caster.
+2. **Down:** 5.478 N against 6.278 N. Acceleration shifts load backwards, off a *front* caster and onto the drive wheels. (Predict this one before running it — most people answer "up", which is the right answer for the rear caster this robot used to have.)
 3. Zero net force. The wheels push 0.314 N forwards and rolling resistance pushes 0.314 N back.
 
-**FP.02-E4:** Expect a total of 1.4–1.8 kg for the stage-1 build. With the lesson's model values the scale reads about **640 g** under the caster (6.28 N), which gives $d_g = 0.10 \times 6.28/15.70 = 0.040$ m. A reading higher than 640 g means your CoM sits further back.
+**FP.02-E4:** Expect a total of 1.4–1.8 kg for the stage-1 build. With the lesson's model values the scale reads about **640 g** under the caster (6.28 N), which gives $d_g = 0.10 \times 6.28/15.70 = 0.040$ m — the CoM is 40 mm *ahead* of the axle, between it and the caster. A reading lower than 640 g means your CoM sits further back, closer to the axle; if the caster reads nothing at all, the CoM is behind the axle and the robot is resting on its tail.
 
 ## Troubleshooting
 
@@ -348,7 +354,7 @@ Hardware: `robot-base` plus a kitchen scale. No-hardware alternative: use the nu
 3. Check the sign convention of the slope and acceleration inputs (uphill and forward are positive).
 
 ### Symptom: the solver returns a negative normal force
-1. A negative $N_c$ means the model wants the floor to *pull the caster down*. Floors cannot pull, so the caster has lifted: the robot is pitching forward or rearing up.
+1. A negative $N_c$ means the model wants the floor to *pull the caster down*. Floors cannot pull, so the caster has lifted: with karmel's front caster that means the robot is rearing up onto its tail, and with a rear caster it means it is pitching onto its nose.
 2. Your inputs have gone past the tipping limit. This is not a solver bug. [FP.07](FP.07-center-of-mass-stability.md) treats it properly.
 
 ### Symptom: the real robot needs much more force than the model predicts
@@ -393,13 +399,13 @@ Hardware: `robot-base` plus a kitchen scale. No-hardware alternative: use the nu
 5. Predict: karmel accelerates hard uphill. Does the load on the drive wheels increase or decrease, and why does it matter?
    <details><summary>Answer</summary>
 
-   It decreases. The downhill pull and the inertial term act at the CoM, above the floor, and tilt load onto the rear caster. Less load on the drive wheels means less available traction, so the wheels can slip exactly when you need grip.
+   It **increases** — 10.31 N against 9.42 N standing still — because karmel's caster is in *front* of the axle, and the downhill pull and the inertial term act at the CoM above the floor, tilting load backwards off the caster and onto the drive wheels. More load means more available traction, exactly when you need grip. The answer depends entirely on which end the caster is at: with a rear caster the same two terms unload the drive wheels, which is why "rear caster" and "front caster" are different robots, not a detail.
    </details>
 
-6. Debugging: your free-body solver gives $N_c = -1.2$ N for a robot with the arm stretched forwards. Is the solver wrong?
+6. Debugging: your free-body solver gives $N_c = -1.2$ N after you move the battery to the rear edge of the plate. Is the solver wrong?
    <details><summary>Answer</summary>
 
-   Probably not. A negative normal force means the floor would have to pull the caster down, which is impossible. The caster has lifted and the robot is tipping forwards about the axle. Check stability with FP.07's support-polygon method.
+   No. A negative normal force means the floor would have to *pull the caster down*, which floors cannot do. $N_c$ goes negative exactly when the CoM crosses to the far side of the axle from the caster — here, behind it — so the front caster has lifted and the robot is sitting back on its tail. The model is telling you the truth about a configuration outside the support polygon; [FP.07](FP.07-center-of-mass-stability.md) is where that gets treated properly.
    </details>
 
 7. On a 5° ramp, what fraction of karmel's weight acts along the ramp?

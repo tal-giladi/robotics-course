@@ -11,7 +11,8 @@
 # SAFETY: measure the divider's middle point with a multimeter BEFORE connecting it to the
 # Pico: with a full battery it must be below 3.3 V (12.6 V -> about 2.27 V).
 #
-# A 3S Li-ion pack: 12.6 V full, about 11.1 V nominal, 10.5 V low (config.BATTERY_LOW_WARNING_V).
+# A 3S Li-ion pack: 12.6 V full, 10.8 V nominal (3 x 3.6 V, Samsung 35E), 10.5 V low
+# (config.BATTERY_LOW_WARNING_V).
 
 import time
 

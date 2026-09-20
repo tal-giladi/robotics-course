@@ -61,7 +61,7 @@ Think of a model as a service whose code is fixed but whose configuration file h
 
 ### What ML is not
 
-- **Not magic understanding.** A model that learned "speed vs duty" at 11.1 V has no idea what a battery is.
+- **Not magic understanding.** A model that learned "speed vs duty" at 10.8 V has no idea what a battery is.
 - **Not a replacement for physics you already know.** If an equation describes the thing well (wheel odometry, a rotation matrix), use the equation. ML is for when the rule is unknown, too messy to write (what does a "cup" look like in pixels?), or has parameters you can't measure directly.
 - **Not safe by default.** A learned component can output anything. Robots put classical guards around it: speed limits, watchdogs, sanity checks.
 
@@ -114,20 +114,20 @@ $$\theta^* = \arg\min_\theta \; \frac{1}{N}\sum_{i=1}^{N} L\big(f_\theta(x_i),\,
 
 For regression the usual loss is the squared error $L = (\hat y - y)^2$, so the objective is the mean squared error (MSE). [FML.04](FML.04-loss-functions.md) explains why, and [FML.05](FML.05-gradient-descent.md) explains how the $\arg\min$ is actually found.
 
-**Numerical example.** Three logged samples at 11.1 V (computed with Python from the course's motor model):
+**Numerical example.** Three logged samples at the 10.8 V nominal (computed with Python from the course's motor model):
 
 | duty $d$ | measured speed $y$ (rad/s) |
 |---|---|
-| 0.3 | 3.248 |
-| 0.5 | 6.800 |
-| 0.7 | 10.352 |
+| 0.3 | 3.104 |
+| 0.5 | 6.560 |
+| 0.7 | 10.016 |
 
-*Datasheet rule* $\hat y = 18d + 0$: predictions 5.4, 9.0, 12.6; errors 2.152, 2.2, 2.248;
-MSE $= (2.152^2 + 2.2^2 + 2.248^2)/3 = 4.84$ (rad/s)².
+*Datasheet rule* $\hat y = 18d + 0$: predictions 5.4, 9.0, 12.6; errors 2.296, 2.44, 2.584;
+MSE $= (2.296^2 + 2.44^2 + 2.584^2)/3 = 5.97$ (rad/s)².
 
-*Learned line* $\hat y = 17.76d - 2.08$ (what `np.polyfit` returns for these three points): errors 0, 0, 0; MSE $= 0$.
+*Learned line* $\hat y = 17.28d - 2.08$ (what `np.polyfit` returns for these three points): errors 0, 0, 0; MSE $= 0$.
 
-The learned intercept, −2.08 rad/s, is the deadband showing up in the numbers: the line crosses zero speed at $d = 2.08/17.76 = 0.117$, right where the motor starts turning.
+The learned intercept, −2.08 rad/s, is the deadband showing up in the numbers: the line crosses zero speed at $d = 2.08/17.28 = 0.120$, right where the motor starts turning.
 
 ### Level 4 — Training vs inference on a real robot
 
@@ -155,7 +155,7 @@ flowchart LR
     subgraph Offline["Training (desktop, once)"]
         L[Robot logs<br/>duty, speed] --> T[Training algorithm<br/>minimize loss]
         M0[Model family<br/>speed = a·duty + b] --> T
-        T --> P[Parameters<br/>a = 18.11, b = −2.13]
+        T --> P[Parameters<br/>a = 17.63, b = −2.13]
     end
     subgraph Online["Inference (robot, every cycle)"]
         D[Duty command] --> F[Frozen model]
@@ -181,7 +181,7 @@ import time
 
 import numpy as np
 
-BATTERY_V = 11.1  # nominal 3S Li-ion pack
+BATTERY_V = 10.8  # nominal 3S Li-ion pack (labs/config/karmel.yaml: battery.nominal_v)
 
 
 def true_wheel_speed(duty: np.ndarray, battery_v: float) -> np.ndarray:
@@ -237,15 +237,15 @@ if __name__ == "__main__":
 Output (tested with Python 3.14, numpy 2.5; timings vary by machine):
 
 ```text
-learned model: speed = 18.11 * duty + -2.13
-RMSE datasheet rule : 2.21 rad/s
+learned model: speed = 17.63 * duty + -2.13
+RMSE datasheet rule : 2.41 rad/s
 RMSE learned model  : 0.32 rad/s
-duty=0.40: predicted   5.11 rad/s, true   5.02 rad/s  (3.7 us)
-duty=0.05: predicted  -1.23 rad/s, true   0.00 rad/s  (0.6 us)
-duty=1.00: predicted  15.98 rad/s, true  15.68 rad/s  (0.2 us)
+duty=0.40: predicted   4.92 rad/s, true   4.83 rad/s  (3.7 us)
+duty=0.05: predicted  -1.25 rad/s, true   0.00 rad/s  (0.6 us)
+duty=1.00: predicted  15.50 rad/s, true  15.20 rad/s  (0.2 us)
 ```
 
-Read it line by line: the learned model is 7× more accurate than the datasheet rule on new data from the same range. RMSE (root mean squared error) is in the same unit as the label, rad/s, and 0.32 is close to the 0.3 rad/s encoder noise, which no model can remove. At duty 0.05 the model predicts a *negative* speed: physically impossible, because the log never went below 0.2. At duty 1.00 it happens to be right, because this motor really is linear up there. The model can't tell you which of those two situations you're in.
+Read it line by line: the learned model is about 8× more accurate than the datasheet rule on new data from the same range. RMSE (root mean squared error) is in the same unit as the label, rad/s, and 0.32 is close to the 0.3 rad/s encoder noise, which no model can remove. At duty 0.05 the model predicts a *negative* speed: physically impossible, because the log never went below 0.2. At duty 1.00 it happens to be right, because this motor really is linear up there. The model can't tell you which of those two situations you're in.
 
 ## Exercise
 
@@ -253,7 +253,7 @@ Read it line by line: the learned model is 7× more accurate than the datasheet 
 
 Hardware: none.
 
-1. Before running anything, write down what the learned line from the Code section predicts at duty 0.10 and at duty 0.0, and what the true speeds are. Use $\hat y = 18.11d - 2.13$ and the fact that the motor doesn't turn below duty ≈ 0.12 at 11.1 V.
+1. Before running anything, write down what the learned line from the Code section predicts at duty 0.10 and at duty 0.0, and what the true speeds are. Use $\hat y = 17.63d - 2.13$ and the fact that the motor doesn't turn below duty ≈ 0.12 at 10.8 V.
 2. Add `0.10` and `0.00` to the tuple in step 4 and run the script.
 3. In one sentence: what should a robot do with a learned model's output for inputs outside the training range?
 
@@ -269,7 +269,7 @@ Hardware: none.
 
 Hardware: none.
 
-With the three samples from Level 3 — (0.3, 3.248), (0.5, 6.800), (0.7, 10.352) — compute the MSE of the model $\hat y = 17d - 1.5$ by hand (calculator allowed). Is it better or worse than the datasheet rule's 4.84? Check with three lines of numpy.
+With the three samples from Level 3 — (0.3, 3.104), (0.5, 6.560), (0.7, 10.016) — compute the MSE of the model $\hat y = 17d - 1.5$ by hand (calculator allowed). Is it better or worse than the datasheet rule's 5.97? Check with three lines of numpy.
 
 ### Exercise FML.01-E4 — ML or not? `[predict]`
 
@@ -279,9 +279,9 @@ For each component, answer "classical", "ML" or "ML with a classical guard", wit
 
 ## Expected result
 
-- **FML.01-E1:** predictions: duty 0.10 → $18.11 \cdot 0.10 - 2.13 = -0.32$ rad/s (true 0.00); duty 0.00 → −2.13 rad/s (true 0.00). The script prints exactly these (±0.01). Answer to step 3: treat outputs outside the training distribution as untrusted — clamp them to physically valid values (here ≥ 0), or refuse and fall back to a safe default.
-- **FML.01-E2:** `speed = 16.73 * duty + -1.23`; duty 0.05 → −0.40 rad/s (closer to the true 0, still wrong); duty 0.10 → +0.44 rad/s (true 0). Surprise: the learned model's RMSE on the 0.2–0.6 test set *rises* from 0.32 to 0.53 rad/s. The straight line now has to compromise between the flat deadband and the sloped region, and fits neither perfectly. *A straight line cannot represent a deadband*: the model family is the problem, not the data. [FML.06](FML.06-neural-networks.md) fixes that with a nonlinear model.
-- **FML.01-E3:** predictions 3.6, 7.0, 10.4; errors 0.352, 0.2, 0.048; MSE $= (0.1239 + 0.04 + 0.0023)/3 = 0.0554$ (rad/s)². Much better than 4.84, worse than 0.
+- **FML.01-E1:** predictions: duty 0.10 → $17.63 \cdot 0.10 - 2.13 = -0.37$ rad/s (true 0.00); duty 0.00 → −2.13 rad/s (true 0.00). The script prints exactly these (±0.01). Answer to step 3: treat outputs outside the training distribution as untrusted — clamp them to physically valid values (here ≥ 0), or refuse and fall back to a safe default.
+- **FML.01-E2:** `speed = 16.24 * duty + -1.23`; duty 0.05 → −0.41 rad/s (closer to the true 0, still wrong); duty 0.10 → +0.40 rad/s (true 0). Surprise: the learned model's RMSE on the 0.2–0.6 test set *rises* from 0.32 to 0.53 rad/s. The straight line now has to compromise between the flat deadband and the sloped region, and fits neither perfectly. *A straight line cannot represent a deadband*: the model family is the problem, not the data. [FML.06](FML.06-neural-networks.md) fixes that with a nonlinear model.
+- **FML.01-E3:** predictions 3.6, 7.0, 10.4; errors 0.496, 0.44, 0.384; MSE $= (0.2460 + 0.1936 + 0.1475)/3 = 0.196$ (rad/s)². Much better than 5.97, worse than 0.
 - **FML.01-E4:** (a) classical — exact trigonometry ([FM.04](../mathematics/FM.04-coordinate-systems.md)); (b) ML — no writable rule for "kitchen" in pixels; (c) classical — a safety function must be simple and verifiable; (d) ML or system identification, *with* a classical guard (clamp duty to ±1, PID corrects the residual error); (e) ML with a classical guard — learned grasp proposals, checked by collision and reachability tests.
 
 ## Troubleshooting
@@ -289,7 +289,7 @@ For each component, answer "classical", "ML" or "ML with a classical guard", wit
 ### Symptom: my numbers differ from the lesson output
 
 1. Timings (`us` column) always differ — ignore them.
-2. Check the seed: `np.random.default_rng(0)`. A different seed gives different samples and slightly different weights (slope 17.5–18.5 is normal).
+2. Check the seed: `np.random.default_rng(0)`. A different seed gives different samples and slightly different weights (slope 17.0–18.0 is normal).
 3. Check numpy ≥ 1.17 (`python -c "import numpy; print(numpy.__version__)"`); older versions don't have `default_rng`.
 4. If the slope is wildly different (e.g. 180), look for a unit error: duty must be 0..1, not 0..100.
 
@@ -321,10 +321,10 @@ You have too few distinct inputs for the polynomial degree (for example, all dut
    Features are the inputs the model sees for each sample (duty cycle, battery voltage). Parameters are the adjustable numbers inside the model (slope, intercept, network weights) that training chooses and that stay fixed during inference.
    </details>
 
-2. The learned line is $\hat y = 18.11d - 2.13$. At what duty does it predict zero speed, and what physical effect does that represent?
+2. The learned line is $\hat y = 17.63d - 2.13$. At what duty does it predict zero speed, and what physical effect does that represent?
    <details><summary>Answer</summary>
 
-   $d = 2.13/18.11 = 0.118$. It represents the deadband: below ≈12 % duty, friction stops the motor turning (the course robot's config lists `duty_deadband: 0.12`).
+   $d = 2.13/17.63 = 0.121$. It represents the deadband: below ≈12 % duty, friction stops the motor turning (the course robot's config lists `duty_deadband: 0.12`).
    </details>
 
 3. Where do training and inference usually run for a detector on the course robot, and why the split?

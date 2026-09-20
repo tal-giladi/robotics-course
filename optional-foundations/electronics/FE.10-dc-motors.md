@@ -156,7 +156,7 @@ With ideal gears the motor model gives stall torque $0.00973 \times (4.0 - 0.1) 
 | Low-speed control | Easy with a gearbox and encoder | Needs sensors plus FOC for smooth low speed |
 | Where you see it | karmel's wheels, servos, toys | Drones, LiDAR spin motors, e-bikes, hoverboard wheels, quadruped and arm actuators |
 
-**Kv rating.** BLDC motors are specified by Kv, the no-load RPM per volt. A 1000 Kv motor on 11.1 V spins at about $1000 \times 11.1 = 11{,}100$ RPM without load. Kv is the inverse of the motor constant:
+**Kv rating.** BLDC motors are specified by Kv, the no-load RPM per volt. A 1000 Kv motor on a 3S *LiPo* pack (11.1 V — LiPo datasheets count 3.7 V per cell, where karmel's 3S Li-ion pack counts 3.6 V and so is 10.8 V) spins at about $1000 \times 11.1 = 11{,}100$ RPM without load. Kv is the inverse of the motor constant:
 
 $$k_t = \frac{60}{2\pi\,K_v}\ \text{N·m/A}$$
 
@@ -282,10 +282,10 @@ def main() -> None:
     v = m.no_load_rpm_out * 2 * math.pi / 60 * r_wheel
     print(f"no-load rim speed (90 mm wheel) = {v:.2f} m/s")
 
-    # Brushless Kv example: 1000 Kv on 3S
+    # Brushless Kv example: 1000 Kv on a 3S LiPo (3.7 V/cell), not karmel's 10.8 V Li-ion pack
     kv, volts = 1000, 11.1
     kt = 60 / (2 * math.pi * kv)
-    print(f"1000 Kv on 11.1 V: {kv * volts:.0f} RPM no-load, Kt = {kt:.5f} N*m/A")
+    print(f"1000 Kv on a 3S LiPo (11.1 V): {kv * volts:.0f} RPM no-load, Kt = {kt:.5f} N*m/A")
 
 
 if __name__ == "__main__":
@@ -313,7 +313,7 @@ stall current at 12.6 V = 4.20 A per motor, 8.4 A for both
 stall current at 10.8 V = 3.60 A per motor, 7.2 A for both
 stall current at  9.0 V = 3.00 A per motor, 6.0 A for both
 no-load rim speed (90 mm wheel) = 0.97 m/s
-1000 Kv on 11.1 V: 11100 RPM no-load, Kt = 0.00955 N*m/A
+1000 Kv on a 3S LiPo (11.1 V): 11100 RPM no-load, Kt = 0.00955 N*m/A
 ```
 
 ## Exercise

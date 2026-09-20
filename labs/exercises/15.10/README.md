@@ -11,7 +11,7 @@ holding the robot up, where is the mass once the arm is out, and where is the ob
 | Function | Does |
 |---|---|
 | `convex_hull_2d(points)` | the hull of the ground contacts, counter-clockwise |
-| `support_polygon(track, caster_x, front_caster_x)` | karmel's contacts, hulled |
+| `support_polygon(track, caster_x, extra_caster_x)` | karmel's contacts, hulled |
 | `combined_com(parts)` | mass-weighted centre of base + arm + payload |
 | `stability_margin(support, com_xy)` | metres to the nearest edge; **negative means it tips** |
 | `object_in_arm_frame(base_xy_yaw, mount_xyz, object_map_xyz)` | map → base_link → arm base |
@@ -24,11 +24,12 @@ python course.py check 15.10              # your code
 python course.py check 15.10 --solution   # the reference, to see what passing looks like
 ```
 
-25 tests, under a second. The two you should read before writing anything:
+26 tests, under a second. The two you should read before writing anything:
 
-- `test_karmel_support_is_a_triangle_ending_at_the_axle` — with one rear caster, **nothing holds
-  this base up in front of the wheels**, so the forward edge of the support polygon is the line
-  `x = 0`. Every stability result in the lesson follows from that one shape.
+- `test_karmel_support_is_a_triangle_ending_at_the_axle` — the single ball caster is 100 mm in
+  *front* of the wheels, so **nothing holds this base up behind them**: the support polygon is a
+  triangle whose rear edge is the line `x = 0` and whose front narrows to a point at `x = +0.100`.
+  Every stability result in the lesson follows from that one shape.
 - `test_the_mount_offset_is_subtracted_in_the_base_frame_not_the_map` — rotate first, then subtract
   the mount. The arm is bolted to the robot, not to the world, and getting it backwards is correct
   for every hand-written test where yaw = 0.

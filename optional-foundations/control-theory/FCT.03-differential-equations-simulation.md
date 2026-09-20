@@ -131,7 +131,7 @@ $$L\frac{di}{dt} = V - R i - k_e\omega, \qquad J\frac{d\omega}{dt} = k_t i$$
 
 With the FP.05/FP.06 numbers ($R = 3.0\ \Omega$, $k_e = 0.559$ V·s/rad, $k_t = 0.2035$ N·m/A, $J = 3.03\times10^{-3}$ kg·m²) and an **assumed** $L = 2$ mH (not on the datasheet), the linear system's eigenvalues are about −1487 and −12.6 s⁻¹. That means two time constants: **0.67 ms** for current and **79 ms** for speed. [FCT.04](FCT.04-stability-intuition.md) explains eigenvalues as "poles".
 
-Euler must respect the *fastest* one: stable only if $\Delta t < 2/1487 = 1.34$ ms. At 1.0 ms it works. At 1.5 ms it explodes to $10^{29}$. An adaptive explicit solver (RK45) survives by taking many small steps (1628 evaluations over 0.5 s). The implicit solver `Radau` handles stiffness and needs 782. When you see `solve_ivp` crawling, try `method="Radau"` or `"BDF"`.
+Euler must respect the *fastest* one: stable only if $\Delta t < 2/1487 = 1.34$ ms. At 1.0 ms it works. At 1.5 ms it explodes to $10^{29}$. An adaptive explicit solver (RK45) survives by taking many small steps (1676 evaluations over 0.5 s). The implicit solver `Radau` handles stiffness and needs 782. When you see `solve_ivp` crawling, try `method="Radau"` or `"BDF"`.
 
 The engineering shortcut: when you only care about speed, **drop the fast state**. Setting $L = 0$ makes current algebraic, $i = (V - k_e\omega)/R$, and gives back the first-order model with $\tau = JR/(k_t k_e) = 0.08$ s. Model reduction like this is how karmel's "first-order motor" is justified.
 
@@ -257,7 +257,7 @@ def main() -> None:
     print(f"duty ramp: nonlinear wheel starts turning at t = {start:.2f} s; "
           f"at t = 2.5 s linear {lin.y[0, -1]:.2f} rad/s vs nonlinear {non.y[0, -1]:.2f} rad/s")
 
-    motor = dc_motor(11.1)
+    motor = dc_motor(10.8)   # labs/config/karmel.yaml: battery.nominal_v
     A = np.array([[-3.0 / 2e-3, -0.559 / 2e-3], [0.2035 / 3.03e-3, 0.0]])
     print(f"DC motor eigenvalues (approx.): {np.round(np.linalg.eigvals(A), 1)} 1/s")
     for method in ("RK45", "Radau"):
@@ -286,7 +286,7 @@ def main() -> None:
     tm = np.linspace(0, 0.5, 1000)
     ax[2].plot(tm, s.sol(tm)[0], label="current [A]")
     ax[2].plot(tm, s.sol(tm)[1] / 10, label="speed / 10 [rad/s]")
-    ax[2].set_title("DC motor at 11.1 V (stiff)")
+    ax[2].set_title("DC motor at 10.8 V (stiff)")
     ax[2].set_xlabel("time [s]")
     ax[2].legend()
     for a in ax:
@@ -311,10 +311,10 @@ linear wheel, duty step 0.5, exact w(0.4 s) = 9.5940 rad/s
   solve_ivp RK45: 9.5940 rad/s with 254 function evaluations
 duty ramp: nonlinear wheel starts turning at t = 0.27 s; at t = 2.5 s linear 19.32 rad/s vs nonlinear 17.00 rad/s
 DC motor eigenvalues (approx.): [-1487.4+0.j   -12.6+0.j] 1/s
-  RK45 : w(0.5 s) = 19.821 rad/s, peak current 3.58 A, nfev 1628
-  Radau: w(0.5 s) = 19.821 rad/s, peak current 3.58 A, nfev 782
-  Euler dt=1.0 ms: w(0.5 s) = 19.82 rad/s
-  Euler dt=1.5 ms: w(0.5 s) = -1.97e+29 rad/s
+  RK45 : w(0.5 s) = 19.285 rad/s, peak current 3.48 A, nfev 1676
+  Radau: w(0.5 s) = 19.285 rad/s, peak current 3.49 A, nfev 782
+  Euler dt=1.0 ms: w(0.5 s) = 19.29 rad/s
+  Euler dt=1.5 ms: w(0.5 s) = -1.917e+29 rad/s
 saved fct03_ode.png
 ```
 
@@ -322,7 +322,7 @@ saved fct03_ode.png
 
 - **Left:** the exact exponential rise to 9.66 rad/s, the Euler points at Δt = 0.02 s hugging it slightly ahead, and the Euler points at Δt = 0.1 s zig-zagging above and below the target before settling.
 - **Middle:** during a 2 s duty ramp, the linear model's speed rises immediately and ends at 19.3 rad/s. The nonlinear model stays at zero until about 0.27 s, when the deadband is crossed, then rises. It flattens at 17 rad/s, the saturation value.
-- **Right:** the stiff motor at 11.1 V. Current spikes to about 3.6 A within a few milliseconds, like a near-stall inrush, then decays as speed builds. Speed/10 rises smoothly to about 1.98, which is 19.8 rad/s.
+- **Right:** the stiff motor at 10.8 V. Current spikes to about 3.5 A within a few milliseconds, like a near-stall inrush, then decays as speed builds. Speed/10 rises smoothly to about 1.93, which is 19.3 rad/s.
 
 > [!NOTE]
 > On some Windows machines, the first `import scipy.integrate` takes many seconds (antivirus scanning). It is not your code.
@@ -379,14 +379,14 @@ Exact final values inside the band depend on the path taken.
 **FCT.03-E3:**
 1. **Oscillating** but converging (factor −0.25): 9.621 against an exact 9.594 at 0.4 s.
 2. **Divergent** (about −2×10²⁹): 1.5 ms > 2/1487 = 1.34 ms.
-3. **Radau**: 782 evaluations against 1628 for RK45.
+3. **Radau**: 782 evaluations against 1676 for RK45.
 
 **FCT.03-E4:** The fast eigenvalue is about −1487 s⁻¹. Euler is stable only for Δt < 1.34 ms, and 2 ms gives a per-step factor of 1 − 2.97 = −1.97 on that mode, which grows exponentially. Fixes:
 - run the electrical part with sub-steps of 0.5 ms;
 - use an exact discretization, $x_{k+1} = e^{A\Delta t}x_k + \dots$, via `scipy.linalg.expm` ([FCT.05](FCT.05-discrete-time-sampling.md));
 - drop L, since the current settles in under 3 ms and a first-order speed model with τ = 0.08 s is enough.
 
-After the fix, the speed settles near 19.8 rad/s at 11.1 V.
+After the fix, the speed settles near 19.3 rad/s at 10.8 V.
 
 ## Troubleshooting
 

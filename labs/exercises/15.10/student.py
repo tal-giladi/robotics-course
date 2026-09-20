@@ -43,15 +43,18 @@ def convex_hull_2d(points: list[tuple[float, float]]) -> list[tuple[float, float
 
 
 def support_polygon(wheel_separation_m: float, caster_x_m: float,
-                    front_caster_x_m: float | None = None) -> list[tuple[float, float]]:
+                    extra_caster_x_m: float | None = None) -> list[tuple[float, float]]:
     """The ground contacts of a differential-drive base, hulled, in the base frame.
 
     The two drive wheels sit on the axle at ``x = 0``, at ``y = +/- wheel_separation_m / 2``.
-    ``caster_x_m`` is the rear caster (negative: behind the axle). ``front_caster_x_m``, when
-    given, adds **two** contacts at that x and the same +/- y as the wheels.
+    ``caster_x_m`` is karmel's single ball caster on the centreline; it is **positive**, +0.100 m,
+    because the caster is in *front* of the axle. ``extra_caster_x_m``, when given, adds **two**
+    more contacts at that x and the same +/- y as the wheels — pass a negative value to model a
+    rear caster pair.
 
-    Return ``convex_hull_2d`` of those contacts. Look hard at what you get back with no front
-    caster — that shape is the whole lesson.
+    Return ``convex_hull_2d`` of those contacts. Look hard at what you get back with no extra
+    casters: a triangle pointing forward, whose rear edge is the axle. That shape is the whole
+    lesson.
     """
     raise NotImplementedError("support_polygon")  # TODO(student)
 

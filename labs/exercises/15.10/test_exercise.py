@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 
 TRACK = 0.200          # labs/config/karmel.yaml: drive.wheel_separation_m
-CASTER_X = -0.100      # labs/config/karmel.yaml: chassis.caster_offset_x_m
+CASTER_X = 0.100       # labs/config/karmel.yaml: chassis.caster_offset_x_m — IN FRONT of the axle
 
 
 # ---------------------------------------------------------------- convex hull
@@ -38,20 +38,23 @@ def test_hull_handles_duplicates_and_tiny_sets(impl):
 def test_karmel_support_is_a_triangle_ending_at_the_axle(impl):
     poly = impl.support_polygon(TRACK, CASTER_X)
     assert len(poly) == 3
-    assert max(x for x, _ in poly) == pytest.approx(0.0), \
-        "nothing supports this base in front of the wheel axle — that is the lesson"
+    assert min(x for x, _ in poly) == pytest.approx(0.0), \
+        "nothing supports this base behind the wheel axle — that is the lesson"
+    assert max(x for x, _ in poly) == pytest.approx(0.100), \
+        "the caster is the single forward-most contact, on the centreline"
 
 
-def test_a_front_caster_adds_two_contacts(impl):
-    poly = impl.support_polygon(TRACK, CASTER_X, 0.120)
-    assert max(x for x, _ in poly) == pytest.approx(0.120)
+def test_a_rear_caster_pair_adds_two_contacts(impl):
+    poly = impl.support_polygon(TRACK, CASTER_X, -0.120)
+    assert min(x for x, _ in poly) == pytest.approx(-0.120)
     assert len(poly) >= 4
 
 
-def test_a_front_caster_behind_the_axle_changes_nothing_useful(impl):
-    """A contact inside the existing hull carries load and contributes no stability."""
-    poly = impl.support_polygon(TRACK, CASTER_X, -0.050)
-    assert max(x for x, _ in poly) == pytest.approx(0.0)
+def test_a_duplicate_contact_pair_at_the_axle_changes_nothing(impl):
+    """A contact that coincides with one already there adds load, not stability."""
+    poly = impl.support_polygon(TRACK, CASTER_X, 0.0)
+    assert len(poly) == 3
+    assert min(x for x, _ in poly) == pytest.approx(0.0)
 
 
 # ---------------------------------------------------------------- combined CoM
@@ -100,16 +103,25 @@ def test_a_com_on_the_edge_has_zero_margin(impl):
 
 
 def test_karmel_with_the_com_at_the_origin_is_exactly_on_the_limit(impl):
-    """base_link is the wheel midpoint, and the forward edge IS the axle."""
+    """base_link is the wheel midpoint, and the REAR edge IS the axle."""
     poly = impl.support_polygon(TRACK, CASTER_X)
     assert impl.stability_margin(poly, (0.0, 0.0)) == pytest.approx(0.0, abs=1e-12)
-    assert impl.stability_margin(poly, (0.020, 0.0)) < 0
-    assert impl.stability_margin(poly, (-0.030, 0.0)) > 0
+    assert impl.stability_margin(poly, (-0.020, 0.0)) < 0
+    assert impl.stability_margin(poly, (0.030, 0.0)) > 0
 
 
-def test_the_front_caster_rescues_a_forward_com(impl):
-    poly = impl.support_polygon(TRACK, CASTER_X, 0.120)
-    assert impl.stability_margin(poly, (0.020, 0.0)) > 0
+def test_the_rear_caster_rescues_a_rearward_com(impl):
+    poly = impl.support_polygon(TRACK, CASTER_X, -0.120)
+    assert impl.stability_margin(poly, (-0.020, 0.0)) > 0
+
+
+def test_the_polygon_narrows_towards_the_caster(impl):
+    """A lateral offset costs more margin the further forward the CoM already is."""
+    poly = impl.support_polygon(TRACK, CASTER_X)
+    assert impl.stability_margin(poly, (0.070, 0.0)) > impl.stability_margin(poly, (0.070, 0.030))
+    assert impl.stability_margin(poly, (0.070, 0.030)) == pytest.approx(0.0, abs=1e-12), \
+        "x + y = 0.100 is exactly the edge from the left wheel to the caster"
+    assert impl.stability_margin(poly, (0.020, 0.030)) == pytest.approx(0.020)
 
 
 def test_margin_uses_the_z_free_projection(impl):

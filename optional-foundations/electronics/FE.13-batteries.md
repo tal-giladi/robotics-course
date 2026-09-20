@@ -79,7 +79,7 @@ For a software engineer: capacity is like a quota, C-rating is like a rate limit
 
 **Why karmel uses 18650 Li-ion:** it is energy-dense, locally available, and 3S matches 12 V motors. The cylindrical steel can survives the bumps of a mobile robot far better than a LiPo pouch. The trade-off is current: an energy cell like the 35E is rated about 8 A continuous, which is enough for two 4 A stall currents but not much more. A LiPo easily delivers more current, but it's more fragile.
 
-**"11.1 V" vs "10.8 V".** Packs labeled 11.1 V assume 3.7 V per cell. Samsung rates the 35E at 3.6 V nominal, so the same 3S pack is "10.8 V". Nothing changed but the label. The range that matters is **9.0–12.6 V** (3.0–4.2 V per cell).
+**"11.1 V" vs "10.8 V".** Packs labeled 11.1 V assume 3.7 V per cell, the convention LiPo datasheets use. Samsung rates the 35E at 3.6 V nominal, so the same 3S pack is "10.8 V". Nothing changed but the label. The range that matters is **9.0–12.6 V** (3.0–4.2 V per cell). **This course uses 10.8 V everywhere**, because karmel's pack is 3S Samsung INR18650-35E: `labs/config/karmel.yaml` sets `battery.nominal_v: 10.8`, and every worked power, runtime and motor-constant example in the course is computed from that number. If you see 11.1 V quoted elsewhere for the same pack, it is the LiPo label, not a different battery.
 
 ### Level 2 — Series, parallel and energy
 

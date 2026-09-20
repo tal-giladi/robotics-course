@@ -323,10 +323,11 @@ Spread, not bias. Work through it in this order:
 1. **Surface.** Turning in place scrubs the tyres sideways. Tile, laminate and a rug will give you
    three different numbers. Pick one surface and say which in the write-up.
 2. **Speed.** Turn slower. Slip grows with the lateral force, which grows with the turn rate.
-3. **Caster.** The ball caster at `caster_offset_x_m = -0.10` has to swivel at the start of every
-   turn, and a dirty or sticky caster adds a random kick. Clean it, spin it by hand, check it is
-   free.
-4. **Weight distribution.** Battery over the wheels rather than over the caster keeps the drive
+3. **Caster.** The ball caster at `caster_offset_x_m = 0.10` — 100 mm *in front* of the axle — has to
+   swivel at the start of every turn, and a dirty or sticky caster adds a random kick. Clean it, spin
+   it by hand, check it is free. It is ahead of the axle, so it is also the part that collects hair
+   and grit from the floor first.
+4. **Weight distribution.** Battery over the wheels rather than out towards the caster keeps the drive
    wheels loaded and reduces slip.
 5. **Still noisy?** That is the answer: encoders cannot observe slip, by construction. The fix is an
    IMU, which is why [08.11](../08-control/08.11-rotate-exactly-90.md) and

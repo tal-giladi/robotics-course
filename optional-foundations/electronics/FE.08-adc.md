@@ -343,7 +343,7 @@ def two_point(raw_lo: float, true_lo: float, raw_hi: float, true_hi: float) -> C
 if __name__ == "__main__":
     print(f"12-bit step at the pin: {VREF / 4096 * 1e3:.3f} mV; "
           f"at the battery: {VREF / 4096 * DIVIDER_GAIN * 1e3:.2f} mV")
-    for batt in (12.6, 11.1, 9.9):
+    for batt in (12.6, 10.8, 9.9):
         raw = volts_to_u16(batt / DIVIDER_GAIN)
         print(f"battery {batt:5.2f} V -> pin {batt / DIVIDER_GAIN:.3f} V -> read_u16 ~ {raw}")
     raw = 44_000
@@ -364,7 +364,7 @@ Output:
 ```text
 12-bit step at the pin: 0.806 mV; at the battery: 4.47 mV
 battery 12.60 V -> pin 2.272 V -> read_u16 ~ 45122
-battery 11.10 V -> pin 2.002 V -> read_u16 ~ 39751
+battery 10.80 V -> pin 1.948 V -> read_u16 ~ 38676
 battery  9.90 V -> pin 1.785 V -> read_u16 ~ 35453
 read_u16 44000 -> pin 2.2156 V -> battery 12.287 V
 calibration: gain 0.99874, offset -21.3 mV

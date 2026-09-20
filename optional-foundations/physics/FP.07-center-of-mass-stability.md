@@ -19,15 +19,15 @@
 
 - Compute the centre of mass (CoM) of a robot built from parts, and measure it with kitchen scales.
 - Draw a robot's support polygon and compute its static stability margin.
-- Predict whether a mobile manipulator tips when the arm reaches out, the robot brakes, or it faces down a slope.
+- Predict whether a mobile manipulator tips when the arm reaches out, the robot brakes or accelerates, or it faces up or down a slope.
 - Use the zero-moment point (ZMP) idea to include acceleration in the tipping check.
 - Choose and quantify fixes: moving the arm mount, counterweights, extra casters, and software limits on pose and acceleration.
 
 ## Why it matters
 
-At stage 5 you bolt an SO-101 arm onto karmel ([15.10](../../15-manipulation/15.10-mobile-manipulation.md), [20.02](../../20-final-robot/20.02-hardware-integration.md)). Karmel stands on two wheels and one caster *behind* them, so its front tipping line is the wheel axle itself. An arm reaching forward with a 100 g object moves the CoM ahead of that line: the caster lifts and the robot pitches onto its nose. The gripper drops, the object falls, and the arm may strike the floor.
+At stage 5 you bolt an SO-101 arm onto karmel ([15.10](../../15-manipulation/15.10-mobile-manipulation.md), [20.02](../../20-final-robot/20.02-hardware-integration.md)). Karmel stands on two wheels and one ball caster 100 mm *in front* of them, so its support polygon is a triangle whose **rear** edge is the wheel axle itself and whose front narrows to a single point. Nothing at all holds the robot up behind the axle: put mass there and the caster lifts, the robot sits back on its tail, and every forward-facing sensor pitches up with it.
 
-Worse, this can happen with the arm **folded upright** when the robot simply brakes at its configured 1.0 m/s², or when it faces down a 6° ramp. This lesson turns "will it tip?" into a number you can check in code before it happens, and into limits you can enforce in software ([14.11](../../14-robotic-arm/14.11-arm-safety.md)).
+That is not a hypothetical. The caster used to be *behind* the wheels, which put the front edge at the axle instead; karmel's centre of mass sits about 1.7 mm ahead of the axle, so the simulated robot rested 5.58° nose-down on its front edge and its LiDAR measured the floor 1.55 m ahead for an entire module's worth of maps ([11.09](../../11-slam/11.09-slam-troubleshooting.md) Level 3b, and [`labs/TESTED.md`](../../labs/TESTED.md) §3.1). One number in one YAML file, and the robot's *perception* was broken. This lesson turns "will it tip?" into a number you can check in code before it happens, and into limits you can enforce in software ([14.11](../../14-robotic-arm/14.11-arm-safety.md)).
 
 <!-- prereqs:start -->
 ## Prerequisites
@@ -47,11 +47,11 @@ Check your readiness: `python course.py why FP.07`
 
 The **centre of mass** is the single point where you can pretend all the robot's mass sits. Gravity acts as if it pulls there. It is a weighted average of the parts' positions: heavy parts pull it towards themselves. If you move a part, the CoM moves by that part's mass fraction times the distance moved.
 
-The **support polygon** is the shape on the floor you get by stretching a rubber band around all the contact points: wheels, casters, feet. For karmel it is a triangle, with the two wheel contacts at the front corners and the ball caster at the rear point.
+The **support polygon** is the shape on the floor you get by stretching a rubber band around all the contact points: wheels, casters, feet. For karmel it is a triangle, with the two wheel contacts at the rear corners and the ball caster at the forward point. Note what that shape does: it is widest at the axle and narrows to nothing 100 mm ahead, so forward reach costs margin gradually while *anything* behind the axle costs it immediately.
 
 The rule of **static stability** is simple. Drop a plumb line from the CoM to the floor. If it lands inside the support polygon, the robot stands. If it lands outside, the robot rotates about the nearest edge and tips. The distance from the CoM's floor projection to the nearest edge is the **stability margin**. More margin means more tolerance for bumps, slopes and braking.
 
-Motion changes the picture. When the robot brakes, the load inside behaves as if a force pushed it forwards at the CoM. It is the same thing that throws you forward on a bus. That "inertial force" combines with gravity, and the combined force hits the floor ahead of the plain plumb-line point. That point is the **zero-moment point** (ZMP). The robot stays upright as long as the ZMP stays inside the support polygon. A **higher** CoM moves the ZMP further for the same braking, so a tall, top-heavy robot tips more easily.
+Motion changes the picture. When the robot brakes, the load inside behaves as if a force pushed it forwards at the CoM. It is the same thing that throws you forward on a bus. That "inertial force" combines with gravity, and the combined force hits the floor ahead of the plain plumb-line point. That point is the **zero-moment point** (ZMP). The robot stays upright as long as the ZMP stays inside the support polygon. A **higher** CoM moves the ZMP further for the same braking, so a tall, top-heavy robot tips more easily. **Accelerating** does the same thing in the other direction — and with karmel's caster in front, that is the dangerous direction, because the polygon stops at the axle.
 
 A slope does the same thing: seen along the slope, gravity tilts, and the plumb line shifts downhill.
 
@@ -70,22 +70,24 @@ Here $\mathbf{p}_i$ is each part's own CoM, in one common frame. We use base_lin
 
 | Part | Mass | Position (x, z) |
 |---|---|---|
-| karmel base (FP.02) | 1.60 kg | (−0.040, 0.050) |
+| karmel base (FP.02) | 1.60 kg | (**+0.040**, 0.050) |
 | arm base + shoulder servo | 0.20 kg | (mount x, 0.10) |
 | arm links (upper arm, forearm, wrist, gripper) | 0.35 kg | CoM 0.14 m from the shoulder |
 | payload in the gripper | 0.10 kg | 0.28 m from the shoulder |
 
+The base's 40 mm is the [FP.02](FP.02-forces-newton.md) modelling assumption: the pack sits between the axle and the caster, which is where it has to be if the caster is to carry any load. Your robot's real number comes from E4's scales.
+
 *Example, arm mounted at x = +0.06 m, straight up (φ = 0), holding 100 g:*
 
-$$x_c = \frac{1.6(-0.04) + 0.20(0.06) + 0.35(0.06) + 0.10(0.06)}{2.25} = \frac{-0.064 + 0.012 + 0.021 + 0.006}{2.25} = -0.0111\ \text{m}$$
+$$x_c = \frac{1.6(0.04) + 0.20(0.06) + 0.35(0.06) + 0.10(0.06)}{2.25} = \frac{0.064 + 0.012 + 0.021 + 0.006}{2.25} = +0.0458\ \text{m}$$
 
 $$z_c = \frac{1.6(0.05) + 0.20(0.10) + 0.35(0.28) + 0.10(0.42)}{2.25} = 0.1067\ \text{m}$$
 
-*Same arm horizontal (φ = 90°):* the links' CoM moves to x = 0.20 and the payload to x = 0.34, so $x_c = (-0.064 + 0.012 + 0.070 + 0.034)/2.25 = +0.0231$ m. **The CoM is now 23 mm in front of the axle.**
+*Same arm horizontal (φ = 90°):* the links' CoM moves to x = 0.20 and the payload to x = 0.34, so $x_c = (0.064 + 0.012 + 0.070 + 0.034)/2.25 = +0.0800$ m. **The CoM is now 80 mm in front of the axle** — and the caster is at 100 mm, so it is still inside, with 20 mm of run left.
 
 ### Level 2 — Support polygon and static margin
 
-Karmel's contacts are the wheels at $(0, \pm0.100)$ and the caster at $(-0.100, 0)$. The front edge is the line $x = 0$, and the two side edges run from each wheel to the caster.
+Karmel's contacts are the wheels at $(0, \pm0.100)$ and the caster at $(+0.100, 0)$. The **rear** edge is the line $x = 0$ — the axle — and the two other edges run from each wheel forward to the caster, at 45°.
 
 For a convex polygon with corners listed counter-clockwise, the signed distance from a point to an edge from $(x_1,y_1)$ to $(x_2,y_2)$ is
 
@@ -93,110 +95,127 @@ $$d = \frac{(p_x - x_1)(-e_y) + (p_y - y_1)\,e_x}{\sqrt{e_x^2 + e_y^2}},\qquad (
 
 It is positive inside. The **margin** is the minimum of $d$ over all edges.
 
-- **Base alone:** CoM x = −0.040, margin **40 mm** (front edge).
-- **Arm up, 100 g:** margin **11.1 mm**.
-- **Arm horizontal, no payload:** −8.4 mm, **tips**.
-- **Arm horizontal, 100 g:** −23.1 mm, **tips**.
+- **Base alone:** CoM x = +0.040, margin **40.0 mm** — and the nearest edge is the *rear* one, the axle.
+- **Arm up (φ = 0), 100 g, mounted at +0.06:** margin **38.3 mm**, now against a front edge.
+- **Arm horizontal, no payload:** **22.7 mm**.
+- **Arm horizontal, 100 g:** **14.1 mm**.
+- **Arm up, 100 g, mounted at −0.06 (behind the axle):** margin **11.1 mm**, against the rear edge again.
+- **Arm horizontal, 400 g:** CoM x = +0.1106, which is past the caster: **−7.5 mm, tips forward over the caster.**
 
-With the arm mounted at +0.06 m and holding 100 g, the robot tips once the arm leans more than **19°** forward. Without a payload it tips past 40°.
+Read that list twice. With the caster in front, extending the arm forward is the *safe* direction until the payload gets heavy — the margin falls smoothly from 38 mm to 14 mm and never crosses zero with 100 g at any tilt. What is dangerous is mass *behind* the axle, and the obvious "fix" of mounting the arm further back is now the thing that causes the problem.
+
+Which edge is nearest also changes how a margin translates into a tipping acceleration, because the front edges are at 45° to the direction of travel and the rear edge is perpendicular to it. Along the x axis the useful distances are simply
+
+$$\ell_{front} = x_{caster} - x_c, \qquad \ell_{rear} = x_c - x_{axle}$$
+
+and for the arm-horizontal 100 g case those are 20.0 mm and 80.0 mm, while the perpendicular polygon margin is 14.1 mm $= 20.0/\sqrt2$. Use the polygon margin for "is it standing"; use $\ell$ for "at what acceleration does it stop standing".
 
 **Measuring the CoM with scales.** From [FP.02](FP.02-forces-newton.md) E4: put the caster on one scale and both wheels on a second surface at the same height. On level ground,
 
-$$x_c = -d_c \frac{N_c}{W}$$
+$$x_c = d_c \frac{N_c}{W}, \qquad d_c = +0.10\ \text{m}$$
 
-*Example:* the caster scale reads 540 g of a 2.25 kg total. Then $x_c = -0.10 \times 540/2250 = -0.024$ m.
+*Example:* the caster scale reads 540 g of a 2.25 kg total. Then $x_c = 0.10 \times 540/2250 = +0.024$ m.
 
-For the height, raise the caster end so the robot pitches nose-down by a known angle β and read the caster scale again:
+For the height, raise the caster end — the *nose* — so the robot pitches nose-up by a known angle β, which shifts the plumb line backwards and unloads the caster further, and read the scale again:
 
-$$h = \frac{|x_c| - d_c\,N_c'/W}{\tan\beta}$$
+$$h = \frac{x_c - d_c\,N_c'/W}{\tan\beta}$$
 
 *Example:* at β = 10° the reading drops to 115 g, so $h = (0.024 - 0.10 \times 115/2250)/\tan 10° = 0.107$ m.
 
-### Level 3 — Dynamic tipping: braking and slopes
+### Level 3 — Dynamic tipping: braking, accelerating and slopes
 
-**Braking** at deceleration $b$ shifts the ZMP forward by $h\,b/g$:
+Acceleration shifts the ZMP **opposite to the acceleration**:
 
-$$x_{zmp} = x_c - \frac{h\,a_x}{g}\quad(a_x < 0 \text{ when braking})$$
+$$x_{zmp} = x_c - \frac{h\,a_x}{g}$$
 
-The robot tips forward once $x_{zmp} > 0$, which means
+Braking ($a_x < 0$) pushes it forward, towards the caster; accelerating ($a_x > 0$) pushes it backwards, towards the axle. So karmel with a front caster has two limits, and they are not symmetric:
 
-$$b_{tip} = g\,\frac{\text{margin}_{front}}{h}$$
+$$b_{tip} = g\,\frac{\ell_{front}}{h} = g\,\frac{x_{caster} - x_c}{h}, \qquad a_{tip} = g\,\frac{\ell_{rear}}{h} = g\,\frac{x_c}{h}$$
 
-- **Base alone:** $9.81 \times 0.040/0.050 = 7.85$ m/s², no concern. FP.03 already found that traction limits braking long before this.
-- **Arm up, 100 g:** $9.81 \times 0.0111/0.1067 = 1.02$ m/s². **The configured limit is 1.0 m/s².** The ZMP ends 0.2 mm from the edge. Any bump, a slightly harder stop, or a watchdog stop that brakes abruptly tips the robot.
-- **Arm up, 200 g:** the CoM rises to 0.120 m and the margin shrinks to 8.1 mm, so $b_{tip} = 0.66$ m/s². The configured limit now tips it.
+- **Base alone:** $b_{tip} = 9.81 \times 0.060/0.050 = 11.8$ m/s² braking, $a_{tip} = 9.81 \times 0.040/0.050 = 7.85$ m/s² accelerating. No concern either way; FP.03 already found that traction limits both long before this.
+- **Arm up, 100 g, mounted at +0.06:** 4.99 braking, 4.21 accelerating. Comfortable.
+- **Arm up, 100 g, mounted at −0.06 (behind the axle):** $a_{tip} = 9.81 \times 0.0111/0.1067 = $ **1.02 m/s²**. **The configured limit is 1.0 m/s².** The ZMP ends 0.2 mm from the axle. Any bump, a slightly harder start, or a controller that steps the command instead of ramping it, and the robot rears up.
+- **Arm up, 200 g, mounted at −0.06:** the CoM rises to 0.120 m and the rear margin shrinks to 8.1 mm, so $a_{tip} = 0.66$ m/s². The configured limit now tips it.
+- **Arm horizontal, 100 g, mounted at +0.06:** $b_{tip} = 9.81 \times 0.020/0.0724 = $ **2.71 m/s²** braking, 10.8 accelerating. The extended arm is what makes *braking* the binding direction.
 
-**Slopes.** Facing downhill on angle θ, the plumb line shifts forward by $h\tan\theta$, so the robot tips when
+Note how the two bullets in the middle recover, almost exactly, the numbers this lesson used to quote for a robot with a rear caster. The physics did not change; the edge did. Whenever you move a contact point, every dynamic limit swaps ends.
 
-$$\tan\theta > \frac{\text{margin}_{front}}{h}$$
+**Slopes.** A slope of angle θ shifts the plumb line downhill by $h\tan\theta$, so the robot tips when $\tan\theta > \ell/h$ for whichever $\ell$ is downhill of the CoM.
 
-With the arm up and 100 g: $\arctan(0.0111/0.1067) = $ **5.9°**, a modest wheelchair ramp. The same equation read backwards explains why karmel alone is safe up to $\arctan(0.04/0.05) = 38.7°$, far beyond what traction allows.
+- Arm horizontal with 100 g, **facing downhill**: $\arctan(0.020/0.0724) = $ **15.4°**.
+- Arm up with 100 g on the rear mount, **facing uphill**: $\arctan(0.0111/0.1067) = $ **5.9°**, a modest wheelchair ramp — taken *backwards*.
+- karmel alone is safe to $\arctan(0.040/0.050) = 38.7°$ uphill and $\arctan(0.060/0.050) = 50.2°$ downhill, far beyond what traction allows.
 
-**Turning.** Driving along a curve adds a sideways acceleration $v^2/R$ ([FP.06](FP.06-rotational-motion-inertia.md)) that pushes the ZMP towards a side edge. With karmel's slow speeds this is rarely the binding case, but check it for a tall arm pose.
+**Turning, and reaching sideways.** Driving along a curve adds a sideways acceleration $v^2/R$ ([FP.06](FP.06-rotational-motion-inertia.md)) that pushes the ZMP towards a side edge. With karmel's slow speeds this is rarely the binding case on its own — but a triangle that narrows towards the front punishes the *combination*. Pan the arm 90° to the left, horizontal with 100 g, and the CoM lands at (+0.046, +0.034): the same 14.1 mm of margin as reaching straight forward, but now spent on a diagonal edge, and the acceleration that tips it drops from 10.8 to 6.2 m/s². Reaching sideways on a three-contact base is not the same manoeuvre as reaching forward, and only the polygon tells you so.
 
 **Arm motion.** Swinging the arm accelerates the arm's mass. That adds inertial forces the same way braking does, so a fast arm move can tip a robot that is statically stable in both the start and end poses. Limit arm acceleration when the margin is small.
 
 ### Level 4 — Fixes, quantified
 
-For the worst pose (arm horizontal, 100 g, margin −23.1 mm):
+There are now two failure modes to fix, at opposite ends of the robot.
+
+**(1) Forward, over the caster.** The worst pose is the arm horizontal with a 400 g payload on the +0.06 mount: CoM at x = +0.1106, which is past the caster at +0.100, margin **−7.5 mm**.
 
 | Fix | Result | Cost |
 |---|---|---|
-| Counterweight of 0.97 kg at x = −0.12 m | margin +20 mm, $b_{tip}$ = 3.3 m/s² | +43% mass: slower acceleration, shorter runtime ([FP.05](FP.05-energy-power-efficiency.md)), more load on the motors |
-| Mount the arm at x = −0.06 m instead of +0.06 m | margin +11.6 mm, $b_{tip}$ = 1.56 m/s², safe at every φ | 12 cm less forward reach from the robot's front |
-| Two front casters at (+0.10, ±0.06) | margin +76.9 mm, $b_{tip}$ = 10.4 m/s² | Four or five floor contacts: on uneven floors a drive wheel can lift and lose traction, unless the casters are sprung or the axle pivots |
-| Software: limit φ and payload while driving; lower acceleration when the arm is up | no hardware change | Must be enforced in every code path, including emergency stops |
+| Counterweight of 0.52 kg at x = −0.12 m | margin +20.0 mm, $b_{tip}$ = 3.9 m/s² | +20% mass: slower acceleration, shorter runtime ([FP.05](FP.05-energy-power-efficiency.md)), and it eats the *rear* margin, which is the one that is already tight |
+| Mount the arm at x = −0.06 m instead of +0.06 m | margin +24.1 mm, $b_{tip}$ = 4.2 m/s² | 12 cm less forward reach — and it moves the stowed CoM towards the axle, which is exactly the Level 3 failure |
+| Move the support forward: two casters at (+0.16, ±0.06) | margin +49.4 mm, $b_{tip}$ = 6.0 m/s² | A longer robot, and four floor contacts: on uneven floors a drive wheel can lift and lose traction unless the casters are sprung or the axle pivots |
+| Software: cap the payload, and the tilt φ, while the base is moving | no hardware change | Must be enforced in every code path, including emergency stops |
 
-Real mobile manipulators combine these. Design the mount so the arm's mass sits over or behind the drive axle. Add a front support if reach matters. Enforce "arm tucked while driving" and a stability check before any reach ([15.10](../../15-manipulation/15.10-mobile-manipulation.md)). The software check is exactly the function in the code below, running on the live joint states.
+**(2) Backwards, over the axle.** The worst pose is the arm upright on a −0.06 mount with 200 g: rear margin 8.1 mm, $a_{tip}$ = 0.66 m/s², below the configured 1.0 m/s². The counterweight above makes this one *worse*, and so does mounting the arm further back. What fixes it is a fourth contact: add a rear caster at (−0.10, 0) and the same pose goes to **+65.0 mm** of margin and $a_{tip}$ = 8.8 m/s². A robot that must both reach forward and accelerate hard wants a contact at each end, which is why almost every commercial mobile manipulator has four.
+
+Real mobile manipulators combine these. Design the mount so the arm's mass sits over the drive axle or *towards* the caster, never on the unsupported side. Add support at whichever end you keep running out of. Enforce "arm tucked while driving" and a stability check before any reach ([15.10](../../15-manipulation/15.10-mobile-manipulation.md)). The software check is exactly the function in the code below, running on the live joint states.
 
 ## Diagram
 
-Top view of karmel's support polygon and CoM positions (arm at x = +0.06, 100 g payload):
+Top view of karmel's support polygon and CoM positions (arm at x = +0.06, 100 g payload). The triangle points
+*forward* now, and the flat edge at the bottom of the drawing is the wheel axle:
 
 ```text
-                    x (forward)
-                     ▲
-          CoM, arm horizontal ▲ (+0.023)   ← outside: tips over the front edge
-          CoM, arm at 45°     ■ (+0.014)   ← outside
-   left wheel ●━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━● right wheel     front edge = wheel axle, x = 0
-   (0, +0.10)  ╲              │              ╱  (0, −0.10)
-                ╲             ● (−0.011)    ╱   ← CoM, arm straight up: inside by 11 mm
-                 ╲            │            ╱
-                  ╲           │           ╱
-                   ╲          │          ╱
-                    ╲         │         ╱
-                     ╲        │        ╱
-                      ╲       │       ╱
-                       ╲      │      ╱
-                        ╲     │     ╱
-                         ╲    │    ╱
-                          ╲   │   ╱
-                           ╲  │  ╱
-                            ╲ │ ╱
-                              ○ caster (−0.10, 0)
+                              ○ caster (+0.10, 0)
+                            ╱ │ ╲
+                           ╱  │  ╲
+                          ╱   │   ╲
+                         ╱    │    ╲
+                        ╱     │     ╲
+                       ╱      ▲ (+0.080)  ← CoM, arm horizontal + 100 g: inside by 14.1 mm
+                      ╱       │       ╲      (and 20 mm short of the caster along x)
+                     ╱        │        ╲
+                    ╱         ■ (+0.064)  ← CoM, arm at 45°
+                   ╱          │          ╲
+                  ╱           ● (+0.046)   ╲  ← CoM, arm straight up: 38.3 mm from an edge
+                 ╱            │            ╲
+                ╱             ✖ (+0.011)    ╲ ← CoM with the arm mounted at −0.06 instead:
+   left wheel ●━━━━━━━━━━━━━━━┿━━━━━━━━━━━━━━━● right wheel     11.1 mm from the REAR edge
+   (0, +0.10)                 │                (0, −0.10)      rear edge = wheel axle, x = 0
+                    x (forward) ▲     NOTHING supports the robot below this line.
    y ◄───────────────────────────
 ```
 
-Side view: braking with the arm up. The combined gravity and inertial force points at the floor just short of the axle.
+Side view: **accelerating** with the arm up on a rear mount. The combined gravity and inertial force points at the
+floor just short of the axle — the edge that has nothing behind it.
 
 ```text
-                      │ payload 0.10 kg (z 0.42)
-                      │
-                      │ arm links
-          inertial    │
-          m·b ──►     ● CoM (x −0.011, h 0.107)
-                     ╱│
-                    ╱ │ m·g
-                   ╱  │
-      ┌───────────╱───┼──────────┐
-      ○ caster   ╱    │          (O) axle   tips when the arrow's floor point (ZMP)
-  ════╧═════════●═════╧══════════╧═════     passes x = 0:  b > g·0.0111/0.107 = 1.02 m/s²
-            ZMP = x_c + h·b/g
+                             │ payload 0.10 kg (z 0.42)
+                             │
+                             │ arm links
+        inertial m·a ◄───────●  CoM (x +0.011, h 0.107)
+                            ╱│
+                           ╱ │ m·g
+                          ╱  │
+      ┌──────────────────╱───┼──────────────────────────────┐
+      │                 ╱    │                              │
+  ════╧════════════════●═════╧══════════════════════════════╧════ floor
+                      (O) axle, x = 0                       ○ caster, x = +0.10
+                       ZMP = x_c − h·a/g = +0.0002 m
+                       0.2 mm inside an edge with NOTHING behind it:
+                       tips backward once a > g·0.0111/0.107 = 1.02 m/s²
 ```
 
 ## Code
 
-Save as `fp07_stability.py` and run `python fp07_stability.py`. It computes the CoM for the base and for three arm poses, the static margin to karmel's triangle, the braking deceleration that tips each configuration, the downhill slope limit and the ZMP while braking at 1.0 m/s², and the effect of the three hardware fixes. It then sweeps the arm angle.
+Save as `fp07_stability.py` and run `python fp07_stability.py`. It computes the CoM for the base and for six arm poses, the static margin to karmel's triangle, **both** tipping accelerations (braking forward over the caster and accelerating backward over the axle), the slope limits, the ZMP while accelerating at 1.0 m/s², and the effect of the hardware fixes. It then sweeps the arm angle. `tipping_accel` finds each limit by bisection on the ZMP rather than from $g\,\text{margin}/h$, because that shortcut is only exact when the binding edge is perpendicular to the motion — true for karmel's rear edge, wrong by a factor of $\sqrt2$ for its 45° front edges.
 
 ```python
 """FP.07 — centre of mass, support polygon and tipping for karmel with an arm.
@@ -248,9 +267,31 @@ def zmp(x: float, y: float, h: float, ax: float, ay: float = 0.0) -> tuple[float
     return x - h * ax / G, y - h * ay / G
 
 
-# karmel: wheel contacts at (0, ±0.100), ball caster at (-0.100, 0) -> triangle (CCW order)
-TRIANGLE = [(0.0, -0.100), (0.0, 0.100), (-0.100, 0.0)]
-BASE = Mass("karmel base", 1.6, -0.04, 0.0, 0.05)
+def tipping_accel(x: float, y: float, h: float, polygon: list[tuple[float, float]],
+                  sign: float, limit: float = 30.0) -> float:
+    """Smallest |a_x| that pushes the ZMP out of the polygon, searched by bisection.
+
+    sign = -1 for braking (a_x < 0, ZMP moves forward), +1 for accelerating (ZMP moves backward).
+    Returns 0.0 if the robot is already outside, and `limit` if it never tips below that.
+    """
+    if polygon_margin(x, y, polygon) <= 0.0:
+        return 0.0
+    if polygon_margin(*zmp(x, y, h, sign * limit), polygon) > 0.0:
+        return limit
+    lo, hi = 0.0, limit
+    for _ in range(60):
+        mid = 0.5 * (lo + hi)
+        if polygon_margin(*zmp(x, y, h, sign * mid), polygon) > 0.0:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
+# karmel: wheel contacts at (0, ±0.100), ball caster at (+0.100, 0) -> triangle (CCW order).
+# The caster is IN FRONT of the axle, so the polygon's REAR edge is the axle line itself.
+TRIANGLE = [(0.0, -0.100), (0.100, 0.0), (0.0, 0.100)]
+BASE = Mass("karmel base", 1.6, 0.04, 0.0, 0.05)
 
 
 def arm_parts(phi_deg: float, payload_kg: float, mount_x: float = 0.06) -> list[Mass]:
@@ -270,9 +311,10 @@ def arm_parts(phi_deg: float, payload_kg: float, mount_x: float = 0.06) -> list[
 def report(label: str, parts: list[Mass], polygon=TRIANGLE) -> tuple[float, float, float, float]:
     m, x, y, z = centre_of_mass(parts)
     margin = polygon_margin(x, y, polygon)
-    a_brake_tip = G * margin / z if margin > 0 else 0.0   # braking shifts the ZMP forward by h*a/g
+    brake = tipping_accel(x, y, z, polygon, -1.0)
+    accel = tipping_accel(x, y, z, polygon, +1.0)
     print(f"{label:44s} m={m:4.2f} kg  CoM=({x:+.4f}, {y:+.3f}, {z:.4f})  margin {margin * 1000:+6.1f} mm  "
-          f"tips when braking at {a_brake_tip:5.2f} m/s^2")
+          f"tips braking at {brake:5.2f}, accelerating at {accel:5.2f} m/s^2")
     return m, x, z, margin
 
 
@@ -281,22 +323,38 @@ def main() -> None:
     report("arm straight up (phi=0), 100 g payload", [BASE, *arm_parts(0, 0.10)])
     report("arm horizontal (phi=90), no payload", [BASE, *arm_parts(90, 0.0)])
     _, x_ext, z_ext, _ = report("arm horizontal (phi=90), 100 g payload", [BASE, *arm_parts(90, 0.10)])
+    report("arm up, 100 g, mounted BEHIND at x=-0.06", [BASE, *arm_parts(0, 0.10, mount_x=-0.06)])
+    report("arm up, 200 g, mounted BEHIND at x=-0.06", [BASE, *arm_parts(0, 0.20, mount_x=-0.06)])
+    worst = [BASE, *arm_parts(90, 0.40)]
+    report("arm horizontal (phi=90), 400 g payload", worst)
 
-    m, x, y, z = centre_of_mass([BASE, *arm_parts(0, 0.10)])
-    theta_tip = math.degrees(math.atan(-x / z))
-    print(f"arm straight up, facing downhill: tips forward on slopes steeper than {theta_tip:.1f} deg")
-    zx, zy = zmp(x, y, z, ax=-1.0)                         # braking at the 1.0 m/s^2 limit
-    print(f"arm straight up, braking at 1.0 m/s^2: ZMP at x={zx:+.4f} m, "
+    m, x, y, z = centre_of_mass([BASE, *arm_parts(90, 0.10)])
+    print(f"arm horizontal + 100 g, facing downhill: tips forward past "
+          f"{math.degrees(math.atan((0.100 - x) / z)):.1f} deg")
+    m, x, y, z = centre_of_mass([BASE, *arm_parts(0, 0.10, mount_x=-0.06)])
+    print(f"arm up + 100 g, rear mount, facing uphill:  tips backward past "
+          f"{math.degrees(math.atan(x / z)):.1f} deg")
+    zx, zy = zmp(x, y, z, ax=+1.0)                         # accelerating at the 1.0 m/s^2 limit
+    print(f"arm up, rear mount, accelerating at 1.0 m/s^2: ZMP at x={zx:+.4f} m, "
           f"margin {polygon_margin(zx, zy, TRIANGLE) * 1000:+.1f} mm")
 
-    print("\nfixes for the 100 g, horizontal pose:")
-    total = sum(p.kg for p in [BASE, *arm_parts(90, 0.10)])
-    moment = total * x_ext
-    need = (moment + 0.020 * total) / (0.12 - 0.020)       # counterweight at x=-0.12 for a 20 mm margin
-    report(f"  + {need:.2f} kg counterweight at x=-0.12", [BASE, *arm_parts(90, 0.10), Mass("cw", need, -0.12, 0, 0.03)])
-    report("  arm mounted at x=-0.06 instead of +0.06", [BASE, *arm_parts(90, 0.10, mount_x=-0.06)])
-    quad = [(0.0, -0.100), (0.10, -0.06), (0.10, 0.06), (0.0, 0.100), (-0.100, 0.0)]
-    report("  two front casters at (+0.10, +/-0.06)", [BASE, *arm_parts(90, 0.10)], polygon=quad)
+    print("\nfixes for the 400 g, horizontal pose (which is outside the polygon):")
+    m_w, x_w, _, _ = centre_of_mass(worst)
+    target = 0.100 - 0.020 * math.sqrt(2)                  # 20 mm perpendicular to a 45 deg edge
+    need = m_w * (x_w - target) / (target + 0.12)
+    report(f"  + {need:.2f} kg counterweight at x=-0.12", [*worst, Mass("cw", need, -0.12, 0, 0.03)])
+    report("  arm mounted at x=-0.06 instead of +0.06", [BASE, *arm_parts(90, 0.40, mount_x=-0.06)])
+    wide = [(0.0, -0.100), (0.16, -0.06), (0.16, 0.06), (0.0, 0.100)]
+    report("  two casters at (+0.16, +/-0.06)", worst, polygon=wide)
+    quad = [(-0.10, 0.0), (0.0, -0.100), (0.10, 0.0), (0.0, 0.100)]
+    report("  + a REAR caster, arm up, 200 g, rear mount",
+           [BASE, *arm_parts(0, 0.20, mount_x=-0.06)], polygon=quad)
+
+    print("\nreaching sideways instead of forward (arm horizontal, panned 90 deg, 100 g):")
+    side = [Mass("arm base", 0.20, 0.06, 0.0, 0.10),
+            Mass("arm links", 0.35, 0.06, 0.14, 0.14),
+            Mass("payload", 0.10, 0.06, 0.28, 0.14)]
+    report("  arm horizontal, panned 90 deg, 100 g", [BASE, *side])
 
     phis = np.linspace(0, 90, 91)
     fig, ax = plt.subplots(1, 2, figsize=(11, 4.2))
@@ -308,7 +366,8 @@ def main() -> None:
         margins = np.array(margins)
         cross = phis[np.argmax(margins < 0)] if np.any(margins < 0) else None
         print(f"payload {payload * 1000:3.0f} g, mount x={mount:+.2f}: margin {margins[0]:+.1f} mm at 0 deg, "
-              f"{margins[-1]:+.1f} mm at 90 deg, first tipping angle: {cross}")
+              f"{margins[-1]:+.1f} mm at 90 deg, worst {margins.min():+.1f} mm at "
+              f"{phis[margins.argmin()]:.0f} deg, first tipping angle: {cross}")
         ax[0].plot(phis, margins, style, label=f"payload {payload * 1000:.0f} g, mount x={mount:+.2f} m")
     ax[0].axhline(0, color="k", lw=0.8)
     ax[0].set_xlabel("arm tilt from vertical φ [deg]")
@@ -340,57 +399,68 @@ if __name__ == "__main__":
 Output:
 
 ```text
-base alone                                   m=1.60 kg  CoM=(-0.0400, +0.000, 0.0500)  margin  +40.0 mm  tips when braking at  7.85 m/s^2
-arm straight up (phi=0), 100 g payload       m=2.25 kg  CoM=(-0.0111, +0.000, 0.1067)  margin  +11.1 mm  tips when braking at  1.02 m/s^2
-arm horizontal (phi=90), no payload          m=2.15 kg  CoM=(+0.0084, +0.000, 0.0693)  margin   -8.4 mm  tips when braking at  0.00 m/s^2
-arm horizontal (phi=90), 100 g payload       m=2.25 kg  CoM=(+0.0231, +0.000, 0.0724)  margin  -23.1 mm  tips when braking at  0.00 m/s^2
-arm straight up, facing downhill: tips forward on slopes steeper than 5.9 deg
-arm straight up, braking at 1.0 m/s^2: ZMP at x=-0.0002 m, margin +0.2 mm
+base alone                                   m=1.60 kg  CoM=(+0.0400, +0.000, 0.0500)  margin  +40.0 mm  tips braking at 11.77, accelerating at  7.85 m/s^2
+arm straight up (phi=0), 100 g payload       m=2.25 kg  CoM=(+0.0458, +0.000, 0.1067)  margin  +38.3 mm  tips braking at  4.99, accelerating at  4.21 m/s^2
+arm horizontal (phi=90), no payload          m=2.15 kg  CoM=(+0.0679, +0.000, 0.0693)  margin  +22.7 mm  tips braking at  4.54, accelerating at  9.61 m/s^2
+arm horizontal (phi=90), 100 g payload       m=2.25 kg  CoM=(+0.0800, +0.000, 0.0724)  margin  +14.1 mm  tips braking at  2.71, accelerating at 10.83 m/s^2
+arm up, 100 g, mounted BEHIND at x=-0.06     m=2.25 kg  CoM=(+0.0111, +0.000, 0.1067)  margin  +11.1 mm  tips braking at  8.17, accelerating at  1.02 m/s^2
+arm up, 200 g, mounted BEHIND at x=-0.06     m=2.35 kg  CoM=(+0.0081, +0.000, 0.1200)  margin   +8.1 mm  tips braking at  7.51, accelerating at  0.66 m/s^2
+arm horizontal (phi=90), 400 g payload       m=2.55 kg  CoM=(+0.1106, +0.000, 0.0804)  margin   -7.5 mm  tips braking at  0.00, accelerating at  0.00 m/s^2
+arm horizontal + 100 g, facing downhill: tips forward past 15.4 deg
+arm up + 100 g, rear mount, facing uphill:  tips backward past 5.9 deg
+arm up, rear mount, accelerating at 1.0 m/s^2: ZMP at x=+0.0002 m, margin +0.2 mm
 
-fixes for the 100 g, horizontal pose:
-  + 0.97 kg counterweight at x=-0.12         m=3.22 kg  CoM=(-0.0200, +0.000, 0.0597)  margin  +20.0 mm  tips when braking at  3.29 m/s^2
-  arm mounted at x=-0.06 instead of +0.06    m=2.25 kg  CoM=(-0.0116, +0.000, 0.0724)  margin  +11.6 mm  tips when braking at  1.56 m/s^2
-  two front casters at (+0.10, +/-0.06)      m=2.25 kg  CoM=(+0.0231, +0.000, 0.0724)  margin  +76.9 mm  tips when braking at 10.41 m/s^2
-payload   0 g, mount x=+0.06: margin +14.4 mm at 0 deg, -8.4 mm at 90 deg, first tipping angle: 40.0
-payload 100 g, mount x=+0.06: margin +11.1 mm at 0 deg, -23.1 mm at 90 deg, first tipping angle: 19.0
-payload 100 g, mount x=-0.06: margin +38.3 mm at 0 deg, +11.6 mm at 90 deg, first tipping angle: None
+fixes for the 400 g, horizontal pose (which is outside the polygon):
+  + 0.52 kg counterweight at x=-0.12         m=3.07 kg  CoM=(+0.0717, +0.000, 0.0719)  margin  +20.0 mm  tips braking at  3.86, accelerating at  9.79 m/s^2
+  arm mounted at x=-0.06 instead of +0.06    m=2.55 kg  CoM=(+0.0659, +0.000, 0.0804)  margin  +24.1 mm  tips braking at  4.16, accelerating at  8.04 m/s^2
+  two casters at (+0.16, +/-0.06)            m=2.55 kg  CoM=(+0.1106, +0.000, 0.0804)  margin  +49.4 mm  tips braking at  6.03, accelerating at 13.49 m/s^2
+  + a REAR caster, arm up, 200 g, rear mount m=2.35 kg  CoM=(+0.0081, +0.000, 0.1200)  margin  +65.0 mm  tips braking at  7.51, accelerating at  8.84 m/s^2
+
+reaching sideways instead of forward (arm horizontal, panned 90 deg, 100 g):
+  arm horizontal, panned 90 deg, 100 g       m=2.25 kg  CoM=(+0.0458, +0.034, 0.0724)  margin  +14.1 mm  tips braking at  2.71, accelerating at  6.20 m/s^2
+payload   0 g, mount x=+0.06: margin +38.8 mm at 0 deg, +22.7 mm at 90 deg, worst +22.7 mm at 90 deg, first tipping angle: None
+payload 100 g, mount x=+0.06: margin +38.3 mm at 0 deg, +14.1 mm at 90 deg, worst +14.1 mm at 90 deg, first tipping angle: None
+payload 100 g, mount x=-0.06: margin +11.1 mm at 0 deg, +38.7 mm at 90 deg, worst +11.1 mm at 0 deg, first tipping angle: None
 saved fp07_stability.png
 ```
 
 **The plot `fp07_stability.png`** has two panels.
 
-- **Left:** static margin in mm against arm tilt φ from 0° to 90°, for three cases.
-  - Mount at +0.06, no payload (dashed): falls from +14 mm and crosses zero at 40°.
-  - Mount at +0.06, 100 g (solid): falls from +11 mm, crosses zero at 19°, and ends at −23 mm.
-  - Mount at −0.06, 100 g (dash-dot): starts near +38 mm, peaks just above 40 mm around 7°, and declines to +12 mm at 90° without crossing zero.
-- **Right:** top view of the triangle, with the flat front edge along x = 0 between y = ±0.1 and the point at the caster. The CoM for φ = 0° sits inside, just behind the edge. The CoMs for 45° and 90° sit outside, in front of it.
+- **Left:** static margin in mm against arm tilt φ from 0° to 90°, for three cases. None of them crosses zero, and the two mounts point in opposite directions.
+  - Mount at +0.06, no payload (dashed): falls monotonically from +38.8 mm to +22.7 mm as the arm goes out.
+  - Mount at +0.06, 100 g (solid): falls monotonically from +38.3 mm to +14.1 mm. Extending the arm costs margin, but never all of it at this payload.
+  - Mount at −0.06, 100 g (dash-dot): the mirror image. It *starts* at its worst, +11.1 mm against the rear edge with the arm upright, rises to a peak of +41.3 mm at φ = 62° as the arm's mass comes forward over the polygon, and settles at +38.7 mm. The stowed pose is the dangerous one.
+- **Right:** top view of the triangle, with the flat edge along x = 0 between y = ±0.1 — the axle — and the point at the caster, 100 mm forward. All three CoMs (φ = 0°, 45°, 90°, at x = +0.046, +0.070, +0.080) sit inside it, walking towards the caster as the arm extends.
 
 ## Exercise
 
 ### Exercise FP.07-E1 — CoM from scale readings `[numerical]`
 
-Hardware: none. Your karmel with its arm straight up and a payload weighs 2.25 kg. The caster scale reads 540 g on level ground and 115 g after you raise the caster end so the robot pitches 10° nose-down. The caster is 0.10 m behind the axle. Compute:
+Hardware: none. Your karmel with its arm straight up and a payload weighs 2.25 kg. The caster scale reads 540 g on level ground and 115 g after you raise the caster end — the nose — so the robot pitches 10° nose-**up**. The caster is 0.10 m in front of the axle. Compute:
 
 1. $x_c$.
 2. $h$.
-3. The static front margin.
-4. The braking deceleration at which it tips.
-5. The steepest ramp it can face downhill.
+3. The static margin, and say which edge it is against.
+4. The acceleration at which it rears up, and the deceleration at which it noses over.
+5. The steepest ramp it can face *uphill*, and the steepest it can face downhill.
 
-### Exercise FP.07-E2 — Safe arm angle `[coding]`
+### Exercise FP.07-E2 — The safe band of arm angles `[coding]`
 
-Hardware: none. Write `max_safe_tilt(payload_kg, mount_x, min_margin_m, brake_m_s2)`. It returns the largest arm tilt φ, in 0.5° steps, for which the static margin is at least `min_margin_m` **and** the ZMP stays inside the polygon while braking at `brake_m_s2`. Evaluate:
+Hardware: none. Write `safe_tilt_band(payload_kg, mount_x, min_margin_m, accel_m_s2)`. It returns the range of arm tilts φ, scanned in 0.5° steps from 0° to 90°, for which the static margin is at least `min_margin_m` **and** the ZMP stays inside the polygon while both accelerating *and* braking at `accel_m_s2`. Evaluate:
 - (a) 100 g, mount −0.06 m, 10 mm, 1.0 m/s²
-- (b) no payload, mount +0.06 m, 10 mm, 1.0 m/s²
-- (c) 100 g, mount +0.06 m, 10 mm, 1.0 m/s²
+- (b) 200 g, mount −0.06 m, 10 mm, 1.0 m/s²
+- (c) 400 g, mount +0.06 m, 10 mm, 1.0 m/s²
 
-### Exercise FP.07-E3 — Predict: payload and braking `[predict]`
+Then say, in one sentence each, which end of the robot closes the band in (b) and in (c).
 
-Hardware: none. Karmel has the arm mounted at +0.06 m, straight up. Before computing, predict:
+### Exercise FP.07-E3 — Predict: payload and acceleration `[predict]`
 
-1. With 100 g in the gripper, does braking at 1.0 m/s² tip it?
+Hardware: none. Karmel has the arm mounted at −0.06 m — behind the axle, which looks like the cautious choice — straight up. Before computing, predict:
+
+1. With 100 g in the gripper, does accelerating at 1.0 m/s² tip it?
 2. With 200 g, does it?
-3. Does holding the payload *lower*, with the arm folded but the same x position, make braking safer or less safe, and why?
+3. Does holding the payload *lower*, with the arm folded but the same x position, make acceleration safer or less safe, and why?
+4. Would mounting the arm at +0.06 m instead make (2) better or worse?
 
 ### Exercise FP.07-E4 — Measure your robot's CoM `[hardware]`
 
@@ -406,28 +476,33 @@ Hardware: `robot-base` and a kitchen scale, plus `arm` if you have reached stage
 ## Expected result
 
 **FP.07-E1:**
-1. $x_c = -0.10 \times 0.540/2.25 = -0.024$ m.
+1. $x_c = +0.10 \times 0.540/2.25 = +0.024$ m — 24 mm *ahead* of the axle.
 2. $h = (0.024 - 0.10 \times 0.115/2.25)/\tan10° = (0.024 - 0.00511)/0.1763 = 0.107$ m.
-3. The margin is **24 mm**, assuming the side edges are further away; check: $(x+0.1)/\sqrt2 = 54$ mm.
-4. $b_{tip} = 9.81 \times 0.024/0.107 = 2.20$ m/s².
-5. $\arctan(0.024/0.107) = 12.6°$.
+3. **24.0 mm, against the rear edge** — the axle. The front edges are much further: $(0.100 - 0.024)/\sqrt2 = 53.7$ mm. This robot's problem is its tail, not its nose.
+4. $a_{tip} = 9.81 \times 0.024/0.107 = $ **2.20 m/s²** accelerating; braking, $b_{tip} = 9.81 \times 0.076/0.107 = 6.96$ m/s², three times as much headroom.
+5. Uphill: $\arctan(0.024/0.107) = $ **12.6°**. Downhill: $\arctan(0.076/0.107) = $ **35.4°**, which traction rules out long before tipping does.
 
 **FP.07-E2:**
-- (a) **90°**: the rear mount is safe everywhere.
-- (b) **11.0°**.
-- (c) **0°**: only the upright pose passes, and barely, with 11.1 mm static and a braking ZMP 0.2 mm inside.
+- (a) **0°–90°**, the whole range, but only just: at φ = 0 the static margin is 11.1 mm and the accelerating ZMP lands 0.2 mm inside the axle.
+- (b) **5.5°–90°**. The extra 100 g pulls the stowed CoM back to x = +0.0081, an 8.1 mm rear margin and $a_{tip}$ = 0.66 m/s², so the *upright* pose now fails. The **rear** end closes the band, and the cure is to tilt the arm forward — the opposite of every instinct trained on a rear-caster robot.
+- (c) **0°–37°**. Here the **front** end closes it: 400 g swung out to φ = 60° puts the CoM at x = +0.102, past the caster, and the robot noses over.
 
 **FP.07-E3:**
-1. **No, barely:** $b_{tip}$ = 1.02 m/s², and the ZMP ends 0.2 mm inside the edge.
-2. **Yes:** $b_{tip}$ = 0.66 m/s² < 1.0 m/s².
-3. **Safer.** A lower payload lowers $h$, and $b_{tip} = g\cdot\text{margin}/h$ rises. The static margin is unchanged because the x position is the same.
+1. **No, barely:** $a_{tip}$ = 1.02 m/s², and the ZMP ends 0.2 mm inside the axle.
+2. **Yes:** $a_{tip}$ = 0.66 m/s² < 1.0 m/s².
+3. **Safer.** A lower payload lowers $h$ — from 0.120 m to 0.108 m — and $a_{tip} = g\,x_c/h$ rises from 0.66 to 0.73 m/s². The static margin is unchanged because the x position is the same. Still under 1.0, so it is not a fix.
+4. **Much better:** mounting at +0.06 puts the stowed CoM at x = +0.0464, an $a_{tip}$ of 3.79 m/s² with 37.9 mm of margin. With a caster in front, mounting the arm *forward* is the safe choice, and the "obviously conservative" rear mount is the trap.
 
-**FP.07-E4:** Stage-1 karmel without the arm typically reads 550–700 g under the caster, which gives $x_c$ between −0.034 and −0.044 m and $h$ of 0.04–0.06 m. With the arm, expect the caster reading to drop, the CoM to move forward, and $h$ to roughly double. If $x_c$ comes out ahead of the axle with the arm upright, do not drive with the arm until you apply one of the Level 4 fixes.
+**FP.07-E4:** Stage-1 karmel without the arm should read 320–530 g under the caster — 20–33% of 1.6 kg — which gives $x_c$ between +0.020 and +0.033 m and $h$ of 0.04–0.06 m. With the arm mounted forward, expect the caster reading to *rise*, the CoM to move towards the caster, and $h$ to roughly double. If the caster reads near zero with the arm upright, your CoM is at or behind the axle: do not drive with the arm until you apply one of the Level 4 fixes.
 
 ## Troubleshooting
 
+### Symptom: the robot rears up when it starts, but is fine once it is moving
+1. Acceleration is the dynamic case, and with the caster in front it is the binding one. Compute $a_{tip} = g\,x_c/h$ from the measured CoM and compare it with `max_linear_accel_m_s2`. karmel in simulation has $x_c$ = 1.7 mm and tips at 0.33 m/s² against a configured limit of 1.0, which is exactly why it visibly rocks nose-up on a step command ([`labs/TESTED.md`](../../labs/TESTED.md) §3.1).
+2. Fix it by moving mass forward (the battery is the big lever), ramping the command instead of stepping it, or lowering the acceleration limit while the arm is not tucked.
+
 ### Symptom: the robot noses over when it stops, but never while driving
-1. Braking is the dynamic case. Compute $b_{tip}$ from the measured margin and height and compare it with the deceleration limit, **including emergency stops**. A watchdog stop that cuts to zero is the hardest brake the robot ever does.
+1. Braking is the other dynamic case, over the caster rather than the axle. Compute $b_{tip} = g\,(x_{caster} - x_c)/h$ and compare it with the deceleration limit, **including emergency stops**. A watchdog stop that cuts to zero is the hardest brake the robot ever does.
 2. Fix it by ramping down on the Pico even when stopping, lowering the deceleration limit when the arm is not tucked, or lowering the payload.
 
 ### Symptom: the scale-based CoM seems wrong, or changes between readings
@@ -437,16 +512,17 @@ Hardware: `robot-base` and a kitchen scale, plus `arm` if you have reached stage
 
 ### Symptom: the simulation says stable, the real robot tips
 1. Compare the URDF masses and inertial origins with reality ([FP.06](FP.06-rotational-motion-inertia.md)). Arm links often have default or missing masses.
-2. Check that the caster's collision geometry actually touches the ground in simulation. A floating caster invents a different support polygon.
+2. Check that the caster's collision geometry actually touches the ground in simulation, **and that it is at the end you think**. A floating caster invents a different support polygon, and a caster at the wrong end inverts every conclusion in this lesson — `karmel_description`'s `test_centre_of_mass_is_inside_the_support_polygon` exists because that happened here.
 3. Check acceleration limits in simulation against those on the real robot.
 
-### Symptom: the robot rocks on four contacts after adding a front caster
+### Symptom: the robot rocks on four contacts after adding a second caster
 1. With more than three contacts, one leaves the floor on any unevenness. If it is a drive wheel, the robot loses traction.
 2. Adjust caster height so the drive wheels always carry load, or use a spring-loaded caster.
 
 ## Common mistakes
 
-- **Assuming the robot's footprint is the support polygon.** Only floor contacts count. Karmel's chassis may extend 12.5 cm ahead of the axle, but the front tipping line is the axle.
+- **Assuming the robot's footprint is the support polygon.** Only floor contacts count. Karmel's chassis extends 12.5 cm behind the axle, but the rear tipping line is the axle.
+- **Assuming the *other* robot's advice applies to yours.** "Mount the arm further back" is right for a rear-caster base and wrong for a front-caster one. Draw the polygon before repeating a rule of thumb.
 - **Checking only static stability.** Braking, slopes and fast arm moves shift the ZMP, and a high CoM amplifies all of them.
 - **Forgetting emergency stops** when choosing deceleration limits.
 - **Ignoring the payload's height.** The same payload held high reduces braking stability more than when held low.
@@ -461,10 +537,10 @@ Hardware: `robot-base` and a kitchen scale, plus `arm` if you have reached stage
    (−0.05 + 0.05 + 0.05)/1.75 = 0.05/1.75 = **+0.0286 m**.
    </details>
 
-2. What is karmel's support polygon, and which edge matters for forward tipping?
+2. What is karmel's support polygon, and which edge matters for forward tipping, and which for backward?
    <details><summary>Answer</summary>
 
-   A triangle: wheel contacts at (0, ±0.10) and the caster at (−0.10, 0). Forward tipping happens over the front edge, the line through the wheel contacts at x = 0, which is the axle.
+   A triangle: wheel contacts at (0, ±0.10) and the caster at (**+0.10**, 0). **Backward** tipping happens over the rear edge, the line through the wheel contacts at x = 0, which is the axle — there is no contact behind it at all. **Forward** tipping happens over one of the two 45° edges running from a wheel to the caster, so the CoM has to get past x = +0.10 on the centreline before the robot noses over.
    </details>
 
 3. A robot's CoM sits 30 mm behind its front tipping edge at a height of 0.12 m. At what braking deceleration does it tip?
@@ -485,31 +561,31 @@ Hardware: `robot-base` and a kitchen scale, plus `arm` if you have reached stage
    An abrupt stop gives the largest deceleration the robot experiences, which shifts the ZMP forward the most. If the configured deceleration limit is only just safe, an unramped e-stop can tip the robot.
    </details>
 
-6. Debugging: karmel with the arm is stable on the living-room floor but tips forward when approaching the balcony threshold ramp facing downhill. Explain with numbers for the arm-up, 100 g configuration.
+6. Debugging: karmel with the arm mounted at −0.06 m is stable on the living-room floor but rears up when it drives *up* the balcony threshold ramp. Explain with numbers for the arm-up, 100 g configuration.
    <details><summary>Answer</summary>
 
-   Facing downhill, the plumb line shifts forward by h·tanθ. With a margin of 11.1 mm and h = 0.107 m, it tips when tan θ > 0.104, which is θ > 5.9°. Threshold ramps are often steeper than that. Any braking on the ramp makes it worse.
+   Facing uphill, the plumb line shifts backwards by h·tanθ, towards the rear edge — the axle, with nothing behind it. With a rear margin of 11.1 mm and h = 0.107 m it tips when tan θ > 0.104, which is θ > **5.9°**. Threshold ramps are often steeper than that, and the robot is also *accelerating* to climb, which spends the same 11.1 mm a second time.
    </details>
 
-7. Name two fixes for forward tipping that do not add mass, and a drawback of each.
+7. Name two fixes for karmel's backward tipping that do not add mass, and a drawback of each.
    <details><summary>Answer</summary>
 
-   (a) Mount the arm further back (at −0.06 m instead of +0.06 m). Drawback: less forward reach. (b) Add front casters. Drawback: uneven floors can lift a drive wheel. Also possible: (c) software limits on arm pose, payload and deceleration. Drawback: they must be enforced on every path, including e-stops.
+   (a) Mount the arm *forward* (at +0.06 m instead of −0.06 m), which takes $a_{tip}$ from 1.02 to 4.21 m/s². Drawback: it spends front margin, so a heavy payload at full extension gets closer to the caster. (b) Add a rear caster at (−0.10, 0). Drawback: four contacts, so uneven floors can lift a drive wheel unless it is sprung. Also possible: (c) software limits on arm pose, payload and acceleration, including a ramped start. Drawback: they must be enforced on every path, including e-stops.
    </details>
 
 ## Practical challenge
 
-Build a **stability monitor** node-ready module `stability.py`. Its input is a list of link masses with CoM positions (later from the arm's URDF and joint states via TF), the support polygon, and the current commanded acceleration. It returns the static margin, the ZMP margin, and a recommended maximum deceleration.
+Build a **stability monitor** node-ready module `stability.py`. Its input is a list of link masses with CoM positions (later from the arm's URDF and joint states via TF), the support polygon, and the current commanded acceleration. It returns the static margin, the ZMP margin, and a recommended acceleration limit in **both** directions.
 
 **Acceptance criteria:**
 - It reproduces this lesson's numbers for the base alone, arm up with 100 g, and arm horizontal with 100 g (margins to ±0.1 mm).
-- `recommended_max_decel()` returns $g\cdot\text{margin}/h$ multiplied by a safety factor of 0.5. For arm up with 100 g that is **0.51 m/s²**.
+- `recommended_max_accel()` returns $g\,x_c/h$ and `recommended_max_decel()` returns $g\,(x_{caster}-x_c)/h$, each multiplied by a safety factor of 0.5. For the arm up with 100 g on the **−0.06** mount, the acceleration limit is **0.51 m/s²** — half the value `karmel.yaml` currently configures.
 - A function `allowed(pose, payload)` refuses any pose with a static margin below 10 mm, and has pytest tests for three poses.
 - A short design note proposes where this check runs in the ROS 2 architecture: before sending an arm goal, and when setting the base's acceleration limit, with the reason for each ([15.10](../../15-manipulation/15.10-mobile-manipulation.md)).
 
 ## You can skip this if…
 
-You get knowledge-check questions 3, 4 and 6 right without looking, and you can compute a support-polygon margin and a braking tip limit for a mobile manipulator with its arm extended.
+You get knowledge-check questions 2, 3 and 6 right without looking, and you can compute a support-polygon margin and *both* tipping limits for a mobile manipulator with its arm extended, without having to be told which end the caster is on.
 
 `python course.py skip FP.07 --reason "can tell if a mobile manipulator tips when the arm extends"`
 

@@ -409,7 +409,7 @@ Note that `set_duty(0.0)` in drive/brake mode means **brake** (IN1 = 1, IN2 = 10
 
 Hardware: none.
 
-The robot climbs a ramp and each motor draws 1.5 A for 20 s from a 11.1 V pack. For an L298N (use 2.9 V drop at 1.5 A), a TB6612FNG (0.5 Ω) and a DRV8874 (0.2 Ω):
+The robot climbs a ramp and each motor draws 1.5 A for 20 s from the 10.8 V pack. For an L298N (use 2.9 V drop at 1.5 A), a TB6612FNG (0.5 Ω) and a DRV8874 (0.2 Ω):
 
 1. Compute the voltage at the motor and the heat per channel.
 2. Compute the energy wasted per channel in joules during the climb.
@@ -449,7 +449,7 @@ No hardware yet? Replace `machine` with a small fake module (classes `Pin`, `PWM
 
 ## Expected result
 
-- **FE.12-E1:** L298N: motor gets $11.1 - 2.9 = $ **8.2 V**, heat $2.9 \times 1.5 = $ **4.35 W**, **87 J**, about **26 %** of the energy wasted. It needs a heatsink. TB6612FNG: drop 0.75 V, motor gets **10.35 V**, heat $1.5^2 \times 0.5 = $ **1.13 W**, **22.5 J**, about **7 %**. Warm; OK for 20 s but close to its 1 A continuous rating. DRV8874: drop 0.3 V, motor gets **10.8 V**, heat **0.45 W**, **9 J**, about **2.7 %**. No heatsink.
+- **FE.12-E1:** L298N: motor gets $10.8 - 2.9 = $ **7.9 V**, heat $2.9 \times 1.5 = $ **4.35 W**, **87 J**, about **27 %** of the energy wasted. It needs a heatsink. TB6612FNG: drop 0.75 V, motor gets **10.05 V**, heat $1.5^2 \times 0.5 = $ **1.13 W**, **22.5 J**, about **7 %**. Warm; OK for 20 s but close to its 1 A continuous rating. DRV8874: drop 0.3 V, motor gets **10.5 V**, heat **0.45 W**, **9 J**, about **2.8 %**. No heatsink.
 - **FE.12-E2:** Stall at 8.4 V is $1.6 \times 8.4/6 = $ **2.24 A**. DRV8833 is now **within voltage** (8.4 < 10.8 V), and its 2 A peak is slightly below the stall current, so it's acceptable with ramping in software. The TB6612FNG (3 A peak) and the DRV8874 pass. The L298N works but wastes about 2.5 V of an 8.4 V pack, 30 % of it.
 - **FE.12-E3:** (1) Coast: the wheel spins down slowly over a second or more. (2) Brake: it stops within a fraction of a turn. (3) `set_duty(0.0)` = brake in this implementation, same as (2). (4) With the same code, one wheel usually turns "backward" relative to the robot, because the motors are mirrored on the chassis. Fix it with a per-side sign in software (or swap that motor's two wires), not by changing the truth table.
 - **FE.12-E4:** VIN reads the pack voltage (9.0–12.6 V). SLEEP 3.3 V ±0.1. Free-spinning current at ±30 % is typically **0.05–0.25 A** (the ADC has a few tens of mA of noise, and readings near 0 are normal at no load). OUT1–OUT2 reads close to $0.3 \times V_\text{pack}$ (about 3.3–3.8 V; a multimeter averages the PWM), with the sign reversed at −30 %. Slowing the tire makes the current climb toward about 1 A. The fake-hardware version gives IN2 = $\lfloor 0.7 \times 65535 \rfloor = 45874$.
@@ -507,7 +507,7 @@ Reversal at speed briefly draws more than stall current and pumps energy back in
    Both switches on the same side (high and low) at once: shoot-through. It shorts the battery through the two switches, with a huge current that destroys them in milliseconds (or blows the fuse). Driver chips prevent it with interlocks and dead time.
    </details>
 
-4. Predict: a robot with an L298N runs at 11.1 V. You replace the L298N with a DRV8874 without changing the code. What changes in its behavior?
+4. Predict: a robot with an L298N runs at the 10.8 V nominal. You replace the L298N with a DRV8874 without changing the code. What changes in its behavior?
    <details><summary>Answer</summary>
 
    The motors get about 2–3 V more at the same duty, so the robot is faster at every duty and has more torque, the driver runs cool, and the battery lasts longer. The open-loop calibrations (duty → speed, deadband) change and must be redone.

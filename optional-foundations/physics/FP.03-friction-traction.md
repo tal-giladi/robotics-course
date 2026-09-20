@@ -119,7 +119,7 @@ $$P_{max} = \frac{\mu W (1 - d_g/d_c)}{1 + \mu h_p/d_c}$$
 
 At μ = 0.6: $P_{max} = \frac{0.6 \times 15.696 \times 0.6}{1.24} = 4.56$ N, which reads as **465 g** on a scale.
 
-What can the motors do? The Yahboom 520 1:56 datasheet gives a stall torque of 8.3 kg·cm = 0.814 N·m at 12 V, which is about 0.753 N·m at 11.1 V. At the rim of a 45 mm-radius wheel that is $0.753/0.045 = 16.7$ N per wheel, **33.5 N for both**. That is more than 7× what the floor can take. Wheels spin long before the motors stall, which is also good news for the motors ([FP.04](FP.04-torque-gears-wheels.md) does the sizing).
+What can the motors do? The Yahboom 520 1:56 datasheet gives a stall torque of 8.3 kg·cm = 0.814 N·m at 12 V, which is about 0.733 N·m at the 10.8 V nominal. At the rim of a 45 mm-radius wheel that is $0.733/0.045 = 16.3$ N per wheel, **32.6 N for both**. That is about 7× what the floor can take. Wheels spin long before the motors stall, which is also good news for the motors ([FP.04](FP.04-torque-gears-wheels.md) does the sizing).
 
 ### Level 3c — Slip and odometry
 
@@ -224,9 +224,9 @@ def max_push(r: Robot, mu: float, push_height_m: float) -> float:
 
 
 def simulate_drive(r: Robot, mu: float, duty: float, ramp_s: float, t_end: float = 1.5, dt: float = 1e-4,
-                   stall_nm: float = 0.753, no_load_rad_s: float = 19.86,
+                   stall_nm: float = 0.733, no_load_rad_s: float = 19.32,
                    stiffness_n_per_m_s: float = 1000.0):
-    """1-D robot + lumped wheels driven by two DC gear motors (straight torque-speed line at 11.1 V).
+    """1-D robot + lumped wheels driven by two DC gear motors (straight torque-speed line at 10.8 V).
 
     Duty ramps from 0 to `duty` over `ramp_s` seconds (ramp_s = 0 is a step).
       J dω/dt = τ - r F      m dv/dt = F - c_rr W      F = clip(k (ω r - v), ±mu N_w)
@@ -263,7 +263,7 @@ def main() -> None:
         print(f"{mu:.1f}   {max_accel(k, mu):10.3f}  {max_brake(k, mu):14.3f}  {p:9.3f}  ({p / G * 1000:.0f} g)")
     print(f"tilt test: slides at 31.0 deg -> mu_s = tan(31.0 deg) = {math.tan(math.radians(31.0)):.3f}")
 
-    stall_per_wheel = 0.8139 * 11.1 / 12.0          # N*m at the gearbox output, scaled to 11.1 V
+    stall_per_wheel = 0.8139 * 10.8 / 12.0          # N*m at the gearbox output, scaled to 10.8 V
     print(f"motor stall force at the rim (both wheels): {2 * stall_per_wheel / k.wheel_radius_m:.1f} N "
           f"vs traction limit {max_push(k, 0.6, 0.04):.2f} N at mu=0.6")
 
@@ -305,20 +305,20 @@ mu    a_max[m/s^2]  brake_max[m/s^2]  push@4cm[N] (reads on a scale)
 0.6        2.566           5.325      4.557  (465 g)
 0.8        3.223           7.848      5.708  (582 g)
 tilt test: slides at 31.0 deg -> mu_s = tan(31.0 deg) = 0.601
-motor stall force at the rim (both wheels): 33.5 N vs traction limit 4.56 N at mu=0.6
+motor stall force at the rim (both wheels): 32.6 N vs traction limit 4.56 N at mu=0.6
 
 full duty, 1.5 s                             true[m]  odom[m]  error   slipping
-  step, mu=0.6 (no acceleration limit)      1.162   1.220    5.0 %  0.29 s
-  ramp over 0.8 s, mu=0.6                   0.861   0.863    0.2 %  0.00 s
-  ramp over 0.8 s, dusty floor mu=0.2       0.813   0.863    6.1 %  0.82 s
+  step, mu=0.6 (no acceleration limit)      1.134   1.187    4.7 %  0.28 s
+  ramp over 0.8 s, mu=0.6                   0.837   0.839    0.2 %  0.00 s
+  ramp over 0.8 s, dusty floor mu=0.2       0.799   0.839    5.0 %  0.78 s
 saved fp03_slip.png
 ```
 
 **The plot `fp03_slip.png`** shows odometry overestimate (%) against how long the duty ramp takes, from 0 (a step) to 1.2 s, for μ = 0.2, 0.4 and 0.6.
 
 - **μ = 0.6:** the error starts at about 5% for a step and drops to zero once the ramp is 0.4 s or longer.
-- **μ = 0.4:** it starts at about 11% and reaches zero at about 0.5 s.
-- **μ = 0.2:** it starts at about 38% and needs a full 1.0 s ramp before it reaches zero.
+- **μ = 0.4:** it starts at about 10% and reaches zero at about 0.5 s.
+- **μ = 0.2:** it starts at about 36% and needs a full 1.0 s ramp before it reaches zero.
 
 The lines fall roughly linearly. The lesson in one picture: a gentler acceleration buys correct odometry, and a slippery floor needs a much gentler one. The remaining 0.2% at long ramps is tyre creep.
 

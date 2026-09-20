@@ -51,7 +51,7 @@ Check your readiness: `python course.py why FP.05`
 **Energy** is the capacity to do work: lift something, speed something up, heat something. It is a quantity, like the balance in a bank account, and it is measured in joules (J). **Power** is the *rate* at which energy flows, like spending per hour, measured in watts (W = J/s). A battery is the account, and each component spends at its own rate.
 
 - Energy (J) = power (W) × time (s).
-- A **watt-hour** (Wh) is 1 W for 1 hour, which is 3600 J. Batteries are rated in ampere-hours (Ah). Multiply by voltage to get energy: a 3S pack of Samsung 35E cells stores 11.1 V × 3.5 Ah = **38.85 Wh**.
+- A **watt-hour** (Wh) is 1 W for 1 hour, which is 3600 J. Batteries are rated in ampere-hours (Ah). Multiply by voltage to get energy: a 3S pack of Samsung 35E cells stores 10.8 V × 3.5 Ah = **37.8 Wh** (the 35E's nominal cell voltage is 3.6 V, not the 3.7 V that generic "11.1 V" LiPo labels assume — see [FE.13](../electronics/FE.13-batteries.md)).
 
 Mechanically, power is force × speed or torque × angular speed: $P = Fv = \tau\omega$. Pushing karmel along a flat floor at 0.3 m/s against 0.31 N of rolling resistance takes only **0.094 W**, about as much as a small LED. Climbing costs more: lifting 1.6 kg by 1 m stores 15.7 J, but that is only 0.0044 Wh. Accelerating to 0.5 m/s stores 0.2 J of kinetic energy. The physics of moving a small robot is cheap.
 
@@ -68,16 +68,16 @@ A **power budget** is a table: every consumer, its power, the fraction of time i
 
 | Quantity | Unit | Relation | Karmel example |
 |---|---|---|---|
-| Energy | J, Wh | 1 Wh = 3600 J | 38.85 Wh = 139,860 J |
+| Energy | J, Wh | 1 Wh = 3600 J | 37.8 Wh = 136,080 J |
 | Charge | Ah, mAh | 1 Ah = 3600 C | 3.5 Ah = 3500 mAh |
-| Battery energy | Wh | $E = V_{nom} \times Q$ | 11.1 V × 3.5 Ah = 38.85 Wh |
+| Battery energy | Wh | $E = V_{nom} \times Q$ | 10.8 V × 3.5 Ah = 37.8 Wh |
 | Electrical power | W | $P = VI$ | Pi 5 drawing 5 W from 5 V = 1.0 A |
 | Mechanical power | W | $P = Fv = \tau\omega$ | 1.68 N × 0.3 m/s = 0.50 W up a 5° ramp |
 | Efficiency | – | $\eta = P_{out}/P_{in}$ | buck converter ≈ 0.90 |
 
-**Converting through a regulator.** A load of 5 W on the 5 V rail, fed by a 90%-efficient buck converter from 11.1 V, draws $5/0.9 = 5.56$ W from the battery, which is $5.56/11.1 = 0.50$ A. Current *drops* when the voltage steps down. Power is what flows through the converter, minus its losses ([FE.15](../electronics/FE.15-voltage-regulators.md)).
+**Converting through a regulator.** A load of 5 W on the 5 V rail, fed by a 90%-efficient buck converter from 10.8 V, draws $5/0.9 = 5.56$ W from the battery, which is $5.56/10.8 = 0.51$ A. Current *drops* when the voltage steps down. Power is what flows through the converter, minus its losses ([FE.15](../electronics/FE.15-voltage-regulators.md)).
 
-**Usable energy.** You never get the full rated energy. The pack must stop at the 9.9 V cutoff in `karmel.yaml`. Voltage sags under load, so the cutoff arrives early. Cells lose capacity with age and in the cold. A planning factor of **0.85** is reasonable for a healthy pack: $38.85 \times 0.85 = 33.0$ Wh usable. [FE.13](../electronics/FE.13-batteries.md) covers the chemistry.
+**Usable energy.** You never get the full rated energy. The pack must stop at the 9.9 V cutoff in `karmel.yaml`. Voltage sags under load, so the cutoff arrives early. Cells lose capacity with age and in the cold. A planning factor of **0.85** is reasonable for a healthy pack: $37.8 \times 0.85 = 32.1$ Wh usable. [FE.13](../electronics/FE.13-batteries.md) covers the chemistry.
 
 ### Level 2 — From the floor to the battery
 
@@ -97,7 +97,7 @@ $$I = I_0 + \frac{\tau}{k_t}, \qquad V_m = I R + k_e \omega, \qquad P_{elec} = V
 
 The gap is almost all the $I_0$ term: gearbox and brush friction that costs current whether or not the wheels push anything. Up a 5° ramp the useful load is larger, so efficiency rises to 16% (3.10 W electrical for 0.50 W mechanical). Small gear motors are most efficient at moderate load and worst when idling along.
 
-With PWM, the driver delivers the motor voltage $V_m$ by switching the battery on and off. The battery current is roughly $P_{elec}/V_{batt}$ (ideal driver), here $1.57/11.1 = 0.14$ A for both motors.
+With PWM, the driver delivers the motor voltage $V_m$ by switching the battery on and off. The battery current is roughly $P_{elec}/V_{batt}$ (ideal driver), here $1.57/10.8 = 0.15$ A for both motors.
 
 ### Level 3 — The power budget and runtime
 
@@ -114,11 +114,11 @@ Here $f_i$ is the fraction of time consumer $i$ is on, and $\eta_i$ is the effic
 | Drive motors at 0.3 m/s | 1.57 W | 0.30 | 1.0 | 0.47 W |
 | **Total** | | | | **5.25 W** |
 
-**Runtime: 33.0 Wh / 5.25 W = 6.3 h.** The Pi is **85%** of the budget and the motors 9%. The Pi figures are planning values: a Raspberry Pi 5 is commonly measured at around 3 W idle and 6–8 W under sustained load. Measure your own with the INA219 ([02.02](../../02-robot-electronics/02.02-power-budget.md)).
+**Runtime: 32.1 Wh / 5.25 W = 6.1 h.** The Pi is **85%** of the budget and the motors 9%. The Pi figures are planning values: a Raspberry Pi 5 is commonly measured at around 3 W idle and 6–8 W under sustained load. Measure your own with the INA219 ([02.02](../../02-robot-electronics/02.02-power-budget.md)).
 
 **Stage 3 karmel** adds a 2D LiDAR (about 0.9 W; the researched LD-series unit is rated at 5 V / 180 mA), a USB camera (assumed 1 W), and a busier Pi running SLAM and Nav2 (an extra 2 W). The average rises to 9.58 W and the runtime drops to **3.4 h**. The motors are now 5% of the budget.
 
-**Stall is the worst case.** Both motors stalled at 11.1 V draw about 7.4 A, which is 82 W, nearly 10× the stage-3 average. That is not a runtime problem but a peak-current problem: it sizes the fuse, the wiring and the cells' discharge rating, and it causes brownouts ([01.07](../../01-first-robot/01.07-power-system.md), [02.02](../../02-robot-electronics/02.02-power-budget.md)).
+**Stall is the worst case.** Both motors stalled at 10.8 V draw about 7.2 A, which is 78 W, about 8× the stage-3 average. That is not a runtime problem but a peak-current problem: it sizes the fuse, the wiring and the cells' discharge rating, and it causes brownouts ([01.07](../../01-first-robot/01.07-power-system.md), [02.02](../../02-robot-electronics/02.02-power-budget.md)).
 
 ### Level 3b — Energy per metre: faster can be cheaper
 
@@ -128,11 +128,11 @@ $$e = \frac{P_{drive}(v) + P_{fixed}}{v}\quad[\text{J/m}]$$
 
 For stage 1 driving continuously ($P_{fixed} = 4.78$ W):
 
-| Speed | Drive power | Energy per metre | Range on 33 Wh |
+| Speed | Drive power | Energy per metre | Range on 32.1 Wh |
 |---|---|---|---|
-| 0.1 m/s | 0.66 W | 54.4 J/m | 2.2 km |
-| 0.3 m/s | 1.57 W | 21.2 J/m | 5.6 km |
-| 0.5 m/s | 2.48 W | 14.5 J/m | 8.2 km |
+| 0.1 m/s | 0.66 W | 54.4 J/m | 2.1 km |
+| 0.3 m/s | 1.57 W | 21.2 J/m | 5.5 km |
+| 0.5 m/s | 2.48 W | 14.5 J/m | 8.0 km |
 
 This is the same logic as a cloud job that holds a large always-on instance: finishing sooner saves more than a leaner per-request cost.
 
@@ -149,7 +149,7 @@ Where karmel's battery energy goes (stage 1, 0.3 m/s):
 
 ```mermaid
 flowchart LR
-    BAT["3S Li-ion<br/>38.85 Wh nominal<br/>33.0 Wh usable"] --> BUCK["buck 5 V<br/>η ≈ 0.90"]
+    BAT["3S Li-ion<br/>37.8 Wh nominal<br/>32.1 Wh usable"] --> BUCK["buck 5 V<br/>η ≈ 0.90"]
     BAT --> DRV["motor drivers (PWM)"]
     BUCK -->|"4.0 W"| PI["Raspberry Pi 5"]
     BUCK -->|"0.3 W"| PICO["Pico + sensors"]
@@ -163,7 +163,7 @@ The power chain for one wheel with its numbers:
 
 ```text
  battery ──► driver ──► motor ──► gearbox ──► wheel ──► floor
- 11.1 V      PWM        4.28 V     (inside     0.0071 N·m   0.157 N
+ 10.8 V      PWM        4.28 V     (inside     0.0071 N·m   0.157 N
              ≈0.07 A    0.183 A    the model)  6.67 rad/s   0.3 m/s
              0.785 W    0.785 W ─── losses 0.738 W ───►     0.047 W
 ```
@@ -231,7 +231,7 @@ class Robot:
     mass_kg: float = 1.6
     wheel_radius_m: float = 0.045
     c_rr: float = 0.02
-    battery_v: float = 11.1
+    battery_v: float = 10.8   # labs/config/karmel.yaml: battery.nominal_v (3 x 3.6 V)
     battery_ah: float = 3.5
     usable_fraction: float = 0.85   # stop at the 9.9 V cutoff, some capacity lost to sag and ageing
     buck_efficiency: float = 0.90
@@ -318,15 +318,15 @@ motor model: R = 3.00 ohm, k_e = 0.5590 V/(rad/s), k_t = 0.2114 N*m/A
   0.3 m/s flat       electrical  1.57 W, mechanical 0.094 W, efficiency  6.0 %
   0.5 m/s flat       electrical  2.48 W, mechanical 0.157 W, efficiency  6.3 %
   0.3 m/s up 5 deg   electrical  3.10 W, mechanical 0.504 W, efficiency 16.3 %
-battery: 38.85 Wh nominal, 33.02 Wh usable
+battery: 37.80 Wh nominal, 32.13 Wh usable
 climbing 1 m of height: 15.7 J = 0.0044 Wh; kinetic energy at 0.5 m/s: 0.20 J
 
-stage 1 (drive around, 30 % moving): average 5.25 W from the battery -> runtime 6.29 h
+stage 1 (drive around, 30 % moving): average 5.25 W from the battery -> runtime 6.12 h
   Raspberry Pi 5                      4.44 W  (84.7 %)
   Pico + sensors                      0.33 W  ( 6.4 %)
   drive motors                        0.47 W  ( 9.0 %)
 
-stage 3 (LiDAR + camera + Nav2): average 9.58 W from the battery -> runtime 3.45 h
+stage 3 (LiDAR + camera + Nav2): average 9.58 W from the battery -> runtime 3.35 h
   Raspberry Pi 5                      4.44 W  (46.4 %)
   Raspberry Pi 5 extra (SLAM/Nav2)    2.22 W  (23.2 %)
   Pico + sensors                      0.33 W  ( 3.5 %)
@@ -334,12 +334,12 @@ stage 3 (LiDAR + camera + Nav2): average 9.58 W from the battery -> runtime 3.45
   USB camera                          1.11 W  (11.6 %)
   drive motors                        0.47 W  ( 4.9 %)
 
-both motors stalled at 11.1 V: 7.4 A, 82 W
-energy per metre at 0.1 m/s:  54.4 J/m -> range on usable battery  2.19 km
-energy per metre at 0.2 m/s:  29.5 J/m -> range on usable battery  4.04 km
-energy per metre at 0.3 m/s:  21.2 J/m -> range on usable battery  5.62 km
-energy per metre at 0.4 m/s:  17.0 J/m -> range on usable battery  6.99 km
-energy per metre at 0.5 m/s:  14.5 J/m -> range on usable battery  8.19 km
+both motors stalled at 10.8 V: 7.2 A, 78 W
+energy per metre at 0.1 m/s:  54.4 J/m -> range on usable battery  2.13 km
+energy per metre at 0.2 m/s:  29.5 J/m -> range on usable battery  3.93 km
+energy per metre at 0.3 m/s:  21.2 J/m -> range on usable battery  5.47 km
+energy per metre at 0.4 m/s:  17.0 J/m -> range on usable battery  6.80 km
+energy per metre at 0.5 m/s:  14.5 J/m -> range on usable battery  7.97 km
 saved fp05_power.png
 ```
 
@@ -354,14 +354,14 @@ saved fp05_power.png
 
 Hardware: none.
 
-1. How many watt-hours and joules does karmel's 3S 3.5 Ah pack store at 11.1 V nominal?
+1. How many watt-hours and joules does karmel's 3S 3.5 Ah pack store at 10.8 V nominal?
 2. With a usable fraction of 0.85, how long does it power a constant 12 W load?
-3. A Raspberry Pi 5 draws 5 W on the 5 V rail through a 90%-efficient buck converter. How much current does that take from the 11.1 V battery?
+3. A Raspberry Pi 5 draws 5 W on the 5 V rail through a 90%-efficient buck converter. How much current does that take from the 10.8 V battery?
 4. How many joules does it take to drive karmel up a 0.8 m-high flight of ramps, ignoring losses? How many Wh is that?
 
 ### Exercise FP.05-E2 — Add the arm to the budget `[coding]`
 
-Hardware: none. Extend the stage-3 budget with the SO-101 arm, powered directly from the battery (12 V servo version, no buck). **Assume** six servos drawing 0.1 A each while holding a light pose at 11.1 V, and that the arm holds a pose 60% of the time. The real figure varies with pose; measure it at stage 5. Compute the new average power and runtime. Then compute the runtime of stage 3 without the arm on a 3S2P pack (7.0 Ah).
+Hardware: none. Extend the stage-3 budget with the SO-101 arm, powered directly from the battery (12 V servo version, no buck). **Assume** six servos drawing 0.1 A each while holding a light pose at 10.8 V, and that the arm holds a pose 60% of the time. The real figure varies with pose; measure it at stage 5. Compute the new average power and runtime. Then compute the runtime of stage 3 without the arm on a 3S2P pack (7.0 Ah).
 
 ### Exercise FP.05-E3 — Predict: drive faster, run longer? `[predict]`
 
@@ -387,18 +387,18 @@ Hardware: `robot-base` with the INA219 on the battery line ([02.02](../../02-rob
 ## Expected result
 
 **FP.05-E1:**
-1. 38.85 Wh = 139,860 J.
-2. $38.85 \times 0.85/12 = 2.75$ h.
-3. $5/0.9 = 5.56$ W, and $5.56/11.1 = 0.50$ A.
+1. 37.8 Wh = 136,080 J.
+2. $37.8 \times 0.85/12 = 2.68$ h.
+3. $5/0.9 = 5.56$ W, and $5.56/10.8 = 0.51$ A.
 4. $1.6 \times 9.81 \times 0.8 = 12.6$ J = 0.0035 Wh. That is negligible next to the electronics.
 
 **FP.05-E2:**
-- **With the arm:** it adds $6 \times 0.1 \times 11.1 \times 0.6 = 4.0$ W. The average rises to **13.6 W** and the runtime falls to **2.43 h** (from 3.45 h).
-- **3S2P without the arm:** **6.89 h**, doubling capacity doubles runtime.
+- **With the arm:** it adds $6 \times 0.1 \times 10.8 \times 0.6 = 3.9$ W. The average rises to **13.5 W** and the runtime falls to **2.39 h** (from 3.35 h).
+- **3S2P without the arm:** **6.71 h**, doubling capacity doubles runtime.
 
 **FP.05-E3:**
-1. **A little:** 5.20 h at 0.3 m/s against 4.55 h at 0.5 m/s (−13%). Average power only rises from 6.35 W to 7.26 W, because the fixed loads dominate.
-2. **Distance increases:** about 5.6 km against 8.2 km (+46%). Faster driving is more energy-efficient per metre on this robot.
+1. **A little:** 5.06 h at 0.3 m/s against 4.43 h at 0.5 m/s (−13%). Average power only rises from 6.35 W to 7.26 W, because the fixed loads dominate.
+2. **Distance increases:** about 5.5 km against 8.0 km (+46%). Faster driving is more energy-efficient per metre on this robot.
 
 **FP.05-E4:**
 - **Idle:** typically 0.3–0.5 A at 11–12 V (3.5–5.5 W).
@@ -425,7 +425,7 @@ If your idle current is much higher, look for the Pi running a desktop, a fan at
 
 ## Common mistakes
 
-- **Confusing Ah and Wh.** 3.5 Ah at 11.1 V is not the same energy as 3.5 Ah at 5 V. Compare batteries in Wh.
+- **Confusing Ah and Wh.** 3.5 Ah at 10.8 V is not the same energy as 3.5 Ah at 5 V. Compare batteries in Wh.
 - **Budgeting motors at stall or rated power.** Real driving uses a few percent of stall. Size the fuse for the peak, but the battery for the average.
 - **Forgetting the regulator's loss.** 5 W at 5 V is 5.6 W from the battery.
 - **Assuming 100% of rated capacity is usable.** Plan with about 85%, less for old packs.
@@ -437,7 +437,7 @@ If your idle current is much higher, look for the Pi running a desktop, a fan at
 1. What is the difference between energy and power? Give karmel's battery as an example of one and the Pi as an example of the other.
    <details><summary>Answer</summary>
 
-   Energy is an amount (J or Wh). The battery stores about 38.85 Wh. Power is a rate (W = J/s). The Pi draws about 4–5 W, so the battery's energy is used up at that rate.
+   Energy is an amount (J or Wh). The battery stores about 37.8 Wh. Power is a rate (W = J/s). The Pi draws about 4–5 W, so the battery's energy is used up at that rate.
    </details>
 
 2. How much mechanical power does karmel need to climb a 5° ramp at a constant 0.3 m/s, and roughly how much electrical power do the motors draw for it?
@@ -455,7 +455,7 @@ If your idle current is much higher, look for the Pi running a desktop, a fan at
 4. Predict: you replace the Pi 5 with a Pico-only design, saving 4 W. Roughly how does stage-1 runtime change?
    <details><summary>Answer</summary>
 
-   Average power falls from 5.25 W to about 0.8 W (0.33 + 0.47), so the runtime rises from about 6.3 h to about 41 h. The computer was the dominant load.
+   Average power falls from 5.25 W to about 0.8 W (0.33 + 0.47), so the runtime rises from about 6.1 h to about 40 h. The computer was the dominant load.
    </details>
 
 5. Why does energy per metre *decrease* as karmel drives faster, within its speed range?
@@ -473,7 +473,7 @@ If your idle current is much higher, look for the Pi running a desktop, a fan at
 7. Why does a stalled drive matter more for the fuse and wiring than for runtime?
    <details><summary>Answer</summary>
 
-   A stall draws a huge peak (about 7.4 A, 82 W for both motors at 11.1 V) for a short time. Energy is power × time, so a brief stall barely dents the battery. But the peak current sets fuse rating, wire gauge, cell discharge limits and voltage sag.
+   A stall draws a huge peak (about 7.2 A, 78 W for both motors at 10.8 V) for a short time. Energy is power × time, so a brief stall barely dents the battery. But the peak current sets fuse rating, wire gauge, cell discharge limits and voltage sag.
    </details>
 
 ## Practical challenge
@@ -481,7 +481,7 @@ If your idle current is much higher, look for the Pi running a desktop, a fan at
 Write `power_budget.py`, a reusable budget tool. It reads `labs/config/karmel.yaml` for battery parameters plus a `budget.yaml` you write. The budget lists consumers with power, time fraction, supply rail (battery or 5 V buck), and optional "mission phases" (idle, patrol, arm task) with their durations. It outputs average power, runtime, energy per phase, and the top three consumers.
 
 **Acceptance criteria:**
-- The lesson's stage-1 inputs reproduce **5.25 W and 6.3 h** (± 1%).
+- The lesson's stage-1 inputs reproduce **5.25 W and 6.1 h** (± 1%).
 - A mission of 10 min patrol (stage 3, driving 100% of the time) plus 5 min arm task (arm holding 100%, robot parked) plus 15 min idle, repeated until empty, yields a runtime in hours and a number of mission cycles. Print both.
 - A unit test verifies Wh/J conversion and the buck-efficiency adjustment.
 - Calibrate at least two entries with measurements from E4, and state which assumption changed the result most.
