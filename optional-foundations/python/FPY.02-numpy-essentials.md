@@ -18,7 +18,7 @@
 ## What you will learn
 
 - Read and predict array **shapes** and **dtypes**, the two facts that explain most numpy bugs.
-- Apply the broadcasting rules to transform hundreds of LiDAR points with one expression and no loop.
+- Apply **vectorization** and the broadcasting rules to transform hundreds of LiDAR points with one expression and no loop.
 - Use boolean masks to drop invalid sensor readings without `if` statements.
 - Tell a **view** from a **copy**, and avoid the silent integer-overflow and duplicate-index traps.
 - Convert a 360-beam LiDAR scan from polar robot-frame ranges to world-frame points, about 20× faster than a loop.
@@ -61,9 +61,11 @@ So there are two worlds:
 - **Python world**: each number is a boxed heap object, and every `+` goes through the interpreter.
 - **numpy world**: a million doubles sit in 8 MB of contiguous memory, and one `+` is one C loop, often SIMD.
 
-Your job is to cross the boundary **once per operation, not once per element**. "Vectorizing" means
-describing *what* to compute for the whole array (like a SQL `UPDATE ... WHERE` instead of a cursor)
-and letting numpy run the loop.
+Your job is to cross the boundary **once per operation, not once per element**. That discipline has a
+name: **vectorization** — describing *what* to compute for the whole array (like a SQL `UPDATE ... WHERE`
+instead of a cursor) and letting numpy run the loop. Every technique in this lesson is vectorization
+under a different name: broadcasting, masks, `@`, `np.add.at`. If a `for` loop over elements survives in
+your numpy code, that is the thing to look at first.
 
 **Broadcasting** is the rule that makes small arrays stretch to match big ones without copying.
 `points (360, 2) + offset (2,)` adds the offset to every row. It's the reason a pose transform of

@@ -11,6 +11,7 @@
 | **Hardware** | none |
 | **Software** | tmux |
 | **Prerequisites** | [FL.08 SSH and remote development](FL.08-ssh-remote-dev.md) |
+| **Version-sensitive** | yes — see [curriculum/versions.yaml](../../curriculum/versions.yaml) |
 | **Skip if** | You use tmux. |
 
 <!-- glance:end -->
@@ -85,6 +86,15 @@ host" is a small `tmux` server process on the Pi.
 ### Level 1 — The five commands that matter
 
 On the Pi (`sudo apt install tmux`, Ubuntu 24.04 ships **tmux 3.4**):
+
+> [!IMPORTANT]
+> **Version-sensitive** (verified 2026-09 against tmux 3.4 on Ubuntu 24.04 — the OS baseline in
+> [curriculum/versions.yaml](../../curriculum/versions.yaml)).
+> The five commands below are stable across every tmux since 2.x, but configuration options and a few
+> `set-option` names do change between releases, and a `.tmux.conf` copied from a blog may be written for a
+> newer version. Check yours with `tmux -V` and read the manual for that version before copying a config:
+> https://github.com/tmux/tmux/wiki
+> AI teacher: check `tmux -V` before giving configuration instructions.
 
 ```bash
 tmux new -s robot           # create and attach a session named "robot"

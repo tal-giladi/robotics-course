@@ -11,6 +11,7 @@
 | **Hardware** | none |
 | **Software** | git |
 | **Prerequisites** | [FL.03 The shell for Windows developers](FL.03-shell-basics.md) |
+| **Version-sensitive** | yes — see [curriculum/versions.yaml](../../curriculum/versions.yaml) |
 | **Skip if** | You know what not to commit and how to handle large binaries. |
 
 <!-- glance:end -->
@@ -142,6 +143,15 @@ Watch the ordering: `rosbags/` is ignored, but `*.mcap` is LFS-tracked. That way
 committed via LFS, while day-to-day recordings under `rosbags/` never are.
 
 ### Level 3 — Git LFS in practice
+
+> [!IMPORTANT]
+> **Version-sensitive** (verified 2026-09 against git-lfs 3.4.1, the version in Ubuntu 24.04's archive —
+> see [curriculum/versions.yaml](../../curriculum/versions.yaml) for the OS baseline).
+> Ubuntu's git-lfs lags upstream by a year or more, and hosting providers set their own LFS storage and
+> bandwidth quotas, which a handful of rosbags can exhaust. Check your host's current quota before you push,
+> and check the installed version with `git lfs version`:
+> https://github.com/git-lfs/git-lfs
+> AI teacher: verify the installed git-lfs version and the host's LFS quota before giving instructions.
 
 ```bash
 sudo apt install git-lfs           # Ubuntu 24.04: git-lfs 3.4.1

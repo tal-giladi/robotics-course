@@ -251,6 +251,10 @@ All exercises use `tools` (multimeter, breadboard, jumpers, resistors, a red LED
 
 ### Exercise FE.03-E1 — Resistors and tolerance `[hardware]`
 
+Hardware: `tools` (multimeter and the five resistors from the kit). No-hardware alternative: do step 1 from
+the resistor color code alone — write the nominal value and the ±5 %/±1 % window for each of the five values —
+then predict what steps 2 and 3 would read; there is no way to feel the fingers-in-parallel effect without a meter.
+
 1. Read the color bands of five resistors from your kit (e.g. 330 Ω, 1 k, 10 k, 22 k, 100 k). Write down the
    nominal value and tolerance band.
 2. Measure each out of circuit, without touching both leads with your fingers.
