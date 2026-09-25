@@ -169,15 +169,87 @@ For $f(x, y)$, the partial derivative $\partial f/\partial x$ treats $y$ as a co
 
 $$\Delta\mathbf{f} \approx J\,\Delta\mathbf{x}$$
 
-**Numerical example — range and bearing to a landmark.** Robot pose $(x, y, \theta) = (0.5, 0.2, 0)$, landmark at $(2.0, 1.0)$. Let $\Delta x = 1.5$, $\Delta y = 0.8$, $q = \Delta x^2 + \Delta y^2 = 2.89$.
+**Numerical example — range and bearing to a landmark.** Read this one slowly: it is the reason the Jacobian exists.
 
-$$d = \sqrt{q} = 1.7 \text{ m}, \qquad \beta = \operatorname{atan2}(\Delta y, \Delta x) - \theta = 0.48996 \text{ rad}$$
+*The situation.* The robot has an **estimated pose** $(x, y, \theta) = (0.5, 0.2, 0)$: "I think I am here, facing along $+x$." Its map says a landmark (a pole) is at $(2.0, 1.0)$. From the estimated pose and the map the robot **predicts what its sensor should measure**: "the landmark should be 1.7 m away and 28° to my left." But the estimated pose may be slightly wrong, and then the prediction is slightly wrong too. **The Jacobian tells us approximately how much the predicted measurement changes for a small error in the pose.** That is what the Kalman filter needs ([10.06](../../10-localization/10.06-extended-kalman-filter.md)): it compares the prediction with what the sensor really reports and uses the Jacobian to turn that mismatch into a pose correction. Throughout, the direction is *pose error → measurement prediction error*; the Jacobian never computes a new robot position.
 
-Using the chain rule on $\sqrt{(l_x - x)^2 + (l_y - y)^2}$: $\partial d/\partial x = -\Delta x/d = -0.88235$, $\partial d/\partial y = -\Delta y/d = -0.47059$, $\partial d/\partial\theta = 0$. For the bearing: $\partial\beta/\partial x = \Delta y/q = 0.27682$, $\partial\beta/\partial y = -\Delta x/q = -0.51903$, $\partial\beta/\partial\theta = -1$.
+*The numbers.* The landmark is $\Delta x = 2.0 - 0.5 = 1.5$ m ahead and $\Delta y = 1.0 - 0.2 = 0.8$ m to the left. Let $q = \Delta x^2 + \Delta y^2 = 2.25 + 0.64 = 2.89$ (a shorthand for the number under the square root, which will come back in the derivatives). The range is the straight-line distance, $d = \sqrt{q} = 1.7$ m.
+
+The **bearing** $\beta$ is the angle between the robot's forward direction and the direction to the landmark (positive = left):
+
+$$\beta = \operatorname{atan2}(\Delta y, \Delta x) - \theta = 0.4900 \text{ rad} \approx 28°$$
+
+The "$-\theta$" is there because the robot measures from its own nose: if it turned left by 10°, the landmark would appear 10° less to the left.
+
+**What `atan2(sideways, forward)` means.** Draw the right triangle at the robot:
+
+```text
+                     landmark
+                  ╱ │
+            d    ╱  │  opposite = sideways = 0.8 m
+        1.7 m   ╱   │
+               ╱ β  │
+   robot ─────┴─────┘
+        adjacent = forward = 1.5 m
+```
+
+From ordinary trigonometry $\tan\beta = \text{opposite}/\text{adjacent} = \text{sideways}/\text{forward} = 0.8/1.5$, so $\beta = \operatorname{atan}(0.8/1.5) = 0.4900$ rad. We use `atan2` instead of `atan` because it receives the two coordinates separately: a landmark at (−1.5, −0.8) has the same ratio but lies behind the robot, and only `atan2` returns the right angle in that case (it works over the full circle, in all four quadrants).
+
+**Why moving forward changes the bearing.** Start with forward = 1.50 m and sideways = 0.80 m. Move the robot forward by 1 cm ($\Delta x = +0.01$ m). The remaining forward distance is $1.50 - 0.01 = 1.49$ m and the sideways distance stays 0.80 m:
+
+```text
+before: β = atan2(0.80, 1.50) ≈ 0.4900 rad
+after:  β = atan2(0.80, 1.49) ≈ 0.4927 rad
+change: Δβ ≈ +0.0028 rad   →   ∂β/∂x ≈ 0.0028 / 0.01 ≈ +0.28 rad/m
+```
+
+The intuition: as you drive toward a pole beside the road, it swings outward to the side, so the bearing increases. The exact value is $\partial\beta/\partial x = \Delta y / q = 0.27682$. This number is **not a universal constant**: it depends on where the landmark is relative to the robot right now.
+
+**The same for y.** Start again with forward = 1.50 m and sideways = 0.80 m. Move the robot 1 cm toward $+y$ (left), toward the landmark's sideways position ($\Delta y = +0.01$ m). The remaining sideways gap becomes $0.80 - 0.01 = 0.79$ m and the forward gap stays 1.50 m:
+
+```text
+before: β = atan2(0.80, 1.50) ≈ 0.4900 rad
+after:  β = atan2(0.79, 1.50) ≈ 0.4848 rad
+change: Δβ ≈ -0.0052 rad   →   ∂β/∂y ≈ -0.0052 / 0.01 ≈ -0.52 rad/m
+```
+
+The exact value is $\partial\beta/\partial y = -\Delta x/q = -0.51903$. The minus sign: the robot moved left, toward the landmark's sideways position, so the landmark is now less far to the left and the bearing decreases.
+
+**Why the y effect is bigger than the x effect here.** A sideways step directly changes the sideways component of the landmark's position, which is the "opposite" side of the triangle and strongly affects the angle. A forward step changes the forward ("adjacent") component, which affects the angle differently. In this particular geometry, with the landmark 1.5 m ahead but only 0.8 m to the side, a small sideways step changes the bearing more than a same-size forward step. This is **not** a general rule: with different landmark positions the two numbers change, and 0.52 is not always larger than 0.28.
+
+**The full bearing row.** Rotation: if the robot turns left by a small angle, the whole world appears to rotate right relative to the robot, so the bearing decreases by the same angle, $\partial\beta/\partial\theta = -1$. The bearing row is $[+0.28,\ -0.52,\ -1]$, which reads
+
+$$\Delta\beta \approx 0.28\,\Delta x - 0.52\,\Delta y - 1\,\Delta\theta$$
+
+Moving forward ($+x$) increases the bearing, moving left ($+y$) decreases it, and turning left ($+\theta$) decreases it.
+
+**The range row.** Using the chain rule on $d = \sqrt{(l_x - x)^2 + (l_y - y)^2}$: $\partial d/\partial x = -\Delta x/d = -0.88235$, $\partial d/\partial y = -\Delta y/d = -0.47059$, $\partial d/\partial\theta = 0$. Read it as
+
+$$\Delta d \approx -0.88\,\Delta x - 0.47\,\Delta y + 0\,\Delta\theta$$
+
+- $-0.88$: moving $+x$ slightly brings the robot closer to the landmark, so the range decreases.
+- $-0.47$: moving $+y$ slightly also brings it closer in this particular geometry.
+- $0$: rotating the robot does not change its physical distance to the landmark.
+
+These are **local sensitivities**: they describe what happens for small changes around the current pose, and they change when the pose changes.
+
+**Why $-0.88$ and not $-1$.** If the landmark were straight ahead, moving forward 1 cm would shorten the range by about 1 cm, so the derivative would be close to $-1$. Here the landmark is diagonal, so only the part of the robot's movement that points along the robot-to-landmark direction shortens the range. The two range coefficients are the components of a unit arrow pointing at the landmark ($0.88^2 + 0.47^2 = 1$), which is why the range gradient has length exactly 1: distance changes at most 1:1, when you move straight toward the landmark.
+
+**Worked question: the pose estimate is 2 cm off in $x$.** Suppose the robot's pose is wrong by $\Delta x = +0.02$ m, $\Delta y = 0$, $\Delta\theta = 0$. How wrong is the range predicted from that pose?
+
+$$\Delta d \approx (-0.88)(0.02) + (-0.47)(0) + (0)(0) = -0.0176 \text{ m} = -1.76 \text{ cm}$$
+
+In plain English: the pose estimate is 2 cm off in $x$, so the range predicted from the estimate is off by about 1.76 cm. Nothing physical moved: the landmark did not shift by 1.76 cm. A 2 cm error in the assumed pose simply causes about a 1.76 cm error in the predicted range. With the bearing row, the same pose error gives $\Delta\beta \approx 0.28 \cdot 0.02 = +0.0055$ rad.
+
+**The whole matrix.** Stack the two rows:
 
 $$J = \begin{bmatrix} -0.88235 & -0.47059 & 0 \\ 0.27682 & -0.51903 & -1 \end{bmatrix}$$
 
-Read it physically: moving the robot 1 cm toward $+x$ shortens the range by 8.8 mm. The range gradient has length exactly 1 — distance changes at most 1:1 when you move straight toward the landmark. This matrix is the measurement Jacobian $H$ of the landmark EKF in [10.06](../../10-localization/10.06-extended-kalman-filter.md).
+The first row says how pose errors affect the predicted range, the second how they affect the predicted bearing. With pose error $[\Delta x, \Delta y, \Delta\theta]^\top$:
+
+$$\begin{bmatrix}\Delta d \\ \Delta\beta\end{bmatrix} \approx J \begin{bmatrix}\Delta x \\ \Delta y \\ \Delta\theta\end{bmatrix}$$
+
+**The Jacobian is a local conversion table: it converts a small error in the robot's pose into the corresponding approximate error in what the robot expects its landmark sensor to measure.** This matrix is the measurement Jacobian $H$ of the landmark EKF in [10.06](../../10-localization/10.06-extended-kalman-filter.md).
 
 **Numerical example — a 2-link arm.** Links $l_1 = 0.12$ m, $l_2 = 0.10$ m, joint angles $q_1 = 30°$, $q_2 = 60°$. Forward kinematics $x = l_1\cos q_1 + l_2\cos(q_1+q_2)$, $y = l_1\sin q_1 + l_2\sin(q_1+q_2)$ gives the tip at (0.10392, 0.16) m. Chain rule:
 
