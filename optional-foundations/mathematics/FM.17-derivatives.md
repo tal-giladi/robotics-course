@@ -91,7 +91,7 @@ Units are output units per input unit: meters per second, radians per meter. New
 
 ### Level 3 — Numerical differentiation and its errors
 
-From samples spaced $h$ apart:
+The robot sends a speed **command** (a motor duty cycle), but the speed it actually achieves depends on load, battery and friction, and no sensor reports it directly. What the encoder reports is a counter, the wheel angle (a position), so the actual speed has to be computed from those position samples. From samples spaced $h$ apart:
 
 $$\text{forward: } \frac{x(t+h) - x(t)}{h}, \qquad \text{central: } \frac{x(t+h) - x(t-h)}{2h}$$
 
@@ -103,9 +103,61 @@ But floating-point numbers have about 16 significant digits. When $h$ is tiny, $
 
 $$\sigma_v = \frac{\sqrt{2}\,\sigma}{dt}$$
 
-For encoder quantization, the position "noise" is roughly uniform over one tick. Per-sample velocity **resolution** is one tick per sample period:
+#### Encoder speed resolution ($\Delta\omega$), step by step
 
-$$\Delta\omega = \frac{2\pi}{N_\text{ticks}\,dt}$$
+**1. The basic idea.** An encoder does not measure speed. It counts ticks. During one sampling interval:
+
+- `dt` is the length of the interval, in seconds,
+- `k` is the number of ticks counted during it,
+- `N` is the number of ticks per wheel revolution.
+
+Ticks are whole events, so `k` can only be 0, 1, 2, 3, ... and never 2.5. The computed speed therefore can only take certain discrete values. If one tick corresponds to 0.255 rad/s, the possible readings are:
+
+```text
+0 ticks  -> 0.000 rad/s
+1 tick   -> 0.255 rad/s
+2 ticks  -> 0.510 rad/s
+3 ticks  -> 0.765 rad/s
+...
+26 ticks -> 6.630 rad/s
+27 ticks -> 6.885 rad/s
+```
+
+There is no possible reading of 6.67 rad/s. **$\Delta\omega$ is the amount by which the reported speed changes when one more tick is counted in one sampling interval**, the smallest step of your speed measurement.
+
+**2. Why the reading jitters.** Say the wheel turns at a perfectly constant 6.67 rad/s and $\Delta\omega = 0.255$ rad/s. The expected number of ticks per sample is $6.67 / 0.255 = 26.16$. You can't count 26.16 ticks, so you get 26 or 27, and the computed speed alternates:
+
+```text
+6.63  6.63  6.63  6.885  6.63  6.63  6.885 ...
+```
+
+The wheel is not speeding up and slowing down. The jitter comes only from the encoder reporting whole ticks.
+
+**3. The math.** One revolution is $2\pi$ radians and has $N$ ticks, so one tick is $2\pi/N$ radians. Counting $k$ ticks means the wheel turned $\Delta\theta = k \cdot 2\pi/N$. Angular velocity is angle divided by time:
+
+$$\omega = \frac{\Delta\theta}{dt} = \frac{k \cdot 2\pi / N}{dt} = k \cdot \frac{2\pi}{N\,dt}$$
+
+Everything except $k$ is fixed by the hardware and the sample time, so name it:
+
+$$\Delta\omega = \frac{2\pi}{N\,dt}, \qquad \omega = k\,\Delta\omega$$
+
+$\Delta\omega$ is the speed represented by one tick during one sampling interval.
+
+**4. The effect of `dt`.** In $\Delta\omega = 2\pi/(N\,dt)$ a larger `dt` makes $\Delta\omega$ smaller:
+
+```text
+short dt -> fewer ticks per sample -> each tick is a bigger speed step -> coarser, more jitter
+long dt  -> more ticks per sample  -> each tick is a smaller speed step -> finer, more stable
+```
+
+The price of a long `dt` is that you wait longer for each new speed value:
+
+```text
+short dt: faster response, worse resolution, more jitter
+long dt:  slower response (lag), better resolution, less jitter
+```
+
+**5. Sampling rate versus `dt`.** A sampling rate of 100 Hz means 100 samples per second, so $dt = 1/100 = 0.01$ s. But $\Delta\omega$ depends on both the sample time and the encoder resolution $N$, not on the rate alone. With $N = 256$, $\Delta\omega = 2\pi/(256 \cdot 0.01) = 2.454$ rad/s, not 0.255. Working backwards, $\Delta\omega = 0.255$ rad/s at 100 Hz means $N = 2\pi/(0.255 \cdot 0.01) \approx 2464$, which is karmel's encoder.
 
 **Numerical example — karmel's encoder** (2,464 ticks/rev = 11 pulses × 56:1 gearbox × 4 quadrature edges, wheel radius 0.045 m). At 1 kHz: $\Delta\omega = 2\pi/(2464 \cdot 0.001) = 2.55$ rad/s = 115 mm/s of robot speed per tick. At 100 Hz: 0.255 rad/s = 11.5 mm/s. At 20 Hz: 0.051 rad/s = 2.3 mm/s. The 1 kHz estimate is useless on its own; the 20 Hz estimate is smooth but averages over 50 ms (lag). The error standard deviation is about $\Delta\omega/\sqrt6$ (difference of two uniform quantization errors): 0.104 rad/s at 100 Hz, which the simulation reproduces (0.102).
 
