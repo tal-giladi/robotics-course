@@ -3,11 +3,170 @@
   "student": {
     "started": "2026-09-20"
   },
-  "lessons": {},
-  "exercises": {},
+  "lessons": {
+    "00.01": {
+      "status": "in-progress",
+      "history": [
+        {
+          "date": "2026-09-20",
+          "status": "in-progress"
+        }
+      ],
+      "started": "2026-09-20"
+    },
+    "00.07": {
+      "status": "practiced",
+      "history": [
+        {
+          "date": "2026-09-20",
+          "status": "read"
+        },
+        {
+          "date": "2026-09-20",
+          "status": "practiced"
+        },
+        {
+          "date": "2026-09-20",
+          "status": "practiced"
+        }
+      ],
+      "read": "2026-09-20",
+      "practiced": "2026-09-20"
+    },
+    "FM.01": {
+      "status": "practiced",
+      "history": [
+        {
+          "date": "2026-09-24",
+          "status": "in-progress"
+        },
+        {
+          "date": "2026-09-25",
+          "status": "practiced"
+        }
+      ],
+      "started": "2026-09-24",
+      "practiced": "2026-09-25"
+    },
+    "FM.02": {
+      "status": "practiced",
+      "history": [
+        {
+          "date": "2026-09-25",
+          "status": "in-progress"
+        },
+        {
+          "date": "2026-09-25",
+          "status": "practiced"
+        }
+      ],
+      "started": "2026-09-25",
+      "practiced": "2026-09-25"
+    }
+  },
+  "exercises": {
+    "00.07-E1": "2026-09-20",
+    "00.07-E2": "2026-09-20",
+    "00.07-E3": "2026-09-20",
+    "00.07-E4": "2026-09-20"
+  },
   "projects": {},
   "current_project": null,
   "hardware": {},
-  "struggles": [],
-  "log": []
+  "struggles": [
+    {
+      "id": "FM.02",
+      "note": "wrapping: a full circle is 2*pi rad (not 2); subtract/add 2*pi until in (-pi, pi]",
+      "date": "2026-09-25",
+      "resolved": "2026-09-25"
+    },
+    {
+      "id": "FM.02",
+      "note": "averaging angles: need both cos and sin (unit arrows) then atan2(y, x)",
+      "date": "2026-09-25",
+      "resolved": "2026-09-25"
+    },
+    {
+      "id": "FM.02",
+      "note": "omega is a rate (rad/s), so the clamp is a speed limit, not a target angle",
+      "date": "2026-09-25",
+      "resolved": "2026-09-25"
+    },
+    {
+      "id": "FM.01",
+      "note": "s in the turn-in-place exercise was undefined: it is the wheel's arc distance, same role as d",
+      "date": "2026-09-25",
+      "resolved": "2026-09-25"
+    }
+  ],
+  "log": [
+    {
+      "date": "2026-09-20",
+      "event": "in-progress 00.01"
+    },
+    {
+      "date": "2026-09-20",
+      "event": "read 00.07"
+    },
+    {
+      "date": "2026-09-20",
+      "event": "exercise 00.07-E1"
+    },
+    {
+      "date": "2026-09-20",
+      "event": "exercise 00.07-E2"
+    },
+    {
+      "date": "2026-09-20",
+      "event": "exercise 00.07-E3"
+    },
+    {
+      "date": "2026-09-20",
+      "event": "exercise 00.07-E4"
+    },
+    {
+      "date": "2026-09-20",
+      "event": "practiced 00.07"
+    },
+    {
+      "date": "2026-09-24",
+      "event": "in-progress FM.01"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "practiced FM.01"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "in-progress FM.02"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "practiced FM.02"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "struggle FM.02: wrapping: a full circle is 2*pi rad (not 2); subtract/add 2*pi until in (-pi, pi]"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "struggle FM.02: averaging angles: need both cos and sin (unit arrows) then atan2(y, x)"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "struggle FM.02: omega is a rate (rad/s), so the clamp is a speed limit, not a target angle"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "struggle FM.01: s in the turn-in-place exercise was undefined: it is the wheel's arc distance, same role as d"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "resolve FM.02"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "resolve FM.01"
+    }
+  ]
 }

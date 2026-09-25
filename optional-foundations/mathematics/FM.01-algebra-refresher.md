@@ -68,7 +68,7 @@ Order of operations is the same as in code: parentheses, powers, multiply/divide
 
 ### Level 2 — Practical: three formulas you will meet in week one
 
-**Ticks to distance ([01.12](../../01-first-robot/01.12-encoder-distance-and-square.md)).** A wheel of radius $r$ travels its circumference $2\pi r$ per revolution. The encoder produces $N$ ticks per revolution. After $n$ ticks:
+**Ticks to distance ([01.12](../../01-first-robot/01.12-encoder-distance-and-square.md)).** A wheel of radius $r$ travels its circumference $2\pi r$ per revolution. The encoder is a sensor on the wheel that sends the computer one pulse, a **tick**, each time the wheel turns by a small fixed angle, and the computer keeps a counter that goes up by 1 per tick. $N$ is a fixed property of the robot: how many ticks make one full wheel revolution. $n$ is the live measurement: how many ticks the counter has reached so far. So $n/N$ is the fraction of a revolution completed (it can exceed 1, for example $n = 5000$ is about two turns), and multiplying it by the distance rolled per revolution gives the distance. After $n$ ticks:
 
 $$d = 2\pi r \cdot \frac{n}{N}$$
 
@@ -94,7 +94,7 @@ Units: $\sqrt{\text{m/s}^2 \cdot \text{m}} = \sqrt{\text{m}^2/\text{s}^2} = \tex
 
 ### Level 3 — Mathematics: rearranging with more than one term
 
-**Differential-drive kinematics ([09.01](../../09-odometry/09.01-diff-drive-kinematics.md)).** The robot's forward speed $v$ and turn rate $\omega$ come from the wheel angular speeds $\omega_L, \omega_R$ (rad/s), the wheel radius $r$ and the wheel separation $L$:
+**Differential-drive kinematics ([09.01](../../09-odometry/09.01-diff-drive-kinematics.md)).** The robot's forward speed $v$ and turn rate $\omega$ come from the wheel angular speeds $\omega_L, \omega_R$ (rad/s), the wheel radius $r$ and the wheel separation $L$ (the distance between the centers of the left and right wheels, 0.200 m on karmel):
 
 $$v = \frac{r(\omega_R + \omega_L)}{2}, \qquad \omega = \frac{r(\omega_R - \omega_L)}{L}$$
 
@@ -250,11 +250,11 @@ All exercises need hardware: none.
 By hand (a calculator is fine), for karmel ($r = 0.045$ m, $N = 2464$, $L = 0.200$ m):
 
 1. How many ticks must **each** wheel count to drive 0.5 m straight?
-2. To turn in place by $\theta$ radians, each wheel travels an arc of $s = \theta \cdot L/2$, one forward and one backward. How many ticks per wheel for a 90° turn ($\theta = \pi/2$)?
+2. When the robot turns in place, it spins around the midpoint between the wheels, so each wheel moves along a circle of radius $L/2$. For a turn by $\theta$ radians, the distance $s$ that each wheel rolls along the floor is the arc length $s = \theta \cdot L/2$ (one wheel forward, the other backward). $s$ plays the same role as $d$ in part 1. How many ticks per wheel for a 90° turn ($\theta = \pi/2$)?
 
 ### Exercise FM.01-E2 — Speed limit with reaction time `[numerical]`
 
-The robot doesn't brake the instant the sensor sees an obstacle. It keeps driving at $v$ for a latency $t = 0.1$ s, then brakes at $a = 1.0$ m/s². The total distance is $d = vt + \frac{v^2}{2a}$. With $d = 0.3$ m, solve for the maximum $v$. (Hint: it is a quadratic, $\frac{1}{2a}v^2 + tv - d = 0$. Use $v = \frac{-B + \sqrt{B^2 - 4AC}}{2A}$.)
+The robot doesn't brake the instant the sensor sees an obstacle. It keeps driving at $v$ for a latency $t = 0.1$ s, then brakes at $a = 1.0$ m/s². The total distance is $d = vt + \frac{v^2}{2a}$. With $d = 0.3$ m, solve for the maximum $v$. (Hint: it is a quadratic, $\frac{1}{2a}v^2 + tv - d = 0$. Use $v = \frac{-B + \sqrt{B^2 - 4AC}}{2A}$. The quadratic has two roots, but a negative speed is not a physical answer, so only one is a valid top speed.)
 
 ### Exercise FM.01-E3 — Calibrate the wheel radius `[numerical]`
 
@@ -262,11 +262,11 @@ You command karmel to drive "exactly three wheel revolutions" (7392 ticks). A ta
 
 ### Exercise FM.01-E4 — Predict the unit bug `[predict]`
 
-A teammate writes `wheel_speed = v / r` with `v = 0.3` (m/s) and `r = 45` (they read "45" from the wheel's datasheet in mm). **Before computing**, predict whether the robot drives too fast or too slow, and by roughly what factor. Then compute both values.
+The spin rate a wheel needs for a ground speed $v$ is $\omega = v/r$ in rad/s, which assumes $r$ is in **meters**. A teammate writes `wheel_speed = v / r` with `v = 0.3` (m/s) and `r = 45` (they read "45" from the wheel's datasheet in mm). **Before computing**, predict whether the robot drives too fast or too slow, and by roughly what factor. Then compute both values.
 
 ### Exercise FM.01-E5 — Generic motor calibration `[coding]`
 
-Write `fit_motor(duty1, w1, duty2, w2) -> (k, d0)` for the model $\omega = k(\text{duty} - d_0)$. Test it on these measurements from a different motor: duty 0.25 → 3.0 rad/s, duty 0.75 → 15.0 rad/s. Then make it raise `ValueError` when `duty1 == duty2`.
+Write `fit_motor(duty1, w1, duty2, w2) -> (k, d0)` for the model $\omega = k(\text{duty} - d_0)$. Given two measurements (the wheel speed `w1`, `w2` you observed at each duty cycle), it returns `k`, how many rad/s you gain per unit of duty, and `d0`, the deadband duty below which the motor doesn't turn. Use the same subtract-the-equations method as in the worked example above. Test it on these measurements from a different motor: duty 0.25 → 3.0 rad/s, duty 0.75 → 15.0 rad/s. Then make it raise `ValueError` when `duty1 == duty2`.
 
 ## Expected result
 

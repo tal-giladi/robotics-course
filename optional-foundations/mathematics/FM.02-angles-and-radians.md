@@ -93,7 +93,7 @@ Differentiate with respect to time (see [FM.17](FM.17-derivatives.md)) and you g
 
 $$v = \omega r$$
 
-The wheel rim at 21.47 rad/s moves at $21.47 \cdot 0.045 = 0.966$ m/s. For a robot turning in place, each wheel is $L/2 = 0.1$ m from the center. A 90° turn moves each wheel along an arc of $s = 0.1 \cdot \pi/2 = 0.157$ m. A LiDAR beam 1° apart at 5 m range lands $5 \cdot 0.01745 = 0.087$ m from its neighbor. That is why distant walls look sparse in a scan.
+The wheel rim at 21.47 rad/s moves at $21.47 \cdot 0.045 = 0.966$ m/s. For a robot turning in place, it spins around the midpoint between the wheels, so each wheel is $L/2 = 0.1$ m from the center (this is the radius in $s = r\theta$ here, not the wheel radius). A 90° turn moves each wheel along an arc of $s = 0.1 \cdot \pi/2 = 0.157$ m. A LiDAR beam 1° apart at 5 m range lands $5 \cdot 0.01745 = 0.087$ m from its neighbor. That is why distant walls look sparse in a scan.
 
 These formulas **only work in radians**. With degrees, $s = r\theta$ is wrong by a factor of 57.3.
 
@@ -111,7 +111,7 @@ $$e = \operatorname{wrap}(\theta_t - \theta_c)$$
 
 With $\theta_t = 170°$ and $\theta_c = -170°$: the naive difference is $340°$, which means turn left almost a full circle. The wrapped difference is $-20°$, which means turn right 20°. A P-controller multiplies this error by a gain, so the naive version doesn't only take the long way. It also commands a turn rate 17 times too large.
 
-**Averaging angles.** The naive mean of 179° and −179° is 0°, pointing exactly the wrong way. The correct average direction is 180°. Average the unit vectors $(\cos\theta, \sin\theta)$ and convert back with atan2. That uses [FM.03](FM.03-trigonometry.md) and [FM.05](FM.05-vectors.md).
+**Averaging angles.** The naive mean of 179° and −179° is 0°, pointing exactly the wrong way. The correct average direction is 180°. Turn each angle into a unit arrow $(\cos\theta, \sin\theta)$, average the x parts and the y parts separately ($x = \text{mean}(\cos\theta)$, $y = \text{mean}(\sin\theta)$), and convert back with $\operatorname{atan2}(y, x)$. For 179° and −179° the y parts cancel and $x \approx -1$, so the result is 180°. That uses [FM.03](FM.03-trigonometry.md) and [FM.05](FM.05-vectors.md).
 
 ### Level 4 — Implementation
 
@@ -188,6 +188,7 @@ def mean_angle(angles_rad: list[float]) -> float:
 
 
 def rpm_to_rad_s(rpm: float) -> float:
+    # revolutions -> radians (x 2*pi), minutes -> seconds (/ 60)
     return rpm * TWO_PI / 60.0
 
 
@@ -238,11 +239,11 @@ All exercises need hardware: none.
 
 ### Exercise FM.02-E1 — Conversions `[numerical]`
 
-Convert by hand, then check with Python: (a) 15° to rad, (b) 2.5 rad to degrees, (c) karmel's software turn-rate limit of 2.5 rad/s to degrees per second and to RPM of the robot body, (d) a gyro reading of 0.5 rad/s held for 3 s to the total degrees turned.
+Convert by hand, then check with Python: (a) 15° to rad, (b) 2.5 rad to degrees, (c) karmel's software turn-rate limit of 2.5 rad/s to degrees per second and to RPM of the robot body (revolutions per minute of the whole robot spinning in place), (d) a gyro reading of 0.5 rad/s held for 3 s to the total degrees turned (a gyro measures turn rate, so angle = rate × time).
 
 ### Exercise FM.02-E2 — Wrap these `[numerical]`
 
-Wrap to $(-\pi, \pi]$ and give the answer in radians and in degrees: (a) 5.0 rad, (b) −4.0 rad, (c) 10.0 rad, (d) −190°, (e) 725°.
+Wrap to $(-\pi, \pi]$ (add or subtract a full circle, $2\pi = 6.283$ rad, as many times as needed) and give the answer in radians and in degrees: (a) 5.0 rad, (b) −4.0 rad, (c) 10.0 rad, (d) −190°, (e) 725°.
 
 ### Exercise FM.02-E3 — Predict the naive modulo `[predict]`
 
@@ -250,7 +251,7 @@ Wrap to $(-\pi, \pi]$ and give the answer in radians and in degrees: (a) 5.0 rad
 
 ### Exercise FM.02-E4 — Heading controller error `[coding]`
 
-A proportional heading controller commands $\omega = K_p \cdot e$ with $K_p = 2.0$, clamped to ±2.5 rad/s. Write `turn_rate(target_rad, current_rad)` that uses `angle_diff`. Evaluate it for (target, current) = (90°, −135°), (−170°, 170°) and (10°, 5°). Then compute what the **naive** error (no wrapping) would command for the first two cases.
+A proportional heading controller commands $\omega = K_p \cdot e$ with $K_p = 2.0$, clamped to ±2.5 rad/s. Here $\omega$ is a turn **rate** (rad/s, positive = left), not a target angle: the robot keeps spinning at that rate while the error shrinks, and the clamp is karmel's speed limit, so any command beyond ±2.5 is cut to ±2.5 (`min(2.5, max(-2.5, w))`). Write `turn_rate(target_rad, current_rad)` that uses `angle_diff`. Evaluate it for (target, current) = (90°, −135°), (−170°, 170°) and (10°, 5°). Then compute what the **naive** error (no wrapping) would command for the first two cases.
 
 ### Exercise FM.02-E5 — Arc lengths for karmel `[numerical]`
 
