@@ -217,27 +217,7 @@ The exact value is $\partial\beta/\partial y = -\Delta x/q = -0.51903$. The minu
 
 **Why the y effect is bigger than the x effect here.** A sideways step directly changes the sideways component of the landmark's position, which is the "opposite" side of the triangle and strongly affects the angle. A forward step changes the forward ("adjacent") component, which affects the angle differently. In this particular geometry, with the landmark 1.5 m ahead but only 0.8 m to the side, a small sideways step changes the bearing more than a same-size forward step. This is **not** a general rule: with different landmark positions the two numbers change, and 0.52 is not always larger than 0.28.
 
-**Where the exact values come from: the derivative of atan2, step by step.**
-
-*Step 1: what atan does.* $\tan$ turns an angle into a ratio: $\tan\beta = \text{opposite}/\text{adjacent} = Y/X$. $\operatorname{atan}$ goes back: give it the ratio $u = Y/X$ (one number) and it returns the angle. For the triangle above, $\operatorname{atan}(0.8/1.5) = 0.49$ rad. That is why the ratio is called $u$: it is the single number atan receives.
-
-*Step 2: why atan2 exists.* The ratio loses information. A point at $(X, Y) = (3, 4)$ and one at $(-3, -4)$ both give $u = 4/3$, so atan returns the same angle, 53°, for both, although the second one points the opposite way (−127°). $\operatorname{atan2}(Y, X)$ receives the two numbers separately, so it can see the signs and returns the right angle anywhere on the circle. When the point is in front ($X > 0$), the two agree exactly: $\operatorname{atan2}(Y, X) = \operatorname{atan}(Y/X)$. In the other directions atan2 only adds a constant ($\pm\pi$), and a constant does not change a derivative, so the rule below holds everywhere.
-
-*Step 3: the one fact to memorize.* Like $\frac{d}{du}\sin u = \cos u$, there is a table entry for atan:
-
-$$\frac{d}{du}\operatorname{atan}u = \frac{1}{1+u^2}$$
-
-*Step 4: chain rule with $u = Y/X$.* Changing $X$ changes $u$, and changing $u$ changes the angle. How fast $u = Y/X$ changes with $X$ (with $Y$ fixed): $\partial u/\partial X = -Y/X^2$. Multiply the two rates:
-
-$$\frac{\partial}{\partial X}\operatorname{atan2}(Y, X) = \frac{1}{1 + Y^2/X^2} \cdot \frac{-Y}{X^2} = \frac{-Y}{X^2 + Y^2}$$
-
-(multiply the top and bottom of the first fraction by $X^2$ to get the last form). The same steps with $\partial u/\partial Y = 1/X$ give
-
-$$\frac{\partial}{\partial Y}\operatorname{atan2}(Y, X) = \frac{X}{X^2 + Y^2}$$
-
-*Step 5: check it with numbers.* At $(X, Y) = (1, 1)$ the angle is $\operatorname{atan2}(1, 1) = 0.7854$ rad (45°). Nudge $X$ to 1.01: $\operatorname{atan2}(1, 1.01) = 0.7804$ rad. The change is $-0.0050$ rad for a 0.01 nudge, a rate of about $-0.50$. The formula gives $-Y/(X^2+Y^2) = -1/2 = -0.5$.
-
-*Step 6: back to the robot.* In the bearing, $X = \Delta x = l_x - x$ and $Y = \Delta y = l_y - y$, so $X^2 + Y^2 = q$. The robot's $x$ sits inside $X$ with a minus sign ($\partial X/\partial x = -1$), so one more chain-rule step gives $\partial\beta/\partial x = \frac{-Y}{q} \cdot (-1) = \Delta y/q$. The same steps for $y$ give $-\Delta x/q$.
+**Where the exact values come from.** They come from the derivative of atan2. It is derived step by step, with checkpoints, right after this example (*Deriving the bearing derivatives by hand*).
 
 **The full bearing row.** Rotation: if the robot turns left by a small angle, the whole world appears to rotate right relative to the robot, so the bearing decreases by the same angle, $\partial\beta/\partial\theta = -1$. The bearing row is $[+0.28,\ -0.52,\ -1]$, which reads
 
@@ -272,6 +252,139 @@ The first row says how pose errors affect the predicted range, the second how th
 $$\begin{bmatrix}\Delta d \\ \Delta\beta\end{bmatrix} \approx J \begin{bmatrix}\Delta x \\ \Delta y \\ \Delta\theta\end{bmatrix}$$
 
 **The Jacobian is a local conversion table: it converts a small error in the robot's pose into the corresponding approximate error in what the robot expects its landmark sensor to measure.** This matrix is the measurement Jacobian $H$ of the landmark EKF in [10.06](../../10-localization/10.06-extended-kalman-filter.md).
+
+**Deriving the bearing derivatives by hand: atan2, step by step.** The numbers above ($\Delta y/q$, $-\Delta x/q$) did not fall from the sky. This part shows how to get them yourself, so you never have to memorize them. It uses the numbers of exercise FM.17-E2 (in the Exercise section below): robot $(x, y, \theta) = (1.0, 1.0, 0.3)$, landmark $(l_x, l_y) = (4.0, 5.0)$. The bearing part is worked here with checkpoints (try each one before opening the answer); the range part of E2 is left to you.
+
+*Step 1: start from the actual equation and name the two inputs.*
+
+$$\beta = \operatorname{atan2}(l_y - y,\ l_x - x) - \theta$$
+
+atan2 receives two numbers. Give them names:
+
+- $u = l_y - y$, the first input: how far the landmark is from the robot in the map's $y$ direction.
+- $v = l_x - x$, the second input: how far the landmark is from the robot in the map's $x$ direction.
+
+(Here $u$ and $v$ are just names for the two inputs; $v$ is not a speed.) Now the equation is short:
+
+$$\beta = \operatorname{atan2}(u, v) - \theta$$
+
+Checkpoint: what are $u$ and $v$ for the E2 numbers?
+
+<details><summary>Answer</summary>
+
+$u = 5 - 1 = 4$ m and $v = 4 - 1 = 3$ m. The landmark is 3 m away in $x$ and 4 m in $y$, so its range is $\sqrt{3^2 + 4^2} = 5$ m.
+</details>
+
+*Step 2: understand atan2 before differentiating it.* Ordinary $\operatorname{atan}(z)$ has **one** input: a ratio $z = u/v$ (opposite over adjacent), and it returns the angle. The ratio loses information: the points $(v, u) = (3, 4)$ and $(-3, -4)$ both give $z = 4/3$, so atan returns 53° for both, although the second points the opposite way (−127°). $\operatorname{atan2}(u, v)$ has **two** inputs, sees both signs, and returns the right angle anywhere on the circle. When $v > 0$ (landmark ahead in $x$), $\operatorname{atan2}(u, v) = \operatorname{atan}(u/v)$ exactly; elsewhere it differs only by a constant ($\pm\pi$), which does not change any derivative.
+
+**This is the key point.** Because atan2 has two inputs, when the robot's $x$ changes you must ask about *both* inputs: does $u$ change? does $v$ change? Each one that changes moves the angle.
+
+*Step 3: the general atan2 derivative, and what each part means.* For $f(x) = \operatorname{atan2}(u(x), v(x))$:
+
+$$\frac{\partial f}{\partial x} = \frac{v\,\dfrac{\partial u}{\partial x} - u\,\dfrac{\partial v}{\partial x}}{u^2 + v^2}$$
+
+- $u$: the first atan2 input; $v$: the second.
+- $\partial u/\partial x$: how fast the first input changes when the robot's $x$ changes.
+- $\partial v/\partial x$: how fast the second input changes when the robot's $x$ changes.
+- $u^2 + v^2$: the **squared distance** to the landmark, $d^2$.
+
+Where it comes from (you can rebuild it from two facts you know): with $z = u/v$, the table entry $\frac{d}{dz}\operatorname{atan}z = \frac{1}{1+z^2}$ and the quotient rule $\frac{\partial z}{\partial x} = \frac{v\,\partial u/\partial x - u\,\partial v/\partial x}{v^2}$. Multiply them (chain rule):
+
+$$\frac{1}{1 + u^2/v^2} \cdot \frac{v\,\partial u/\partial x - u\,\partial v/\partial x}{v^2} = \frac{v\,\partial u/\partial x - u\,\partial v/\partial x}{v^2 + u^2}$$
+
+(the $v^2$ under the second fraction multiplies into the first denominator: $v^2(1 + u^2/v^2) = v^2 + u^2$). Numeric sanity check: $\operatorname{atan2}(1, 1) = 0.7854$ rad; nudge $v$ from 1 to 1.01 and $\operatorname{atan2}(1, 1.01) = 0.7804$ rad, a rate of about $-0.50$. The formula, with $\partial u = 0$ and $\partial v = 1$, gives $(1 \cdot 0 - 1 \cdot 1)/(1 + 1) = -0.5$.
+
+*Step 4: for our equation, which input changes when the robot moves in $x$?* Take them one at a time.
+
+Checkpoint: what are $\partial u/\partial x$ and $\partial v/\partial x$?
+
+<details><summary>Answer</summary>
+
+$u = l_y - y$. Moving the robot in $x$ changes neither $l_y$ (the landmark is fixed) nor $y$, so $\partial u/\partial x = 0$.
+
+$v = l_x - x$. The landmark's $l_x$ is fixed and $x$ appears with a minus sign, so $\partial v/\partial x = -1$. In words: if the robot moves 1 cm toward $+x$, the $x$-distance from the robot to the landmark, $l_x - x$, shrinks by 1 cm.
+</details>
+
+*Step 5: substitute one piece at a time.* Start from the general derivative:
+
+$$\frac{\partial\beta}{\partial x} = \frac{v\,\dfrac{\partial u}{\partial x} - u\,\dfrac{\partial v}{\partial x}}{u^2 + v^2}$$
+
+Put in $\partial u/\partial x = 0$ and $\partial v/\partial x = -1$:
+
+$$= \frac{v(0) - u(-1)}{u^2 + v^2}$$
+
+Simplify ($v \cdot 0 = 0$, and minus times minus is plus):
+
+$$= \frac{u}{u^2 + v^2}$$
+
+Put back $u = l_y - y$ and $v = l_x - x$:
+
+$$\frac{\partial\beta}{\partial x} = \frac{l_y - y}{(l_y - y)^2 + (l_x - x)^2}$$
+
+The "$-\theta$" part of $\beta$ adds nothing here: $\theta$ does not depend on $x$, so its derivative with respect to $x$ is 0. Every piece of the final formula has a source: the top $u = l_y - y$ is the first input, left over after $\partial u/\partial x = 0$ killed the other term; the minus of $\partial v/\partial x = -1$ cancelled the minus in the formula; the bottom is the squared distance.
+
+Checkpoint: evaluate it with $u = 4$, $v = 3$.
+
+<details><summary>Answer</summary>
+
+$$\frac{\partial\beta}{\partial x} = \frac{4}{4^2 + 3^2} = \frac{4}{25} = 0.16 \text{ rad/m}$$
+
+The 4 is the landmark's $y$-offset (4 m); the 25 is $3^2 + 4^2$, the squared range $5^2$.
+</details>
+
+*Step 6: $\theta$ is different, so treat it separately.* In $\beta = \operatorname{atan2}(l_y - y,\ l_x - x) - \theta$ the atan2 term does not contain $\theta$ at all: turning the robot does not move it or the landmark. Only the "$-\theta$" depends on $\theta$, so
+
+$$\frac{\partial\beta}{\partial\theta} = -1$$
+
+*Step 7: the same recipe for $y$.* Now $\partial u/\partial y = -1$ ($y$ appears with a minus in $u = l_y - y$) and $\partial v/\partial y = 0$ ($v = l_x - x$ has no $y$):
+
+$$\frac{\partial\beta}{\partial y} = \frac{v(-1) - u(0)}{u^2 + v^2} = \frac{-v}{u^2 + v^2} = -\frac{l_x - x}{(l_y - y)^2 + (l_x - x)^2}$$
+
+Checkpoint: evaluate it, then write the whole bearing row.
+
+<details><summary>Answer</summary>
+
+$\partial\beta/\partial y = -3/25 = -0.12$ rad/m. With columns $[x,\ y,\ \theta]$:
+
+$$H_\beta = \begin{bmatrix} 0.16 & -0.12 & -1 \end{bmatrix}$$
+</details>
+
+The same two formulas give the landmark example above: there $u = 0.8$, $v = 1.5$ and $u^2 + v^2 = q = 2.89$, so $\partial\beta/\partial x = 0.8/2.89 = 0.27682$ and $\partial\beta/\partial y = -1.5/2.89 = -0.51903$.
+
+*Step 8: do not confuse bearing with range.* The sensor gives two numbers, and each has its own row:
+
+- Bearing $\beta = \operatorname{atan2}(l_y - y,\ l_x - x) - \theta$, an **angle**. Its row $H_\beta$ predicts a change in bearing, in radians.
+- Range $d = \sqrt{(l_x - x)^2 + (l_y - y)^2}$, a **distance**. Its row (derived with the chain rule on the square root) predicts a change in range, in metres.
+
+E2 asks for the change in *range* after the move $(\Delta x, \Delta y) = (+0.02, +0.01)$: use the range row for that, not $H_\beta$.
+
+*Step 9: use the bearing row.* Write the pose change as a column (call it $\Delta p$, since $q$ already means the squared distance):
+
+$$\Delta p = \begin{bmatrix} 0.02 \\ 0.01 \\ 0 \end{bmatrix}, \qquad \Delta\beta \approx H_\beta\,\Delta p$$
+
+A row times a column is a **dot product**: multiply matching entries and *add* them, which gives **one number**, not three:
+
+$$\Delta\beta \approx 0.16(0.02) + (-0.12)(0.01) + (-1)(0)$$
+
+Checkpoint: compute it.
+
+<details><summary>Answer</summary>
+
+$0.0032 - 0.0012 + 0 = +0.0020$ rad (about 0.11°): the move changes the predicted bearing by 0.002 rad.
+</details>
+
+*Step 10: the intuition.* When the robot moves in $x$, the landmark's relative $x$-offset $v$ changes. When it moves in $y$, the relative $y$-offset $u$ changes. atan2 turns those two relative offsets into an angle, and the derivative says how sensitive that angle is to each small robot move. The denominator is $u^2 + v^2 = d^2$, the squared range, so the sensitivity falls with distance: the row $[0.16,\ -0.12]$ has length $\sqrt{0.16^2 + 0.12^2} = 0.2 = 1/d$ for $d = 5$ m. A 1 cm step changes the bearing of a landmark 5 m away by at most 0.002 rad, and of one 50 m away ten times less, just as a nearby lamppost swings past quickly while a distant mountain barely moves.
+
+> [!TIP]
+> **Recipe for any $f(x) = \operatorname{atan2}(u(x), v(x))$.**
+> 1. Identify $u$, the first argument.
+> 2. Identify $v$, the second argument.
+> 3. Calculate $\partial u/\partial x$: does $x$ appear in $u$, and with which sign?
+> 4. Calculate $\partial v/\partial x$ the same way.
+> 5. Substitute into $\dfrac{\partial f}{\partial x} = \dfrac{v\,\partial u/\partial x - u\,\partial v/\partial x}{u^2 + v^2}$ and simplify.
+> 6. Only then put in the numbers.
+>
+> The formula itself is not something to memorize blindly: it is the atan table entry plus the quotient rule (step 3), and you can rebuild it whenever you need it.
 
 **Numerical example — a 2-link arm.** A second, different use of the Jacobian. On an arm the motors control the **joint angles**, but what we care about is where the **tip** (the gripper) is. The Jacobian answers: *if I turn the joints a little, how does the tip move?*
 
@@ -555,7 +668,7 @@ karmel's left encoder reads 15,230 ticks, then 15,308 ticks 20 ms later (2,464 t
 ### Exercise FM.17-E2 — Partial derivatives of a range-bearing sensor `[numerical]`
 
 Goal: derive a Jacobian by hand.
-Robot pose $(x, y, \theta) = (1.0, 1.0, 0.3)$, landmark at $(4.0, 5.0)$. Compute the range $d$ and bearing $\beta = \operatorname{atan2}(l_y - y, l_x - x) - \theta$, then all six partial derivatives with respect to $x$, $y$, $\theta$. Use them to predict the change in range if the robot moves by $(\Delta x, \Delta y) = (+0.02, +0.01)$ m, and compare with the exact new range.
+Robot pose $(x, y, \theta) = (1.0, 1.0, 0.3)$, landmark at $(4.0, 5.0)$. Compute the range $d$ and bearing $\beta = \operatorname{atan2}(l_y - y, l_x - x) - \theta$, then all six partial derivatives with respect to $x$, $y$, $\theta$. Use them to predict the change in range if the robot moves by $(\Delta x, \Delta y) = (+0.02, +0.01)$ m, and compare with the exact new range. For the bearing derivatives, follow the atan2 recipe from *Deriving the bearing derivatives by hand* (name $u$ and $v$, find $\partial u/\partial x$ and $\partial v/\partial x$, substitute, then put in numbers). For the range derivatives, use the chain rule on the square root the same way. The prediction is a change in **range**, so it uses the range row ($\partial d/\partial x$, $\partial d/\partial y$), not the bearing row.
 
 ### Exercise FM.17-E3 — Which rate is noisier? `[predict]`
 
