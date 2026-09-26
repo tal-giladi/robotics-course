@@ -217,6 +217,12 @@ The exact value is $\partial\beta/\partial y = -\Delta x/q = -0.51903$. The minu
 
 **Why the y effect is bigger than the x effect here.** A sideways step directly changes the sideways component of the landmark's position, which is the "opposite" side of the triangle and strongly affects the angle. A forward step changes the forward ("adjacent") component, which affects the angle differently. In this particular geometry, with the landmark 1.5 m ahead but only 0.8 m to the side, a small sideways step changes the bearing more than a same-size forward step. This is **not** a general rule: with different landmark positions the two numbers change, and 0.52 is not always larger than 0.28.
 
+**Where the exact values come from: the derivative of atan2.** $\operatorname{atan2}(Y, X)$ has two inputs, so it has two partial derivatives:
+
+$$\frac{\partial}{\partial X}\operatorname{atan2}(Y, X) = \frac{-Y}{X^2 + Y^2}, \qquad \frac{\partial}{\partial Y}\operatorname{atan2}(Y, X) = \frac{X}{X^2 + Y^2}$$
+
+(Where $X > 0$, $\operatorname{atan2}(Y, X) = \operatorname{atan}(Y/X)$, and $\frac{d}{du}\operatorname{atan}u = \frac{1}{1+u^2}$ plus the chain rule gives these; they hold in every quadrant.) Here $X = \Delta x = l_x - x$ and $Y = \Delta y = l_y - y$, so $X^2 + Y^2 = q$. The robot's $x$ sits inside $X$ with a minus sign, so by the chain rule $\partial\beta/\partial x = \frac{-Y}{q} \cdot (-1) = \Delta y/q$. The same steps for $y$ give $-\Delta x/q$.
+
 **The full bearing row.** Rotation: if the robot turns left by a small angle, the whole world appears to rotate right relative to the robot, so the bearing decreases by the same angle, $\partial\beta/\partial\theta = -1$. The bearing row is $[+0.28,\ -0.52,\ -1]$, which reads
 
 $$\Delta\beta \approx 0.28\,\Delta x - 0.52\,\Delta y - 1\,\Delta\theta$$
