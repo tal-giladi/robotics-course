@@ -528,7 +528,7 @@ All exercises need hardware: **none**. (In [08.03](../../08-control/08.03-wheel-
 ### Exercise FM.17-E1 — Speed from two encoder readings `[numerical]`
 
 Goal: convert ticks to wheel and robot speed, and know the resolution.
-karmel's left encoder reads 15,230 ticks, then 15,308 ticks 20 ms later (2,464 ticks per wheel revolution, wheel radius 0.045 m). Compute (a) the wheel angle change in radians, (b) the wheel angular speed in rad/s, (c) the robot's linear speed at that wheel in m/s, (d) the speed resolution (one tick per sample) in rad/s and in mm/s.
+karmel's left encoder reads 15,230 ticks, then 15,308 ticks 20 ms later (2,464 ticks per wheel revolution, wheel radius 0.045 m). Compute (a) the wheel angle change in radians, (b) the wheel angular speed in rad/s, (c) the robot's linear speed at that wheel in m/s, (d) the speed resolution in rad/s and in mm/s: how much the computed speed would change if the encoder had counted just one tick more in the same 20 ms (79 instead of 78). The measured speed can only move in steps of this size, so it is the smallest speed difference the robot can see. The mm/s version is the same step at the wheel rim (multiply by $r$), as in part (c).
 
 ### Exercise FM.17-E2 — Partial derivatives of a range-bearing sensor `[numerical]`
 
