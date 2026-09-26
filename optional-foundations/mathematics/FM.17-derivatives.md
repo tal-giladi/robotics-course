@@ -251,11 +251,74 @@ $$\begin{bmatrix}\Delta d \\ \Delta\beta\end{bmatrix} \approx J \begin{bmatrix}\
 
 **The Jacobian is a local conversion table: it converts a small error in the robot's pose into the corresponding approximate error in what the robot expects its landmark sensor to measure.** This matrix is the measurement Jacobian $H$ of the landmark EKF in [10.06](../../10-localization/10.06-extended-kalman-filter.md).
 
-**Numerical example — a 2-link arm.** Links $l_1 = 0.12$ m, $l_2 = 0.10$ m, joint angles $q_1 = 30°$, $q_2 = 60°$. Forward kinematics $x = l_1\cos q_1 + l_2\cos(q_1+q_2)$, $y = l_1\sin q_1 + l_2\sin(q_1+q_2)$ gives the tip at (0.10392, 0.16) m. Chain rule:
+**Numerical example — a 2-link arm.** A second, different use of the Jacobian. On an arm the motors control the **joint angles**, but what we care about is where the **tip** (the gripper) is. The Jacobian answers: *if I turn the joints a little, how does the tip move?*
 
-$$J = \begin{bmatrix} -l_1\sin q_1 - l_2\sin(q_1+q_2) & -l_2\sin(q_1+q_2) \\ l_1\cos q_1 + l_2\cos(q_1+q_2) & l_2\cos(q_1+q_2) \end{bmatrix} = \begin{bmatrix} -0.16 & -0.10 \\ 0.10392 & 0 \end{bmatrix}$$
+*The setup.* Two links. Link 1 ($l_1 = 0.12$ m) goes from the shoulder, at the origin, to the elbow. Link 2 ($l_2 = 0.10$ m) goes from the elbow to the tip. $q_1$ is the shoulder angle, measured from the $+x$ axis. $q_2$ is the elbow angle, measured *relative to link 1*, so link 2 points at $q_1 + q_2$ from the $x$ axis. Here $q_1 = 30°$ and $q_2 = 60°$, so link 2 points at $90°$, straight up:
 
-Joint speeds $\dot q = (0.5, -0.5)$ rad/s → tip velocity $J\dot q = (-0.03, 0.05196)$ m/s. That's [14.06](../../14-robotic-arm/14.06-jacobian.md) in one line.
+```text
+   y
+   ▲
+   │             ● tip (0.104, 0.160)
+   │             │
+   │             │  link 2 = 0.10 m, points straight up (q1 + q2 = 30° + 60° = 90°)
+   │             │
+   │             ● elbow (0.104, 0.060)
+   │         ╱
+   │     ╱      link 1 = 0.12 m, at q1 = 30° from the x axis
+   ●───────────────────▶ x
+ shoulder (0, 0)
+```
+
+*Forward kinematics* (joint angles → tip position) just walks along the links. Link 1 moves you by $(l_1\cos q_1,\ l_1\sin q_1) = (0.10392,\ 0.06)$, which is the elbow. Link 2 adds $(l_2\cos(q_1+q_2),\ l_2\sin(q_1+q_2)) = (0,\ 0.10)$. Together:
+
+$$x = l_1\cos q_1 + l_2\cos(q_1+q_2), \qquad y = l_1\sin q_1 + l_2\sin(q_1+q_2)$$
+
+so the tip is at $(0.10392,\ 0.16)$ m.
+
+**Experiment 1: turn only the shoulder.** Increase $q_1$ by 0.01 rad (about 0.57°), keep $q_2$, and recompute the tip with the same formulas:
+
+```text
+before:  tip = (0.10392, 0.16000)
+after:   tip = (0.10232, 0.16103)
+change:  Δx ≈ -0.0016 m,  Δy ≈ +0.0010 m
+divide by the 0.01 rad nudge:  ∂x/∂q1 ≈ -0.16 m/rad,  ∂y/∂q1 ≈ +0.10 m/rad
+```
+
+The unit m/rad means "metres of tip movement per radian of joint rotation". Why left and up: turning the shoulder swings the whole arm, rigidly, around the origin. The tip moves along a circle around the shoulder, perpendicular to the line from the shoulder to the tip. That line is $\sqrt{0.10392^2 + 0.16^2} = 0.19$ m long, so 0.01 rad moves the tip $0.19 \times 0.01 = 1.9$ mm (arc length $s = r\theta$, [FM.02](FM.02-angles-and-radians.md)), split into 1.6 mm left and 1.0 mm up. The exact values are $-0.16$ and $+0.10392$: the tip's coordinates $(x, y) = (0.10392, 0.16)$ turned into $(-y, x)$, which is the shoulder-to-tip arrow rotated 90° to the left.
+
+**Experiment 2: turn only the elbow.** Predict first: now only link 2 swings, around the elbow, and link 2 points straight up. The tip moves perpendicular to link 2, so straight left:
+
+```text
+before:  tip = (0.10392, 0.16000)
+after:   tip = (0.10292, 0.159995)
+change:  Δx ≈ -0.0010 m,  Δy ≈ -0.000005 m ≈ 0
+divide by the 0.01 rad nudge:  ∂x/∂q2 ≈ -0.10 m/rad,  ∂y/∂q2 ≈ 0
+```
+
+The circle's radius is now only link 2 (0.10 m), so the same 0.01 rad moves the tip just 1 mm. The tiny $\Delta y$ comes from the curve of the circle; it shrinks much faster than the nudge, and the exact derivative is 0.
+
+**Build the Jacobian column by column.** Each column is what *one joint* does to the tip; the first row is the effect on $x$, the second on $y$:
+
+$$J = \begin{bmatrix} \partial x/\partial q_1 & \partial x/\partial q_2 \\ \partial y/\partial q_1 & \partial y/\partial q_2 \end{bmatrix} = \begin{bmatrix} -0.16 & -0.10 \\ 0.10392 & 0 \end{bmatrix}$$
+
+Column 1 is experiment 1 (the shoulder), column 2 is experiment 2 (the elbow). The chain rule gives the same numbers symbolically. For $\partial x/\partial q_1$ both terms of $x$ contain $q_1$ and the derivative of $\cos$ is $-\sin$, so $-l_1\sin q_1 - l_2\sin(q_1+q_2) = -0.06 - 0.10 = -0.16$. For $\partial x/\partial q_2$ only the second term contains $q_2$, so $-l_2\sin(q_1+q_2) = -0.10$. The full matrix:
+
+$$J = \begin{bmatrix} -l_1\sin q_1 - l_2\sin(q_1+q_2) & -l_2\sin(q_1+q_2) \\ l_1\cos q_1 + l_2\cos(q_1+q_2) & l_2\cos(q_1+q_2) \end{bmatrix}$$
+
+It reads like the landmark example, a local conversion table, this time from a small joint-angle change to the tip movement:
+
+$$\begin{bmatrix}\Delta x \\ \Delta y\end{bmatrix} \approx J \begin{bmatrix}\Delta q_1 \\ \Delta q_2\end{bmatrix}$$
+
+It is local: in another arm pose the numbers are different.
+
+**From small changes to speeds.** Divide both sides by the time the change took: joint speeds (rad/s) go in, tip velocity (m/s) comes out, $v_{\text{tip}} = J\dot q$. Example: shoulder at $+0.5$ rad/s, elbow at $-0.5$ rad/s:
+
+```text
+x speed = (-0.16)(0.5)    + (-0.10)(-0.5) = -0.08 + 0.05 = -0.03 m/s
+y speed = (0.10392)(0.5)  + (0)(-0.5)     =  0.05196 m/s
+```
+
+The tip moves 3 cm/s left and 5.2 cm/s up. The shoulder alone would push it left and up (column 1 × 0.5 = (−0.08, 0.052)); the elbow turning backwards pushes it right (column 2 × −0.5 = (+0.05, 0)) and cancels part of the leftward motion. That's [14.06](../../14-robotic-arm/14.06-jacobian.md) in one line: an arm controller uses this table in reverse, to find the joint speeds that move the tip where it should go.
 
 **Gradient check.** Always verify a hand-derived Jacobian against central differences, column by column. Agreement to ~1e-8 means correct; a wrong sign shows up immediately. ML frameworks call this a gradient check.
 
