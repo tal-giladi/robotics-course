@@ -217,11 +217,27 @@ The exact value is $\partial\beta/\partial y = -\Delta x/q = -0.51903$. The minu
 
 **Why the y effect is bigger than the x effect here.** A sideways step directly changes the sideways component of the landmark's position, which is the "opposite" side of the triangle and strongly affects the angle. A forward step changes the forward ("adjacent") component, which affects the angle differently. In this particular geometry, with the landmark 1.5 m ahead but only 0.8 m to the side, a small sideways step changes the bearing more than a same-size forward step. This is **not** a general rule: with different landmark positions the two numbers change, and 0.52 is not always larger than 0.28.
 
-**Where the exact values come from: the derivative of atan2.** $\operatorname{atan2}(Y, X)$ has two inputs, so it has two partial derivatives:
+**Where the exact values come from: the derivative of atan2, step by step.**
 
-$$\frac{\partial}{\partial X}\operatorname{atan2}(Y, X) = \frac{-Y}{X^2 + Y^2}, \qquad \frac{\partial}{\partial Y}\operatorname{atan2}(Y, X) = \frac{X}{X^2 + Y^2}$$
+*Step 1: what atan does.* $\tan$ turns an angle into a ratio: $\tan\beta = \text{opposite}/\text{adjacent} = Y/X$. $\operatorname{atan}$ goes back: give it the ratio $u = Y/X$ (one number) and it returns the angle. For the triangle above, $\operatorname{atan}(0.8/1.5) = 0.49$ rad. That is why the ratio is called $u$: it is the single number atan receives.
 
-(Where $X > 0$, $\operatorname{atan2}(Y, X) = \operatorname{atan}(Y/X)$, and $\frac{d}{du}\operatorname{atan}u = \frac{1}{1+u^2}$ plus the chain rule gives these; they hold in every quadrant.) Here $X = \Delta x = l_x - x$ and $Y = \Delta y = l_y - y$, so $X^2 + Y^2 = q$. The robot's $x$ sits inside $X$ with a minus sign, so by the chain rule $\partial\beta/\partial x = \frac{-Y}{q} \cdot (-1) = \Delta y/q$. The same steps for $y$ give $-\Delta x/q$.
+*Step 2: why atan2 exists.* The ratio loses information. A point at $(X, Y) = (3, 4)$ and one at $(-3, -4)$ both give $u = 4/3$, so atan returns the same angle, 53°, for both, although the second one points the opposite way (−127°). $\operatorname{atan2}(Y, X)$ receives the two numbers separately, so it can see the signs and returns the right angle anywhere on the circle. When the point is in front ($X > 0$), the two agree exactly: $\operatorname{atan2}(Y, X) = \operatorname{atan}(Y/X)$. In the other directions atan2 only adds a constant ($\pm\pi$), and a constant does not change a derivative, so the rule below holds everywhere.
+
+*Step 3: the one fact to memorize.* Like $\frac{d}{du}\sin u = \cos u$, there is a table entry for atan:
+
+$$\frac{d}{du}\operatorname{atan}u = \frac{1}{1+u^2}$$
+
+*Step 4: chain rule with $u = Y/X$.* Changing $X$ changes $u$, and changing $u$ changes the angle. How fast $u = Y/X$ changes with $X$ (with $Y$ fixed): $\partial u/\partial X = -Y/X^2$. Multiply the two rates:
+
+$$\frac{\partial}{\partial X}\operatorname{atan2}(Y, X) = \frac{1}{1 + Y^2/X^2} \cdot \frac{-Y}{X^2} = \frac{-Y}{X^2 + Y^2}$$
+
+(multiply the top and bottom of the first fraction by $X^2$ to get the last form). The same steps with $\partial u/\partial Y = 1/X$ give
+
+$$\frac{\partial}{\partial Y}\operatorname{atan2}(Y, X) = \frac{X}{X^2 + Y^2}$$
+
+*Step 5: check it with numbers.* At $(X, Y) = (1, 1)$ the angle is $\operatorname{atan2}(1, 1) = 0.7854$ rad (45°). Nudge $X$ to 1.01: $\operatorname{atan2}(1, 1.01) = 0.7804$ rad. The change is $-0.0050$ rad for a 0.01 nudge, a rate of about $-0.50$. The formula gives $-Y/(X^2+Y^2) = -1/2 = -0.5$.
+
+*Step 6: back to the robot.* In the bearing, $X = \Delta x = l_x - x$ and $Y = \Delta y = l_y - y$, so $X^2 + Y^2 = q$. The robot's $x$ sits inside $X$ with a minus sign ($\partial X/\partial x = -1$), so one more chain-rule step gives $\partial\beta/\partial x = \frac{-Y}{q} \cdot (-1) = \Delta y/q$. The same steps for $y$ give $-\Delta x/q$.
 
 **The full bearing row.** Rotation: if the robot turns left by a small angle, the whole world appears to rotate right relative to the robot, so the bearing decreases by the same angle, $\partial\beta/\partial\theta = -1$. The bearing row is $[+0.28,\ -0.52,\ -1]$, which reads
 
