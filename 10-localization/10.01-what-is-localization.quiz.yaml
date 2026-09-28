@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 10.01-what-is-localization.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3f8d43207732
+  question: Which is the definition of the belief $bel(\mathbf{x}_k)$?
+  options:
+    - "$p(\\mathbf{z}_k \\mid \\mathbf{x}_k)$: the probability of the latest measurement given the state"
+    - "$p(\\mathbf{x}_k \\mid \\mathbf{z}_{1:k}, \\mathbf{u}_{1:k})$: the state given all measurements and controls so far"
+    - "$p(\\mathbf{x}_k \\mid \\mathbf{x}_{k-1}, \\mathbf{u}_k)$: the state given the last state and control"
+    - "$p(\\mathbf{x}_k \\mid \\mathbf{z}_k)$: the state given only the current measurement"
+  correct: 1
+- source: 770da7a5dd70
+  question: Which pairing of localization problem and a belief representation that can solve it is correct?
+  options:
+    - "Tracking: particles only; global: Gaussian; kidnapped: Gaussian with a larger $P$"
+    - "Tracking: grid; global: Gaussian; kidnapped: Kalman filter with gating"
+    - "Tracking: Gaussian; global: grid or particles; kidnapped: particles or grid with recovery"
+    - "Tracking: Gaussian; global: Gaussian; kidnapped: particles without recovery"
+  correct: 2
+- source: 63896ee235a6
+  question: A converged Kalman filter tracking karmel at σ = 3 cm is kidnapped by 2 m. What happens if nothing special is done?
+  options:
+    - Huge innovations; it rejects them or crawls slowly with small gain; it needs a reset
+    - It snaps to the new position within one update, since the innovation is large
+    - Its covariance automatically grows to 2 m, and it relocalizes normally
+    - Nothing, since the kidnapping is invisible to a Kalman filter
+  correct: 0
+- source: b704bc0a5c26
+  question: The belief along a corridor is $\mathcal{N}(4.0, 0.2^2)$ m. What is the probability that the robot is within ±0.2 m of 4.0 m? Within ±0.4 m?
+  options:
+    - 39.3 % and 86.5 %
+    - 50 % and 75 %
+    - 95.4 % and 99.7 %
+    - 68.3 % and 95.4 %
+  correct: 3
+- source: 6ce3d594ebaf
+  question: Which part of the Bayes filter sharpens the belief and which widens it? Why can't motion alone make a uniform belief peaked?
+  options:
+    - Prediction sharpens, update widens; motion averages out noise
+    - Update sharpens, prediction widens; motion carries no location evidence
+    - Both sharpen; a uniform belief has no gradient for motion to follow
+    - Update widens, prediction sharpens; uniform beliefs are absorbing
+  correct: 1
+- source: 9fa250c8eb26
+  question: A tag 3 m away is measured with 1 cm range noise, but heading σ = 4°. Roughly how precise is the fix, and where is it worst?
+  options:
+    - About 1 cm along the line of sight; about 21 cm sideways to it
+    - About 1 cm in every direction, since range noise dominates
+    - About 21 cm along the line of sight; about 1 cm sideways
+    - About 12 cm in every direction, heading and range combined
+  correct: 0
+- source: 76d4baa3dcc5
+  question: The `map → odom` transform jumps 40 cm back and forth every few seconds while the robot stands still. Drifting odometry?
+  options:
+    - "Yes: odometry drifts even when still; recalibrate the encoders"
+    - "Yes: the IMU bias is leaking into odometry; recalibrate the gyro"
+    - "No: the TF buffer is too short; lengthen it in the launch file"
+    - "No: odometry is steady; the localizer alternates between hypotheses"
+  correct: 3

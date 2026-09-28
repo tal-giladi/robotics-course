@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FE.04-breadboards-and-connectors.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c7524c0c72a0
+  question: On a standard breadboard, are holes 17c and 17h connected? 17c and 18c?
+  options:
+    - Both pairs are connected
+    - Neither pair is connected
+    - 17c–17h yes; 17c–18c no
+    - 17c–18c yes; 17c–17h no
+  correct: 1
+- source: 45963589254e
+  question: Why does a Pico 2 or a DIP chip go across the center channel?
+  options:
+    - So the chip can draw power from both power rails at the same time
+    - So air can flow under the chip and keep it cool while running
+    - So the chip's pins align with the 0.1-inch rail spacing on the edges
+    - So each pin lands in its own strip instead of being shorted to the opposite pin
+  correct: 3
+- source: 0e04479974f0
+  question: Your 4-leg pushbutton "is always pressed". Most likely placement error?
+  options:
+    - It's rotated so the switched pair shares one strip; rotate 90° and straddle the channel
+    - It's placed across the channel; move it so all four legs are in one strip
+    - It's missing a pull-down resistor; add 10 kΩ from the output to GND
+    - It's inserted upside down; flip it so the flat side faces the rail
+  correct: 0
+- source: 69c9e9eefcdd
+  question: Why is it a bad idea to run the motor supply through a breadboard?
+  options:
+    - Breadboard strips add capacitance that filters the PWM and slows the motors
+    - Motor noise travels back through the rails and resets the breadboard itself
+    - Amp-level motor currents heat and can melt the contacts, and a slip can short battery to logic
+    - Breadboards only conduct up to 5 V, so a 12 V supply is blocked by the strips
+  correct: 2
+- source: 27a4581f5420
+  question: Which connector family do Qwiic and STEMMA QT use, and what four signals does it carry?
+  options:
+    - "JST-XH 4-pin 2.5 mm: GND, 5 V, TX, RX (UART)"
+    - "JST-SH 4-pin 1.0 mm: GND, 3.3 V, MOSI, SCK (SPI)"
+    - "JST-SH 4-pin 1.0 mm: GND, 3.3 V, SDA, SCL (I²C)"
+    - "Dupont 4-pin 2.54 mm: GND, 3.3 V, SDA, SCL (I²C)"
+  correct: 2
+- source: fe2ec9072688
+  question: An LED circuit works only while you press on the jumper wire at GP16. What do you do?
+  options:
+    - Replace the jumper and move to a fresh row; confirm with continuity while wiggling
+    - Add a larger resistor in series so the LED current stays stable
+    - Reconfigure GP16 with an internal pull-up to hold the line high
+    - Solder the jumper to the breadboard strip so it cannot move
+  correct: 0

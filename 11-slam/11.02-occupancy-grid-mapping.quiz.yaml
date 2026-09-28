@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 11.02-occupancy-grid-mapping.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: cbd6bcc7b0a6
+  question: What does the inverse sensor model give you that the forward model does not?
+  options:
+    - "$p(z \\mid m, x)$: the expected measurement from a known map"
+    - "$p(x \\mid z, m)$: the robot's pose given a scan and a map"
+    - "$p(m_i \\mid z, x)$: how occupied a cell is, given this beam"
+    - "$p(z_t \\mid z_{1:t-1})$: the normalizer for the map update"
+  correct: 2
+- source: a800fe1eebb5
+  question: "A cell starts unknown and receives miss, hit, hit, miss, hit (defaults: hit +0.847, miss −0.619). What are its log-odds and probability?"
+  options:
+    - "$l = 1.304$, $p = 0.786$: occupied"
+    - "$l = 0.847$, $p = 0.700$: occupied"
+    - "$l = -1.304$, $p = 0.214$: free"
+    - "$l = 3.779$, $p = 0.978$: occupied"
+  correct: 0
+- source: de931e627ccb
+  question: Why does the log-odds update not need the normalizer $p(z_t \mid z_{1:t-1})$ that Bayes' rule has?
+  options:
+    - The normalizer is always 1 for binary cells
+    - The log of a normalizer is zero, so it disappears
+    - It is absorbed into the prior, which is 0.5
+    - The ratio of occupied to free shares the normalizer, so it cancels
+  correct: 3
+- source: 7d6930dc0dc1
+  question: "Bresenham from (2, 7) to (−1, 1): how many cells does it return, and which axis steps every time?"
+  options:
+    - 4 cells; x steps every time
+    - 7 cells; y steps every time
+    - 9 cells; both step every time
+    - 6 cells; y steps every time
+  correct: 1
+- source: 15731642dce3
+  question: With $p_\text{hit} = 0.55$, $p_\text{miss} = 0.49$ and thresholds 0.25/0.65, how many consistent hits make a cell occupied, and why choose these values?
+  options:
+    - 1 hit; to map fast in static rooms
+    - 4 hits; to flicker less with unreliable scans
+    - 28 hits; to ignore all moving people
+    - 2 hits; to save memory on the grid
+  correct: 1
+- source: cbfc8d083381
+  question: The map is perfect while driving straight, and walls smear into fans whenever the robot turns in place (ground-truth poses). Most likely bug?
+  options:
+    - The log-odds clamp is set too tight for turns
+    - The grid resolution is too coarse for the scan
+    - Scan paired with a wrong-time pose, or mount ignored
+    - Bresenham skips cells along diagonal beams
+  correct: 2
+- source: 1f9b7483c2ad
+  question: Why can a map built with fewer scans have fewer wrongly free wall cells?
+  options:
+    - Grazing beams vote wall-edge cells free; more scans mean more erosion
+    - Fewer scans mean less memory, so fewer cells are clamped
+    - More scans overflow the log-odds, flipping walls to free
+    - Fewer scans hit fewer walls, so walls are never tested
+  correct: 0

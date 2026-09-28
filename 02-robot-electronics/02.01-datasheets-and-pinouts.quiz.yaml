@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 02.01-datasheets-and-pinouts.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1917a33ebecb
+  question: What is the difference between an absolute maximum rating and a recommended operating condition, with the DRV8874's motor supply numbers?
+  options:
+    - Absolute max is the typical operating value (37 V); recommended is the safe minimum (4.5 V).
+    - Absolute max is the damage limit (VM 40 V); recommended is the specified working range (VM 4.5–37 V), where you design with margin.
+    - Absolute max is the working range (4.5–40 V); recommended is the value for best efficiency (12 V).
+    - Both mean the same limit; the recommended value just adds a 10% margin (36 V).
+  correct: 1
+- source: 647c851bd2d6
+  question: An output guarantees $V_{OH} \ge 2.4$ V and $V_{OL} \le 0.4$ V; the input needs $V_{IH} \ge 2.0$ V and $V_{IL} \le 0.8$ V. What are the noise margins, and which fails first near a motor driver?
+  options:
+    - $NM_H = 0.4$ V, $NM_L = 0.4$ V; the low margin usually fails first because ground bounce lifts the low level.
+    - $NM_H = 1.6$ V, $NM_L = 0.4$ V; the low margin is much thinner.
+    - $NM_H = 0.4$ V, $NM_L = 1.2$ V; the high margin fails first because supply sag lowers the high level.
+    - $NM_H = 2.0$ V, $NM_L = 0.8$ V; both margins are comfortable.
+  correct: 0
+- source: d3b609e2b2dc
+  question: Why is 5 V on a Pico 2 GPIO sometimes within the absolute maximum and sometimes not?
+  options:
+    - "It depends on the PWM frequency: 5 V is safe only below 1 kHz."
+    - "It depends on the current: 5 V is safe only through a 1 kΩ resistor."
+    - "It depends on the chip stepping: only A4 chips accept 5 V."
+    - Fault-tolerant pins accept 5.5 V only while IOVDD is at 3.3 V (3.63 V when unpowered); GP26–GP29 are not fault tolerant.
+  correct: 3
+- source: e60f97547988
+  question: Your wiring leaves the DRV8874 carrier's PMODE pin unconnected. What does the driver do, and when is the mode decided?
+  options:
+    - It defaults to IN/IN mode; the mode is read on every PWM edge.
+    - It defaults to PH/EN mode; the mode is decided at power-up only.
+    - Floating reads as half-bridge mode, latched when enabled through nSLEEP; tie PMODE high and wake the driver again.
+    - It refuses to run until PMODE is driven; the mode is decided by the first IN1 pulse.
+  correct: 2
+- source: 679df977530e
+  question: A datasheet gives $R_{DS(on)}$ = 100 mΩ typ, 120 mΩ max at $T_J$ = 25 °C. Which do you use for a heat estimate, and is it optimistic?
+  options:
+    - 100 mΩ typical; it's pessimistic, since resistance falls as the chip warms.
+    - 120 mΩ maximum; still optimistic, since on-resistance rises with junction temperature.
+    - 110 mΩ, the average; it's accurate at any temperature.
+    - 120 mΩ maximum; it's pessimistic, since the driver never exceeds 25 °C.
+  correct: 1
+- source: 4911d570decd
+  question: "`i2c.scan()` returns `[41, 64]` but your teammate insists the sensors are at 0x52 and 0x80. Who is right?"
+  options:
+    - "Your teammate: the scan is showing corrupted addresses from bus noise."
+    - "You: 0x52 and 0x80 belong to different devices on another bus."
+    - "Neither: the sensors must be re-addressed to match the datasheet."
+    - "Both: 41 = 0x29 and 64 = 0x40 are the 7-bit forms of the 8-bit addresses 0x52 and 0x80."
+  correct: 3
+- source: 8e89f1e6b0f8
+  question: The US-100 has no official datasheet. How should that change how you use its numbers?
+  options:
+    - "Treat them as unverified: record their source, assume conservatively (e.g. power at 3.3 V) and confirm the ones you rely on by measurement."
+    - Use the HC-SR04 datasheet instead, since the sensors are identical.
+    - Trust the seller's listing, because retailers must publish accurate specifications.
+    - Avoid the sensor altogether, since undocumented parts can't be used safely.
+  correct: 0

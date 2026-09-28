@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.03-classical-detection.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9d3d4716f5d7
+  question: Which ordering of the ball detector's stages is correct?
+  options:
+    - Blur → HSV inRange → opening → closing → contours → area → circularity → fill ratio → best score
+    - HSV inRange → contours → blur → closing → opening → circularity → area → fill ratio → best score
+    - Blur → contours → HSV inRange → area → opening → closing → fill ratio → circularity → best score
+    - HSV inRange → blur → closing → opening → area → contours → circularity → fill ratio → best score
+  correct: 0
+- source: a73f03c8a8d8
+  question: Compute circularity and fill ratio for a square of side 20 px.
+  options:
+    - Circularity 0.637, fill ratio 0.785
+    - Circularity 1.000, fill ratio 0.637
+    - Circularity 0.785, fill ratio 1.273
+    - Circularity 0.785, fill ratio 0.637
+  correct: 3
+- source: a6956dfb3dde
+  question: Why does the naive detector choose the box, even though the ball is orange and the box is brown?
+  options:
+    - The box reflects more light, so its V is higher and it wins the brightness-based ranking of contours
+    - The ball's specular highlight splits its blob in two, so each half is smaller than the box's single blob
+    - Both have hue 13; the naive range starts at S = 50, so both pass, and "largest contour" picks the bigger box
+    - The box is closer to the camera, so its hue shifts toward orange and it passes a tighter hue range
+  correct: 2
+- source: b677af51f0e1
+  question: You process frames from a ROS topic without converting `rgb8` to BGR. What does the orange detector output?
+  options:
+    - "The ball as usual: HSV thresholds on hue are symmetric, so swapping red and blue changes nothing"
+    - "Almost always `None`: the ball's hue becomes ≈ 108, and round blue objects may be detected instead"
+    - Every orange object doubled, because each pixel now passes both the red and blue hue ranges
+    - The ball with a shifted center, since the channel swap mirrors the image horizontally
+  correct: 1
+- source: 4317c353500e
+  question: A 7 cm ball, f = 467.7 px, detect up to Z ≈ 3.9 m. Which `min_area_px` reasoning is right?
+  options:
+    - Ideal area ≈ 55 px², and pixelated discs measure larger than ideal, so set ≈ 110 px² to be safe
+    - Ideal area ≈ 220 px² (radius 8.4 px), so set ≈ 200 px² and keep circularity strict
+    - Ideal area ≈ 13 px² (radius 2.1 px), so set ≈ 10 px² and keep circularity strict
+    - Ideal area ≈ 55 px², but small pixelated discs measure about half, so set ≈ 25 px² and relax circularity
+  correct: 3
+- source: 3b97aa6ce551
+  question: The detector reports the ball at u = 320, v = 200 with r = 30 px. The camera is level at 0.145 m. Why distrust this?
+  options:
+    - r = 30 px is too large for any distance, since the ball can never exceed 10 px in radius
+    - u = 320 is exactly the image center, which is where false positives from lens glare appear
+    - v = 200 is above the horizon ($c_y = 240$), where a ball on the floor can never appear
+    - v = 200 is below the horizon, but too close to it for a ball with a 30 px radius
+  correct: 2
+- source: a83d0db0a75d
+  question: When is `HoughCircles` a better choice than color segmentation?
+  options:
+    - When the object has no distinctive color but a clear circular edge, or to verify a color blob
+    - When the scene has many textures, since Hough ignores texture and finds only real circles
+    - When speed matters most, since Hough is faster than HSV thresholding on a Raspberry Pi
+    - When the object is partly occluded, since Hough needs no edge to find the circle's center
+  correct: 0

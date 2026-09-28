@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 12.06-nav2-architecture.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: cd859f73769e
+  question: Which Nav2 server owns the local costmap, and why is there no standalone `local_costmap` node?
+  options:
+    - "`planner_server`; the costmap is an object inside it, so the planner can check local obstacles without IPC"
+    - "`controller_server`; the costmap runs as a separate process but is hidden from `ros2 node list` by design"
+    - "`bt_navigator`; it builds the local costmap on each tick, so a separate node would only duplicate the work"
+    - "`controller_server`; the costmap is an object inside it, sharing its lifecycle and needing no IPC to be read at 20 Hz"
+  correct: 3
+- source: 6adac48ef49e
+  question: 'A `RecoveryNode number_of_retries="1"`: child 0 returns FAILURE, child 1 returns SUCCESS, then child 0 returns SUCCESS. How many ticks of the tree does that take?'
+  options:
+    - Two; one tick for the failed attempt and one tick for the successful retry
+    - One; the node loops internally and the whole retry happens inside a single tick
+    - Three; one tick for each child execution in the sequence
+    - Four; each failure costs an extra tick before the recovery child can run
+  correct: 1
+- source: 2ca92192a887
+  question: Why is `GoalUpdated` under a `ReactiveFallback` rather than a `Fallback`?
+  options:
+    - "`ReactiveFallback` re-checks `GoalUpdated` every tick, so a new goal interrupts a running recovery within 10 ms."
+    - "`ReactiveFallback` checks `GoalUpdated` only once per goal, which avoids replanning on every small goal change."
+    - "`Fallback` cannot hold a condition node as its first child, so the reactive version is required by the BT library."
+    - "`ReactiveFallback` runs its children in parallel threads, so recovery and goal checking can execute simultaneously."
+  correct: 0
+- source: 0245609d5b28
+  question: karmel drives at 0.25 m/s and the tree replans at 1 Hz. You raise cruise speed to 0.5 m/s. What would you change in the tree?
+  options:
+    - Lower `RateController hz` to about 0.5, so the planner has more time per plan at the higher speed
+    - Nothing; replanning rate is independent of speed, since the controller handles all new obstacles
+    - Raise `RateController hz` to about 2.0 (or replan per distance travelled), after checking the planner can keep up
+    - Raise `RateController hz` to 20, matching the controller, so every control cycle gets a fresh path
+  correct: 2
+- source: 2bddde64bffb
+  question: You delete the whole recovery subtree (child 1 of `NavigateRecovery`). What happens when a person briefly blocks a doorway?
+  options:
+    - The robot waits indefinitely at the doorway, because without recoveries the tree can never return FAILURE.
+    - Nothing changes, because the controller's own internal retry logic handles temporary blockages by itself.
+    - The robot drives through the person, because recoveries are what feed obstacles into the local costmap.
+    - The first pipeline failure ends the action immediately; no clearing or waiting, so the mission layer must retry the goal.
+  correct: 3
+- source: c1e54f055b07
+  question: What does `lifecycle_manager`'s bond protect against that a plain `respawn` would not?
+  options:
+    - A server that is alive but not working (blocked or starved); a missing heartbeat deactivates the stack
+    - A server that crashed; the bond restarts it faster than respawn, keeping the goal active throughout
+    - A server with wrong parameters; the bond validates the YAML before letting the server activate
+    - A network outage; the bond buffers commands so the controller keeps running until the link returns
+  correct: 0
+- source: 048a4eea2c1a
+  question: "Goals succeed in simulation but abort on the real robot with `compute_path_error_code: 202` (TF_ERROR). Where do you look?"
+  options:
+    - "The planner: switch from NavFn to Smac, since NavFn cannot plan on real sensor data with noise"
+    - "The costmap: raise `inflation_radius`, since the real robot's footprint is larger than in simulation"
+    - "TF: check that `map → odom` and `odom → base_footprint` are published and fresh; suspect AMCL, `use_sim_time` or clocks"
+    - "The controller: lower `controller_frequency`, since the Pi cannot run the controller at the sim rate"
+  correct: 2
+- source: 568d1db4a8ad
+  question: Which plugin strings does karmel use for the planner, the controller and the goal checker?
+  options:
+    - "`nav2_smac_planner::SmacPlanner2D`, `nav2_mppi_controller::MPPIController`, `nav2_controller::StoppedGoalChecker`"
+    - "`nav2_navfn_planner::NavfnPlanner`, `nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController`, `nav2_controller::SimpleGoalChecker`"
+    - "`nav2_navfn_planner::NavfnPlanner`, `dwb_core::DWBLocalPlanner`, `nav2_controller::SimpleProgressChecker`"
+    - "`nav2_theta_star_planner::ThetaStarPlanner`, `nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController`, `nav2_controller::SimpleGoalChecker`"
+  correct: 1

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.18-integrals-numerical-integration.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c51299b65fa2
+  question: A robot's speed is $v(t) = 0.4t$ m/s for $0 \le t \le 2$ s. How far does it travel?
+  options:
+    - 0.8 m
+    - 1.6 m
+    - 0.4 m
+    - 0.2 m
+  correct: 0
+- source: 4b0458c150eb
+  question: Why is the trapezoid rule more accurate than the left Riemann sum for the same samples?
+  options:
+    - It uses more samples per interval, which averages out the sensor noise
+    - It uses the midpoint value, which is exact for any curved rate
+    - It assumes the rate stays at its starting value, which removes bias
+    - It uses both ends, so linear rates are exact; error ∝ $\Delta t^2$ vs ∝ $\Delta t$
+  correct: 3
+- source: 85363680ca34
+  question: Euler gives 8 mm error at $h = 0.02$ s. What at $h = 0.01$ s? A midpoint method has 0.3 mm at $h = 0.02$ s; what at $h = 0.01$ s?
+  options:
+    - Euler ≈ 2 mm; midpoint ≈ 0.15 mm
+    - Euler ≈ 4 mm; midpoint ≈ 0.075 mm
+    - Euler ≈ 4 mm; midpoint ≈ 0.15 mm
+    - Euler ≈ 8 mm; midpoint ≈ 0.3 mm
+  correct: 1
+- source: 322939cf705a
+  question: You simulate a motor with τ = 20 ms using Euler at 50 Hz. What happens?
+  options:
+    - It oscillates forever around the target without ever settling
+    - It explodes, since the step is larger than the time constant
+    - "It jumps to the target in one step: stable, but it hides the real dynamics"
+    - It tracks the real exponential response accurately
+  correct: 2
+- source: 92ed96a0d9bb
+  question: A gyro bias of 0.005 rad/s is not calibrated out. How many degrees of heading error after 2 minutes?
+  options:
+    - 0.6°
+    - 0.57°
+    - 68.8°
+    - 34.4°
+  correct: 3
+- source: 654cc8c35d60
+  question: Dead reckoning is perfect on straight lines but after many turns the estimated path ends up consistently outside the real one. The loop runs at 5 Hz. Most likely cause?
+  options:
+    - Euler integration cuts outside every arc; re-integrate logs with a midpoint update to confirm
+    - Wheel slip in the turns; re-run the same path on a floor with more grip to confirm
+    - A wrong wheel radius; drive a measured straight line to confirm
+    - Gyro bias; leave the robot still for a minute and watch the heading drift
+  correct: 0
+- source: fc145f1c30f1
+  question: Why do physics engines like Gazebo or MuJoCo use step sizes around a millisecond even for slow robots?
+  options:
+    - They render graphics at 1 kHz, so physics must match the frame rate
+    - Slow robots accumulate more floating-point error, so they need smaller steps
+    - Stability depends on the fastest dynamics (contacts, motor models), not robot speed
+    - ROS clocks tick at 1 kHz, so larger steps would lose synchronization
+  correct: 2

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FC.04-cmake-builds.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 15ce2d466e9e
+  question: What is the difference between `cmake -S . -B build` and `cmake --build build`?
+  options:
+    - The first configures and generates a native build system; the second runs it
+    - The first compiles sources; the second links them into executables
+    - The first builds Debug; the second builds Release
+    - The first downloads dependencies; the second configures and compiles
+  correct: 0
+- source: f9ec083dd7f9
+  question: "`target_include_directories(foo PRIVATE include/)` and `foo`'s public header includes something from `include/`. What fails, and at which stage?"
+  options:
+    - "`foo` itself fails at link time with `undefined reference`"
+    - CMake fails at configure time with a missing directory error
+    - Anything linking `foo` fails at compile time with `No such file`
+    - Nothing fails; PRIVATE includes propagate to direct dependents
+  correct: 2
+- source: 38b6ca09e0c7
+  question: You change one comment line in `include/wheelodom/odometry.hpp`. How many translation units recompile, and why?
+  options:
+    - None, because the compiler ignores changes to comments
+    - One, `odometry.cpp`, because it is the header's implementation file
+    - Two, the files that call `odometry` functions directly
+    - All three, because `#include` is textual and their input bytes changed
+  correct: 3
+- source: 4b4e438cdf32
+  question: "`undefined reference` versus `multiple definition`: what does each tell you, and which stage produces them?"
+  options:
+    - "Compiler errors: a missing `#include`, and a variable declared twice in one scope"
+    - "Linker errors: a used symbol defined nowhere, and an ODR break like a non-inline body in a header"
+    - Undefined is a compiler error and multiple is a linker error from duplicate libraries
+    - "CMake errors: a missing target, and a target added twice with `add_library`"
+  correct: 1
+- source: 1e26a2ad59cb
+  question: A public header takes 1.5 s to compile into each of 60 TUs, on 6 cores, with a 4 s link. How long is a rebuild after touching it, and after touching one `.cpp`?
+  options:
+    - Header 94 s; one `.cpp` 5.5 s
+    - Header 19 s; one `.cpp` 5.5 s
+    - Header 15 s; one `.cpp` 1.5 s
+    - Header 19 s; one `.cpp` 4 s
+  correct: 1
+- source: aebaacc47f0e
+  question: You run `cmake --build build` after adding a new `.cpp` to the directory but not to `CMakeLists.txt`. What happens?
+  options:
+    - CMake detects the new file and reconfigures automatically
+    - The build fails with a configure error about an unknown source
+    - The file is compiled but not linked into any target
+    - "Nothing: it's never compiled, and calls into it give `undefined reference`"
+  correct: 3
+- source: 1474f77447a3
+  question: What does `ament_package()` do, and what breaks if you leave it out?
+  options:
+    - It generates the package's `Config.cmake` and index entries; without it nothing can `find_package` it
+    - It compiles the package's messages; without it the build fails at the first `.msg` file
+    - It installs the executables; without it `ros2 run` can't find any node
+    - It sets the C++ standard; without it the package builds as C++98
+  correct: 0

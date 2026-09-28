@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.05-pico-microcontroller-setup.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: bc82a65d4c62
+  question: What's the difference between `mpremote run script.py` and `mpremote fs cp script.py :main.py`?
+  options:
+    - "`run` compiles the file to bytecode; `fs cp` copies the source to the laptop."
+    - "`run` stores the file permanently; `fs cp` executes it once without storing."
+    - "`run` executes the file once from RAM, forgotten on reset; `fs cp … :main.py` stores it in flash so it runs at every power-up."
+    - Both store the file, but only `fs cp` restarts the Pico afterwards.
+  correct: 2
+- source: 7e286a34e5a2
+  question: "`find_pico.py` reports `[2e8a:000f]`. What state is the Pico in, and what do you do next?"
+  options:
+    - BOOTSEL mode; copy the MicroPython `RPI_PICO2` Arm `.uf2` onto the `RP2350` drive.
+    - MicroPython is running; open the REPL with `mpremote`.
+    - A crashed program; unplug and replug the USB cable.
+    - BOOTSEL mode; run `mpremote fs cp main.py :` to install the firmware.
+  correct: 0
+- source: 1512144cd794
+  question: You added yourself to `dialout` a minute ago, and `mpremote` still says permission denied. What's the fix?
+  options:
+    - Run `sudo chmod 666 /dev/ttyACM0`.
+    - Run `mpremote` with `sudo`.
+    - Reboot the Pico into BOOTSEL mode.
+    - Log out and back in, since groups are read at login.
+  correct: 3
+- source: 5041982dc673
+  question: "`read_u16()` on ADC channel 4 (the temperature sensor) returns 13,800. What temperature is that?"
+  options:
+    - 27.0 °C
+    - 33.4 °C
+    - 20.6 °C
+    - 42.1 °C
+  correct: 1
+- source: 8c523905728b
+  question: "`hello_pico.py` prints `chip stepping : A2`. What must you avoid in your firmware, and what do you do instead?"
+  options:
+    - Avoid PIO state machines; decode encoders in a Python interrupt instead.
+    - Avoid ADC channel 4; use an external temperature sensor instead.
+    - Avoid clocks above 150 MHz; keep the default clock instead.
+    - Avoid internal pull-downs (erratum RP2350-E9); use `Pin.PULL_UP` active-low, or an external ≤ 8.2 kΩ pull-down.
+  correct: 3
+- source: ce666e685ca2
+  question: "`dmesg` shows a new full-speed USB device when you plug in the Pico, but no `ttyACM0` appears, and BOOTSEL mode works. What's wrong?"
+  options:
+    - The user isn't in `dialout`; add the group and log in again.
+    - The USB cable is charge-only; replace it with a data cable.
+    - MicroPython isn't presenting its serial port (wrong firmware or a crash); re-flash the correct Arm `RPI_PICO2` `.uf2`.
+    - The Pi's USB port is underpowered; use a powered hub.
+  correct: 2
+- source: 41f299a5cf9a
+  question: Your robot program has `/dev/ttyACM0` open, and you run `mpremote fs ls` in another terminal. What happens?
+  options:
+    - The OS queues the two programs, so both work in turn without problems.
+    - "Two programs fight over one port: `mpremote` may fail or interrupt the firmware; stop the robot program (and motors) first."
+    - "`mpremote` opens a second virtual port, `ttyACM1`, and works normally."
+    - The robot program pauses automatically until `mpremote` finishes.
+  correct: 1

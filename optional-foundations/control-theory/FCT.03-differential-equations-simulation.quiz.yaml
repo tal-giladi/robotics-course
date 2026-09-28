@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FCT.03-differential-equations-simulation.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 2290fbb72b7f
+  question: What is a system's "state", and what is the state of karmel's wheel under position control?
+  options:
+    - All measured signals; for the wheel, the encoder ticks and PWM duty
+    - The current output only; for the wheel, the angle θ
+    - The controller's internal variables; for the wheel, the error and its integral
+    - The smallest set that with future inputs fixes future behaviour; angle θ and speed ω
+  correct: 3
+- source: 74d90894880e
+  question: How is $\tau\ddot\theta + \dot\theta = Ku$ written as a first-order state-space system with $x = [\theta, \omega]$?
+  options:
+    - $\dot\theta = \omega$, $\dot\omega = (Ku - \omega)/\tau$
+    - $\dot\theta = \omega$, $\dot\omega = Ku - \tau\omega$
+    - $\dot\theta = Ku$, $\dot\omega = -\omega/\tau$
+    - $\dot\theta = \omega/\tau$, $\dot\omega = Ku - \omega$
+  correct: 0
+- source: 7c430f93f49a
+  question: What is the Euler stability limit for a first-order system with τ = 0.02 s?
+  options:
+    - Δt < 0.01 s
+    - Δt < 0.02 s
+    - Δt < 0.04 s
+    - Δt < 0.2 s
+  correct: 2
+- source: 026b9646be30
+  question: You double a linear system's step input. Does the overshoot percentage change, and with duty saturation?
+  options:
+    - "Linear: it doubles; with saturation: it stays the same, since the duty is capped"
+    - "Linear: no change; with saturation: yes, larger steps saturate longer and change the shape"
+    - "Linear: no change; with saturation: no change either, since the model is linear"
+    - "Linear: it halves; with saturation: it doubles, since the step saturates longer"
+  correct: 1
+- source: 4ccdf10623ed
+  question: What makes an ODE system stiff, and what solver do you reach for?
+  options:
+    - Strong nonlinearity like saturation; use `RK45` with a tight tolerance
+    - A very long simulation time; use explicit Euler with a larger step
+    - Many coupled states; use an explicit fourth-order Runge–Kutta solver
+    - Widely separated time scales; use an implicit solver like `Radau` or `BDF`
+  correct: 3
+- source: 5818d9d29c86
+  question: In simulation a P position loop settles exactly on target, but the real wheel stops a little short every time. What did the model miss?
+  options:
+    - Deadband and static friction; add it to the model, fix with integral action or compensation
+    - Encoder quantization; add dithering to the measurement in the simulation
+    - Battery sag; add a voltage feedforward term proportional to the error
+    - Backlash in the gearbox; add a derivative term to damp the final approach
+  correct: 0
+- source: e01dc847d968
+  question: Why does the course simulator use $1 - e^{-\Delta t/\tau}$ instead of $\Delta t/\tau$ for the motor update?
+  options:
+    - It is faster to compute on the Pico than a division
+    - It includes the deadband, which the linear update ignores
+    - It is the exact one-step solution with the input held, stable for any Δt
+    - It approximates second-order effects of the motor inductance
+  correct: 2

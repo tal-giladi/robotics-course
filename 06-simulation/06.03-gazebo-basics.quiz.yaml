@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 06.03-gazebo-basics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9ff2fe01d6bf
+  question: Which three systems does every world in this course load, and what does each give you?
+  options:
+    - "`Sensors` (all sensor data), `Imu` (orientation estimates), and `Physics` (gravity only, no contacts)"
+    - "`Physics` (time and contacts), `UserCommands` (spawn/delete/move entities), `SceneBroadcaster` (scene for GUI)"
+    - "`Physics` (contacts), `Rendering` (the GUI window), and `Clock` (publishes `/clock` straight to ROS 2)"
+    - "`UserCommands` (keyboard teleop), `SceneBroadcaster` (camera images), and `Sensors` (LiDAR scans)"
+  correct: 1
+- source: 4cf638058771
+  question: A 0.2 m cube starts with its centre 2.0 m above the floor. When does it land, and what is its centre height then?
+  options:
+    - After 0.639 s (falling 2.0 m); centre at 0 m
+    - After 0.623 s (falling 1.9 m); centre at 0.2 m
+    - After 0.623 s (falling 1.9 m); centre at about 0.1 m
+    - After 0.388 s (falling 1.9 m); centre at about 0.1 m
+  correct: 2
+- source: 67f2c345d480
+  question: A box on a 30° ramp does not slide. What do you know about $\mu$?
+  options:
+    - $\mu \ge \tan 30° = 0.577$, regardless of the box's mass
+    - $\mu \ge \sin 30° = 0.5$, regardless of the box's mass
+    - $\mu \ge 0.577$, but only for a box heavier than 1 kg
+    - $\mu \le \tan 30° = 0.577$, since friction stays below the slope
+  correct: 0
+- source: 94628fc4e452
+  question: You delete the `<collision>` element from `ground_plane` but keep the `<visual>`. What do you see?
+  options:
+    - The floor disappears from the view, but objects still rest on it
+    - Gazebo refuses to load the world, since every link needs a collision
+    - Objects rest on the floor as before, using the visual as a fallback
+    - A normal-looking floor that objects fall straight through
+  correct: 3
+- source: 50a183b7b84a
+  question: Why does `step_and_measure.sh` start Gazebo with `-s`, without `-r`, and drive it with a service call?
+  options:
+    - "For an exact, machine-independent measurement: headless, paused, stepped exactly $n$ × 1 ms"
+    - To run faster than real time by letting the service call skip unneeded physics steps
+    - Because `-r` only exists in Gazebo Classic, and the service call is its modern replacement
+    - To let the GUI draw each step as the script requests it, for frame-by-frame inspection
+  correct: 0
+- source: 280f49ebf073
+  question: Your world runs and `gz model --list` shows your robot, but there is no `/clock` topic and `iterations` stays at 0. What is the likely cause?
+  options:
+    - The `SceneBroadcaster` system is missing, so the robot was never really spawned
+    - The server is paused, or the `Physics` system is missing from the world file
+    - The ROS 2 bridge is not running, so Gazebo has nothing to count iterations for
+    - "`use_sim_time` is false, which stops Gazebo from publishing the `/clock` topic"
+  correct: 1
+- source: 93a154ebdc88
+  question: You want a table in your world without modelling it. What are your two options and their costs?
+  options:
+    - Import a CAD file (costs a licence), or sketch it in the GUI (free, but it cannot be saved to SDF)
+    - Use a Fuel model (always the fastest physics), or a mesh collision (slower, but more realistic)
+    - "`<include>` a Fuel model (download, dependency, maybe slow mesh collisions), or use primitives"
+    - Spawn it from a URDF (needs the ROS bridge), or from SDF (needs the GUI to be open to place it)
+  correct: 2

@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FPY.06-python-performance.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 64d2660e2d66
+  question: What is the difference between `tottime` and `cumtime`, and which do you sort by to find the loop body that burns CPU?
+  options:
+    - "`tottime` includes called functions, `cumtime` excludes them; sort by `cumtime`"
+    - "`tottime` is wall time, `cumtime` is CPU time; sort by `cumtime`"
+    - "`tottime` is per call, `cumtime` is summed over calls; sort by `tottime`"
+    - "`tottime` excludes called functions, `cumtime` includes them; sort by `tottime`"
+  correct: 3
+- source: 6a7ab7bf09c7
+  question: A profile shows 60% of the time in feature matching and 40% spread across 30 small functions. What is the maximum speed-up from making matching infinitely fast?
+  options:
+    - 1.6×
+    - 2.5×
+    - 6×
+    - Unlimited, since the bottleneck disappears
+  correct: 1
+- source: d224b461518b
+  question: Why is `sum(x * x for x in arr)` over a numpy array slower than the same loop over a Python list?
+  options:
+    - Each element becomes a boxed numpy scalar, whose arithmetic costs more than Python floats
+    - numpy arrays are stored column-major, so iterating them causes cache misses
+    - The generator copies the whole array to a list before summing
+    - "`sum` falls back to `np.sum`, which recompiles for each element"
+  correct: 0
+- source: 2babf6b2558f
+  question: Your 10 Hz mapping update takes 45 ms mean but 140 ms p99 on the Pi. Is that acceptable, and what do you check first?
+  options:
+    - Yes, since the 45 ms mean is well under the 100 ms budget
+    - Yes, if you raise the rate to 20 Hz so that the spikes average out
+    - Not reliably, 1% overrun the budget; check if spikes match other load (py-spy)
+    - No; rewrite the update in C++ first, since Python can't meet 10 Hz
+  correct: 2
+- source: 4b8b1656fba2
+  question: When is numba a better choice than numpy vectorization?
+  options:
+    - When the data is small, since numba has no startup cost unlike numpy
+    - For numeric loops with per-element branching or state that don't map onto whole-array ops
+    - When code uses dicts and classes, which numba speeds up more than numpy
+    - Whenever the code runs on the Pi, since numpy has no arm64 SIMD support
+  correct: 1
+- source: 7d411b9005e7
+  question: Why does the course run the motor PID and the command watchdog on the Pico instead of in the Python process on the Pi?
+  options:
+    - The Pi's GPIO pins cannot generate PWM at the frequency the motor driver needs
+    - The Pico's floating-point unit computes PID updates faster than the Pi's CPU
+    - Python on the Pi can't import the PID library needed for motor control
+    - Those loops need bounded latency, and the Pico keeps working if the Pi's software stalls
+  correct: 3

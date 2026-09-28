@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FP.01-kinematics-units.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 98dc206d1f4b
+  question: Convert 150 rpm at the wheel to m/s on karmel's 90 mm wheels.
+  options:
+    - 0.707 m/s
+    - 1.414 m/s
+    - 6.75 m/s
+    - 0.118 m/s
+  correct: 0
+- source: c3f360034dbd
+  question: Why is $v = \omega r$ true with no conversion factor only when ω is in rad/s?
+  options:
+    - rad/s is the SI unit for speed, so it always cancels against meters
+    - Radians are larger than degrees, so the factor is too small to matter
+    - A radian is defined so arc length = θ(rad) × r; other units need a factor
+    - Only rad/s includes the wheel's circumference automatically
+  correct: 2
+- source: c0cfad3ced9d
+  question: Karmel drives at 0.4 m/s and brakes at 0.8 m/s². How far does it travel while braking, and how long does it take?
+  options:
+    - 0.200 m in 0.5 s
+    - 0.100 m in 2.0 s
+    - 0.320 m in 0.5 s
+    - 0.100 m in 0.5 s
+  correct: 3
+- source: f13e46752559
+  question: The loop reads encoder ticks at 200 Hz instead of 50 Hz with no averaging. Smoother or noisier speed estimate, and how does the step size change?
+  options:
+    - Smoother; one-tick steps shrink 4× (22.9 → 5.74 mm/s)
+    - Noisier; one-tick steps grow 4× (5.74 → 22.9 mm/s)
+    - Noisier; one-tick steps grow 2× (5.74 → 11.5 mm/s)
+    - No change; the step size depends only on the encoder
+  correct: 1
+- source: fab5f95368d0
+  question: A 0.2 m move with v_max = 0.5 m/s and a_max = 1.0 m/s² never reaches 0.5 m/s. What is its peak speed and why?
+  options:
+    - 0.4 m/s; the controller caps peak speed at 80 % of v_max for safety margin
+    - 0.2 m/s; peak speed equals distance divided by one second of motion
+    - 0.5 m/s briefly; it is reached for an instant at the midpoint of the move
+    - 0.447 m/s; reaching 0.5 m/s and back needs 0.25 m, so the profile is a triangle
+  correct: 3
+- source: 4e94e799aa43
+  question: A teammate's odometry says the robot turned 5157° when it turned 90°. What happened?
+  options:
+    - A value already in degrees was treated as radians and converted again (×57.3)
+    - The encoder counts were read at 57× the real sample rate
+    - The wheel radius was entered in millimeters instead of meters
+    - The heading was integrated without wrapping, adding 14 full turns
+  correct: 0
+- source: 1bac1d9caa5a
+  question: Why does integrating an accelerometer twice drift away within seconds, while differentiating encoder position doesn't drift?
+  options:
+    - Accelerometers are noisier than encoders, and noise always drifts
+    - Integration accumulates a bias as ½bt²; differentiation amplifies noise but has no memory
+    - Differentiation removes the bias, while integration doubles it each step
+    - Encoders are absolute sensors, while accelerometers are relative
+  correct: 1

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.10-object-detection-models.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d4a758d0b93f
+  question: Box A = (0, 0, 100, 100), box B = (50, 50, 150, 150). What is the IoU, and would NMS with τ = 0.5 suppress B if A scores higher?
+  options:
+    - IoU = 0.25; no, B survives as a separate object
+    - IoU ≈ 0.143; yes, any overlap with a higher-scoring box suppresses B
+    - IoU = 0.5; yes, B is suppressed because IoU reaches the threshold
+    - IoU ≈ 0.143; no, B survives as a separate object
+  correct: 3
+- source: bdbfc7f2311e
+  question: Why do SSD/YOLO-style detectors need NMS while DETR-style detectors usually don't?
+  options:
+    - Dense heads use anchors that never overlap; DETR uses overlapping queries, so it filters them internally
+    - Dense heads let many cells predict the same object; DETR's one-to-one matching trains one box per object
+    - DETR runs NMS inside its decoder layers, so the post-processing step is simply hidden from the user
+    - Dense heads output boxes at low resolution; DETR outputs full-resolution masks, which cannot duplicate
+  correct: 1
+- source: c1166ebafec1
+  question: A detector finds 18 of 20 real cups, and 6 of its 24 cup boxes are wrong. What are precision and recall?
+  options:
+    - Precision 0.75, recall 0.90
+    - Precision 0.90, recall 0.75
+    - Precision 0.75, recall 0.82
+    - Precision 0.82, recall 0.90
+  correct: 0
+- source: a922e81b1544
+  question: You raise the score threshold from 0.3 to 0.7. What happens to precision, recall and grasp attempts on empty space?
+  options:
+    - Recall rises, precision drops, and grasps on empty space increase as more boxes pass the threshold
+    - Recall drops, precision usually rises, and grasps on empty space drop; partly occluded cups may be missed
+    - Both precision and recall rise, since only confident boxes remain and they are all correct
+    - Precision drops, recall is unchanged, and grasps on empty space stay the same as before
+  correct: 1
+- source: 4389e313d686
+  question: A startup ships a closed-source robot with fine-tuned YOLO26; a hobbyist publishes a GPL robot on GitHub with it. What applies?
+  options:
+    - "YOLO is MIT: both may use it freely, as long as they keep the copyright notice in their documentation"
+    - "YOLO is AGPL-3.0: the startup is fine if it only fine-tunes; the hobbyist must relicense GPL code as MIT"
+    - "YOLO is AGPL-3.0: the startup needs an Enterprise License or an Apache/BSD model; the hobbyist is fine under AGPL-compatible terms"
+    - "YOLO is Apache-2.0: the startup is fine, but the hobbyist cannot combine it with GPL-licensed code"
+  correct: 2
+- source: 42d5ed936ca7
+  question: RT-DETRv2 boxes look right on square test images but are stretched vertically on 640×480 frames. Most likely cause?
+  options:
+    - The model was trained only on square images, so it cannot handle non-square aspect ratios
+    - The image was passed as BGR instead of RGB, which distorts box heights more than widths
+    - The confidence threshold is too low, so tall boxes from neighbouring objects are merged in
+    - "`target_sizes` was set to a square/input size or swapped, instead of the frame's `(480, 640)`"
+  correct: 3
+- source: e25f19a2bf73
+  question: Why can AP50 look great while the grasp still fails?
+  options:
+    - AP50 only counts the top 50 detections, so the grasped object may not be among them
+    - AP50 accepts boxes at only 50% IoU, so a shifted box's centre can miss a narrow bottle
+    - AP50 is measured at 50% confidence, so low-confidence grasp targets are ignored in the score
+    - AP50 averages over 50 classes, so weak classes like bottles are hidden by strong ones
+  correct: 1

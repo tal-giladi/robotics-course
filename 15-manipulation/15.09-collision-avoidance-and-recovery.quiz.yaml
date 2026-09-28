@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 15.09-collision-avoidance-and-recovery.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6d47ca7f7a65
+  question: Why does "clear the world and re-add `object_0 … object_n` each frame" break attaching?
+  options:
+    - Clearing the world also clears the robot model, so attaching fails until `move_group` restarts
+    - Ids follow clustering order, which changes per frame, so `attach` grabs the wrong object; reconcile by position
+    - Re-adding objects takes longer than one frame, so the attach call arrives before the object exists
+    - MoveIt forbids attaching objects added in the same frame, so every attach is silently rejected
+  correct: 1
+- source: fc92a55d6817
+  question: You attach an object and never detach it. What is the measurable cost, and which process do you restart to confirm it?
+  options:
+    - Planning time doubles from the extra geometry; restart your pipeline node
+    - Lowest tool height 20 → 26 mm and smallest graspable 40 → 60 mm; restart your node
+    - Lowest tool height 20 → 26 mm and smallest graspable 40 → 60 mm; restart `move_group`
+    - Nothing measurable, since attached objects expire after one plan; restart RViz
+  correct: 2
+- source: 22366a671918
+  question: MoveIt rejects every grasp pose as a collision. Which two allowances do you need?
+  options:
+    - Target (grasping means touching it) and table (pads close mm above it, inside the padding)
+    - Gripper and arm links (they touch at the wrist) and the camera (it sits inside the gripper)
+    - Target and all neighbours (they may be brushed during approach), kept for the whole run
+    - Table and floor (both are static and known exactly), so padding can be disabled for them
+  correct: 0
+- source: 6671851045c6
+  question: You raise padding from 5 mm to 20 mm on the course's table. What stops working, and how do the two new blockers differ?
+  options:
+    - The 24 mm gap, then the table blocks grasps; neighbours are a tolerance choice, the table a modelling error
+    - Nothing, since 20 mm is still below the jaw clearance; padding only affects transport paths
+    - The table blocks all grasps first; neighbours then block too, and both are fixed by lowering padding
+    - Only the neighbours block grasps; the table is exempt from padding, so it never blocks
+  correct: 0
+- source: 8652ebdd2fbf
+  question: Your pipeline publishes the whole detected world every perception frame at 10 Hz. Which two problems arise?
+  options:
+    - Network saturation (images are resent) and TF buffer overflow; lower the frame rate to 1 Hz
+    - Planner timeouts (scene locked during writes) and memory leaks in `move_group`; restart it hourly
+    - Stale detections (10 Hz is too slow) and missing objects; raise the rate to 30 Hz
+    - Write amplification (40 updates/s for a still table) and identity churn or jitter; diff and send changes only
+  correct: 3
+- source: 915104ef5731
+  question: Which single invariant, asserted once per cycle, catches both a forgotten detach and a wrongly attached object?
+  options:
+    - The number of world objects equals the number of detections in the current frame
+    - The attached object's pose equals the tool frame's pose to within the padding
+    - The scene's attached object equals the pipeline's `holding` state (same id, or both empty)
+    - The gripper width equals the attached object's width to within 5 mm
+  correct: 2
+- source: 6e09bcd73450
+  question: Why is `stop` the first rung of the collision-recovery ladder rather than `retreat`?
+  options:
+    - Retreating requires a plan, which takes longer than the servo's thermal protection allows
+    - A moving controller is a hazard and later steps assume no motion; stopping is free, retreating changes the world
+    - Stopping clears the collision from the planning scene, which retreating cannot do
+    - Retreating is only allowed after a human confirms, while stopping needs no confirmation
+  correct: 1
+- source: 66031772e7b7
+  question: 'Which recoveries must not be prefixed with "put the held object down": `plan_failed`, `dropped`, `joint_limit`, `attached_but_empty`?'
+  options:
+    - "`plan_failed` and `joint_limit`, since their recoveries don't move the gripper"
+    - "`plan_failed` and `dropped`, since both happen before the object is lifted"
+    - All four, since putting an object down is never part of a recovery
+    - "`dropped` and `attached_but_empty`, since the gripper is not holding anything"
+  correct: 3

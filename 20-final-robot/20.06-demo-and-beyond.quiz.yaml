@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 20.06-demo-and-beyond.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 59fa2474e353
+  question: Why is the e-stop test the second segment of the demo rather than the last?
+  options:
+    - It frames everything after it, and its failure must end the demo before any autonomous driving
+    - It is the least interesting segment, so it goes early while people settle
+    - The battery is fullest early, which the e-stop relay needs
+    - The e-stop must be tested before the robot warms up, or it may stick
+  correct: 0
+- source: 592d26306883
+  question: The demo consumes 3.0 Wh of a 36.2 Wh pack. Why is the battery still the most likely thing to end your demo?
+  options:
+    - The pack's real capacity is only about 3 Wh after cold storage
+    - The arm's peak draw can trip the pack's protection circuit
+    - Compute draws ~11 W while switched on for setup and waiting; two hours ≈ 22 Wh
+    - The e-stop test drains the pack by resetting the relay
+  correct: 2
+- source: ada649a50e66
+  question: During the navigation segment, somebody steps into the robot's path and it stops. What do you do?
+  options:
+    - Apologise and restart the segment from the beginning
+    - Let it happen and narrate it as the collision monitor working
+    - Press the e-stop to be safe and move to the next segment
+    - Ask the person to move and switch to teleop to finish
+  correct: 1
+- source: 4d0118da74cc
+  question: You plan a fifteen-minute demo with twelve segments. What happens?
+  options:
+    - It fits if each segment is rehearsed to under 75 seconds
+    - "`check` accepts it, but warns about the battery"
+    - The audience stays engaged because of the variety
+    - "`check` refuses it; it overruns and attention fades"
+  correct: 3
+- source: a1c49a1fd925
+  question: Your grasp fails twice in segment 6. What is the correct action?
+  options:
+    - Try a third time, since the odds improve with each attempt
+    - Place the object by hand, say what the grasp needed, and move on
+    - Restart the robot and repeat the segment from the start
+    - Skip to the final segment and end the demo early
+  correct: 1
+- source: 317f35b4c36f
+  question: Which of the six next directions costs the least new hardware and theory, and why might it be the most valuable for you?
+  options:
+    - Legged robots; the kit is cheap and reuses the arm servos
+    - Learned manipulation; SmolVLA runs on the hardware you own
+    - Outdoor navigation; it reuses Nav2 unchanged
+    - Fleets, cloud and tooling; your distributed-systems experience counts
+  correct: 3
+- source: 7e6d66daa2e4
+  question: What habit most reliably keeps a course robot alive six months later?
+  options:
+    - Storing the pack correctly and writing one log line every time you change something
+    - Leaving it on the charger continuously so the battery stays full
+    - Updating ROS 2 and all packages to the latest version every month
+    - Running the full field test protocol every week
+  correct: 0

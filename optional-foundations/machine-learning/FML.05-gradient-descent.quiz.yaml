@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.05-gradient-descent.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ff74e8017713
+  question: What is the gradient-descent update rule?
+  options:
+    - $\theta \leftarrow \theta - \eta \nabla_\theta L(\theta)$, with η the learning rate
+    - $\theta \leftarrow \theta + \eta \nabla_\theta L(\theta)$, with η the learning rate
+    - $\theta \leftarrow \eta\theta - \nabla_\theta L(\theta)$, with η the momentum
+    - $\theta \leftarrow \theta - \nabla_\theta L(\theta) / \eta$, with η the batch size
+  correct: 0
+- source: 2f7e9dd951c3
+  question: For $L = \frac1N\lVert Xw - y\rVert^2$, what is $\nabla_w L$?
+  options:
+    - $\frac{1}{N}X(Xw - y)$
+    - $\frac{2}{N}(Xw - y)^\top X^\top$
+    - $\frac{2}{N}X^\top(Xw - y)$
+    - $\frac{2}{N}X^\top X w$
+  correct: 2
+- source: 69263df6e6b6
+  question: The largest Hessian eigenvalue is 83.4. Above which learning rate does plain GD diverge?
+  options:
+    - About 0.012
+    - About 0.024
+    - About 0.048
+    - About 0.12
+  correct: 1
+- source: faa785567eea
+  question: On a problem with $\lambda_{\max} = 2$, what happens at exactly $\eta = 1.0$?
+  options:
+    - It converges in a single step, since η = 1/λ is optimal
+    - It diverges, with the error doubling each step
+    - It converges slowly, halving the error each step
+    - The error flips sign each step without shrinking, so it oscillates forever
+  correct: 3
+- source: f82400e29372
+  question: What is the size of Adam's very first update for each parameter, and why?
+  options:
+    - About η·g for each parameter, since both moment estimates start at zero
+    - About η for every parameter, since bias correction makes $\hat m/\sqrt{\hat v} = \pm 1$
+    - Zero for each parameter, since Adam needs one step to warm up its moments
+    - About η/√g for each parameter, since the second moment normalizes the step
+  correct: 1
+- source: 70e374449eda
+  question: SGD on robot logs shows the loss alternating between low and high every few hundred steps in a regular pattern. What is the likely bug?
+  options:
+    - "Data not shuffled: batches follow log time order, so the model keeps re-adapting"
+    - The learning rate is too high, causing periodic divergence and recovery
+    - The model has too few parameters to fit the fast and slow data together
+    - The loss uses MAE instead of MSE, which oscillates near the minimum
+  correct: 0
+- source: 251a0330d1d5
+  question: Why does standardizing features help plain gradient descent so much?
+  options:
+    - It removes outliers, so the gradient is less noisy
+    - It makes all gradients positive, so every step goes downhill
+    - It rounds the loss landscape, so one learning rate suits all directions
+    - It reduces the number of parameters the model has to learn
+  correct: 2

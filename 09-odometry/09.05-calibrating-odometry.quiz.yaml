@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 09.05-calibrating-odometry.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5fe01ba8d6bf
+  question: What distinguishes a systematic odometry error from a random one, and how does UMBmark separate them?
+  options:
+    - Systematic errors are large, random ones small; UMBmark sorts runs by size
+    - Systematic repeats each run, random varies; cluster centre vs spread
+    - Systematic comes from slip, random from radii; UMBmark drives on two floors
+    - Systematic grows with speed, random with distance; UMBmark varies both
+  correct: 1
+- source: 17fc3330c3c2
+  question: Why must the UMBmark square be driven both clockwise and counter-clockwise?
+  options:
+    - In one direction diameter and wheelbase errors can cancel; both separate them
+    - To average out the gyro bias, which reverses sign with direction
+    - Because the robot's caster behaves differently in each direction
+    - To double the number of runs, which halves the random error
+  correct: 0
+- source: 6db72ff00fab
+  question: UMBmark on a 2 m square gives $x_{cg,cw} = x_{cg,ccw} = -0.10$ m. What kind of error is it, and what is $E_b$?
+  options:
+    - Diameter (Type B) error; $E_b = 1.0$
+    - Wheelbase (Type A) error; $E_b = 0.984$
+    - Diameter (Type B) error; $E_b = 1.0162$
+    - Wheelbase (Type A) error; $E_b = 1.0162$
+  correct: 3
+- source: 2d14d7a9f4c6
+  question: You calibrate by least squares using only the 10 UMBmark squares. Which parameters come out well, and which don't?
+  options:
+    - All parameters are well determined by closed squares
+    - Absolute radii are good; the wheelbase is undetermined
+    - Ratios $r_R/r_L$ and $b/r$ are good; overall scale isn't
+    - Only the wheelbase is good; both radii are undetermined
+  correct: 2
+- source: d32a234346e8
+  question: What is the least-squares estimate of $r$ from pairs $(\varphi_i, d_i)$ with the model $d = r\varphi$?
+  options:
+    - $r = \sum\varphi_i d_i / \sum\varphi_i^2$
+    - $r = \sum d_i / \sum\varphi_i$ squared
+    - $r = \sum d_i^2 / \sum\varphi_i d_i$
+    - $r = \text{mean}(d_i/\varphi_i)$ weighted by $d_i$
+  correct: 0
+- source: 3ed5b7e1df9f
+  question: After one round, $E_{max,syst} = 4$ cm and the cluster standard deviation is 6 cm with 5 runs each. Recalibrate?
+  options:
+    - "Yes: 4 cm is above the 2.7 cm SEM, so it is real"
+    - "No: 4 cm is below 3·SEM ≈ 8 cm, so it is within scatter"
+    - "Yes: any nonzero offset should be calibrated out"
+    - "No: 4 cm is below the 6 cm σ, so it is noise"
+  correct: 1
+- source: 629fadd8892c
+  question: Your calibrated multipliers are right 0.98 and left 1.02, but the robot now curves more than before. Most likely cause?
+  options:
+    - The multipliers are too small; apply them twice
+    - The floor changed between calibration and testing
+    - Random error dominates, so calibration made no sense
+    - A sign or convention flip, e.g. left and right swapped
+  correct: 3

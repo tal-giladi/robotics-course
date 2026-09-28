@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.07-power-system.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 7b70f271c1a7
+  question: Why is the fuse placed between the battery and the switch rather than after the switch?
+  options:
+    - So that the fuse can be replaced safely while the switch is on.
+    - So that the switch arc can't blow the fuse every time the robot is turned on.
+    - So that a fault inside the switch or its wiring is also protected; the fuse belongs as close to the battery positive as possible.
+    - So that the fuse sees the lower current that flows before the switch.
+  correct: 2
+- source: 8bda595a0c54
+  question: Your pack is at 9.9 V and the 5 V rail delivers 19 W. How much current does the battery supply to the regulator at 90% efficiency, and why is it more than at 12.6 V?
+  options:
+    - 1.92 A; the regulator's efficiency drops at low input voltage.
+    - 2.13 A; a buck converts power, so a lower input voltage needs proportionally more input current.
+    - 1.68 A; the current is the same at any input voltage for a buck regulator.
+    - 3.80 A; the regulator draws the output current plus its own losses.
+  correct: 1
+- source: c475163eae5f
+  question: What exactly does "common ground" require, and what does it not mean?
+  options:
+    - Every board connects its ground to the metal chassis; it does not mean the battery negative is connected.
+    - Every board shares one ground wire chained board-to-board; it does not mean a star point is needed.
+    - Every board's ground has a low-resistance connection to one star point with the battery negative; it does not mean grounds may be chained board-to-board.
+    - Every board has its own isolated ground; it does not mean the signals share a reference.
+  correct: 2
+- source: 6daba682435f
+  question: You leave the DRV8874's `CS` pin wired straight to GP27 and stall a motor. What is the voltage on GP27, and what happens?
+  options:
+    - About 0.3 V, well within range; the ADC reads the stall current safely.
+    - About 11 V, the motor supply; the pin is destroyed instantly.
+    - About 1.1 V, because the current limit caps it; nothing is at risk.
+    - About 3.3 V with peaks of 3.5–4.8 V, above the pin's 3.8 V absolute maximum; you risk destroying the pin or chip.
+  correct: 3
+- source: f9d9a5d87609
+  question: A 5×20 mm 10 A fast fuse blows every third time you switch the robot on, but never while it drives. What's happening and what do you change?
+  options:
+    - Inrush into the bulk capacitors (about 58 A for about 123 µs); fit a T10A time-lag fuse.
+    - The motors stall at start-up; fit a 20 A fast fuse.
+    - The switch contacts bounce; fit a switch with a higher AC rating.
+    - The regulator's soft-start fails; add more bulk capacitance at its input.
+  correct: 0
+- source: c1c25f036344
+  question: When a motor spins, the Pico stops responding and restarts. Which pair of candidate causes and measurements is correct?
+  options:
+    - Pi brown-out (measure 5 V at the Pi header) or ground shift (measure Pico GND to star GND while the motor runs).
+    - Serial baud mismatch (measure the TX line) or firmware crash (read the REPL traceback).
+    - Encoder noise (measure the encoder lines) or a loose wheel (measure wheel wobble).
+    - Motor driver overheating (measure its temperature) or a blown fuse (measure fuse continuity).
+  correct: 0
+- source: b93a2f0dd356
+  question: Why does karmel power the Pico from the Pi's USB port instead of from the 5 V regulator?
+  options:
+    - The regulator's 5 V is too noisy for the Pico's ADC readings.
+    - USB power lets the Pico keep running when the Pi is switched off.
+    - The USB port gives the Pico more current than the regulator can supply.
+    - The Pico must reset when the Pi resets, so it never drives motors from a stale command; it also avoids back-feeding.
+  correct: 3

@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in FC.03-cpp-for-csharp-devs.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: bbfb785bbd1a
+  question: "`std::vector<double> v(1000);` as a local: where do the `vector` object and the 1,000 doubles live, and what destroys them?"
+  options:
+    - Both on the heap; the garbage collector frees them when `v` is unreachable
+    - Both on the stack; the compiler pops them at the closing brace
+    - Object on the heap, doubles on the stack; `delete v` frees both
+    - Object on the stack, doubles on the heap; `~vector()` frees them at the closing brace
+  correct: 3
+- source: 492e0e286556
+  question: Why does `MotorGuard` delete its copy constructor?
+  options:
+    - It owns a unique resource; copies would issue "stop" twice or close a descriptor twice
+    - Copying is slower than moving, so deleting it forces faster code
+    - The compiler cannot generate a copy constructor for classes with destructors
+    - A deleted copy constructor makes the class usable in `constexpr` contexts
+  correct: 0
+- source: 5e993c9d5756
+  question: "`struct { std::uint8_t flags; std::uint32_t ms; std::uint8_t version; std::int32_t ticks; };` on a 32-bit MCU: what is `sizeof`?"
+  options:
+    - 10, since the fields add up to 10 bytes with no padding
+    - 12, since the compiler reorders fields widest-first
+    - 16, with 6 bytes of padding; reordered widest-first it would be 12
+    - 16, with 6 bytes of padding; reordered widest-first it would be 10
+  correct: 2
+- source: b7c19b209e05
+  question: A function returns `std::string_view` built from a `const std::string &` parameter. Is `auto v = payload_of(read_line());` safe when `read_line()` returns `std::string` by value?
+  options:
+    - Safe, because binding to a `const &` extends the temporary's life to `v`'s scope
+    - "Not safe: the temporary dies at the end of the full expression and `v` dangles"
+    - Safe, because `string_view` copies the characters it refers to
+    - Not safe, because `string_view` cannot be built from a `const std::string &`
+  correct: 1
+- source: 130111749be3
+  question: What is the difference between "undefined behaviour" and "an exception"?
+  options:
+    - An exception is a defined outcome you can catch; UB imposes no requirement and the compiler may assume it never happens
+    - UB always crashes the program at once; an exception can be caught and handled
+    - UB is a runtime exception the standard library doesn't document; catch it with `catch (...)`
+    - They are the same in release builds; the difference only exists with debug assertions
+  correct: 0
+- source: ba1654041a6b
+  question: A 100 Hz `ros2_control` loop occasionally writes a wheel velocity of 3.7e38 rad/s. Where do you look, and with which tool?
+  options:
+    - An integer overflow in the encoder count; add `-Wall -Wextra` and read the warnings
+    - A PID gain set too high; plot the loop with `rqt_plot` and retune the gains
+    - A garbage read near `FLT_MAX` (uninitialised, dangling, bad cast); rebuild with ASan/UBSan
+    - A DDS serialization bug; switch the RMW implementation and compare results
+  correct: 2
+- source: 3b408f0a34f3
+  question: When should a robotics function take `const std::vector<double> &` rather than `std::vector<double>`?
+  options:
+    - Only for vectors over 1,000 elements, since smaller copies are free
+    - Never, since compilers elide every by-value copy automatically
+    - Only when the function is `inline`, since references can't cross units
+    - Almost always; take by value only when you keep your own copy anyway
+  correct: 3
+- source: ba9f24fc6433
+  question: You write `~Logger()` on a class that has a `std::ofstream` member. What else do you now owe?
+  options:
+    - Nothing; a destructor alone is always enough for classes with members
+    - The rest of the rule of five, or better, delete the destructor and follow the rule of zero
+    - A `close()` method that the destructor calls, plus a `flush()` in every write
+    - A virtual keyword on the destructor, since any class with members may be derived
+  correct: 1

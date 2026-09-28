@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.03-train-validation-test.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 444301ef5138
+  question: What may each of the training, validation and test sets influence?
+  options:
+    - "Training: parameters; validation: final score; test: hyper-parameters"
+    - "Training: hyper-parameters; validation: parameters; test: nothing"
+    - "Training: parameters; validation: your choices; test: nothing, it only measures once"
+    - "Training and validation: parameters; test: the stopping point"
+  correct: 2
+- source: 8dda6ecf69c3
+  question: Train RMSE 0.10 rad/s, sensor noise σ = 0.5 rad/s, val RMSE 5.4 rad/s. Diagnose.
+  options:
+    - Underfitting; use a larger model with more parameters
+    - A noisy sensor; filter the encoder and retrain as before
+    - Leakage; the validation set contains training samples
+    - "Severe overfitting: it fits noise and doesn't generalize"
+  correct: 3
+- source: d307be685d6d
+  question: Why is splitting a 50 Hz log randomly by sample a leak, even though no sample appears in both sets?
+  options:
+    - Consecutive samples are near-twins, so the model can remember rather than generalize
+    - Random splits put more high-speed samples in training than in test
+    - The random seed is shared, so the model learns the split pattern
+    - Samples at 50 Hz alias, so test and train contain the same frequency
+  correct: 0
+- source: e8da72dee2a3
+  question: Random split gives 0.35 rad/s and split-by-run 0.63 rad/s. Which do you report?
+  options:
+    - 0.35, since it uses more data for training and is less noisy
+    - 0.63, since it estimates performance on a new run
+    - Their mean, 0.49, since both splits are valid
+    - 0.35, since it matches the noise floor of the sensor
+  correct: 1
+- source: 656efc6123fa
+  question: You computed normalization mean and std on the full dataset, then split. Is the test score still valid?
+  options:
+    - Yes, since normalization is a linear transform that can't leak
+    - No, the test score is meaningless and all training must be redone
+    - Slightly leaky; fit the statistics on training data only
+    - Yes, as long as the test set is less than 20% of the data
+  correct: 2
+- source: 2cfbb44dd609
+  question: Validation RMSE is lower than training RMSE and below the noise floor. What is the most likely cause?
+  options:
+    - Strong regularization that helps validation more than training
+    - A lucky random seed; re-run the split a few times
+    - The model generalizes very well, a sign it is ready to deploy
+    - Leakage or a non-comparable validation set (duplicates, easy cases)
+  correct: 3
+- source: 3cbb7ede8d01
+  question: With 5 recording sessions, what is leave-one-run-out cross-validation and what do you report?
+  options:
+    - Train on 4 sessions and test on the held-out one, five times; report the mean and spread
+    - Train on all 5 sessions and test on each one in turn; report the best score
+    - Train on 1 session and test on the other 4, five times; report the minimum
+    - Shuffle all samples into 5 folds; report the mean of the 5 scores only
+  correct: 0

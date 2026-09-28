@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 14.11-arm-safety.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9651611064a6
+  question: Why does the pinch force 1 cm from a joint axis (162 N) dwarf the force at the tool (3 N), with the same servo?
+  options:
+    - "$F = \\tau \\cdot r$: the joint's short lever multiplies the servo's torque by fifty"
+    - "$F = \\tau / r$: the same torque on a lever fifty times shorter gives fifty times the force"
+    - The gearbox adds mechanical advantage near the axis, which the tool does not receive
+    - The servo's current limit only applies at the tool, not at points near the joint
+  correct: 1
+- source: d9b8f1323be9
+  question: You `kill -9` the process driving the arm. What happens, and which layer notices?
+  options:
+    - The watchdog detects the missing heartbeat and parks the arm in its home pose within 300 ms
+    - The arm keeps holding its last pose; no software layer notices, and only the e-stop removes energy
+    - The servos lose their goal and go limp, so the arm falls under gravity immediately
+    - The servos detect the closed serial port and disable torque after their timeout
+  correct: 1
+- source: 4f1b9aea262c
+  question: Why must the e-stop be normally closed and latching?
+  options:
+    - NC draws no current when idle; latching keeps the button pressed so the arm restarts automatically
+    - NC is cheaper to wire; latching lets software reset the stop remotely once the hazard has cleared
+    - NC keeps the arm powered during a wire fault; latching locks the arm in its current pose
+    - NC fails safe on a broken wire; latching means a human must reset it and software must re-enable
+  correct: 3
+- source: 30889b1c206c
+  question: Dropping the speed limit from 300 °/s to 30 °/s reduces impact energy by what factor, and why?
+  options:
+    - 100×, since kinetic energy goes as $v^2$
+    - 10×, since kinetic energy goes as $v$
+    - 1000×, since kinetic energy goes as $v^3$
+    - About 3×, since energy goes as $\sqrt{v}$
+  correct: 0
+- source: bff2bab1345b
+  question: Your policy commands a joint 90° away in one step. Which layer would you rely on to catch it?
+  options:
+    - The servo's `Goal_Velocity`, since it still limits the move even if your process dies
+    - "`move_smoothly`'s per-tick rate limit, since it spreads the move out over time"
+    - The step limit in `check_move`, since it's the only one that refuses rather than executes
+    - The software joint limits, since a 90° step always ends outside the allowed range
+  correct: 2
+- source: db899cc2b1fd
+  question: Why does `clear_fault()` return the arm to `DISABLED` rather than `ENABLED`?
+  options:
+    - The servos need a full power cycle after a fault, which only happens on the transition out of `DISABLED`
+    - "`ENABLED` would re-run calibration automatically, which moves every joint through its full range"
+    - Recovery takes two deliberate acts (acknowledge, then enable), so a caught fault never becomes uncommanded motion
+    - The fault log is only written in `DISABLED`, so the state must be visited before resuming
+  correct: 2
+- source: 0919765a9a3c
+  question: You need 39 % torque to hold 200 g at full extension, but want a pinch ceiling that needs 31 %. What do you do?
+  options:
+    - Raise the ceiling to 39 %, since the payload requirement always takes priority over pinch safety
+    - "Change the task: keep the payload near the base (~22 %) and tighten the workspace box, or pick another arm"
+    - Set 39 % only while carrying and 31 % otherwise, since pinch risk only exists without a payload
+    - Keep 31 % and move faster, so the arm reaches the target before the payload can sag
+  correct: 1
+- source: f0fd73de0188
+  question: What does the workspace box protect against that joint limits do not?
+  options:
+    - "Self-collision: joint limits allow links to hit each other, which the box forbids"
+    - "Overspeed: joint limits bound position only, while the box also bounds tool velocity"
+    - "Singularities: joint limits allow singular poses, which the box removes from the workspace"
+    - "The world: joint limits allow poses inside the table or over the keyboard; the box knows what's around"
+  correct: 3

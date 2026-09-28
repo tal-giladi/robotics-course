@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FM.10-rotation-matrices.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: b111d3047cc7
+  question: Apply $R_z(90°)$ to the point $(1, 2, 3)$. What is the result?
+  options:
+    - $(2, -1, 3)$
+    - $(1, -3, 2)$
+    - $(-2, 1, 3)$
+    - $(-1, -2, 3)$
+  correct: 2
+- source: dd770f7d962e
+  question: Why is the inverse of a rotation matrix its transpose?
+  options:
+    - Its determinant is 1, and any matrix with determinant 1 has $R^{-1} = R^T$
+    - It is symmetric, so transposing leaves it unchanged and inverting it too
+    - Its diagonal is all ones, so transposing just negates the off-diagonal terms
+    - Its columns are orthonormal, so $R^TR = I$, which defines $R^{-1} = R^T$
+  correct: 3
+- source: d7e78d1ba8f4
+  question: A matrix has orthonormal columns and $\det = -1$. What is it, and what does it do to a right-handed frame?
+  options:
+    - A rotation plus reflection; it makes the frame left-handed, so it is not a valid orientation
+    - A proper rotation by 180°; it keeps the frame right-handed and is a valid orientation
+    - A scaling by −1; it keeps handedness but reverses every axis direction
+    - A shear; it keeps handedness but the axes are no longer perpendicular
+  correct: 0
+- source: 87acb12f3546
+  question: An IMU is mounted rotated 90° about $z$ (its $x$ axis points to the robot's left). The robot drives forward and brakes. Where do you see the deceleration?
+  options:
+    - A negative spike on the IMU's $y$ axis
+    - A positive spike on the IMU's $y$ axis
+    - A negative spike on the IMU's $x$ axis
+    - A positive spike on the IMU's $x$ axis
+  correct: 1
+- source: c0034d866e80
+  question: What is the rotation angle of a rotation matrix with trace 1?
+  options:
+    - 0°
+    - 90°
+    - 60°
+    - 180°
+  correct: 1
+- source: 9304306b7752
+  question: "`R_total = R_mount @ R_robot` is correct only while yaw is zero. `R_robot` is `R_world_base`, `R_mount` is `R_base_sensor`. Fix?"
+  options:
+    - "`R_world_sensor = R_mount.T @ R_robot`; the mount must be inverted before chaining"
+    - "`R_world_sensor = R_mount @ R_robot.T`; the robot rotation must be inverted before chaining"
+    - "`R_world_sensor = R_mount @ R_robot`; the code is right but yaw must be wrapped first"
+    - "`R_world_sensor = R_world_base @ R_base_sensor`; at zero yaw `R_robot = I` hid the bug"
+  correct: 3

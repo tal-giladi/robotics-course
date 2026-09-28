@@ -1,0 +1,75 @@
+# Multiple-choice version of the quiz in 14.07-trajectories.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: cb33bff22f77
+  question: A joint must move 12° with $v_{\max} = 60°/s$ and $a_{\max} = 120°/s^2$. Trapezoid or triangle, and how long?
+  options:
+    - Trapezoid; about 0.700 s
+    - Triangle; about 0.632 s
+    - Triangle; about 0.316 s
+    - Trapezoid; about 0.200 s
+  correct: 1
+- source: 748833a06eb3
+  question: Why does a trapezoidal profile vibrate the arm, and what does a quintic change?
+  options:
+    - Its acceleration jumps (infinite jerk); a quintic sets $\ddot q = 0$ at both ends, so jerk stays finite
+    - Its velocity jumps at the ends; a quintic sets $\dot q = 0$ at both ends, so velocity is continuous
+    - Its peak speed is too high; a quintic lowers peak speed, so the move is always faster and smoother
+    - Its duration is too short; a quintic stretches the move, which is the only reason vibration drops
+  correct: 0
+- source: 2b263eda26e7
+  question: Five joints move 60°, 30°, 20°, 5° and 0° with the same limits. Without synchronisation, over what window do they stop?
+  options:
+    - About 0.5 s, with the 5° joint finishing 0.25 s before the 60° one
+    - None; all joints stop together because they share the same limits
+    - About 3.0 s, with the 60° joint finishing 1.5 s after the 30° one
+    - About 1.5 s, with the 5° joint finishing 1.09 s before the 60° one
+  correct: 3
+- source: 3f2da191ab0e
+  question: The gripper must travel in a straight line but the move takes too long. Which is not a legitimate fix?
+  options:
+    - Raising the Cartesian $v_{\max}/a_{\max}$ after checking joint speeds along the whole path
+    - Doing only the part that needs a straight line in Cartesian space and the rest in joint space
+    - Increasing `dt` so there are fewer samples along the path
+    - Shortening the Cartesian segment to the approach and moving in joint space before it
+  correct: 2
+- source: 527cc7319801
+  question: Your trajectory's first point is the last commanded position, but the arm sags 3° below it under gravity. What happens when you start streaming?
+  options:
+    - Nothing noticeable; the controller blends the 3° gap smoothly into the first segment
+    - A 3° step at $t = 0$ executed at full servo speed; seed from the measured position instead
+    - The arm sags another 3° before moving, since the trajectory ignores gravity entirely
+    - The controller rejects the trajectory because its start differs from the current state
+  correct: 1
+- source: c67dd04cc637
+  question: Why is a 90° move 2.00 / 2.25 / 2.81 s (trapezoid / cubic / quintic), but a 10° move 0.577 / 0.707 / 0.694 s, with the quintic faster than the cubic?
+  options:
+    - The quintic needs a minimum duration of 0.69 s, so short moves are rounded up while the cubic's are rounded more
+    - Short moves use a triangle profile inside the quintic, but not inside the cubic, which makes it slower
+    - "Different limits bind: velocity on the long move (quintic peak higher), acceleration on the short one (quintic peak lower)"
+    - Measurement noise dominates at 10°; with more samples the quintic would be slower than the cubic there too
+  correct: 2
+- source: 00ce4e37a9e1
+  question: A joint-space move between two poses 20 cm apart deviates 22.5 mm from the straight line. What single number explains it?
+  options:
+    - The arc radius about the `shoulder_pan` axis, 0.2336 m
+    - The sampling period of the trajectory, 22.5 ms
+    - The peak joint velocity of the move, 0.2336 rad/s
+    - The arm's total reach from the base, 0.55 m
+  correct: 0
+- source: fb58cc89123c
+  question: A trapezoidal profile's measured jerk is 24,000 °/s³ at `dt = 5 ms` and 48,000 °/s³ at `dt = 2.5 ms`. What is it really?
+  options:
+    - About 36,000 °/s³, the average of both measurements
+    - About 24,000 °/s³; the 2.5 ms value is aliased noise
+    - Zero; a trapezoid has constant acceleration everywhere
+    - Infinite; the measurement is $a_{\max}/dt$, a sampling artefact
+  correct: 3
+- source: a58d0cf165ec
+  question: What does `joint_trajectory_controller` do differently when you populate `velocities` as well as `positions`?
+  options:
+    - It fits cubic segments matching both, so velocity is continuous (accelerations too give quintics)
+    - It ignores the velocities and interpolates linearly, since positions always take precedence
+    - It fits quintic segments, so both velocity and acceleration become continuous at every point
+    - It uses the velocities only as limits, clipping the linear interpolation between the points
+  correct: 0

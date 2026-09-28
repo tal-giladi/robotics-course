@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 15.06-visual-servoing.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: b451bf43c84a
+  question: Why does the interaction matrix divide the translation columns by $Z$ but not the rotation columns?
+  options:
+    - Translation causes parallax that scales as $1/Z$; rotation moves every point equally regardless of distance
+    - Rotation causes parallax that scales as $1/Z$; translation moves every point equally regardless of distance
+    - Rotation columns are already normalized by the focal length, which cancels the $Z$ dependence
+    - Translation is measured in metres and rotation in radians, so only translation needs a unit conversion
+  correct: 0
+- source: 02ca951836af
+  question: At $Z = 0.25$ m, $f = 525$ px, a feature 60 px right of centre moves at −105 px/s for $v_x = 5$ cm/s. What rotation rate gives almost the same image motion?
+  options:
+    - About $\omega_y = 2.0$ rad/s; rotation is ten times weaker, so the ambiguity rarely matters
+    - About $\omega_y = 0.2$ rad/s; this ambiguity is why one point is nearly useless and four is the minimum
+    - About $\omega_z = 0.2$ rad/s; rolling about the optical axis mimics sideways translation
+    - About $\omega_y = 0.05$ rad/s; this is why a single point feature fully constrains the motion
+  correct: 1
+- source: c3c89d2414f9
+  question: The object is centred, at the right distance, rolled 179° about the optical axis. Where does an IBVS camera go?
+  options:
+    - Nowhere; IBVS rotates in place about the optical axis by 179°, exactly like PBVS
+    - Forwards into the object; points spread outward first, which enlarges the target
+    - Backwards a long way (~1.77 m peak); image points converge toward the centre, shrinking the target
+    - Sideways in an arc; IBVS resolves the roll by translating around the object
+  correct: 2
+- source: 600254e39f63
+  question: Your IBVS loop uses $Z^{*}$ = 250 mm for a feature actually at 1.2 m. What happens?
+  options:
+    - It diverges; a wrong depth reverses the sign of the translation columns of $L$
+    - It converges to the wrong pose, 1.2 m − 250 mm too close to the object
+    - It stalls; the interaction matrix becomes singular when depth is off by more than 2×
+    - It still converges; wrong depth scales translation velocity like a mis-set gain, not its direction
+  correct: 3
+- source: aa8e024a0b29
+  question: You convert the camera twist to a tool twist with `v_tool = R @ v_cam` and nothing else. What breaks on the robot?
+  options:
+    - "Rotations: the lever-arm term is missing, so paths bow and an offset grows with camera distance"
+    - "Translations: the rotation matrix flips sideways motion, so the camera moves the wrong way"
+    - "Nothing: rotating the velocity into the tool frame is the complete transformation"
+    - "Everything: without the lever arm, even pure translation tests fail immediately"
+  correct: 0
+- source: 2f91d846b898
+  question: Why does asking for a full 6-DOF camera pose stall on the SO-101, and why doesn't the damped solve tell you?
+  options:
+    - The camera frame rate is too low for 6 DOF; DLS hides dropped frames by reusing the last command
+    - $J$ is 6×5, so some twists are unattainable; DLS silently returns the closest one and the residual plateaus
+    - The arm is at a singularity everywhere; DLS always converges, so the singularity never shows
+    - The interaction matrix is 8×6 and overdetermined; DLS reports success once any four features agree
+  correct: 1
+- source: 26030c78c070
+  question: The detector runs at 10 Hz with one buffered frame, and you set $\lambda = 5$. What happens, and what would you do instead?
+  options:
+    - ~100 ms dead time gives $\lambda T = 0.5$, well inside stability; keep $\lambda = 5$ for fast convergence
+    - ~200 ms dead time gives $\lambda T = 1.0$, at the edge; lower the detector frame rate to smooth the loop
+    - No dead time with buffering; the loop is stable at any gain, so raise $\lambda$ to 10
+    - "~200 ms dead time gives $\\lambda T = 1.0$, at the edge: overshoot and oscillation; use $\\lambda \\approx 1$ or cut latency"
+  correct: 3
+- source: eacbc929fc0c
+  question: What does "the image error converged" prove, and what does it not prove?
+  options:
+    - The camera is at the goal pose to within 1 px, so the grasp will succeed if the gripper is calibrated
+    - The camera is at a pose where the object looks like the goal, not necessarily the goal pose; verify the grasp
+    - The object has not moved during servoing, but not that the camera reached the goal pose
+    - The controller gain is stable, but not that the detector's features are correctly matched
+  correct: 1

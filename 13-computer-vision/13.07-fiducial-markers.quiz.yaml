@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.07-fiducial-markers.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 034c741aa0d0
+  question: Why does a marker need a known physical size to give a full pose, while its ID and 2D corners don't?
+  options:
+    - The ID is encoded relative to the tag size, so the decoder needs the size to read the bits correctly
+    - Projection divides by depth, so a tag twice as large and far looks identical; size fixes scale and thus translation
+    - Without size, orientation is ambiguous, although position can be recovered from the corners alone
+    - The size is needed to undistort the corners, since distortion scales with the physical size of the tag
+  correct: 1
+- source: a0770b4cac7f
+  question: A 12 cm tag appears 45 px wide with $f = 467.7$. Roughly how far is it, and what is the range change per 1 px size error?
+  options:
+    - About 1.25 m; about 2.8 cm per px
+    - About 1.25 m; about 0.6 cm per px
+    - About 2.50 m; about 5.6 cm per px
+    - About 0.12 m; about 0.3 cm per px
+  correct: 0
+- source: a59706421dad
+  question: "Code works on your laptop but fails on the Pi with `AttributeError: module 'cv2.aruco' has no attribute 'ArucoDetector'`. Why?"
+  options:
+    - The Pi's OpenCV was built without contrib, so the whole `cv2.aruco` module is missing
+    - "`ArucoDetector` needs a GPU, so it is disabled on ARM builds of OpenCV"
+    - The Pi runs Python 3.12, which renamed `ArucoDetector` to `aruco_detector`
+    - The Pi's apt OpenCV 4.6 has the pre-4.7 API (`detectMarkers`, `DetectorParameters_create()`)
+  correct: 3
+- source: 3556d8f7010f
+  question: "`solvePnP` returns `tvec = (0.0, 0.0, 1.0)` and `rvec = (π, 0, 0)` for a tag. Where is the tag and how does it face?"
+  options:
+    - 1 m straight ahead, facing away from the camera (seen from behind)
+    - 1 m above the camera, facing downward toward the optical axis
+    - 1 m ahead, rotated 90° about x so it lies flat like a floor tile
+    - 1 m straight ahead on the optical axis, facing the camera squarely
+  correct: 3
+- source: 93139c937136
+  question: A tag at 2 m viewed head-on vs. at 2 m viewed at 40°. Which has better rotation accuracy, and why?
+  options:
+    - "The head-on view: its corners are evenly spaced, so the solver has the most symmetric constraints"
+    - "The head-on view: at 40° the tag appears smaller, so corner noise dominates the rotation estimate"
+    - "The 40° view: head-on, two mirror-tilted poses give nearly identical corners; foreshortening separates them"
+    - "Both are equal: rotation accuracy depends only on distance and tag size, not on viewing angle"
+  correct: 2
+- source: ff1f318ccbf7
+  question: Which transform chain gives the dock in the `map` frame from `solvePnP`'s result and TF?
+  options:
+    - $T_{map,tag} = T_{map,odom}\,T_{odom,base}\,T_{base,optical}\,T_{optical,tag}$
+    - $T_{map,tag} = T_{optical,tag}\,T_{base,optical}\,T_{odom,base}\,T_{map,odom}$
+    - $T_{map,tag} = T_{map,base}\,T_{optical,base}\,T_{tag,optical}$
+    - $T_{map,tag} = T_{map,odom}\,T_{odom,base}\,T_{optical,base}\,T_{tag,optical}$
+  correct: 0
+- source: 0a673e38c5e2
+  question: The tag pose's reprojection error is 40 px. What do you do?
+  options:
+    - Use it but average it with the previous 10 poses, since 40 px is normal noise for four corners
+    - Don't use it; check corner order, $K$/dist or the detection, try another solver, or drop the frame
+    - Use it; reprojection error only matters for calibration, not for pose estimation of a single tag
+    - Double the tag size in the code, since a 40 px error means the size is off by a factor of two
+  correct: 1

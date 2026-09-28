@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 14.03-controlling-servos.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 0a18273c2681
+  question: "`Goal_Velocity` is 0 and `Goal_Position` is 40° away from the joint. You enable torque. What happens?"
+  options:
+    - The joint drives there at maximum speed, in roughly 0.15 s
+    - "Nothing: velocity 0 means the joint holds its current position"
+    - The joint drives there slowly, at the default of 10 deg/s
+    - The servo reports an error and refuses to enable torque
+  correct: 0
+- source: 5a8249de995c
+  question: Which `Torque_Limit` value corresponds to 25% of stall, and how many N·m is that on a 7.4 V STS3215?
+  options:
+    - 25; about 0.405 N·m
+    - 250; about 0.735 N·m
+    - 1024; about 1.62 N·m
+    - 250; about 0.405 N·m
+  correct: 3
+- source: 42cf6f6a1915
+  question: Which limit layer catches a policy outputting a joint angle 40° out of range, and which still acts if your process is killed mid-move?
+  options:
+    - The software clamp catches the command; the servo's own velocity/acceleration in RAM still bounds the last move
+    - The servo's position limits catch the command; the software clamp still bounds the last move after exit
+    - The software clamp catches both, since it runs inside the servo firmware rather than on the host
+    - The servo's torque limit catches the command; the arm de-energizes automatically once the process dies
+  correct: 0
+- source: 1305987817ec
+  question: "`Present_Load` reads 1036 raw. What is the load?"
+  options:
+    - +103.6 % of stall
+    - +1.2 % of stall
+    - −1.2 % of stall
+    - −10.36 % of stall
+  correct: 2
+- source: ef3134351808
+  question: "`max_step_deg = 1.0` at 50 Hz, and you ask for a 90° move with `--speed 30`. How long should it take, and which limit governs?"
+  options:
+    - About 1.8 s plus ramps; the software's 50 deg/s is below the servo's 30 deg/s
+    - About 3 s plus ramps; the servo's 30 deg/s is below the software's 50 deg/s
+    - About 0.9 s; the software allows 1° per cycle at 100 Hz effective
+    - About 3 s plus ramps; the software limit governs at 30 deg/s
+  correct: 1
+- source: 85f7c463d867
+  question: Why does `safe_enable_torque` refuse rather than move when it finds a joint outside its software limits?
+  options:
+    - The servo cannot move while outside its limits, so any command would be silently ignored anyway
+    - Something unexpected happened, and moving back would sweep an unchecked region; a human should move it
+    - Moving back would require exceeding the torque limit, which could overheat the servo windings
+    - The calibration file becomes invalid once a joint leaves its limits, so it must be recalibrated first
+  correct: 1
+- source: 017087773f44
+  question: Your arm holds a 200 g object at mid-reach with `--torque 30`. Is that safe to leave running for ten minutes?
+  options:
+    - "No: the elbow sits near 70% of its allowed torque continuously; watch temperature, park or release"
+    - "Yes: holding needs only 0.1 N·m, far below the 0.486 N·m cap, so the servo stays cool"
+    - "Yes: servos draw no current when stationary, so holding a pose is free regardless of load"
+    - "No: the torque cap is below the holding torque, so the arm will slowly sag and drop the object"
+  correct: 0

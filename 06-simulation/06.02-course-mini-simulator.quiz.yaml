@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 06.02-course-mini-simulator.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 202a4b9e65b4
+  question: Why is the update `w += (target - w) * (1 - exp(-dt/tau))` better than `w += (target - w) * dt/tau`?
+  options:
+    - It is cheaper to compute, because `exp` runs faster than a division on most CPUs
+    - It adds damping the Euler form lacks, so it settles faster than the real motor does
+    - It is the exact solution over the step, so it is accurate and stable at any step size
+    - It only differs for negative targets, where forward Euler would reverse the direction
+  correct: 2
+- source: dc31a0508481
+  question: Karmel's motor has $\tau = 0.08$ s. At what step size does forward Euler become unstable, and what does the wheel speed do there?
+  options:
+    - Above $dt = 0.16$ s ($2\tau$); the speed oscillates with growing amplitude
+    - Above $dt = 0.08$ s ($\tau$); the speed freezes at its initial value
+    - Above $dt = 0.04$ s ($\tau/2$); the speed slowly converges to half the target
+    - Above $dt = 0.16$ s ($2\tau$); the speed saturates cleanly at 17 rad/s
+  correct: 0
+- source: ffa6802b61f4
+  question: The course simulator at 10 Hz beats a naive simulator at 1000 Hz. What kind of error does the naive simulator have, and why does shrinking the step not remove it?
+  options:
+    - Random noise; each smaller step adds another noise sample, so the total noise keeps growing
+    - A systematic one-step lag; halving the step halves the lag but doubles the number of steps
+    - Floating-point round-off; at 1000 Hz the round-off per second dominates the result
+    - A discretization error that does shrink with the step, but 1000 Hz is still too coarse
+  correct: 1
+- source: 0ccb57ba4f68
+  question: You set `motor_gain_right = 0.8` and drive a square in open-loop `set_duty` mode instead of `set_velocity`. Does the error stay small, as in the closed-loop table?
+  options:
+    - "Yes: gain mismatch is free in any mode, because the simulator normalizes motor gains"
+    - "Yes: the square only shrinks by about 20 % in size but keeps its shape and heading"
+    - "No: the weaker right motor curves the robot right, so the square rotates clockwise"
+    - "No: nothing measures the wheels, so the robot curves left and the square becomes a spiral"
+  correct: 3
+- source: a0dc29f035f4
+  question: "`sim.ticks` does not change when a wheel slips. Is that a bug?"
+  options:
+    - "Yes: encoders should stop counting whenever the wheel loses traction with the floor"
+    - "No: encoders measure wheel rotation, not ground travel, and odometry must cope with that"
+    - "Yes: the simulator should subtract the slipped distance from the reported tick count"
+    - "No: the simulator does not model wheel slip at all, so that case can never arise"
+  correct: 1
+- source: f4d3bf092a1f
+  question: Your particle filter worked with seed 7, but fails with seed 7 after you added `print(sim.front_range())` for debugging. What happened?
+  options:
+    - Printing slows the loop down, so the filter now misses its real-time deadline
+    - "`front_range()` resets the simulator's seed to 8 each time it is called"
+    - "The extra call consumed random numbers, shifting every later draw: a different run"
+    - "`print` flushes the particle array, so the filter restarts from a uniform prior"
+  correct: 2
+- source: 44918f55a83f
+  question: Can the course mini-simulator tell you whether karmel can climb the 15 mm threshold into the bathroom?
+  options:
+    - "No: it is 2D with no gravity or torque; use Gazebo with a correct URDF, then the robot"
+    - "Yes: set the obstacle height to 15 mm and check whether the robot drives over it"
+    - "Yes: its motor model includes torque, so a stall shows up as zero wheel speed"
+    - "No: but raising the step size to 0.1 s makes thresholds climbable in the simulator"
+  correct: 0

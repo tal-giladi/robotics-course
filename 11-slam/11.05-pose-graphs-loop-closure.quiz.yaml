@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 11.05-pose-graphs-loop-closure.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e98aa7033117
+  question: What does an edge's information matrix encode, and what happens if you set it to the identity?
+  options:
+    - The edge's age; identity makes every edge count as equally recent
+    - Inverse covariance; identity weights all edges and axes the same
+    - The edge's Jacobian; identity linearizes every edge at zero error
+    - The robot's velocity; identity assumes it moved at constant speed
+  correct: 1
+- source: 6a79c08e9bec
+  question: Why can one loop closure between the last node and the first correct node 25 in the middle?
+  options:
+    - It is chained to both ends; least squares spreads the error along
+    - slam_toolbox silently adds hidden loop edges to every node
+    - The optimizer first resets every node to its odometry value
+    - It can't; only the nodes a loop edge touches ever move
+  correct: 0
+- source: 8cee89cc2ec8
+  question: Why does a pose graph need an anchor, and what goes wrong numerically without one?
+  options:
+    - To set the map resolution; without it the grid is empty
+    - To fix the time origin; without it stamps overflow
+    - Edges are relative; $H$ has a 3D null space and is singular
+    - To bound the edge count; without it memory grows forever
+  correct: 2
+- source: ec7194d24171
+  question: "For $\\Omega = \\operatorname{diag}(2500, 2500, 3283)$, which costs more: an error of (3 cm, 0, 0) or (0, 0, 1.5°)?"
+  options:
+    - The 3 cm error, by about 30 %
+    - The 1.5° error, by about 30 %
+    - The 1.5° error, by far
+    - "Exactly the same: both cost 2.25"
+  correct: 3
+- source: c33ca261d3dd
+  question: You double every odometry edge's information matrix but keep the loop edges unchanged. Where does the correction go?
+  options:
+    - More into the odometry edges; the ends meet more exactly
+    - More into the loop edges; the trajectory stays nearer odometry
+    - "Nowhere: scaling information has no effect on the result"
+    - Equally split, since information only scales the cost
+  correct: 1
+- source: 5781e646ff6a
+  question: $\chi^2$ after optimization is 1,800 where similar runs end below 1. What is your first diagnostic step?
+  options:
+    - Compute $e^\top\Omega e$ per edge and sort to find the bad one
+    - Rerun with more iterations until $\chi^2$ drops below 1
+    - Halve every information matrix and optimize again
+    - Delete the anchor and let the graph float freely
+  correct: 0
+- source: 5fc44a2e6cdc
+  question: Which slam_toolbox parameters correspond to the loop-closure step and to `optimize`?
+  options:
+    - "Loop: `map_update_interval`, `resolution`; optimize: `max_laser_range`"
+    - "Loop: `minimum_travel_distance`; optimize: `scan_buffer_size`, `throttle_scans`"
+    - "Loop: `do_loop_closing`, `loop_*`; optimize: `CeresSolver`, `ceres_*`"
+    - "Loop: `use_scan_matching`; optimize: `transform_publish_period`, `tf_buffer_duration`"
+  correct: 2

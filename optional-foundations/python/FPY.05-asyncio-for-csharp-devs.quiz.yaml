@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FPY.05-asyncio-for-csharp-devs.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 84d67b621b4e
+  question: In C#, CPU-heavy work in one request doesn't slow others. Why can the same situation in asyncio stall a robot?
+  options:
+    - asyncio uses a thread pool with only one worker, which the CPU work saturates
+    - asyncio's scheduler preempts coroutines every 10 ms, adding jitter to all tasks
+    - asyncio runs all coroutines on one thread, so CPU work without `await` blocks every other coroutine
+    - Python's `await` copies arguments to the pool, so large payloads block the caller
+  correct: 2
+- source: 7dacb68abc22
+  question: You call `send_stop(port)` (an `async def`) inside an `except` block but forget `await`. What happens?
+  options:
+    - The stop is sent later, when the event loop next becomes idle
+    - The stop is sent synchronously, blocking the loop until it finishes
+    - A `TypeError` is raised immediately, crashing the handler
+    - Nothing is sent; a `never awaited` warning appears and the robot keeps driving
+  correct: 3
+- source: a09d84b9886c
+  question: A pure-Python path planner takes 400 ms. Which is the right way to run it from asyncio, and what about a 400 ms OpenCV resize + blur?
+  options:
+    - Planner in a `ProcessPoolExecutor`; OpenCV in `asyncio.to_thread`, since it releases the GIL
+    - Planner in `asyncio.to_thread`; OpenCV in a `ProcessPoolExecutor`, since it holds the GIL
+    - Both as plain coroutines, since `await` lets the loop run the rest in parallel
+    - Both in `asyncio.to_thread`, since threads give true parallelism for any code
+  correct: 0
+- source: c0510103e509
+  question: What is the maximum blocking time before karmel's 300 ms watchdog can trip when commands are sent at 20 Hz?
+  options:
+    - 300 ms
+    - 250 ms
+    - 350 ms
+    - 150 ms
+  correct: 1
+- source: d8a02c124e71
+  question: Which are the asyncio equivalents of `Task.WhenAll`, `CancellationTokenSource.CancelAfter(200)` and `Channel.CreateBounded<T>(100)`?
+  options:
+    - "`asyncio.wait`, `asyncio.sleep(0.2)` then `cancel()`, and `collections.deque(maxlen=100)`"
+    - "`asyncio.TaskGroup`, `asyncio.timeout(200)`, and `queue.Queue(maxsize=100)`"
+    - "`asyncio.as_completed`, `asyncio.shield(0.2)`, and `asyncio.Queue(100, bounded=True)`"
+    - "`asyncio.TaskGroup`, `async with asyncio.timeout(0.2)`, and `asyncio.Queue(maxsize=100)`"
+  correct: 3
+- source: 62164270b270
+  question: A 20 Hz loop uses `await asyncio.sleep(0.05)` after 8 ms of work. What is the real rate, and how do you fix it?
+  options:
+    - About 17 Hz; schedule on absolute time with `next_t += 0.05` and sleep until `next_t`
+    - Exactly 20 Hz; `asyncio.sleep` subtracts time already spent in the coroutine
+    - About 17 Hz; shorten the sleep to `0.042` to compensate for the work
+    - About 23 Hz; the sleep ends early because the timer rounds down
+  correct: 0
+- source: 9a16c73f8bbd
+  question: Why does `pyserial`'s `readline()` with `timeout=None` make clean shutdown of an asyncio program hard?
+  options:
+    - It holds the GIL while waiting, so the event loop can't run the shutdown code
+    - It runs in a worker thread that blocks forever, and Python threads can't be cancelled from outside
+    - It raises `CancelledError` inside the serial driver, which corrupts the port state
+    - It closes the port on cancel, so the shutdown stop command can't be sent
+  correct: 1

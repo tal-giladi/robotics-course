@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 11.03-the-slam-problem.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: acb92a94a17a
+  question: Why does mapping need localization, and why does localization need a map?
+  options:
+    - Mapping needs the sensor pose to place a scan; localization compares what it sees with a map
+    - Mapping needs a known map resolution; localization needs a known sensor noise
+    - Mapping needs loop closures; localization needs a particle filter
+    - Mapping needs odometry to be perfect; localization needs GPS to start
+  correct: 0
+- source: 7d4a9e633267
+  question: What is the difference between full SLAM and online SLAM, and which does slam_toolbox solve?
+  options:
+    - "Full: current pose only; online: whole trajectory; slam_toolbox solves online"
+    - "Full: map only; online: pose only; slam_toolbox solves both separately"
+    - "Full: whole trajectory plus map; online: current pose plus map; slam_toolbox solves full"
+    - "Full: 3D; online: 2D; slam_toolbox solves online SLAM in 2D"
+  correct: 2
+- source: 76c67601237d
+  question: After 6 m of driving the heading is off by 12°. How far off is a wall 4 m to the robot's side?
+  options:
+    - About 0.08 m
+    - About 1.25 m
+    - About 0.48 m
+    - About 0.83 m
+  correct: 3
+- source: 55157caa4833
+  question: Which split between front end and back end is correct?
+  options:
+    - "Front: Gauss-Newton, sparse Cholesky; back: scan matching, keyframes, loops"
+    - "Front: keyframes, matching, loop checks, information; back: Gauss-Newton, Cholesky"
+    - "Front: scan matching only; back: everything else, keyframes included"
+    - "Front: information matrices, Cholesky; back: keyframes, loop verification"
+  correct: 1
+- source: 469142e42ccd
+  question: A candidate association has $d^2 = 4.1$ (2 dof) and a second has $d^2 = 4.6$. Accept either?
+  options:
+    - Accept the first, since it has the lower $d^2$
+    - Reject both, since both exceed the 95 % gate
+    - Accept both, fusing the two measurements
+    - "Skip it: both pass but it is ambiguous"
+  correct: 3
+- source: 80e9e034f795
+  question: You disable loop closure and map a single long corridor with no loops. How much worse is the map?
+  options:
+    - "Hardly worse: without loops there is nothing to close"
+    - "Much worse: loop closure corrects every scan match"
+    - "Unusable: slam_toolbox needs loop closure to run"
+    - "Better: loop closure adds false constraints"
+  correct: 0
+- source: db689fa20288
+  question: Why did graph-based SLAM replace EKF-SLAM for LiDAR mapping?
+  options:
+    - It needs no odometry at all, unlike EKF-SLAM
+    - It is sparse and can correct past poses when loops close
+    - It gives a closed-form solution with no iterations
+    - It keeps a dense covariance, which is more accurate
+  correct: 1

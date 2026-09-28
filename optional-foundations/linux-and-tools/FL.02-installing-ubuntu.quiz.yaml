@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.02-installing-ubuntu.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 69ffdd684e83
+  question: Which list correctly pairs a dual-boot advantage with a WSL2 advantage for this course?
+  options:
+    - "Dual boot: native USB/Wi-Fi access; WSL2: zero risk to Windows and quick setup"
+    - "Dual boot: zero risk to Windows; WSL2: native USB/Wi-Fi access"
+    - "Dual boot: GUIs as Windows windows; WSL2: best GPU performance for Gazebo"
+    - "Dual boot: 15-minute setup; WSL2: plain multicast networking"
+  correct: 0
+- source: c5095cd783b9
+  question: Why does the course insist on `wsl --install -d Ubuntu-24.04` instead of `wsl --install`?
+  options:
+    - The unversioned default installs Debian, which cannot run ROS 2 at all
+    - The unversioned default tracks the newest LTS (26.04), but Jazzy binaries exist only for 24.04
+    - The unversioned default installs WSL1, which cannot run ROS 2
+    - The versioned name installs faster because it skips the Store download
+  correct: 1
+- source: dee5c8379674
+  question: "`colcon build` takes 6 minutes in WSL vs 40 seconds for a colleague on the same laptop. The workspace is `/mnt/c/Users/you/karmel_ws`. Likely cause?"
+  options:
+    - WSL is limited to one CPU core by default; raise it in `.wslconfig`
+    - Windows Defender scans every file inside WSL; disable it for the Linux disk
+    - The colleague uses a release build; add `--cmake-args -DCMAKE_BUILD_TYPE=Release`
+    - It's on the Windows filesystem via a slow cross-OS protocol; move it to `~/karmel_ws`
+  correct: 3
+- source: ad924d5c2740
+  question: What does `networkingMode=mirrored` give you for ROS 2, and which Windows version does it need?
+  options:
+    - Faster file access to the Windows disk; Windows 10 21H2 or newer
+    - USB device passthrough to WSL; Windows 11 22H2 or newer
+    - Multicast and direct LAN access for DDS discovery; Windows 11 22H2 or newer
+    - A separate IP per ROS node; Windows 10 1903 or newer
+  correct: 2
+- source: dfa3fbe29b26
+  question: What is the correct order of dual-boot preparation steps?
+  options:
+    - BitLocker key → disable Fast Startup → shrink partition → verify ISO hash → write USB
+    - Shrink partition → BitLocker key → write USB → verify ISO hash → disable Fast Startup
+    - Write USB → verify ISO hash → BitLocker key → shrink partition → disable Fast Startup
+    - Disable Fast Startup → shrink partition → write USB → verify ISO hash → BitLocker key
+  correct: 0
+- source: b73c26e7a905
+  question: After `usbipd attach --wsl --busid 2-3`, the Windows serial terminal shows "COM5 not found". Bug or expected?
+  options:
+    - A bug; attached devices should appear in both Windows and WSL
+    - A bug; the busid changed, so re-run `usbipd bind` to fix it
+    - Expected; COM5 is renamed to COM6 while attached to WSL
+    - Expected; an attached device belongs to WSL until `usbipd detach`
+  correct: 3
+- source: e911e5422895
+  question: "`ubuntu-ready.sh` exits with code 1 inside `docker run ubuntu:24.04`. Which check fails, and why isn't that a problem with the image?"
+  options:
+    - The systemd check; containers don't run systemd, so it must be installed
+    - The sudo check; containers run as root, so sudo must be installed
+    - The UTF-8 locale; minimal images leave `LANG` unset, so set `ENV LANG=C.UTF-8`
+    - The network check; containers have no internet until `--network host` is set
+  correct: 2

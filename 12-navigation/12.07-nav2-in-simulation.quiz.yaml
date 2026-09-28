@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 12.07-nav2-in-simulation.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d97fe1d06587
+  question: Why are there fourteen lifecycle nodes when [12.06](12.06-nav2-architecture.md) listed twelve servers?
+  options:
+    - Gazebo and RViz each register a lifecycle node, which the lifecycle manager also brings up and down.
+    - The global and local costmaps are lifecycle nodes of their own, owned by the planner and controller servers.
+    - The lifecycle manager counts itself twice, once for localization and once for the navigation stack.
+    - AMCL and map_server each run a second backup lifecycle node that takes over if the first one fails.
+  correct: 1
+- source: 6e93aa7e7897
+  question: "A goal returns `error_code: 206`. What is wrong, and what is the cheapest fix?"
+  options:
+    - "TF_ERROR: republish `map → odom`, or raise `transform_tolerance` on the planner"
+    - "NO_VALID_PATH: lower `inflation_radius` until a corridor opens between the obstacles"
+    - "TIMEOUT: raise the planner's `expected_planner_frequency` so it has more time to search"
+    - "GOAL_OCCUPIED: move the goal 20–30 cm from the wall, or raise the planner's `tolerance`"
+  correct: 3
+- source: 747def7c3455
+  question: You want to know whether a failure is the planner's or the controller's. What do you run?
+  options:
+    - "`/follow_path` with an empty path; failure means the controller is misconfigured, not the planner"
+    - "`/navigate_to_pose` with recoveries disabled; the error code then always names the failing server"
+    - "`/compute_path_to_pose` with the same goal; success means the problem is downstream of the planner"
+    - "`/spin` in place; if the robot turns correctly the controller is fine and the planner is at fault"
+  correct: 2
+- source: "00e881379167"
+  question: "On a SLAM map with `track_unknown_space: true` and `allow_unknown: false`, you send a goal in a never-mapped corner. What happens?"
+  options:
+    - The planner refuses unknown cells, so the goal fails (e.g. NO_VALID_PATH or goal outside map/occupied).
+    - The planner routes optimistically through unknown cells and relies on the obstacle layer to stop the robot.
+    - The planner treats unknown cells as free space, but the controller refuses to drive into them.
+    - SLAM automatically extends the map to the goal corner before the planner starts searching for a path.
+  correct: 0
+- source: f9b2a7ad8e46
+  question: "`/cmd_vel_nav` publishes at 20 Hz and `/cmd_vel` is silent. Which two causes are plausible, and how do you tell them apart?"
+  options:
+    - Controller crashed, or AMCL lost localization; `ros2 node list` tells them apart
+    - Planner has no path, or the goal is occupied; the action's error code tells them apart
+    - Motor driver is unpowered, or the Pico watchdog tripped; the battery voltage tells them apart
+    - Collision monitor holding the robot, or a message-type mismatch; `/collision_monitor_state` tells them apart
+  correct: 3
+- source: a224a838f040
+  question: Why does a long `obstacle_max_range` hurt the global costmap more than the local one?
+  options:
+    - The global costmap has a coarser resolution, so far returns always round to the wrong cell and never clear.
+    - Global marks are in `map` and carry localization error, then persist; the small local `odom` costmap refreshes quickly.
+    - The local costmap ignores `obstacle_max_range` entirely, so only the global costmap is affected by it.
+    - Global marks are in `odom` and carry wheel drift; the local costmap is in `map` and is corrected by AMCL.
+  correct: 1
+- source: 9b2985acf821
+  question: karmel's goal tolerance is 15 cm and it cruises at 0.25 m/s. Your goal is in a 0.8 m doorway. Is that a good goal?
+  options:
+    - Yes; 0.8 m is far wider than karmel's footprint, so the 15 cm tolerance fits comfortably in the doorway.
+    - No; the tolerance must be raised to 40 cm so the robot can stop anywhere in the doorway without failing.
+    - No; the free corridor is only 0.57 m, leaving no margin, and a robot parked in a doorway blocks it. Put the goal beyond the door.
+    - Yes, as long as the speed is lowered to 0.1 m/s so the robot does not overshoot the doorway goal.
+  correct: 2
+- source: 0a64ee364c8c
+  question: What does `initial_pose:=true x:=-1.5 y:=-0.5` actually change?
+  options:
+    - It rewrites AMCL's `set_initial_pose` and `initial_pose` so it seeds particles there instead of waiting for `/initialpose`.
+    - It moves the robot's spawn pose in Gazebo, and AMCL still waits for a `/initialpose` message from RViz.
+    - It shifts the map origin by (-1.5, -0.5), so the robot's spawn pose becomes the map's zero point.
+    - It publishes a one-time `/initialpose` message from RViz at startup, replacing AMCL's global localization.
+  correct: 0

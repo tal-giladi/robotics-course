@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in F3D.04-tolerances-fits.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 0380f10d82bc
+  question: What as-printed hole diameters do you use for M2, M2.5 and M3 screws at the ISO 273 medium series?
+  options:
+    - 2.0, 2.5 and 3.0 mm
+    - 2.2, 2.7 and 3.2 mm
+    - 2.6, 3.1 and 3.6 mm
+    - 2.4, 2.9 and 3.4 mm
+  correct: 3
+- source: 5824389b4498
+  question: An M3 screw goes into a heat-set insert through a 3.4 mm hole. How far can the hole centre be from the insert's centre?
+  options:
+    - 0.4 mm
+    - 0.2 mm
+    - 0.1 mm
+    - 0.3 mm
+  correct: 1
+- source: f4e1752881d3
+  question: A coupon gives $d_{meas} = 0.99 \, d_{CAD} - 0.30$. What do you draw for a 4.0 mm as-printed insert hole?
+  options:
+    - 3.66 mm
+    - 4.30 mm
+    - 4.34 mm
+    - 4.04 mm
+  correct: 2
+- source: 9e912cfa8bb9
+  question: Why do printed holes come out smaller than drawn, while outer dimensions come out slightly bigger?
+  options:
+    - "The squashed line bulges sideways: outward on outer walls, into the hole on hole walls"
+    - The plastic shrinks toward the part's centre as it cools, so holes close up
+    - The slicer offsets all perimeters inward by half a line width
+    - The nozzle moves faster on curves, depositing more plastic in holes
+  correct: 0
+- source: 9fed5feedadd
+  question: A 200 mm PLA deck with 0.5 % shrinkage has M3 holes at both ends that must match a metal chassis. Will it fit with 3.4 mm holes?
+  options:
+    - Yes, since 1.0 mm total shrink is within the 3.4 mm hole clearance
+    - Yes, if you use M2.5 screws in the same holes
+    - "No: each end is 0.5 mm off but only 0.2 mm is allowed; scale or slot the holes"
+    - "No: shrinkage is 10 mm, so the deck must be reprinted in PETG"
+  correct: 2
+- source: cc8fa0d3d89c
+  question: The bottom 0.5 mm of every vertical hole is tight and the rest is fine. What is it, and what do you change?
+  options:
+    - Stringing; increase the retraction distance in the slicer
+    - Layer shift; tighten the printer's X and Y belts
+    - Warping; raise the bed temperature by 10 °C
+    - Elephant's foot; enable compensation and chamfer the hole
+  correct: 3
+- source: 4c731d6a9ba5
+  question: Why is a 0.3 mm gap a sensible start for two sliding printed parts, when the printer is quoted at 0.2 mm accuracy?
+  options:
+    - The quoted figure is for PLA only, and sliding parts use PETG
+    - Both surfaces have errors, often in opposite directions, plus real clearance is needed
+    - The extra 0.1 mm makes room for grease between the parts
+    - Accuracy figures are measured at 20 °C, and parts heat up when sliding
+  correct: 1

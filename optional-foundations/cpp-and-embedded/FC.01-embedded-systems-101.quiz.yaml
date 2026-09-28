@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FC.01-embedded-systems-101.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e28bcfbf999c
+  question: Which is something a microcontroller does better than a Raspberry Pi 5, and something it can't do?
+  options:
+    - "Better: predictable microsecond timing and instant boot; can't: run ROS 2, SLAM or vision"
+    - "Better: running many isolated programs at once; can't: generate PWM without an OS"
+    - "Better: floating-point vision processing; can't: boot quickly after a power cut"
+    - "Better: storing large logs; can't: react to hardware events without a driver"
+  correct: 0
+- source: c27a08cac590
+  question: What is at `0x10000000` and at `0x20000000` on the RP2350, and which survives a power cycle?
+  options:
+    - "`0x10000000` is SRAM, `0x20000000` is flash; the SRAM survives"
+    - "`0x10000000` is the boot ROM, `0x20000000` is flash; both survive"
+    - "`0x10000000` is XIP-mapped flash, `0x20000000` is SRAM; the flash survives"
+    - "`0x10000000` is flash, `0x20000000` is peripheral registers; neither survives"
+  correct: 2
+- source: 68dd9fec05d4
+  question: What value toggles GPIO 6 and GPIO 7 when written to `GPIO_OUT_XOR`?
+  options:
+    - "`0x00000067`"
+    - "`0x00000030`"
+    - "`0x0000000D`"
+    - "`0x000000C0`"
+  correct: 3
+- source: 0859180aaa6c
+  question: Why does the chip have separate `GPIO_OUT_SET` / `GPIO_OUT_CLR` registers instead of only `GPIO_OUT`?
+  options:
+    - To change some pins in one atomic write, avoiding a read-modify-write race with interrupts
+    - Because `GPIO_OUT` is read-only and reflects only the input pin levels
+    - To let the two cores each own half of the pins without locking
+    - Because writing `GPIO_OUT` directly draws too much current on all pins
+  correct: 0
+- source: 4c301c8b50ba
+  question: MicroPython `main.py` sets a motor to 50 % and then hits an uncaught exception. What does the motor do?
+  options:
+    - Stops, because the interpreter resets all peripherals on an exception
+    - Keeps turning at 50 %, because the PWM peripheral keeps generating the signal
+    - Coasts to a stop, because the REPL disables PWM when it starts
+    - Speeds up to 100 %, because the PWM pin floats high with no program
+  correct: 1
+- source: a1641e0d7c79
+  question: "`arm-none-eabi-size` reports `text 120000, data 4000, bss 60000`. How much flash and static RAM does it use?"
+  options:
+    - Flash 120,000 B; RAM 64,000 B
+    - Flash 184,000 B; RAM 60,000 B
+    - Flash 124,000 B; RAM 64,000 B
+    - Flash 124,000 B; RAM 60,000 B
+  correct: 2
+- source: 6eb19d2b7e6d
+  question: The Pico's USB serial port disappears every time the robot starts driving. Code bug or power problem, and what do you measure first?
+  options:
+    - Code bug, a stack overflow in the motor loop; measure free RAM with `gc.mem_free()`
+    - USB driver bug on the laptop; check `dmesg` for enumeration errors first
+    - Code bug, the UART and PWM share a timer; check the pin assignments first
+    - Most likely power (brown-out); measure 3V3/VSYS while starting the motor and check `reset_cause()`
+  correct: 3

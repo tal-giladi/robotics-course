@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.06-processes-systemd.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: b76ad08404a5
+  question: Which signal does `systemctl stop` send first, and what happens if the process doesn't exit?
+  options:
+    - SIGKILL, then SIGTERM after `TimeoutStopSec`
+    - SIGTERM, then SIGKILL after `TimeoutStopSec`
+    - SIGINT, then SIGTERM after 90 s
+    - SIGHUP, then the unit is marked failed
+  correct: 1
+- source: 5e1b242a6326
+  question: A driver's exit code is 137. What happened? And 130?
+  options:
+    - "137: killed by SIGTERM (128 + 9); 130: killed by SIGKILL (128 + 2)"
+    - "137: out of disk space; 130: out of memory"
+    - "137: killed by SIGKILL (128 + 9); 130: interrupted by SIGINT (128 + 2)"
+    - "137: interrupted by SIGINT (128 + 9); 130: killed by SIGKILL (128 + 2)"
+  correct: 2
+- source: f70521118bda
+  question: Why can't software alone guarantee the motors stop when the Pi-side driver dies, and what does the course do?
+  options:
+    - SIGKILL, panic or power loss skip cleanup; the Pico's watchdog stops motors after ~300 ms
+    - The driver's cleanup code is too slow; the course adds a faster SIGTERM handler instead
+    - systemd restarts the driver too late; the course sets `Restart=always` with no delay
+    - The motor driver ignores the Pi; the course wires a relay to cut battery power
+  correct: 0
+- source: 8cf2f5e18970
+  question: Your unit has `ExecStart=ros2 launch karmel_bringup robot.launch.py` and fails with `203/EXEC`. Why?
+  options:
+    - The launch file is not executable, and the unit runs as the wrong user
+    - The unit lacks `After=network.target`, and ROS starts too early
+    - "`ros2 launch` cannot run under systemd; it only works in a terminal"
+    - "`ExecStart` needs an absolute path, and nothing sourced the ROS setup"
+  correct: 3
+- source: d46e4ff8c6bd
+  question: With `Restart=on-failure`, the program catches SIGTERM from `kill` and exits 0. Does systemd restart it? What about `kill -9`?
+  options:
+    - "Exit 0: no restart; `kill -9`: yes, death by signal counts as failure"
+    - "Exit 0: yes, any stop triggers a restart; `kill -9`: no restart"
+    - "Exit 0: no restart; `kill -9`: no restart, since SIGKILL is intentional"
+    - Both restart, since `on-failure` covers any exit
+  correct: 0
+- source: 3be3eae509f2
+  question: How do you see the robot service's logs from before the last reboot, only since 08:00?
+  options:
+    - "`journalctl -u karmel-bringup -b 1 --since 08:00`"
+    - "`journalctl -u karmel-bringup --boot 0 --until 08:00`"
+    - "`systemctl status karmel-bringup --since 08:00 --previous`"
+    - "`journalctl -u karmel-bringup -b -1 --since 08:00`"
+  correct: 3
+- source: 5b9779a428df
+  question: On a 4-core Pi the 1-minute load average is 7.0. Estimate the overload and one likely effect on a 50 Hz control loop.
+  options:
+    - About 700 % overload; the loop stops completely until load drops
+    - About 43 % of capacity used; the loop runs normally with spare time
+    - About 75 % more work than cores; the 20 ms loop jitters and misses deadlines
+    - About 175 % more work than cores; only the loop's logging is delayed
+  correct: 2

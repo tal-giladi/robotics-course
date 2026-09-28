@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.09-parameters.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8b77521c89ed
+  question: "Default `0.3`, `--params-file a.yaml` with `0.5`, `--params-file b.yaml` with `0.4`, and `-p filter_alpha:=0.2`: which value does the node end up with?"
+  options:
+    - "0.3"
+    - "0.5"
+    - "0.4"
+    - "0.2"
+  correct: 3
+- source: fe5681550588
+  question: A YAML block is keyed `battery_health:`, but the node runs in namespace `karmel1`. What value does the node use, and how do you fix the file?
+  options:
+    - The default, silently; key it `/karmel1/battery_health:` or `/**/battery_health:`.
+    - The YAML value, because namespaces are ignored for parameters.
+    - "None: the node fails to start with a parameter error."
+    - The YAML value, but only after `ros2 param load` is run manually.
+  correct: 0
+- source: 95e1dde02ee2
+  question: Why must an on-set-parameters callback not modify node state?
+  options:
+    - It runs in a different process from the node's other callbacks.
+    - The change isn't committed yet and can still be rejected; apply it in the post-set callback.
+    - It runs before the node is constructed, so state doesn't exist yet.
+    - Modifying state there triggers the callback again in an infinite loop.
+  correct: 1
+- source: effdbc89d63d
+  question: karmel moves to a 4S pack (cell limits 3.0–4.25 V). Is `low_threshold_v = 13.5`, `critical_v = 13.2`, `hysteresis_v = 0.2` accepted?
+  options:
+    - "No: the range is 9.0–12.75 V, so both values are too high."
+    - "No: $13.2 + 0.2 = 13.4$ exceeds the rule's limit."
+    - "Yes: the range is 12.0–17.0 V and $13.2 + 0.2 = 13.4 \\le 13.5$."
+    - Yes, but only because hysteresis is ignored for 4S packs.
+  correct: 2
+- source: 9d0844bd7a7d
+  question: With `filter_alpha = 0.3` and 2 Hz samples, how long until the filtered voltage reflects 95% of a sudden drop? And with 0.5?
+  options:
+    - About 4.5 s (9 samples), and about 2.5 s (5 samples).
+    - About 1.5 s (3 samples), and about 1.0 s (2 samples).
+    - About 9 s (18 samples), and about 5 s (10 samples).
+    - About 2.5 s (5 samples), and about 4.5 s (9 samples).
+  correct: 0
+- source: 6a6ea40acdfa
+  question: "`ros2 param set /battery_health low_threshold_v 11` fails. Why, and what's the fix?"
+  options:
+    - The parameter is read-only; restart the node with `-p`.
+    - The value is out of range; use 10.9.
+    - "`11` is parsed as an integer while the parameter is a `double`; use `11.0`."
+    - The node name needs a namespace; use `/karmel/battery_health`.
+  correct: 2
+- source: 1831a572d502
+  question: You set `filter_alpha` at runtime, `ros2 param get` shows the new value, but the behaviour is unchanged. What's the most likely cause?
+  options:
+    - The parameter server hasn't synced with the node yet.
+    - The node copied the value into the filter at start-up and nothing updates it on change.
+    - "`ros2 param get` shows a cached value, not the node's real one."
+    - Parameters only take effect after the node is re-launched.
+  correct: 1

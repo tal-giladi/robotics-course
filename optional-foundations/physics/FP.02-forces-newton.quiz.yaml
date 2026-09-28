@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FP.02-forces-newton.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e620dfa96a4b
+  question: A load cell reads "250 g" while the gripper squeezes it. What force is that in newtons?
+  options:
+    - 0.25 N
+    - 2.45 N
+    - 250 N
+    - 0.025 N
+  correct: 1
+- source: 0290e7f95b40
+  question: What force must karmel's wheels produce to cruise at a constant 0.4 m/s on a flat floor with $c_{rr} = 0.02$?
+  options:
+    - 0.126 N, rolling resistance times speed
+    - 0.64 N, rolling resistance plus $m a$
+    - 0 N, since constant speed needs no force
+    - 0.314 N, only rolling resistance
+  correct: 3
+- source: 1de0905d3ffe
+  question: When karmel accelerates forwards, which body pushes it forwards, and what is the reaction?
+  options:
+    - The floor pushes the wheels forwards; the wheels push the floor backwards
+    - The motors push the robot forwards; the robot pushes the motors backwards
+    - The wheels push the robot forwards; the axle pushes the wheels backwards
+    - The air pushes the robot forwards; the robot pushes the air backwards
+  correct: 0
+- source: 8cc7e66d9fed
+  question: The force that gave the 1.6 kg karmel 1.0 m/s² is applied to the 2.25 kg version. What acceleration results (no rolling resistance)?
+  options:
+    - 1.41 m/s²
+    - 1.0 m/s²
+    - 0.71 m/s²
+    - 0.65 m/s²
+  correct: 2
+- source: 8ae1a226230d
+  question: Karmel (front caster) accelerates hard uphill. Does the load on the drive wheels increase or decrease, and why does it matter?
+  options:
+    - Decreases; load shifts forward onto the caster, so the wheels slip on the ramp
+    - Increases; but traction does not depend on the load on the drive wheels
+    - Stays the same; the ramp and acceleration effects exactly cancel
+    - Increases; load shifts back off the front caster, giving more traction when needed
+  correct: 3
+- source: 839e3458386e
+  question: Your free-body solver gives $N_c = -1.2$ N after moving the battery to the rear edge. Is the solver wrong?
+  options:
+    - Yes; normal forces are never negative, so a sign convention is flipped
+    - No; the CoM crossed behind the axle and the front caster has lifted
+    - Yes; the battery mass was entered in grams instead of kilograms
+    - No; a negative value means the caster pushes up harder than usual
+  correct: 1
+- source: 6a8ff7d08dc5
+  question: On a 5° ramp, what fraction of karmel's weight acts along the ramp?
+  options:
+    - About 99.6 % (cos 5°)
+    - About 5 % (5/100)
+    - About 8.7 % (sin 5°)
+    - About 8.8 % (tan 5°) of the normal force only
+  correct: 2

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 15.07-detect-and-approach.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 283d81cb7421
+  question: Why does the pre-grasp waypoint fail IK on the SO-101 while the grasp itself succeeds?
+  options:
+    - "Seeding: the pre-grasp IK starts from a bad seed; retry from the grasp solution and it converges"
+    - "Collision: the pre-grasp pose puts the camera inside the table's padded collision volume"
+    - "Height: 80 mm up needs more extension, leaving no wrist range to pitch to 90°; use a shallower approach"
+    - "Timing: the pre-grasp is solved first, before the arm's joint states have been received"
+  correct: 2
+- source: e734bf22ea48
+  question: Your jaw has a 45 mm stroke, the object is 40 mm wide, and your reach has a p90 lateral error of 9 mm. What happens, and how often?
+  options:
+    - Only ±2.5 mm slack, so most of the time a pad hits and pushes the object away to an unknown spot
+    - ±5 mm slack, so about 10% of grasps miss cleanly and the object stays where it was
+    - ±2.5 mm slack, so most grasps close off-centre but still hold the object securely
+    - ±9 mm slack, so the error fits inside the stroke and nearly every grasp succeeds
+  correct: 0
+- source: 9f9f25c9de90
+  question: Two error sources contribute 3 mm and 4 mm. You halve the 3 mm one. How much does the total improve?
+  options:
+    - From 7 mm to 5.5 mm, ~21%; errors add linearly, so every source matters equally
+    - From 5 mm to 3.5 mm, 30%; halving any source halves its share of the total
+    - From 5 mm to about 4.27 mm, ~15%; errors add in quadrature, so attack the largest term
+    - From 5 mm to about 4.27 mm, ~15%; so attack the smallest term, since it is cheapest
+  correct: 2
+- source: 8c2298d7f0b3
+  question: You tilt the approach from 90° to 70° to make the pre-grasp reachable. Which two things get worse?
+  options:
+    - Jaw alignment (closing direction no longer across the short axis) and approach clearance (longer sweep)
+    - Payload (the tilted wrist carries less) and repeatability (backlash grows at tilted poses)
+    - Detection (the camera sees the object at a steeper angle) and IK speed (more iterations)
+    - Grip force (pads push at an angle) and the lift height (the arm cannot rise as far)
+  correct: 0
+- source: 1ccdbb2997f6
+  question: Your detector stamps messages with `now()`; the object appears 20 mm off while the arm moves but correct when still. What is happening?
+  options:
+    - "Motion blur: the moving camera smears the object; lower the exposure time to fix the offset"
+    - "TF timing: the camera pose used is ~100 ms newer than the image; stamp with the image's own time"
+    - "Hand–eye error: the calibration is wrong, and the error only shows up during arm motion"
+    - "Detector lag: it outputs the previous frame's box; add a second detector running in parallel"
+  correct: 1
+- source: a90f2ef205cc
+  question: What single measurement separates "hand–eye transform is wrong" from "arm kinematics are wrong"?
+  options:
+    - "Command the same grasp ten times from one configuration: large scatter means calibration, small means kinematics"
+    - "Measure the camera's reprojection error: above 1 px means calibration, below means kinematics"
+    - "Move the object 10 cm: a miss that doubles means kinematics, a constant miss means detection"
+    - "Command the same grasp from two configurations: same miss means calibration, different miss means kinematics"
+  correct: 3
+- source: fc1ba7690c23
+  question: Why does the lift go straight up in the world frame rather than back along the approach axis?
+  options:
+    - Straight up needs fewer IK solutions, so it is faster to compute than a retreat along the axis
+    - The approach axis is only defined for descent, and MoveIt cannot plan along it in reverse
+    - A slipping object falls back where it was, and a clean vertical lift makes "did it hold?" easy to check
+    - Lifting vertically keeps the camera pointed at the table, so the next detection is faster
+  correct: 2

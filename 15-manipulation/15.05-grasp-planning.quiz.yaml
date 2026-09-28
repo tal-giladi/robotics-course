@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 15.05-grasp-planning.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: dc3ad3b29a5d
+  question: Why does the planner sample yaw from 0° to 180° rather than 0° to 360°?
+  options:
+    - The arm's wrist roll joint is limited to 180°, so other yaws are unreachable
+    - PCA returns yaw in 0–180°, so the planner cannot evaluate yaws outside it
+    - "A parallel jaw is symmetric: closing along $d$ and $-d$ gives the identical grasp"
+    - Sampling 360° doubles planning time, so half is sampled as a speed shortcut
+  correct: 2
+- source: 7fca76fff7cd
+  question: At yaw 60° on the wooden block the stability term is exactly 0.00 while the width term is 0.17. What physical fact is behind the zero?
+  options:
+    - The width at 60° exceeds the jaw's stroke, so the stability term is zeroed as infeasible
+    - The pads land on corners, the grasp line leaves a friction cone, so there is no force closure
+    - The pads land on a flat face, but friction is too low for any grasp on wood
+    - The centroid offset exceeds the block's half-length, so the object tips when lifted
+  correct: 1
+- source: 1fc9424b6898
+  question: A 45 mm jaw reports "no feasible top-down grasp" for a golf ball measured at 39 mm. Which two things are going on?
+  options:
+    - 39 mm exceeds the jaw's 35 mm limit; and the ball's low friction rules it out as well
+    - The planner is wrong, since 39 < 45; and the ball's curvature confuses the clearance check
+    - 39 + 10 mm margin exceeds 45 mm; and 39 mm underestimates the real 43 mm (only a cap is seen)
+    - 39 + 10 mm margin exceeds 45 mm; and 39 mm overestimates the real 35 mm due to depth noise
+  correct: 2
+- source: 3922af842d34
+  question: Two blocks are 12 mm apart and every candidate has `clear < 0.5`. What should the robot do, and not do?
+  options:
+    - Execute the best candidate, since its score of 0.489 is still well above the acceptance threshold
+    - Not execute; instead resample yaw at 1° steps until a candidate with clearance above 0.5 appears
+    - Execute the best candidate slowly, so a pad that touches the neighbour does not push it far
+    - Not execute the best candidate; change the world (push, pick the neighbour first) or report thinner fingers needed
+  correct: 3
+- source: 774a3fed6b4a
+  question: You change pads from $\mu = 0.4$ to $\mu = 0.9$. Besides lifting more, what else changes in the planner?
+  options:
+    - "Which grasp it chooses: wider cones raise $\\varepsilon$, so imperfectly opposed grasps stop being penalised"
+    - "Nothing else: $\\mu$ only affects payload, not which grasp the planner ranks highest"
+    - "It samples more yaws: higher friction doubles the number of candidates the planner evaluates"
+    - "Clearance changes: grippier pads are thicker, so fewer candidates pass the clearance check"
+  correct: 0
+- source: 99b9fb5b5603
+  question: When is a learned grasp model (Contact-GraspNet, AnyGrasp) worth its cost over this heuristic?
+  options:
+    - "Always: learned models beat heuristics on every tabletop object, including convex ones"
+    - When the objects are convex and fit the jaw, where learned models are most accurate
+    - When no GPU is available, since learned models run faster on CPUs than heuristics
+    - "When heuristic assumptions break: side grasps, concave or complex shapes, dense clutter"
+  correct: 3
+- source: 6a963d988aa4
+  question: Grasp A scores 0.626 on a 45 mm jaw; grasp B scores 0.713 on an 80 mm jaw. Is B better?
+  options:
+    - Yes; the higher score means B has more force closure and will hold the block more reliably
+    - No; A is better because the smaller jaw fits the block more tightly and so grips more firmly
+    - Not necessarily; they are the same grasp and the score is relative to stroke, so only compare within a gripper
+    - Yes; scores are normalized across grippers, so a 0.087 difference is significant
+  correct: 2

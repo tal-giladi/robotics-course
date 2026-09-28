@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 18.02-imitation-learning-behavior-cloning.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: b3e735f4fea1
+  question: What is covariate shift in behavior cloning?
+  options:
+    - The expert's demonstrations drift over time, so later episodes contradict the earlier ones
+    - The camera's lighting changes between training and deployment, shifting the input pixel statistics
+    - The policy is trained on the expert's states but its own actions lead it to states with no training data
+    - The action labels are noisy, so the policy learns the mean of the expert's actions instead of the mode
+  correct: 2
+- source: ebab81873149
+  question: Per-step unrecoverable-mistake probability 0.5%, episode 20 s at 30 Hz. What is the probability of a clean episode?
+  options:
+    - About 90%
+    - About 5%
+    - About 50%
+    - About 0.5%
+  correct: 1
+- source: 879a979451c1
+  question: Why does DAgger reduce the compounding-error bound from $O(\epsilon T^2)$ to roughly $O(\epsilon T)$?
+  options:
+    - It trains on the state distribution the learner itself visits, so its mistakes no longer lead into unlabelled states
+    - It shortens every episode to a fixed horizon, so the number of steps $T$ grows more slowly
+    - It replaces the MSE loss with an L1 loss, which is less sensitive to large errors
+    - It collects many more expert demonstrations on the same centre line, reducing $\epsilon$ quadratically
+  correct: 0
+- source: 0f59e1a8e650
+  question: Demonstrations at the start state are 50% $a = (0.4, +0.3)$ and 50% $a = (0.4, -0.3)$ m/s. What do MSE- and L1-trained policies output?
+  options:
+    - MSE picks one mode, e.g. $(0.4, +0.3)$; L1 outputs the mean $(0.4, 0.0)$
+    - Both pick a mode at random each step, alternating between $+0.3$ and $-0.3$
+    - "MSE: the mean $(0.4, 0.0)$; L1: a median, any $v_y$ in $[-0.3, 0.3]$"
+    - MSE outputs $(0.4, 0.0)$; L1 always picks the upper mode $(0.4, +0.3)$
+  correct: 2
+- source: 705408fa7774
+  question: You add 20 more perfect, noise-free demonstrations to the lane task. Does BC's success rate improve much?
+  options:
+    - Yes, doubling the data roughly halves the per-step error and compounding error
+    - No, because noise-free demos make the policy overfit and it gets worse
+    - Yes, as long as the new demos are recorded at a higher control rate
+    - No, the new data lies on the same centre line; coverage, not quantity, is the problem
+  correct: 3
+- source: 90e19acc225d
+  question: On a real SO-101, how is DAgger's "ask the expert for labels on visited states" implemented?
+  options:
+    - "Human-gated interventions: the operator takes over with the leader arm near failure, and those segments are added to training"
+    - The operator watches recorded rollouts afterwards and types the correct joint angles for every frame
+    - A simulator replays the policy's states and a scripted planner labels each one offline
+    - The policy is retrained only on its own successful rollouts, discarding the failed ones
+  correct: 0
+- source: 6256878c6904
+  question: Which pairing of policy class to model is correct for representing a multimodal action distribution?
+  options:
+    - Conditional VAE (Diffusion Policy); diffusion (ACT); discretized tokens (SmolVLA)
+    - Conditional VAE (ACT); diffusion/flow matching (Diffusion Policy, π0); discretized tokens (VQ-BeT, RT-2)
+    - MSE regression (ACT); diffusion (RT-2); discretized tokens (Diffusion Policy)
+    - Conditional VAE (RT-2); flow matching (VQ-BeT); discretized tokens (ACT, π0)
+  correct: 1

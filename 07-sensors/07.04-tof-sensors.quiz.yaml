@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.04-tof-sensors.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: aa614ef660cb
+  question: Why can a cheap ToF chip resolve 6.67 ps when no cheap clock can?
+  options:
+    - It uses a crystal oscillator running at 150 GHz inside the package
+    - It measures the phase of a single pulse with an analogue comparator
+    - It histograms millions of photon arrivals; precision improves as $1/\sqrt N$
+    - It interpolates between two coarse clock ticks with a lookup table
+  correct: 2
+- source: b0fef5f42c57
+  question: σ at 1 m is 3 mm in the dark. What is σ at 3 m in the dark, and in a room whose ambient rate equals 3× the 1 m signal?
+  options:
+    - 9 mm in the dark; about 24 mm with that ambient light
+    - 27 mm in the dark; about 72 mm with that ambient light
+    - 3 mm in the dark; about 9 mm with that ambient light
+    - 9 mm in the dark; still about 9 mm with that ambient light
+  correct: 0
+- source: 075246746a73
+  question: You switch from a 16×16 ROI to 4×4 at the same budget and mode. What happens to FoV, signal, σ and range?
+  options:
+    - FoV widens to ~108°; signal rises 16×; σ quarters; range grows
+    - FoV shrinks to ~6.75°; signal falls ~16×; σ ~quadruples; range drops
+    - FoV shrinks to ~6.75°; signal is unchanged; σ is unchanged; range grows
+    - FoV is unchanged; signal falls ~4×; σ doubles; range is unchanged
+  correct: 1
+- source: 6cf39be4cde4
+  question: The robot drives toward a glass door with only a VL53L1X. What does it do, and what is the minimal hardware fix?
+  options:
+    - It stops early, as glass reflects 940 nm strongly; lower the threshold
+    - It reads a dropout and stops safely; no hardware change is needed
+    - It reads 0 m and reverses; add a second VL53L1X at another angle
+    - It ranges what's behind the glass and hits the door; add the US-100, use the min
+  correct: 3
+- source: fbd9817aee12
+  question: Why does a 30° wall make the ToF read ~9 % short while the ultrasonic reads roughly 2× long?
+  options:
+    - "ToF: the cone's nearest diffuse hit is closer. Ultrasonic: surviving echoes took a two-bounce path"
+    - "ToF: the tilted wall absorbs light. Ultrasonic: sound slows down near angled surfaces"
+    - "ToF: the SPADs saturate on angled walls. Ultrasonic: its timer counts two ring-downs"
+    - "ToF: ambient light shortens every reading. Ultrasonic: the wall's echo is doubled in gain"
+  correct: 0
+- source: 96735bc8bce5
+  question: Readings are valid with good signal rate but all 2 cm short, starting when the sensor went behind an acrylic panel. What is it?
+  options:
+    - Refraction in the acrylic bends the beam toward nearer objects
+    - The acrylic heats up and shifts the sensor's internal clock
+    - "Cover-glass crosstalk: the panel reflects light straight back"
+    - The panel blocks ambient light, which removes a built-in offset
+  correct: 2
+- source: fbfac81728f5
+  question: Which distance mode would you use on a sunny balcony, and what do you give up?
+  options:
+    - "`long`, for its stronger signal; you give up update rate"
+    - "`short`, which rejects ambient light; you give up range (~1.3 m)"
+    - "`medium`, a compromise; you give up nothing important outdoors"
+    - "`long`, with a 500 ms budget; you give up about half the precision"
+  correct: 1
+- source: b7038dd1437b
+  question: Your obstacle logic must react within 150 ms at 0.5 m/s. Which timing budget fits, and why?
+  options:
+    - The default 100 ms budget, since the sensor itself adds no further latency
+    - A 200 ms budget, since longer budgets reduce σ and therefore reaction time
+    - A 500 ms budget in `long` mode, to maximise range for early warnings
+    - 33 ms with `SENSOR_HZ` 30, for ~86 ms total at the cost of ~2× σ
+  correct: 3

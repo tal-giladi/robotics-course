@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FM.04-coordinate-systems.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a194ccab9d56
+  question: Convert $(r, \theta) = (2.0, 150°)$ to Cartesian.
+  options:
+    - $(1.000, -1.732)$
+    - $(1.732, 1.000)$
+    - $(-1.000, 1.732)$
+    - $(-1.732, 1.000)$
+  correct: 3
+- source: 8cba65e7d9e4
+  question: Convert $(3, 4)$ to polar.
+  options:
+    - $r = 7$, $\theta = 53.13°$
+    - $r = 5$, $\theta = 53.13°$
+    - $r = 5$, $\theta = 36.87°$
+    - $r = 25$, $\theta = 53.13°$
+  correct: 1
+- source: 27d2d01ce176
+  question: A LaserScan has `angle_min = -1.5708`, `angle_increment = 0.0087266` (0.5°). What is the angle of beam 100?
+  options:
+    - −0.6981 rad (≈ −40°)
+    - 0.8727 rad (≈ 50°)
+    - −1.5621 rad (≈ −89.5°)
+    - −0.8727 rad (≈ −50°)
+  correct: 0
+- source: c83f643a5ca0
+  question: You compute `min(scan.ranges)` to find the nearest obstacle and get 0.0 even though nothing is near the robot. Why?
+  options:
+    - The scan is in the laser frame, so its origin is always 0.0 away from itself
+    - "`min` compares angles, not ranges, and the first beam angle is 0.0"
+    - Some drivers report "no return" as 0.0; mask with `range_min`/`range_max` and `isfinite` first
+    - The ranges are in millimeters and round down to 0.0 when read as meters
+  correct: 2
+- source: 595fb0c6c112
+  question: Why do distant walls look sparser than near walls in a LiDAR scan?
+  options:
+    - Distant surfaces absorb more of the laser, so many beams return no hit
+    - Beams diverge by a constant angle, so hit spacing $r\Delta\theta$ grows linearly with range
+    - The LiDAR lowers its sample rate for long ranges to save bandwidth
+    - Hit spacing grows with $r^2$ because the beam spreads in two dimensions
+  correct: 1
+- source: 6ae3cad16cf3
+  question: In ROS, is the point $(0.5, -0.3, 0)$ to the left or right of the sensor?
+  options:
+    - To the left, because $+y$ is right (REP-103)
+    - Behind, because negative values mean behind
+    - Directly ahead, because $z$ is 0
+    - To the right, because $+y$ is left (REP-103)
+  correct: 3

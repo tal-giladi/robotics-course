@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in F3D.03-file-formats-slicers.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: dc279992d2b3
+  question: A print service asks for your bracket. Which files do you send, and why?
+  options:
+    - Only G-code, so they print exactly what your slicer produced
+    - STEP to check dimensions and re-mesh, plus STL or 3MF for slicing
+    - Only the native CAD file, since services can convert any format
+    - A PDF drawing, since services quote from 2D dimensions only
+  correct: 1
+- source: d799e987aeaf
+  question: Why can't you reliably change a hole diameter in an STL?
+  options:
+    - STL stores holes in inches, so the value must be converted first
+    - STL files are read-only once exported from CAD
+    - An STL has no hole, only triangles approximating one; change it in CAD
+    - STL stores only the outer surface, so internal holes are lost
+  correct: 2
+- source: 8df5c7096370
+  question: A 6 mm shaft hole is exported with 12 segments. What is the sagitta and the flat-to-flat width?
+  options:
+    - Sagitta 0.102 mm; flat-to-flat 5.80 mm
+    - Sagitta 0.034 mm; flat-to-flat 5.93 mm
+    - Sagitta 0.205 mm; flat-to-flat 5.59 mm
+    - Sagitta 0.102 mm; flat-to-flat 6.00 mm
+  correct: 0
+- source: e519f2f83f72
+  question: An L-bracket is printed standing, with its upright vertical. A LiDAR on top gets knocked sideways. Where does it break?
+  options:
+    - At a screw hole, where the insert concentrates stress
+    - In the middle of the upright, where the bending moment is largest
+    - At the base plate's edge, where the first layer is weakest
+    - At the inside corner, along a layer line pulled apart across the bond
+  correct: 3
+- source: e9d94a1bc90e
+  question: The volume computed from an STL comes out negative. What does that mean?
+  options:
+    - The part was exported in inches instead of millimetres
+    - The triangle winding is inverted, so the mesh is inside-out
+    - The part has internal voids larger than its outer volume
+    - The mesh has holes, so the volume integral is undefined
+  correct: 1
+- source: 30b8c4fa2d20
+  question: Why does raising infill from 15 % to 40 % change a 3 mm-thick bracket so little?
+  options:
+    - Infill above 20 % is capped by the slicer for thin parts
+    - Infill only affects the top and bottom layers, not the walls
+    - The walls and skins make a 3 mm section almost all solid shell
+    - Infill density only changes print time, not mass or strength
+  correct: 2
+- source: 96238d69a42d
+  question: You put an STL exported in millimetres into a URDF `<mesh>` without a scale. What do you see in RViz?
+  options:
+    - The part is a thousand times too big; add `scale="0.001 0.001 0.001"`
+    - The part is a thousand times too small; add `scale="1000 1000 1000"`
+    - The part renders correctly, since RViz reads units from the STL
+    - Nothing renders, since RViz rejects meshes without a scale
+  correct: 0

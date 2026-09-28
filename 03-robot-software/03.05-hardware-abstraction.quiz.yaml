@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.05-hardware-abstraction.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 72f4467b7726
+  question: Why is `typing.Protocol` a better fit than an ABC for `DifferentialBase` in this course?
+  options:
+    - Protocols run faster at runtime because they skip method resolution.
+    - Structural typing lets sims, fakes, test doubles and wrappers satisfy it without inheriting, and there's no shared implementation to inherit anyway.
+    - ABCs can't declare method signatures, while Protocols can.
+    - Protocols enforce the methods at import time, while ABCs only check at call time.
+  correct: 1
+- source: 25e95b869dc4
+  question: "`BaseState.range_m` is `None` when the ToF has no valid reading. What would break if it were `-1.0` instead?"
+  options:
+    - "Nothing: `-1.0` and `None` are handled identically by comparisons."
+    - Logging, because CSV files can't store negative numbers.
+    - "Every comparison: `if state.range_m < 0.3: stop()` would stop the robot permanently whenever the sensor sees nothing."
+    - The type checker, because `float` can't be `-1.0`.
+  correct: 2
+- source: a616f417b3b1
+  question: You write `drive_distance` to send `set_wheel_velocity` once and then only call `read()` in the loop. What happens on the fake, `SimBase` and the real robot?
+  options:
+    - All three stop after the 300 ms watchdog (about 8 cm) and the loop waits until its timeout fires.
+    - The fake and `SimBase` drive the full distance; only the real robot stops.
+    - All three drive the full distance, since the command is held.
+    - Only the fake stops; `SimBase` and the robot keep driving.
+  correct: 0
+- source: 177f7ba23f9c
+  question: The conformance suite's tick assertion fails by 2% against `SimBase` but passes exactly against `FakeBase`. Is this a bug?
+  options:
+    - "Yes: the simulator's encoder model must be wrong."
+    - "Yes: the fake is hiding a sign error that the simulator reveals."
+    - No, but the conformance test should demand exact values for both.
+    - "No: the simulator has motor time constants, deadband and quantized encoders, which is why the suite allows 3%."
+  correct: 3
+- source: 457f992bd90f
+  question: What does rung 3 (`SerialBase` + `fake_pico` over TCP) test that rung 2 (`SimBase`) cannot?
+  options:
+    - The motor physics of the real robot, such as the deadband, time constants and wheel slip.
+    - "The whole host communication stack: encoding, checksums, sequence numbers, acks and retries, reader and keep-alive threads, reconnection."
+    - The odometry math that converts wheel ticks into a pose estimate and its covariance.
+    - The ROS 2 node that wraps the base and publishes odometry and joint states.
+  correct: 1
+- source: b310b920e215
+  question: A teammate adds `def drive_to(self, x, y)` to `DifferentialBase`. For or against?
+  options:
+    - "For: every base can drive to a point, so it belongs in the contract."
+    - "For: it simplifies tests by hiding the wheel commands."
+    - "Against: it's not a base capability (it needs pose estimation); keep the contract at \"command wheels, report wheels\" and build it above."
+    - "Against: Protocols can't have methods with more than one argument."
+  correct: 2
+- source: f5739b1d1ebe
+  question: "`isinstance(RecordingBase(SpeedLimitedBase(base, 4.0)), TelemetryStream)` is False, although calling `wait_for_telemetry` works. Why?"
+  options:
+    - The runtime Protocol check inspects the class, but `wait_for_telemetry` only exists via `__getattr__` on the instance.
+    - "`TelemetryStream` is not marked `@runtime_checkable`."
+    - The inner base doesn't implement `wait_for_telemetry`, and the call silently fails.
+    - "`isinstance` only checks the outermost wrapper's parent classes."
+  correct: 0

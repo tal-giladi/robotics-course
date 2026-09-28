@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 08.04-proportional-control.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f5fce55aabba
+  question: kp = 0.2, error = 2.5 rad/s. What duty does P send, and what if the error is 8 rad/s?
+  options:
+    - 0.5; and 1.6, sent to the motor as is
+    - 0.5; and 1.6, clamped to 1.0
+    - 0.08; and 0.025, the ratio inverted
+    - 12.5; and 40, clamped to 1.0
+  correct: 1
+- source: 5cc7a8fb95e1
+  question: Without a deadband and with $K = 20$, what fraction of the setpoint does a P loop reach with kp = 0.15?
+  options:
+    - 100%
+    - 25%
+    - 75%
+    - 67%
+  correct: 2
+- source: 6f62c11a7b8f
+  question: Why can't a P controller hold the setpoint exactly on a motor that needs a non-zero duty to keep spinning?
+  options:
+    - Zero error means zero duty, so it settles where the error gives the needed duty
+    - The encoder quantization always leaves a residual error of one tick
+    - P controllers only work on position, not on speed, so they drift
+    - The motor's time constant delays the response, so it never arrives
+  correct: 0
+- source: ab6aa6b9709e
+  question: You move the P loop from the Pico (100 Hz, ~15 ms lag) to a laptop over Wi-Fi (~60 ms extra delay) with the same kp = 0.3. What happens?
+  options:
+    - It settles faster, since the laptop has a stronger CPU
+    - Steady-state error grows, but it stays perfectly stable
+    - Nothing changes, since the gain is the same on both
+    - Steady error is the same in theory, but it will likely oscillate
+  correct: 3
+- source: ac1f5a90162d
+  question: A teammate's P loop settles at 4.6 rad/s instead of 8 and they want to double kp. What do you tell them first?
+  options:
+    - It's P's normal steady-state error; for zero error add I or feedforward
+    - "Something is broken: a correct P loop always reaches its setpoint"
+    - Doubling kp will remove the error completely; go ahead with it
+    - The encoder is miscalibrated; recalibrate it before tuning anything
+  correct: 0
+- source: a9a35921da9c
+  question: The battery drops from 12.1 V to 10.5 V. Does a calm P loop get closer to or farther from oscillating?
+  options:
+    - "Closer: lower voltage raises the motor gain $K$"
+    - "Farther: $K$ drops with voltage, so $k_p K$ drops"
+    - "Closer: lower voltage adds lag to the motor"
+    - "No change: the loop gain is independent of voltage"
+  correct: 1
+- source: 399f9f338eb4
+  question: For kp = 0.4 on the simulated left wheel ($K$ = 21.6, deadband 0.12), what is the loop gain and the settled speed at 8 rad/s?
+  options:
+    - $L = 0.4$; about 2.3 rad/s
+    - $L = 21.6$; about 7.6 rad/s
+    - $L = 8.65$; about 6.9 rad/s
+    - $L = 8.65$; exactly 8.0 rad/s
+  correct: 2

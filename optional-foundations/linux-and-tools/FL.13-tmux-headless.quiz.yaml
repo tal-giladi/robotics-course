@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FL.13-tmux-headless.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c11daa287255
+  question: Which signal kills programs started in an SSH session when the connection drops, and why doesn't it reach programs inside tmux?
+  options:
+    - SIGTERM; tmux traps it and forwards only SIGINT to its panes
+    - SIGKILL; tmux runs its panes in a separate cgroup that SSH cannot signal
+    - SIGPIPE; tmux buffers the output, so its programs never write to a closed pipe
+    - SIGHUP; tmux programs run on ptys owned by the tmux server, so only the client is hung up
+  correct: 3
+- source: 3d9914798c6e
+  question: What are the tmux keys to detach, split left/right, zoom a pane and enter scroll mode?
+  options:
+    - "`Ctrl+b d`, `Ctrl+b %`, `Ctrl+b z`, `Ctrl+b [`"
+    - '`Ctrl+b d`, `Ctrl+b "`, `Ctrl+b z`, `Ctrl+b ]`'
+    - "`Ctrl+b x`, `Ctrl+b %`, `Ctrl+b f`, `Ctrl+b [`"
+    - "`Ctrl+b q`, `Ctrl+b |`, `Ctrl+b z`, `Ctrl+b s`"
+  correct: 0
+- source: de2ac17e265a
+  question: Robot bringup must run after every boot, and during development you want to watch its logs live. How do you combine systemd and tmux?
+  options:
+    - Start bringup inside a tmux session from `.bashrc`, and use systemd only to restart tmux on crash
+    - Run bringup as a systemd service, and watch `journalctl -u karmel-bringup -f` in a tmux window on the Pi
+    - Run bringup in tmux from a cron `@reboot` entry, and attach with `tmux a` to watch the logs
+    - Run bringup as a systemd service with `StandardOutput=tty`, and attach tmux to that tty
+  correct: 1
+- source: c4c16812d612
+  question: What does `tmux ls` print when there are no sessions, and what is its exit code?
+  options:
+    - Nothing at all, exit code 0
+    - "`no sessions`, exit code 0"
+    - "`no server running on /tmp/tmux-<uid>/default`, exit code 1"
+    - "`error connecting to /tmp/tmux-<uid>/default`, exit code 2"
+  correct: 2
+- source: 9da5c8a38d61
+  question: You SSH from a tmux session on your laptop into the Pi and start tmux there. `Ctrl+b c` creates a window on the laptop. Why, and how do you reach the Pi's tmux?
+  options:
+    - The inner tmux has a different prefix by default; press `Ctrl+a c` for the Pi
+    - SSH filters control keys; start SSH with `-t` so keys reach the Pi's tmux
+    - The outer tmux intercepts the prefix; press `Ctrl+b Ctrl+b c` to send it to the inner tmux
+    - The Pi's tmux is detached; run `tmux attach` there first, then `Ctrl+b c` works
+  correct: 2
+- source: 2fd29d354435
+  question: How many lines of scrollback per pane can 4 panes have within a 20 MB budget at about 100 bytes per line?
+  options:
+    - 5,000 lines per pane
+    - 50,000 lines per pane
+    - 200,000 lines per pane
+    - 12,500 lines per pane
+  correct: 1

@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 02.08-from-breadboard-to-perfboard.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5c35158b3ad0
+  question: Which pair of changes from breadboard to soldered board, with the symptom each fixes, is correct?
+  options:
+    - Lower contact resistance fixes sag and brownouts under load; shorter ground paths (lower inductance) fix glitches when motors run.
+    - Higher capacitance fixes encoder errors; thicker wires fix I²C timing.
+    - Lower contact resistance fixes Wi-Fi drops; shorter ground paths fix battery aging.
+    - Higher insulation fixes thermal shutdown; lower inductance fixes motor stalls.
+  correct: 0
+- source: 136fa4fc431c
+  question: Why does `board_drc.py` set the Pico GPIO voltage limit to 3.3 V when the datasheet says 5.5 V for fault-tolerant pins?
+  options:
+    - The datasheet's 5.5 V applies only to the ADC pins.
+    - 5.5 V depends on IOVDD being present (3.63 V unpowered); the linter enforces the design rule, not the damage limit.
+    - The DRC tool can't represent limits above the supply voltage.
+    - 3.3 V gives the ADC a full-scale reading, which the DRC checks.
+  correct: 1
+- source: b5fce81a6b1c
+  question: Your net list has `Net("3V3", 3.3, 0.11, ["PICO.3V3"])`. What two problems does the DRC report?
+  options:
+    - '"voltage too high" and "current too low".'
+    - '"missing C_BULK" and "wire gauge too thin".'
+    - '"duplicate net name" and "no ground reference".'
+    - '"only one connection" and "power net without a test point".'
+  correct: 3
+- source: 7fda0b875781
+  question: You forget the 470 µF bulk capacitor and everything else is perfect. What do you observe?
+  options:
+    - The board doesn't power up at all, because the regulator needs the capacitor to start.
+    - "The board works at rest but the rail dips on motor transients: sensor glitches, possible Pico resets and Pi brownouts."
+    - Nothing changes, because the 100 nF ceramics cover all time windows.
+    - The motors spin faster, because nothing absorbs their current.
+  correct: 1
+- source: d36fee3635ca
+  question: Why is the bring-up order "board alone → Pico → sensors → drivers → motors"?
+  options:
+    - "It's bisection in time: only the part just added can cause a new problem, and with a current limit a short can't destroy anything."
+    - The Pico must be flashed before the drivers are connected, or the drivers latch into sleep mode.
+    - The sensors need to warm up before the motors run.
+    - It spreads the inrush current over several power-ups.
+  correct: 0
+- source: 9374831d84dc
+  question: VBAT_SW to GND beeps continuity, then stops beeping and the resistance climbs into the megohms. Is this a short?
+  options:
+    - "Yes: any initial beep between power and ground means a short."
+    - "Yes: a short that is burning open as you measure."
+    - "No: the 470 µF bulk capacitor is charging from the meter's test current; a real short stays low and stable."
+    - "No: the meter's battery is running low and the reading drifts."
+  correct: 2
+- source: efebdfa09215
+  question: You probe TP10 with a 15 cm ground lead clipped to the far end of the board. Why is the waveform worse than the signal?
+  options:
+    - The probe's bandwidth is too low for the board's signals.
+    - The ground lead's ~150 nH forms a loop that rings and picks up the board's $di/dt$ fields; you're measuring the probe.
+    - The far end of the board is at a different DC voltage.
+    - The scope's input impedance loads the test point.
+  correct: 1
+- source: 99c7c605d38b
+  question: Your board has 12 wires crossing between the high-current and low-current regions. Why is that a problem, and what do you change?
+  options:
+    - Each crossing is a coupling path and loop antenna; karmel needs about five or six, so move the parts, not the wires.
+    - Each crossing adds resistance; use thicker wires for all twelve.
+    - Twelve wires exceed the connector count; add a second connector.
+    - Crossing wires must be shielded; wrap them in copper tape.
+  correct: 0

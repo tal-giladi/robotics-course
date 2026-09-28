@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 08.12-control-in-ros2.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6284f25eb46a
+  question: What exactly does `controller_manager`'s `update_rate` control, and what does it not control?
+  options:
+    - Only `/odom`'s publish rate; not the controllers' sample period
+    - The read → update → write cycle; not `publish_rate` or telemetry rate
+    - The Pico's telemetry rate; not the rate of the controllers
+    - The rate of `cmd_vel` publishers; not the hardware read rate
+  correct: 1
+- source: c533f4b8e36e
+  question: Why does `write()` send a command every cycle even when nothing changed?
+  options:
+    - The serial link drops bytes, so each command is sent redundantly
+    - The Pico forgets the last command unless it is refreshed each cycle
+    - The Pico's watchdog treats each command as a heartbeat
+    - ros2_control requires `write()` to transmit on every cycle
+  correct: 2
+- source: f07e235f5b34
+  question: Nav2 runs at 10 Hz and serial adds 4 ms. Where should a wheel-speed loop with a 40 ms time constant live?
+  options:
+    - "On the Pico: only its ~10 ms dead time fits under ~31 ms"
+    - In Nav2's controller server, which runs at 10 Hz already
+    - In a ROS 2 node on the Pi at 100 Hz, with 4 ms serial lag
+    - On a laptop over Wi-Fi, where there is more CPU available
+  correct: 0
+- source: 88a7f8602997
+  question: "`linear.x.max_acceleration: 2.0` and `update_rate: 100`. How much may speed change per cycle, and how long does 0 → 0.5 m/s take?"
+  options:
+    - 0.2 m/s per cycle; 0.025 s
+    - 0.02 m/s per cycle; 2.5 s
+    - 2.0 m/s per cycle; one cycle
+    - 0.02 m/s per cycle; 0.25 s
+  correct: 3
+- source: 0bd48083181b
+  question: "You set `open_loop: true` and drive the robot into a wall. What does `/odom` say?"
+  options:
+    - It stays put, since the stalled wheels report zero
+    - It jumps back to the last good pose and stops
+    - Still moving forward, since it integrates commands
+    - It reports an error and stops publishing
+  correct: 2
+- source: 6f9acb121fdb
+  question: Which two watchdogs sit between a dead `cmd_vel` publisher and a moving robot, and which protects you if the Pi kernel panics?
+  options:
+    - Nav2's timeout and DDS liveliness; DDS survives a Pi panic
+    - "`cmd_vel_timeout` (Pi) and the Pico watchdog; only the Pico's survives"
+    - "`cmd_vel_timeout` (Pi) and the Pico watchdog; only the Pi's survives"
+    - systemd's watchdog and the battery BMS; the BMS survives a panic
+  correct: 1
+- source: cbcb1d3b041e
+  question: "`/odom` runs at 50 Hz, `/joint_states` positions never change, and the wheels are turning. Where is the fault?"
+  options:
+    - Between telemetry and the state interfaces, in the hardware component
+    - In `diff_drive_controller`, which ignores the joint positions
+    - In `robot_state_publisher`, which freezes `/joint_states`
+    - In the encoders, which have stopped counting ticks
+  correct: 0
+- source: 0668b15b0dc1
+  question: Why is swapping `karmel_hardware/KarmelSystem` for `gz_ros2_control/GazeboSimSystem` enough to run the robot in simulation?
+  options:
+    - Gazebo reads the Pico firmware and emulates it exactly
+    - The Gazebo plugin rewrites the controller YAML to match
+    - The two plugins share the same C++ code underneath
+    - Everything above talks only to named interfaces, not hardware
+  correct: 3

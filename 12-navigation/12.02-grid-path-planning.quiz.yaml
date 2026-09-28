@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 12.02-grid-path-planning.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ba6f041577ef
+  question: Why can BFS return a longer path than Dijkstra on an 8-connected grid, but not on a 4-connected grid with unit costs?
+  options:
+    - BFS minimizes move count; with unit costs that equals length, but diagonals cost √2 so equal move counts can differ in length.
+    - BFS explores diagonals first on 8-connected grids, so it always prefers longer diagonal routes over straight ones.
+    - BFS minimizes path length; on 8-connected grids it ignores obstacles near diagonals, producing detours.
+    - Dijkstra uses a heuristic on 8-connected grids that BFS lacks, so it finds shortcuts BFS cannot see.
+  correct: 0
+- source: 4e65ae8d558d
+  question: Compute the octile and Euclidean distances from (2, 3) to (9, 5). Which is larger, and why is that good?
+  options:
+    - Octile 7.828, Euclidean 7.280; octile is larger yet still admissible on an 8-connected grid, so A* expands fewer cells.
+    - Octile 7.280, Euclidean 7.828; Euclidean is larger yet still admissible, so it is the better A* heuristic.
+    - Octile 9.000, Euclidean 7.280; octile is larger, which makes A* return shorter paths than Dijkstra.
+    - Octile 7.828, Euclidean 7.280; octile is larger, which is good because overestimating makes A* optimal.
+  correct: 0
+- source: 5c1a11aa1347
+  question: Which statement correctly defines admissibility and consistency, and gives a heuristic admissible on a 4-connected grid but not on an 8-connected one?
+  options:
+    - "Admissible: $h(n) \\ge h^*(n)$; consistent: $h(n) \\le c(n,m) + h(m)$; Euclidean distance."
+    - "Admissible: $h(n) \\le h^*(n)$; consistent: $h(n) \\ge c(n,m) + h(m)$; octile distance."
+    - "Admissible: $h(n) \\le h^*(n)$; consistent: $h(n) \\le c(n,m) + h(m)$; Manhattan distance."
+    - "Admissible: $h(n) \\le c(n,m) + h(m)$; consistent: $h(n) \\le h^*(n)$; Manhattan distance."
+  correct: 2
+- source: 9be9b4619103
+  question: Weighted A* with $w = 1.5$ returns a 6.1 m path. What can you say about the optimal path length?
+  options:
+    - It is between 6.1 m and 9.15 m
+    - It is between 4.07 m and 6.1 m
+    - It is exactly 6.1 / 1.5 = 4.07 m
+    - It is between 3.05 m and 6.1 m
+  correct: 1
+- source: 2d7bcd3f0f4e
+  question: You halve the grid cell size from 5 cm to 2.5 cm. Roughly how do Dijkstra's expansions and the path length change?
+  options:
+    - About 2× more expansions; path length changes by only millimeters to centimeters
+    - About 4× more expansions; path length gets roughly 25% shorter
+    - About 2× more expansions; path length gets roughly half as long
+    - About 4× more expansions; path length changes by only millimeters to centimeters
+  correct: 3
+- source: ece55d08ace6
+  question: Your planner says "no path" whenever the robot starts next to the sofa, although it can clearly drive away. What's happening?
+  options:
+    - The goal cell lies inside the grown obstacle; move the goal farther from the sofa or disable goal checking.
+    - The heuristic is inadmissible near obstacles; switch from A* to BFS so the search ignores costs.
+    - The grid is too coarse near the sofa; halve the cell size so a gap appears between robot and sofa.
+    - The start cell lies inside the grown obstacle; start from the nearest free cell, reduce inflation, or back up first.
+  correct: 3
+- source: bba13bd64ac5
+  question: How does Theta* differ from A* followed by shortcut smoothing?
+  options:
+    - Theta* smooths the finished A* path afterward, so it gives the same result as shortcutting but faster.
+    - Theta* restricts moves to 45° angles during search, so its paths need no smoothing at all afterward.
+    - Theta* checks line of sight to the grandparent during search, so it optimizes any-angle length directly.
+    - Theta* runs A* twice, once forward and once backward, and keeps the shorter of the two paths found.
+  correct: 2

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.06-messages-and-custom-interfaces.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a207f70f6c75
+  question: Why must interfaces live in an `ament_cmake` package, and why keep them separate from the nodes?
+  options:
+    - "`ament_python` can't store `.msg` files in its share directory; separation makes builds faster."
+    - The rosidl generators are driven by CMake; a separate package lets every consumer depend only on the contract, versioned and deployed consistently.
+    - CMake packages are the only ones rosdep can install; separation hides the message fields from other nodes.
+    - Interfaces must be compiled to C++ first; separation lets Python nodes skip them.
+  correct: 1
+- source: c60e2e8f6f4e
+  question: What is the CDR size (with the 4-byte encapsulation header) of `uint8 mode`, `float64 speed_m_s`, `uint8 flags`, and after reordering as `float64`, `uint8`, `uint8`?
+  options:
+    - 14 bytes, then 14 bytes
+    - 21 bytes, then 16 bytes
+    - 24 bytes, then 16 bytes
+    - 24 bytes, then 24 bytes
+  correct: 2
+- source: 3ddaf19736da
+  question: The Pi has an old `BatteryHealth` without `raw_voltage_v`; the laptop publishes the new one. What does the Pi read for `percent`?
+  options:
+    - The correct percent, because fields are matched by name.
+    - Zero, because the missing field is filled with a default.
+    - "Nothing: the subscription fails with a type-mismatch error."
+    - The laptop's `raw_voltage_v` value (e.g. 12.37), because fields are read by position, with no error.
+  correct: 3
+- source: 1b809acf6e23
+  question: When is a custom message justified instead of `sensor_msgs/BatteryState`?
+  options:
+    - When the data has a meaning no standard message expresses, like `BatteryHealth`'s policy state.
+    - Whenever the field names in the standard message differ from the ones you prefer.
+    - Whenever the standard message has several fields that your node doesn't use.
+    - Whenever a custom layout would need fewer bytes on the wire than the standard one.
+  correct: 0
+- source: 143c125270ad
+  question: How does ROS 2 express "this field was not measured"?
+  options:
+    - With a `has_field()` method generated for every field.
+    - "By convention: NaN for floats, a separate flag field, or a documented sentinel constant — never zero."
+    - By leaving the field as zero, which means unset.
+    - By omitting the field from the serialized message.
+  correct: 1
+- source: 54dab4a4be33
+  question: "After renaming a field, `battery_health` fails with `AttributeError: ... no attribute 'voltage_v'` on the Pi but works on the laptop. What is the systematic fix?"
+  options:
+    - Add a compatibility alias for the old field name in the node code.
+    - Downgrade the laptop to the old message definition.
+    - Deploy the same revision to the Pi, rebuild the interfaces and dependents, re-source, restart, and compare type hashes.
+    - Clear the ROS daemon cache on the Pi with `ros2 daemon stop`.
+  correct: 2
+- source: 4fd2efcffe79
+  question: How many bytes does the constant `BatteryHealth.STATE_LOW` add to each published message?
+  options:
+    - "Zero: constants are class attributes in code and never serialized."
+    - One byte, the size of its `uint8` type.
+    - Four bytes, since constants are aligned to 4.
+    - It depends on whether the field it describes is set.
+  correct: 0

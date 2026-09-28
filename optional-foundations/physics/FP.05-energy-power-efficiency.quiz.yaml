@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FP.05-energy-power-efficiency.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: eccdba113c2e
+  question: What is the difference between energy and power, using karmel's battery and the Pi as examples?
+  options:
+    - Energy is an amount (battery ≈ 37.8 Wh); power is a rate (Pi ≈ 4–5 W)
+    - Energy is a rate (battery ≈ 37.8 W); power is an amount (Pi ≈ 4–5 Wh)
+    - Both are amounts; the battery stores 37.8 Wh and the Pi stores 4–5 Wh
+    - Energy is voltage times current; power is energy times time
+  correct: 0
+- source: d51ca6f16e80
+  question: How much mechanical power does karmel need to climb a 5° ramp at a constant 0.3 m/s, and roughly how much electrical power do the motors draw?
+  options:
+    - ≈ 0.50 W mechanical; ≈ 0.55 W electrical
+    - ≈ 0.50 W mechanical; ≈ 3.1 W electrical
+    - ≈ 5.6 W mechanical; ≈ 3.1 W electrical
+    - ≈ 0.41 W mechanical; ≈ 0.50 W electrical
+  correct: 1
+- source: 015bdd709c35
+  question: A 20 W load runs for 90 minutes. How much energy is that in Wh and J?
+  options:
+    - 30 Wh = 1,800 J
+    - 1,800 Wh = 108,000 J
+    - 13.3 Wh = 48,000 J
+    - 30 Wh = 108,000 J
+  correct: 3
+- source: 3acf28e9ff03
+  question: You replace the Pi 5 with a Pico-only design, saving 4 W. Roughly how does stage-1 runtime change?
+  options:
+    - From about 6.1 h to about 8 h
+    - From about 6.1 h to about 12 h
+    - From about 6.1 h to about 40 h
+    - It barely changes, because the motors dominate
+  correct: 2
+- source: 961f452ad886
+  question: Why does energy per metre decrease as karmel drives faster, within its speed range?
+  options:
+    - Motors are more efficient at high speed, so drive power falls as speed rises
+    - Rolling resistance falls with speed, so less force is needed per metre
+    - The battery delivers more energy at high current, so each metre costs less
+    - Fixed electronics power is spread over more metres; drive power grows only modestly
+  correct: 3
+- source: 798861c5d420
+  question: Runtime is 2 h instead of the budgeted 6 h, and logs show 15 W average with the robot mostly parked. Two likely causes?
+  options:
+    - The battery is too small, and the wheels have too much rolling resistance
+    - The Pi is busy or has extra loads, and motors/servos draw power while parked
+    - The robot drives too slowly, and the fuse is rated too low
+    - The charger is faulty, and the encoders draw too much current
+  correct: 1
+- source: e5da7d697128
+  question: Why does a stalled drive matter more for the fuse and wiring than for runtime?
+  options:
+    - A stall draws little current but lasts long, so it slowly heats the fuse and wiring
+    - A stall reverses current into the battery, which trips the fuse but restores energy
+    - A brief stall draws a huge peak (≈ 7.2 A) but little energy; peaks set fuse and wire sizing
+    - A stall draws no power at all, so it only matters for the mechanical parts
+  correct: 2

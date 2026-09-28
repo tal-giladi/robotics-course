@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 08.03-wheel-speed-estimation.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 4a66ee96f99f
+  question: Karmel's encoder has 2464 ticks per wheel revolution. What is the speed resolution with a 20 ms window?
+  options:
+    - 0.0127 rad/s
+    - 0.254 rad/s
+    - 1.27 rad/s
+    - 0.127 rad/s
+  correct: 3
+- source: e54e22e84615
+  question: An EMA with α = 0.25 runs at 100 Hz. What is its time constant, and roughly how much lag does the whole estimate (difference + EMA) have?
+  options:
+    - 30 ms; about 35 ms in total
+    - 40 ms; about 40 ms in total
+    - 2.5 ms; about 7.5 ms in total
+    - 30 ms; about 60 ms in total
+  correct: 0
+- source: 78d1ee4f6f95
+  question: Why does halving the sample period double the noise of a raw derivative?
+  options:
+    - Faster sampling picks up more electrical noise from the motor driver
+    - The same position error is divided by a period half as long
+    - Twice as many samples means twice as much noise is summed
+    - The encoder's edges jitter more when it is read more often
+  correct: 1
+- source: 2b4d92b41cc6
+  question: You replace the firmware's α = 0.5 with α = 0.1. What happens to noise, and to a speed controller that was well tuned before?
+  options:
+    - Noise rises and lag falls; the controller becomes sluggish
+    - Noise drops and lag is unchanged; the controller improves
+    - Noise drops but lag grows from 15 to 95 ms; it may overshoot
+    - Noise and lag both drop; the controller can use higher gains
+  correct: 2
+- source: 8d2b79943fbc
+  question: A Pi-side speed estimate shows +100% spikes about every 30 samples at steady speed, while the CPU is busy. Likely cause and fix?
+  options:
+    - Encoder noise from the camera's USB cable; add shielding
+    - Integer overflow in the tick counter; use 64-bit counts
+    - The EMA is unstable at this rate; lower α to 0.1
+    - Late telemetry with a fixed `dt`; use the robot's timestamps
+  correct: 3
+- source: 629ce0219e30
+  question: "A moving average of 8 samples and an EMA with the same lag: which removes more white noise?"
+  options:
+    - "About the same: both reduce it to about 0.35×"
+    - The moving average, by roughly a factor of two
+    - The EMA, by roughly a factor of two
+    - "Neither: both leave white noise unchanged"
+  correct: 0
+- source: fb073af1a95d
+  question: Why is the total rms of the raw 10 ms estimate lower than that of the 5-sample moving average, even though its noise is higher?
+  options:
+    - The moving average adds noise at its window edges
+    - The raw estimate is computed with more precise timestamps
+    - The average's extra lag costs more on a fast signal than it saves
+    - The test signal is constant, so noise dominates the rms
+  correct: 2

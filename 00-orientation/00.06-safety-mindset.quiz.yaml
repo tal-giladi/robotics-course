@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 00.06-safety-mindset.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5e75a2c4cc50
+  question: What does "fail-safe" mean for a robot, and which is an example on karmel?
+  options:
+    - The robot never fails because every component is duplicated; e.g. two Picos run in parallel.
+    - Any failure or lost communication leads to a safe state (usually motors stopped); e.g. the Pico stops the motors after 300 ms without a valid command.
+    - Failures are logged safely for later analysis; e.g. rosbag2 records every command.
+    - The robot finishes its current task before stopping after a failure; e.g. Nav2 completes the goal.
+  correct: 1
+- source: f90d06b1c6e7
+  question: Why is karmel's battery a bigger hazard than its motion?
+  options:
+    - The moving robot has about 136,000 J of kinetic energy, while the battery stores only about 0.2 J.
+    - The moving robot has about 0.2 J and the battery about 1,360 J, roughly 7,000 times more.
+    - The battery's 12.6 V can cause electric shock, while motion energy is negligible.
+    - The moving robot has about 0.2 J of kinetic energy, while the battery stores about 136,000 J that a short or runaway can release as heat and fire.
+  correct: 3
+- source: 2003077a57fc
+  question: You pause the program that sends `cmd_vel` at a debugger breakpoint while the robot moves. What does the robot do?
+  options:
+    - It stops at once, because the debugger pauses all ROS 2 traffic.
+    - It slowly decelerates, because the Pico ramps the speed down between commands.
+    - It keeps driving until the battery runs out, because the command is still valid.
+    - "It keeps the last command until a timeout below stops it: `base_node`'s 0.5 s timeout or the Pico's 300 ms watchdog."
+  correct: 3
+- source: 105b1f1f5362
+  question: Where should the fuse go, and roughly what rating does karmel need?
+  options:
+    - Inline on the battery positive, close to the battery and before the switch; about 10 A.
+    - On the ground wire at the motor driver; about 10 A.
+    - Inline on the battery positive, after the switch; about 30 A.
+    - Between the Pi and the Pico on the 5 V line; about 2 A.
+  correct: 0
+- source: a2cbce1f31df
+  question: Which order of the safe testing procedure is correct?
+  options:
+    - Simulation → floor in an open area → review the change → robot on a stand → raise limits.
+    - Robot on a stand → review the change → simulation → raise limits → floor in an open area.
+    - Review the change → simulation → robot on a stand at low speed → floor, slow, hand on the stop → raise limits one at a time.
+    - Review the change → floor, slow, hand on the stop → simulation → robot on a stand → raise limits.
+  correct: 2
+- source: 1f8c5d33631e
+  question: During a Nav2 test the robot nearly drove over the hallway stairs, although the map shows a wall there. Which assumption failed?
+  options:
+    - That the planner's costmap inflation radius was large enough for the robot's footprint.
+    - That the battery could supply enough current to brake on a slope.
+    - That the map and sensors see every hazard; a 2D LiDAR can't see a drop below its scan plane.
+    - That the LiDAR rotates fast enough to see a wall at walking speed.
+  correct: 2
+- source: b4ad1acb18b0
+  question: An LLM agent can call `publish_velocity(v, w)` with any values. Which set of changes makes it safe enough to test?
+  options:
+    - Allowlisted skills that validate parameters, limits and geofences enforced below the LLM, and human confirmation with independent hardware stops.
+    - A stricter system prompt telling the LLM to use low speeds and avoid obstacles.
+    - Running the LLM on the Pi instead of the cloud so its commands arrive with lower latency.
+    - Letting the LLM call `publish_velocity` only once per second so it cannot react too fast.
+  correct: 0

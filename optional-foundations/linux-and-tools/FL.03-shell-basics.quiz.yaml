@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.03-shell-basics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 92e8f1d35a9d
+  question: What's the difference between `>`, `>>` and `2>&1`?
+  options:
+    - "`>` replaces the file, `>>` appends, `2>&1` sends stderr to where stdout points"
+    - "`>` appends, `>>` replaces the file, `2>&1` sends stdout to where stderr points"
+    - "`>` replaces the file, `>>` appends, `2>&1` writes both streams to a file named `1`"
+    - "`>` writes stderr, `>>` writes stdout, `2>&1` swaps the two streams"
+  correct: 0
+- source: 2b03276f4b58
+  question: Why do ROS 2 tutorials say `source /opt/ros/jazzy/setup.bash` instead of `bash /opt/ros/jazzy/setup.bash`?
+  options:
+    - "`source` runs it faster by skipping the script's error checks"
+    - "`bash` cannot run `.bash` files that lack the executable bit"
+    - "`source` runs it in the current shell, so exported variables stay set"
+    - "`source` runs it as root, which ROS needs to write to `/opt`"
+  correct: 2
+- source: c453e24b17b9
+  question: "`grep -c FATAL run.log` prints `0`. What's `$?`, and why does it matter in a script with `set -e`?"
+  options:
+    - "`0`; the count printed successfully, so the script continues"
+    - "`1`; the script would stop there, so use `|| true` if no match is fine"
+    - "`1`; `set -e` ignores grep's exit code, so it does not matter"
+    - "`2`; grep reports an error for empty files, so the script stops"
+  correct: 1
+- source: 03c079b52a2c
+  question: You ran `ROS_DOMAIN_ID=5` (no export), then `ros2 topic list` shows domain 0 topics. Why?
+  options:
+    - The domain ID only takes effect after the ROS daemon restarts
+    - "`ros2` reads the domain ID from a config file, not the environment"
+    - Domain IDs above 4 are reserved, so ROS falls back to domain 0
+    - Unexported variables aren't copied to child processes; use `export`
+  correct: 3
+- source: a08f73c62e7d
+  question: "A teammate's `start_robot.sh` works for them but for you prints `cannot execute: required file not found`, though the file exists. What do you check first?"
+  options:
+    - "Line endings: `cat -A` showing `^M` means CRLF from a Windows checkout"
+    - "Permissions: `ls -l` showing no `x` bit means it needs `chmod +x`"
+    - "Disk space: `df -h` showing a full disk prevents execution"
+    - "Ownership: `ls -l` showing another owner means you need `sudo`"
+  correct: 0
+- source: 974a6a276a30
+  question: What do `echo $((7400 + 250 * 2))` and `echo '$((7400 + 250 * 2))'` print?
+  options:
+    - "`7900`, then `7900` again"
+    - "`15300`, then the literal text `$((7400 + 250 * 2))`"
+    - "`7900`, then the literal text `$((7400 + 250 * 2))`"
+    - The literal text, then `7900`
+  correct: 2
+- source: a1da5de4a45a
+  question: How do you see which `python3` will run, and all directories bash searches?
+  options:
+    - "`python3 --version`, and `ls /usr/bin`"
+    - "`type python3`, and `echo \"$PATH\" | tr ':' '\\n'`"
+    - "`find / -name python3`, and `echo $HOME`"
+    - "`which python3`, and `cat /etc/environment`"
+  correct: 1

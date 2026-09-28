@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.09-cnns-for-robot-vision.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c483c6e9d8b8
+  question: What does a torchvision ImageNet classifier expect of its input tensor?
+  options:
+    - BGR order, 256 × 256 (resize only), [0, 255] uint8 values without normalization, float32 (3, H, W)
+    - RGB order, any size, [0, 1] scaling only with no per-channel normalization, float32 (N, H, W, 3)
+    - BGR order, 224 × 224 (resize 256 + center crop), [-1, 1] scaling, float16 (N, 3, H, W)
+    - RGB order, 224 × 224 (resize 256 + center crop), [0, 1] then ImageNet mean/std normalization, float32 (N, 3, H, W)
+  correct: 3
+- source: 1a783e9b217e
+  question: Logits are $(3.0, 1.0, 1.0)$. What is the softmax, and what happens if you add 5 to all three?
+  options:
+    - $(0.600, 0.200, 0.200)$; unchanged, since softmax only encodes differences
+    - $(0.787, 0.107, 0.107)$; the top class approaches 1.0 as all logits grow
+    - $(0.787, 0.107, 0.107)$; all three move toward 0.333 as logits grow
+    - $(0.787, 0.107, 0.107)$; unchanged, since softmax only encodes differences
+  correct: 3
+- source: ae06200a839e
+  question: A pixel arrives as BGR (40, 120, 200) and you forget to convert. What normalized value does the red input get, and what should it get?
+  options:
+    - It gets 1.307 (from 200) but should get −1.433 (from 40)
+    - It gets −1.433 (from 40) but should get 1.307 (from 200)
+    - It gets −0.101 (from 120) but should get 1.307 (from 200)
+    - It gets −1.433 (from 40) but should get 0.160 (from 200)
+  correct: 1
+- source: 0f3254589d4a
+  question: ResNet-18 has 11.7 M parameters. How much RAM do its weights take in float32 and in int8?
+  options:
+    - About 11.7 MB and 2.9 MB
+    - About 93.6 MB and 46.8 MB
+    - About 46.8 MB and 11.7 MB
+    - About 46.8 MB and 23.4 MB
+  correct: 2
+- source: 84c7db210974
+  question: "Perception latency: median 60 ms, p90 190 ms. The controller runs at 10 Hz using the latest result. What will you see?"
+  options:
+    - Roughly every tenth cycle uses a stale result, causing occasional twitches or overshoot on moving targets
+    - Nothing noticeable, since the 60 ms median is well under the 100 ms control period
+    - The controller stalls entirely every tenth cycle, waiting for the next result before issuing a command
+    - A constant lag of 190 ms on every cycle, causing smooth but delayed tracking of moving targets
+  correct: 0
+- source: 1e721b651296
+  question: Why does a bottle 40 px tall in a 640×480 frame often go undetected by a classifier run on the whole frame?
+  options:
+    - Resize and crop shrink it to ~21 px, under one cell of the 7×7 feature map, so the rest of the image dominates
+    - ImageNet has no bottle class, so the classifier can only label the scene around the bottle
+    - Center cropping always removes the outer 30% of the frame, where the bottle usually sits
+    - Normalization clips small bright objects to zero, so thin objects vanish before the first layer
+  correct: 0
+- source: 8546e4a1fef7
+  question: When is a classifier (not a detector) the right tool on karmel?
+  options:
+    - When you need to locate several objects in a frame, e.g. all bottles on the kitchen counter
+    - When the object is small in the full frame, e.g. a bottle 40 px tall at the far end of the room
+    - When the crop is already known, e.g. the region between the gripper jaws, or refining a detector's box
+    - When you need the object's position in the map, e.g. finding the charging dock from far away
+  correct: 2

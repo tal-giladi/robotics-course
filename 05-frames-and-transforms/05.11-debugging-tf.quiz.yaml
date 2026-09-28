@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 05.11-debugging-tf.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e227f85f5031
+  question: You get `Lookup would require extrapolation into the future. Requested time …111.277 but the latest data is at time …111.259`. What's the cause and fix?
+  options:
+    - The TF buffer is too short; increase its cache time.
+    - You asked for a time 18 ms newer than the newest transform; use `Time()` for latest, or queue and retry briefly.
+    - A static transform expired; republish `/tf_static`.
+    - The clock jumped backwards; restart chrony.
+  correct: 1
+- source: ff0b0574f5b9
+  question: "What does `Average rate: 10000.0` with `Most recent transform: 0.0` mean in `view_frames` output?"
+  options:
+    - A static transform on `/tf_static`; the rate is a placeholder, not a measurement.
+    - A dynamic transform publishing at 10 kHz.
+    - A transform that hasn't been received yet.
+    - A transform with a broken timestamp that needs fixing.
+  correct: 0
+- source: 95bfb36b23be
+  question: A node publishes `odom → base_link` while `robot_state_publisher` publishes `base_footprint → base_link`. Which is a visible symptom?
+  options:
+    - RViz shows an error on every display.
+    - The robot model doubles in RViz.
+    - "Nothing: TF merges the two parents automatically."
+    - Everything below base_link shifts by the footprint offset (a detection's map z goes from 0.165 to 0.120).
+  correct: 3
+- source: 8c0c615c572c
+  question: "`tf2_monitor` reports `Frame: laser, … Average Delay: 55.9653`. Is the LiDAR transform 56 seconds late?"
+  options:
+    - "Yes: the LiDAR driver is lagging badly."
+    - "Yes: the Pi's clock is 56 s behind the laptop's."
+    - "No: `laser` is static, stamped once at start-up, so the \"delay\" is just the node's uptime."
+    - "No: the value is in milliseconds, so it's 56 ms."
+  correct: 2
+- source: df58153b77b2
+  question: A node with `use_sim_time:=true` runs on a real robot where nobody publishes `/clock`. What do you observe?
+  options:
+    - An error on every callback saying that no time source is available.
+    - "Nothing at all: ROS time stays at 0, so the node's timers never fire."
+    - The node falls back to wall time and logs a single warning at start-up.
+    - The node's timers fire as fast as possible, since no clock limits them.
+  correct: 1
+- source: dd0a4bd8d1ac
+  question: You fix a bad `base_frame` parameter and restart the offending node, but RViz and another node stay broken while a fresh copy works. Why?
+  options:
+    - Their TF buffers still hold the frozen re-parented edge; TF2 never reverts it, so restart them.
+    - The old parameter value is still cached by the ROS daemon, so restart the daemon.
+    - RViz saved the wrong frame in its config file, and the node reads that file too.
+    - The DDS discovery cache still lists the old node, so they talk to a ghost.
+  correct: 0
+- source: ef12b1d0d7e1
+  question: "`tf2_echo` works, `view_frames` shows one connected tree, delay is 4 ms — and the SLAM map still has doubled walls. Where do you look?"
+  options:
+    - At the TF buffer size in slam_toolbox.
+    - At the QoS of `/scan`.
+    - At the network latency between Pi and laptop.
+    - "At correctness: the LiDAR mount in the URDF and odometry calibration versus the real hardware."
+  correct: 3
+- source: e462da3e3f8b
+  question: The wheel-odometry controller and an EKF both want to publish `odom → base_footprint`. What do you do?
+  options:
+    - Let both publish, since TF2 averages transforms that arrive for the same edge.
+    - "Let the EKF own the edge and set `enable_odom_tf: false` on the controller."
+    - Publish the controller's edge to `odom` and the EKF's to `map` instead.
+    - Give them different publish rates so their messages never collide in time.
+  correct: 1

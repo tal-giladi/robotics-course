@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.08-depth-and-3d-vision.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 63fe6d854296
+  question: A stereo camera has $f = 600$ px and $B = 0.05$ m. What is the disparity at 1.5 m, and the depth error for 0.25 px disparity error?
+  options:
+    - 20 px; about 6 mm
+    - 45 px; about 19 mm
+    - 2 px; about 190 mm
+    - 20 px; about 19 mm
+  correct: 3
+- source: 999411c007ea
+  question: Why does doubling the distance quadruple the stereo depth error?
+  options:
+    - "$\\partial Z/\\partial d = -Z/(fB)$: disparity halves twice, once per camera, giving a factor of four"
+    - Matching noise doubles with distance and the baseline effectively halves, together a factor of four
+    - "$\\partial Z/\\partial d = -Z^2/(fB)$: disparity halves, so a fixed pixel error grows as $Z^2$"
+    - $Z = fB \cdot d$, so the error grows with $d^2$, and disparity doubles when distance doubles
+  correct: 2
+- source: edbeabd0f75d
+  question: Back-project pixel (100, 50) with depth 2.0 m using $f = 467.7$, $c = (320, 240)$.
+  options:
+    - $(-0.941, -0.812, 2.0)$ m
+    - $(0.941, 0.812, 2.0)$ m
+    - $(-0.470, -0.406, 2.0)$ m
+    - $(-0.812, -0.941, 2.0)$ m
+  correct: 0
+- source: b1cd53edec3a
+  question: A depth image arrives as `16UC1` with pixel value 1234. What is $Z$, and what does value 0 mean?
+  options:
+    - 1234 m; 0 means the point is exactly at the camera
+    - 1.234 m; 0 means no valid measurement and must be excluded
+    - 12.34 m; 0 means no valid measurement and must be excluded
+    - 1.234 m; 0 means the point is beyond the sensor's maximum range
+  correct: 1
+- source: 573680e86a96
+  question: The table fills 30% of the depth points. How many plane-RANSAC iterations for 99% confidence, and for 99.9%?
+  options:
+    - About 168 and 252
+    - About 49 and 74
+    - About 567 and 851
+    - About 168 and 1,680
+  correct: 0
+- source: 315069fc5494
+  question: Plane RANSAC with an 8 mm threshold on a table holding a 5 mm coaster and a 10 cm box. What does object segmentation report?
+  options:
+    - Both objects; any object above the table plane is segmented regardless of the threshold
+    - Only the box; the coaster's points fall within 8 mm of the plane and become table inliers
+    - Only the coaster; the box is too tall and is rejected as a second, separate plane
+    - Neither; the box's points pull the fitted plane up so both objects are counted as table
+  correct: 1
+- source: 602be2169a75
+  question: Why is the visible-points centroid of a box biased, and in which direction?
+  options:
+    - Only the back and bottom surfaces are seen, so the centroid shifts away from the camera and down
+    - Depth noise grows with distance, so the centroid shifts away from the camera along the ray
+    - Only the front and top surfaces are seen, so the centroid shifts toward the camera and up
+    - Edge pixels have invalid depth, so the centroid shifts toward the box's geometric center
+  correct: 2

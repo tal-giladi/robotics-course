@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FM.01-algebra-refresher.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 4a8f878fbdd7
+  question: Solve $v = \omega r$ for $r$. A wheel spins at 20 rad/s and its rim moves at 0.9 m/s. What is $r$?
+  options:
+    - $r = \omega v = 18$ m
+    - $r = \omega/v = 22.2$ m
+    - $r = v/\omega = 0.45$ m
+    - $r = v/\omega = 0.045$ m
+  correct: 3
+- source: 62d754368238
+  question: Which is the correct rearrangement of $d = \frac{v^2}{2a}$ for $a$? Check with units.
+  options:
+    - $a = \frac{v^2}{2d}$ (units m/s²)
+    - $a = 2dv^2$ (units m/s²)
+    - $a = \frac{2d}{v^2}$ (units m/s²)
+    - $a = \frac{v}{2d}$ (units m/s²)
+  correct: 0
+- source: 571f94884e81
+  question: A robot has $r = 0.05$ m and $L = 0.30$ m. Navigation commands $v = 0.2$ m/s and $\omega = 0$. What are $\omega_L$ and $\omega_R$?
+  options:
+    - Both are 0.01 rad/s
+    - Both are 4.0 rad/s
+    - $\omega_L = 3.4$, $\omega_R = 4.6$ rad/s
+    - Both are 0.67 rad/s
+  correct: 1
+- source: f56eec9b4dcf
+  question: You calibrate a motor with two runs at duty 0.40 and duty 0.40 (the same value twice, by accident). What does Cramer's rule do?
+  options:
+    - It returns the correct gain but an offset of zero, since both runs agree
+    - It averages the two runs and returns a slightly noisier but valid fit
+    - The determinant is 0, so it divides by zero; two identical inputs can't determine two unknowns
+    - It returns a negative gain because the determinant becomes negative
+  correct: 2
+- source: 3732ded0d1ca
+  question: A 3.5 Ah battery powers a robot that draws 0.7 A while idle and 2.1 A while driving. It drives half the time. Roughly how long does it last?
+  options:
+    - 1.67 h
+    - 5.0 h
+    - 2.5 h
+    - 1.25 h
+  correct: 2
+- source: 6e18fa5c7741
+  question: "`ticks = d * N / 2 * math.pi * r` returns 174.2 for $d = 1$. What is wrong?"
+  options:
+    - Integer division truncates `N / 2`; it should be `d * N / 2.0 * math.pi * r` (174.5 ticks)
+    - "Operator precedence: it computes $\\frac{dN}{2}\\pi r$; it should be `d * N / (2 * math.pi * r)` (8714.6 ticks)"
+    - "The radius should be a diameter: `d * N / 2 * math.pi * (2 * r)` (348.4 ticks)"
+    - "`math.pi` should be in degrees: `d * N / 2 * 180 * r` (9980 ticks)"
+  correct: 1

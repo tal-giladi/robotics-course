@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.03-trigonometry.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 72b4e5c09094
+  question: What are $\cos\theta$ and $\sin\theta$ geometrically?
+  options:
+    - The y and x coordinates of the point at angle $\theta$ on the unit circle
+    - The arc length and radius of the unit circle at angle $\theta$
+    - The x and y coordinates of the point at angle $\theta$ on the unit circle
+    - The slopes of the tangent and normal lines at angle $\theta$
+  correct: 2
+- source: c1191bab2fde
+  question: A robot moves at 0.4 m/s with heading −60°. What are $v_x$ and $v_y$?
+  options:
+    - $v_x = 0.2$, $v_y = -0.346$ m/s
+    - $v_x = -0.346$, $v_y = 0.2$ m/s
+    - $v_x = 0.346$, $v_y = -0.2$ m/s
+    - $v_x = 0.2$, $v_y = 0.346$ m/s
+  correct: 0
+- source: ece370769be9
+  question: Why does `atan(y/x)` return the same angle for $(3, 4)$ and $(-3, -4)$?
+  options:
+    - atan uses degrees internally and rounds both results to the same whole degree
+    - atan normalizes its input to the unit circle, which maps opposite points together
+    - atan returns angles in $[0°, 360°)$, and both points are equally far from the origin
+    - The division throws away the signs; both give $y/x = 4/3$, so atan returns only $(-90°, 90°)$
+  correct: 3
+- source: 469e270f7933
+  question: What does `math.atan2(0, -5)` return, and what does `math.atan2(-0.0, -5)` return?
+  options:
+    - $\pi$ and $\pi$ (signed zero is ignored)
+    - $\pi$ and $-\pi$ (both mean straight back)
+    - 0 and 0 (the y component is zero)
+    - $-\pi/2$ and $\pi/2$ (pointing sideways)
+  correct: 1
+- source: cd82f0cb42c7
+  question: A ToF sensor mounted 0.08 m high is tilted down so that its beam hits the floor 0.5 m ahead. What is the tilt angle?
+  options:
+    - 80.9°
+    - 9.21°
+    - 9.09°
+    - 0.16°
+  correct: 2
+- source: 7e670c6008fe
+  question: Your go-to-goal controller spins in circles when the goal is directly to the left, at $(0, 1)$. The code is `bearing = math.atan2(dx, dy)`. What is wrong?
+  options:
+    - atan2 returns degrees; the code must convert the bearing to radians first
+    - The arguments are swapped; `atan2(0, 1)` returns 0 instead of 90°, so use `atan2(dy, dx)`
+    - atan2 fails when dx is exactly 0; add a small epsilon to dx
+    - The bearing must be wrapped to $[0, 2\pi)$ before it is used
+  correct: 1
+- source: 27441f566a40
+  question: Two arm links of 0.2 m each. What is the elbow angle (between the links) when the wrist is 0.2 m from the shoulder?
+  options:
+    - 60°
+    - 90°
+    - 120°
+    - 30°
+  correct: 0

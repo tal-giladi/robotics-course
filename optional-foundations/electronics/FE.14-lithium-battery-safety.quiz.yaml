@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.14-lithium-battery-safety.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5922ac779caf
+  question: What is thermal runaway, and why can't you "switch it off"?
+  options:
+    - A self-heating chain reaction that needs no outside power, so unplugging doesn't stop it
+    - A charger fault that keeps pushing current, so only unplugging the charger stops it
+    - A short circuit in the wiring, so opening the fuse or switch stops it at once
+    - Overheating from high current draw, so it stops once the load is disconnected
+  correct: 0
+- source: 6cbd1a8b2b59
+  question: Describe the two phases of a Li-ion charge and when the charge ends.
+  options:
+    - CV at 4.20 V/cell first, then CC until the cells reach 4.35 V; then trickle charge
+    - CC to 3.7 V/cell, then CV at 3.7 V until current reaches zero; then trickle charge
+    - CC to 4.20 V/cell, then a timed trickle charge for one hour to top off
+    - CC to 4.20 V/cell, then CV at 4.20 V until current tapers to ~C/10–C/20; no trickle
+  correct: 3
+- source: 3453fad34dca
+  question: A 3S LiPo reads 12.60 V after charging with a non-balance charger. Why might that still be dangerous?
+  options:
+    - 12.60 V is above the 3S maximum of 12.0 V, so every cell is over-charged
+    - The total can be right with unbalanced cells (e.g. 4.10 + 4.10 + 4.40 V), over-charging one
+    - The non-balance charger adds a trickle current that keeps heating the cells
+    - The reading is only correct under load; at rest the pack is really at 13.2 V
+  correct: 1
+- source: c9b7cce7715f
+  question: Why should a cell that has been below 2.5 V not be recharged?
+  options:
+    - The cell's capacity drops to zero, so recharging only wastes energy
+    - The BMS permanently locks the cell, so the charger cannot reach it
+    - Dissolved copper re-deposits as dendrites that can cause an internal short later
+    - The electrolyte freezes below 2.5 V and blocks current flow
+  correct: 2
+- source: d81bfc836995
+  question: How long does a 3.5 Ah pack at 20 % take to charge with a 1.5 A CC/CV charger (CV tail 0.5 h)?
+  options:
+    - About 2.4 h
+    - About 1.4 h
+    - About 1.9 h
+    - About 2.8 h
+  correct: 2
+- source: ca39963f3d0f
+  question: You leave the robot in the car during a two-hour lunch in July, then want to charge it immediately at home. What do you do?
+  options:
+    - Charge it right away at a lower current so the heat does not build up further
+    - Charge it immediately, because charging cools the cells as they absorb energy
+    - Put it in the freezer for ten minutes to cool it quickly, then charge it
+    - Don't charge; cool it to room temperature, inspect and measure, then charge attended
+  correct: 3
+- source: 682312d4e478
+  question: A LiPo on the charger starts hissing and swelling. What do you do?
+  options:
+    - Pick it up with gloves and carry it outside quickly, then pour water on it
+    - Unplug at the wall if safe, leave it, get everyone out, call 102 if smoke
+    - Cover it with a wet towel on the bench and keep watching it closely
+    - Disconnect the balance lead to stop the charge, then puncture it to vent
+  correct: 1

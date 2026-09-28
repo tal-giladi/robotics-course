@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.04-raspberry-pi-setup.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d93acd5b6600
+  question: Why does karmel run Ubuntu Server 24.04 rather than Raspberry Pi OS?
+  options:
+    - Raspberry Pi OS doesn't support the Pi 5's PCIe port needed for the SSD.
+    - Raspberry Pi OS lacks SSH support, which the headless setup requires.
+    - Ubuntu Server boots faster and uses less RAM than Raspberry Pi OS Lite.
+    - ROS 2 Jazzy's Tier 1 platform is Ubuntu 24.04 with apt binaries; Raspberry Pi OS is Tier 3 and needs source builds or containers.
+  correct: 3
+- source: b1bd217c266e
+  question: What does cloud-init do on the first boot, and why doesn't editing `user-data` afterwards change anything?
+  options:
+    - It downloads updates from Canonical; it ignores `user-data` once the network is up.
+    - It flashes the bootloader EEPROM; `user-data` is only read by the Raspberry Pi Imager.
+    - It creates the user, SSH key, hostname and Wi-Fi config from `user-data`, then records the instance as provisioned and doesn't re-run.
+    - It mounts the boot partition read-only, so later edits to `user-data` are never saved.
+  correct: 2
+- source: c688a054cfb9
+  question: The Pi 5 runs from a 5 V buck regulator via a USB-C lead. What USB current limit does it apply by default, and how do you change it?
+  options:
+    - 1.6 A; set `PSU_MAX_CURRENT=3000` in `config.txt`.
+    - 3 A; nothing can change it without a USB-PD supply.
+    - 1.2 A; add `max_usb_current=1` to `cmdline.txt`.
+    - 600 mA; add `usb_max_current_enable=1` to `config.txt` (only if the regulator really delivers 5 A).
+  correct: 3
+- source: 4dee46f34bd0
+  question: A 1 m cable with 24 AWG conductors (0.084 Ω/m) carries 3 A from a 5.0 V supply. What voltage reaches the Pi, and what happens?
+  options:
+    - "About 4.92 V: the drop is negligible for a 1 m cable."
+    - "About 4.75 V, above the threshold: the Pi runs normally."
+    - "About 4.50 V, below the ≈ 4.63 V threshold: the Pi logs under-voltage, throttles and may reboot."
+    - "About 4.00 V: the Pi refuses to boot at all."
+  correct: 2
+- source: 310f2943f04c
+  question: What does `throttled=0x20000` mean?
+  options:
+    - Under-voltage is active right now and the Pi is throttling.
+    - ARM frequency capping has occurred since boot, but nothing is active now.
+    - The soft temperature limit is active right now.
+    - Under-voltage has occurred since boot and the Pi is still throttled.
+  correct: 1
+- source: 7502bbc91606
+  question: "`ping karmel.local` fails from the laptop, but `ssh tal@192.168.1.57` works. What do you check first?"
+  options:
+    - Whether `sshd` is listening on the Pi's mDNS interface.
+    - Whether the Pi's hostname in `/etc/hosts` matches `karmel`.
+    - Whether the laptop's DNS server resolves `.local` names.
+    - Whether `avahi-daemon` is installed and active on the Pi.
+  correct: 3
+- source: d21fd61aa1da
+  question: You run `sudo usermod -aG dialout $USER` and immediately run `groups` in the same SSH session. What do you see?
+  options:
+    - "`dialout` is listed, because `usermod` updates the running session."
+    - "`dialout` is listed, but only for commands run with `sudo`."
+    - An error, because `groups` needs `sudo` after `usermod`.
+    - "`dialout` is not listed yet, because a process's groups are fixed at login."
+  correct: 3

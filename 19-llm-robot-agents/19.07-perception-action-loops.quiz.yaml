@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 19.07-perception-action-loops.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: bf9c09436da6
+  question: '`pick` returns `SUCCEEDED`, `get_robot_state` says `holding: "bottle-1"`, and the camera sees the bottle still on the counter. Which is right, and what should the executive do?'
+  options:
+    - The gripper state; the camera is showing a stale frame, so continue to `place`
+    - Neither; look a second time before deciding, since detectors often miss
+    - "The camera; treat the step as failed and repair: re-detect, then pick again"
+    - The gripper state; ask the LLM to replan the whole task from scratch
+  correct: 2
+- source: f89b8366285b
+  question: Why does a failed call get `NOT_VERIFIED` with method `"result"` and no extra observation?
+  options:
+    - The failure already carries the diagnosis; verification is for claimed successes
+    - Observations are disabled after a failure to protect the camera
+    - The executive cannot call `detect_objects` while an error is pending
+    - Failed calls are never retried, so there is nothing left to verify
+  correct: 0
+- source: d4ce42bc06b0
+  question: You remove the `idempotent` term from `choose_repair` and run the default task. What changes?
+  options:
+    - Nothing; `place` is never retried because its verification always passes
+    - A failed `pick` is no longer retried, so the task fails earlier
+    - The robot places the bottle twice on the same table
+    - A falsely failed `place` is retried and returns `NOT_HOLDING_OBJECT`
+  correct: 3
+- source: 3c70fcbe2ee2
+  question: The open-loop run takes 35.5 s and the closed-loop run 43.9 s. Is verification 24% more expensive?
+  options:
+    - Yes; each verification look costs about 2.8 s of robot time
+    - No; verification cost 0.6 s, the rest was recovering a failed grasp
+    - Yes, but only because the closed-loop run drove slower
+    - No; the difference is network latency to the model
+  correct: 1
+- source: 641682f39d30
+  question: Which `navigate_to` postcondition can the state verifier not check, and what would check it?
+  options:
+    - That the robot arrived within its time budget; a wall-clock timer would
+    - That the base motors stopped; the firmware watchdog would
+    - That the path was collision-free; the costmap would
+    - Being really at the table when the map is wrong; perception would
+  correct: 3
+- source: 8aea4d91e535
+  question: Why does `verify_goal` exist when every step was already verified?
+  options:
+    - Step verification is skipped on success, so the goal check is the only real one
+    - Steps compose into the task only if the plan was right; it checks the user's goal
+    - It is needed only for logging, since the steps already guarantee the outcome
+    - It re-runs every step's verification in case the detector changed its mind
+  correct: 1
+- source: c0750cca25ee
+  question: "`SearchReplanner` returns `None` when the failed step is a `navigate_to`. Why is that right?"
+  options:
+    - A false arrival is a broken robot, not a wrong plan; stop and report
+    - Navigation failures are always transient, so the executive just retries
+    - The replanner cannot generate plans without a successful navigation first
+    - Returning `None` makes the LLM pick a different room to search
+  correct: 0
+- source: 9ab7aa5559a3
+  question: The verifier's false-alarm rate is 8% per step and a task has 7 steps. What share of good tasks trigger an unnecessary repair, and what fixes it?
+  options:
+    - About 8%; acceptable, no change needed
+    - About 56%; raise the pass threshold
+    - About 44%; a second look cuts it to about 4.4%
+    - About 44%; drop verification on every other step
+  correct: 2

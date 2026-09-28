@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FC.02-micropython-on-pico.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 80187a9803ef
+  question: What is the difference between `mpremote run x.py` and `mpremote cp x.py :main.py`?
+  options:
+    - "`run` executes from RAM once without storing it; `cp … :main.py` writes it to flash to run at every power-up"
+    - "`run` writes the file to flash and runs it; `cp … :main.py` only copies it without running it ever"
+    - "`run` compiles to bytecode first; `cp … :main.py` stores the source, which runs more slowly"
+    - Both store the file in flash; `run` also opens the REPL afterward for debugging
+  correct: 0
+- source: 4978a8755141
+  question: You press Ctrl-D at the REPL while the motor test is paused with a motor at 30 % PWM. What happens to the motor?
+  options:
+    - It keeps running at 30 %, since a soft reset leaves peripherals alone
+    - It brakes hard, since the soft reset drives both inputs high
+    - "It coasts: the soft reset de-initialises PWM, so the driver inputs go low"
+    - It jumps to 100 % until `main.py` runs again and resets the duty
+  correct: 2
+- source: 8f4d8f9df287
+  question: 'Which of these allocate on the heap in MicroPython: `count += 1`, `speed = ticks * 0.00255`, `buf[3] = 9` on a `bytearray`, `msg = "L%d" % count`?'
+  options:
+    - All four, since every assignment creates a new object
+    - "`speed = …` and the string formatting"
+    - "`count += 1` and the string formatting"
+    - Only the string formatting
+  correct: 1
+- source: 19a27127e837
+  question: A history of 500 wheel-speed floats in a list vs an `array('f')`. Approximate RAM for each on the Pico 2?
+  options:
+    - List about 2 kB; array about 10 kB
+    - List about 4 kB; array about 2 kB
+    - Both about 2 kB
+    - List about 10 kB; array about 2 kB
+  correct: 3
+- source: 7c52aeaaaeea
+  question: "`time.ticks_ms()` returned `1073741000` a moment ago and returns `200` now. How many ms passed?"
+  options:
+    - 1,024 ms, which `ticks_diff` computes because the counter wraps at 2³⁰
+    - 824 ms, which `ticks_diff` computes because the counter wraps at 2³⁰
+    - −1,073,740,800 ms, meaning the clock was reset
+    - 200 ms, since the counter restarted at boot
+  correct: 0
+- source: a19e6c0be04e
+  question: "`mpremote` can't enter the raw REPL, only on the Ubuntu Desktop laptop, a few seconds after plugging in. Likely cause?"
+  options:
+    - The USB cable is charge-only, so no data lines are connected
+    - Another process, typically ModemManager probing `ttyACM`, has the port open
+    - The Pico's firmware is corrupt and needs reflashing with a UF2 file
+    - The user isn't in the `plugdev` group, so the port is read-only
+  correct: 1
+- source: 15f93d48765a
+  question: "`main.py` enables `WDT(timeout=2000)`, and you run `mpremote cp config.py :`. What happens?"
+  options:
+    - The copy succeeds, since `mpremote` feeds the watchdog while it runs
+    - The copy fails immediately, since the watchdog locks the filesystem
+    - "`main.py` is interrupted, nothing feeds the watchdog, and the chip resets in ~2 s"
+    - The watchdog is paused automatically whenever the raw REPL is active
+  correct: 2

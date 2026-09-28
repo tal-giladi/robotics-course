@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.09-networking-basics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 642ad57c27e3
+  question: How many usable host addresses does a `/26` have, and what is the broadcast address of `192.168.1.70/26`?
+  options:
+    - 64 usable; broadcast `192.168.1.127`
+    - 62 usable; broadcast `192.168.1.255`
+    - 62 usable; broadcast `192.168.1.127`
+    - 62 usable; broadcast `192.168.1.63`
+  correct: 2
+- source: d5e5657779dd
+  question: The laptop is `192.168.1.23/24`, and the Pi got `192.168.0.57/24` on the guest SSID. Can they talk directly?
+  options:
+    - Yes, because both addresses are private `192.168.x.x` addresses on the same router
+    - Yes, but only over IPv6, since the guest network blocks IPv4 unicast
+    - No, because the Pi's address is outside the DHCP range, so it has no gateway
+    - No; they are different /24 networks and home routers isolate guest from main on purpose
+  correct: 3
+- source: 5327c901dd0c
+  question: "`ping karmel.local` works but `ssh karmel.local` says `Connection refused`. Which layer, and what is your next command on the Pi?"
+  options:
+    - Name resolution; run `resolvectl query karmel.local` on the Pi
+    - Service layer, nothing listening on 22; run `ss -tlnp | grep :22` and check `ssh.socket`
+    - Link layer, Wi-Fi drops SSH packets; run `iw dev wlan0 link` on the Pi
+    - Routing, the reply takes another path; run `ip route` and fix the default gateway
+  correct: 1
+- source: 7eb5c5f6ebc2
+  question: What are the DDS discovery multicast port and participant 0's user unicast port for `ROS_DOMAIN_ID=7`?
+  options:
+    - 9150 for discovery multicast, 9161 for user unicast
+    - 7407 for discovery multicast, 7418 for user unicast
+    - 9150 for discovery multicast, 9151 for user unicast
+    - 7400 for discovery multicast, 7411 for user unicast
+  correct: 0
+- source: 1167f392c59f
+  question: Why does `netplan try` matter more on a robot than on a desktop?
+  options:
+    - The robot's Wi-Fi driver needs a dry run before any new config can be applied to it
+    - It validates the YAML syntax and routes, a check that `apply` skips on headless systems
+    - It applies the config to Wi-Fi and Ethernet at the same time, which a mobile robot needs
+    - The robot is headless; `try` rolls back after 120 s unless confirmed, so you can't get locked out
+  correct: 3
+- source: c96fd6a5bb43
+  question: ROS 2 in WSL (NAT mode) can't see nodes on the Pi, but `ping` to the Pi's IP works. What is the most likely cause and a fix?
+  options:
+    - DDS discovery multicast doesn't pass the WSL NAT; use `networkingMode=mirrored` or `ROS_STATIC_PEERS`
+    - WSL uses a different `ROS_DOMAIN_ID` by default; set it to 0 on both machines
+    - Windows Firewall blocks ICMP replies for DDS; allow ping in the inbound rules
+    - WSL resolves `.local` names differently; add the Pi to `/etc/hosts` in WSL
+  correct: 0
+- source: cf5b613b4822
+  question: "Ping to the robot: `rtt min/avg/max/mdev = 2/8/140/25 ms`, 2 % loss. Is it good enough for 20 Hz teleop, and what protects the robot?"
+  options:
+    - Not usable at all, since 2 % loss means one command in fifty drives the robot blind
+    - Usable for gentle teleop, not tight remote control; the Pico's 300 ms watchdog stops motors if commands stop
+    - Fine for any teleop, since the 8 ms average is far below the 50 ms command period
+    - Usable, and DDS retransmits lost commands, so the Pico never sees a gap
+  correct: 1

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FP.03-friction-traction.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f7f044997a3c
+  question: What is the difference between static and kinetic friction, and which one does a rolling wheel use?
+  options:
+    - Static prevents sliding (up to $\mu_s N$), kinetic acts while sliding; rolling uses kinetic
+    - Static prevents sliding (up to $\mu_s N$), kinetic acts while sliding; rolling uses static
+    - Static acts on parked robots only, kinetic on any moving robot; rolling uses kinetic
+    - Static is always larger than $\mu_s N$, kinetic smaller; rolling uses both equally
+  correct: 1
+- source: def30e654542
+  question: A tyre starts sliding on a board tilted to 20°. What is $\mu_s$?
+  options:
+    - "0.364"
+    - "0.342"
+    - "0.940"
+    - "0.20"
+  correct: 0
+- source: 78b8de7f2dff
+  question: Why does karmel's maximum acceleration not depend on its mass?
+  options:
+    - Heavier robots have larger motors, which exactly compensate for the mass
+    - Acceleration is limited by the controller setting, not by physics
+    - Traction ∝ weight and needed force ∝ mass, so mass cancels; geometry and μ remain
+    - Mass only affects top speed, not the acceleration the wheels can deliver
+  correct: 2
+- source: 92921d0935a1
+  question: Karmel's motors can deliver about 33 N at the rims, but it only pushes a scale to about 758 g on tile. What limits it, and where does the extra torque go?
+  options:
+    - Motor current limit (≈ 7.4 N); the extra torque is never produced
+    - Scale stiffness (≈ 7.4 N); the extra torque compresses the scale
+    - Gearbox efficiency (≈ 23 %); the extra torque heats the gears
+    - Traction (≈ 7.4 N); the extra torque spins the wheels as slip and heat
+  correct: 3
+- source: 8dff28fc4f77
+  question: You mop the floor (μ 0.6 → 0.2) and keep the 1.0 m/s² acceleration limit. What happens?
+  options:
+    - $a_{max}$ stays the same, since friction does not affect acceleration limits
+    - $a_{max}$ drops to ≈ 0.33 m/s², so every start slips even on a clean floor
+    - $a_{max}$ rises, since a wet floor reduces rolling resistance
+    - "$a_{max}$ drops to ≈ 1.09 m/s²: starts barely work, and dusty patches slip and ruin odometry"
+  correct: 3
+- source: 07a4e3c2c645
+  question: The robot turns fine on the real floor, but in Gazebo it barely rotates in place and the wheels spin. What do you check first?
+  options:
+    - The wheel motor torque limit; raise it in the plugin
+    - The caster's friction coefficients; set its `mu` near 0
+    - The simulation step size; reduce it to 0.1 ms
+    - The robot's mass; increase it for more traction
+  correct: 1
+- source: 60d0cbb3d655
+  question: "Which gives more traction for accelerating forwards: moving the battery 3 cm towards the axle, or adding 300 g at the current CoM?"
+  options:
+    - Moving the battery towards the axle; extra mass at the CoM changes nothing
+    - Adding 300 g; more weight always means more traction and acceleration
+    - Both give the same increase in acceleration
+    - Neither; only a higher μ can increase traction
+  correct: 0

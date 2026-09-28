@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.08-ssh-remote-dev.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e54b04734c92
+  question: Which file on your laptop records the robot's identity, and which file on the robot records yours?
+  options:
+    - "Laptop: `~/.ssh/authorized_keys`; robot: `~/.ssh/known_hosts` of the target user"
+    - "Laptop: `~/.ssh/config`; robot: `/etc/ssh/sshd_config` of the target user"
+    - "Laptop: `~/.ssh/id_ed25519.pub`; robot: `~/.ssh/known_hosts` of the target user"
+    - "Laptop: `~/.ssh/known_hosts`; robot: `~/.ssh/authorized_keys` of the target user"
+  correct: 3
+- source: 1a50bb0963ef
+  question: You re-flashed the Pi's SD card and now get `REMOTE HOST IDENTIFICATION HAS CHANGED`. Why, and what do you run?
+  options:
+    - The fresh OS lost your public key; run `ssh-copy-id karmel.local` and reconnect
+    - The fresh OS made a new host key; run `ssh-keygen -R karmel.local`, reconnect and accept the new fingerprint
+    - Your laptop key expired; run `ssh-keygen -t ed25519` to make a new key and reconnect
+    - The router gave the Pi a new IP; run `ssh -o StrictHostKeyChecking=no karmel.local` from now on
+  correct: 1
+- source: 707635dca4cf
+  question: '`ssh` prints `Load key "…/id_ed25519": bad permissions`. What permissions are required and why?'
+  options:
+    - "`644`, so the SSH agent running as another user can read the key"
+    - "`700`, because the private key file must be executable to be loaded"
+    - "`600`, because a private key other users can read is not private, so SSH refuses it"
+    - "`755`, because SSH needs directory-style permissions to traverse the key file"
+  correct: 2
+- source: f2f42276c08b
+  question: What is the difference between `rsync -a src/ robot:ws/src/` and `rsync -a src robot:ws/src/`?
+  options:
+    - With the trailing slash the contents of `src` go into `ws/src/`; without it you get `ws/src/src/`
+    - With the trailing slash only changed files are sent; without it the whole directory is copied
+    - Without the trailing slash the contents go into `ws/src/`; with it you get `ws/src/src/`
+    - There is no difference; rsync normalizes trailing slashes on the source path
+  correct: 0
+- source: 4ee3069cb196
+  question: A 40 MB workspace, 3 changed files totaling 60 kB, Wi-Fi at 3.1 MB/s effective. Roughly how long do `scp -r` and `rsync` take?
+  options:
+    - "`scp -r` well under 1 s; `rsync` about 13 s because it checksums every file first"
+    - Both about 13 s, since both must read the whole 40 MB workspace over the link
+    - "`scp -r` about 1.3 s; `rsync` well under 1 s"
+    - "`scp -r` about 13 s because it sends everything; `rsync` well under 1 s"
+  correct: 3
+- source: 4a0e249387d3
+  question: Foxglove bridge on the robot listens on port 8765 on localhost only. How do you connect from the laptop without changing the robot?
+  options:
+    - "`ssh -N -R 8765:localhost:8765 karmel`, then connect to `ws://karmel.local:8765`"
+    - "`ssh -N -L 8765:localhost:8765 karmel`, then connect to `ws://localhost:8765` on the laptop"
+    - "`ssh -N -D 8765 karmel`, then connect to `ws://karmel.local:8765` through the SOCKS proxy"
+    - "`ssh -N -L 8765:karmel.local:8765 localhost`, then connect to `ws://karmel.local:8765`"
+  correct: 1
+- source: 8624f8208a25
+  question: Why does `sync-to-robot.sh` use `ssh -o BatchMode=yes` for its reachability check?
+  options:
+    - It runs all queued commands in one connection, so the check is faster
+    - It disables host key checking, so a re-flashed robot does not break the script
+    - SSH never prompts, so it fails fast with an exit code instead of hanging on input
+    - It compresses the connection, so the check works on a weak Wi-Fi link
+  correct: 2

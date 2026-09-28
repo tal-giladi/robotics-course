@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.06-lens-distortion-calibration.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 20e92e21abae
+  question: What is the difference between barrel and pincushion distortion, and what sign does $k_1$ usually have for a wide-angle webcam?
+  options:
+    - "Barrel pushes points outward (lines bow inward), pincushion pulls them in; webcams: $k_1 > 0$"
+    - "Barrel pulls points toward the center (lines bow outward), pincushion pushes them out; webcams: $k_1 < 0$"
+    - "Barrel pulls points toward the center (lines bow outward), pincushion pushes them out; webcams: $k_1 > 0$"
+    - "Barrel affects only the image corners, pincushion only the center; webcams: $k_1 = 0$ after focusing"
+  correct: 1
+- source: 7f471e0b6a4a
+  question: Why does calibration need tilted views and views reaching the image corners?
+  options:
+    - Tilted views reduce motion blur on the board, and corner views give more corners per frame to average.
+    - Tilted views measure the square size, and corner views measure the principal point, which is always at a corner.
+    - Frontal views can't separate focal length from distance, and distortion is strongest at the corners, so high-order terms need them.
+    - Frontal views overfit the distortion model, and corner views are only needed for cameras wider than 120°.
+  correct: 2
+- source: 23022c57a0cd
+  question: "Calibration A: RMS 0.08 px from 4 frontal views. B: RMS 0.35 px from 25 varied views of a real webcam. Which do you trust?"
+  options:
+    - "A: a lower RMS always means more accurate parameters, and 4 views are enough for a simple webcam"
+    - "A: frontal views avoid perspective error, so their RMS is more meaningful than tilted views'"
+    - "Neither: any RMS above 0.1 px means the calibration failed, and below 0.1 px means it overfit"
+    - "B: RMS measures fit, not correctness; A's views don't constrain the parameters, and 0.35 px is normal for real corners"
+  correct: 3
+- source: 05b0bfc0186c
+  question: With $k_1 = -0.3$ (other terms 0) and $f = 470$, how far toward the center does the lens move a point at normalized radius 0.5?
+  options:
+    - About 70.5 px
+    - About 17.6 px
+    - About 35.3 px
+    - About 8.8 px
+  correct: 1
+- source: 96a0fc413073
+  question: You calibrated with square size 20 mm, but the real squares are 25 mm. Your tag distances in 13.07 use the correct tag size. Are they wrong?
+  options:
+    - "No: $K$ and distortion don't depend on square size; only calibration's own board poses are 20% too small"
+    - "Yes: $f$ is scaled by 20/25, so every tag distance comes out 20% too small"
+    - "Yes: $f$ is scaled by 25/20, so every tag distance comes out 25% too large"
+    - "No: but the distortion coefficients are wrong, so tags near the corners will be off by 20%"
+  correct: 0
+- source: 431e5fc11bfb
+  question: The ROS calibrator prints "Waiting for service camera/set_camera_info" and stops. What are two fixes?
+  options:
+    - Restart the camera driver with `use_sim_time:=true`, or run the calibrator with `sudo` to access the service
+    - Install `camera_info_manager` on the Pi, or rename the image topic to `camera/image_raw` in the driver
+    - Remap the service to the driver's real name, or pass `--no-service-check` and point `camera_info_url` at `ost.yaml`
+    - Lower the calibrator's `--size` to 7x5, or print a larger checkerboard so detection succeeds
+  correct: 2
+- source: cb07550fa5d5
+  question: You undistort frames with `alpha=1` and then compute ball distances with the calibrated $K$. What's wrong?
+  options:
+    - "Nothing: undistortion only moves pixels, so the original $K$ stays valid on the new image"
+    - "`alpha=1` crops the image to valid pixels only, so the ball may fall outside the frame"
+    - The undistorted image corresponds to `newK`, with different $f$ and principal point; use `newK`
+    - The distortion coefficients must be applied a second time, since undistortion is only approximate
+  correct: 2

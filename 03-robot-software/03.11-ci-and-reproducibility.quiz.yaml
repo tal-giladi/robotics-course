@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.11-ci-and-reproducibility.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 90f2764d79ba
+  question: Why is `python tools/build.py --check` a CI step, when the generated blocks are committed anyway?
+  options:
+    - It speeds up CI by caching the generated files between runs.
+    - Committed generated files drift silently when someone forgets to regenerate; anything generated into the repo must be verified by CI.
+    - It formats the Markdown so that diffs are smaller in code review.
+    - It uploads the generated files to the course website on every push.
+  correct: 1
+- source: cc9d8fbc8b29
+  question: You record 20 rosbags of 400 MB each during a week. Where do they go, and what goes in git?
+  options:
+    - All 8 GB go in git LFS, which is designed for exactly this.
+    - All 8 GB go in git directly, compressed with `git gc`.
+    - They go to object storage; git gets a manifest with id, SHA-256, size, location, date, robot and release.
+    - They are deleted after analysis; git gets a summary plot of each.
+  correct: 2
+- source: 7d93520ce5e8
+  question: Your CI is green. Which classes of failure can it not catch for a robot?
+  options:
+    - Syntax errors, unit test failures and import errors.
+    - Type errors, linting violations and missing dependencies.
+    - Config-sync drift, generated-file drift and broken links.
+    - Physical/electrical faults, real-time behaviour on the target, and environment drift on the robot itself.
+  correct: 3
+- source: 8ef1694bdfe4
+  question: You `git rm` a 300 MB file committed last month and push. What happens to the clone size?
+  options:
+    - "Nothing: the blob is still in history; only rewriting history (e.g. `git filter-repo`) removes it."
+    - It shrinks by 300 MB on the next clone, since the file is gone.
+    - It shrinks after the server runs its weekly garbage collection.
+    - It shrinks only for clones made with `--depth 1` before the removal.
+  correct: 0
+- source: c2b8357f5028
+  question: What does a release record give you that an annotated git tag does not?
+  options:
+    - A signed commit hash that can't be forged by anyone else.
+    - It pins the environment, the robot's config and calibration, and the test evidence, and one command verifies the tree against it.
+    - A changelog generated from the commit messages since the last tag.
+    - A backup of the repository in a second remote.
+  correct: 1
+- source: f76253f4a01d
+  question: Your teammate wants CI to run `ubuntu-latest` "so we stay current". How do you respond?
+  options:
+    - "Agree: `ubuntu-latest` always matches the robot after an `apt upgrade`."
+    - Agree, but pin the Python version inside the job.
+    - "Disagree: use a self-hosted Pi runner and drop the cloud CI."
+    - Pin `ubuntu-24.04` to test what you ship, and add a second, non-blocking job on the next release.
+  correct: 3
+- source: 612a4e13b764
+  question: A run's plot looks wrong and you want to know what produced it. What do you consult first?
+  options:
+    - "The run's metadata sidecar: run id, git commit, dirty flag, config hash, release label."
+    - The telemetry values themselves, row by row.
+    - The Pico firmware's source code.
+    - The CI logs from the day of the run.
+  correct: 0

@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in 13.13-embeddings-open-vocabulary.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 61f736f56747
+  question: Two unit vectors have dot product 0.2. What is their cosine similarity, and what does L2-normalizing embeddings buy you?
+  options:
+    - 0.04; all N × M similarities become one matrix product $V T^\top$
+    - 0.2; all N × M similarities become one matrix product $V T^\top$
+    - 0.2; the embeddings take half the memory, since norms need not be stored
+    - 0.98; similarities no longer depend on the embedding dimension
+  correct: 1
+- source: cc4d628143c6
+  question: CLIP cosines are 0.250 and 0.240 for two phrases. With $s = 100$, what are the softmax probabilities, and what should a robot conclude?
+  options:
+    - 0.731 and 0.269; almost nothing, since a 0.01 cosine gap is within noise
+    - 0.731 and 0.269; the first phrase is correct with high confidence
+    - 0.502 and 0.498; almost nothing, since the probabilities are nearly equal
+    - 0.999 and 0.001; the first phrase is correct with near certainty
+  correct: 0
+- source: 34143efd18e9
+  question: How do OWLv2 and Grounding DINO differ in where text and image meet, and when does it matter?
+  options:
+    - OWLv2 fuses text and image by cross-attention; Grounding DINO compares separate embeddings, better for long expressions
+    - Both fuse early, but OWLv2 uses convolution and Grounding DINO uses attention, which only matters for speed
+    - OWLv2 compares separate embeddings at the end; Grounding DINO fuses them by cross-attention, better for long expressions
+    - OWLv2 uses no text at all, only image prompts; Grounding DINO uses text, which matters for unknown objects
+  correct: 2
+- source: e86448cd7387
+  question: Why must you add distractor queries to an open-vocabulary detector call?
+  options:
+    - Distractors raise the detector's confidence for the target, e.g. "a cup" scores higher when "a mug" is also queried
+    - The detector needs at least four queries to calibrate its scores, e.g. add "a table", "a wall", "a floor"
+    - Distractors speed up inference by sharing features, e.g. queries for "a cup" and "a bowl" cost the same as one
+    - Without alternatives the most similar object gets the query's box; e.g. add "a vase", "a glass" when looking for "a cup"
+  correct: 3
+- source: c5af992024a4
+  question: Your product uses `openai/clip-vit-base-patch32` to recognise household objects. A reviewer flags it. What's the issue and fix?
+  options:
+    - The model card says deployed uses are out of scope (research release); switch to e.g. SigLIP 2 and validate it
+    - The weights are GPL-licensed, so the product must be open source; switch to a proprietary API instead
+    - The model is too large for the Pi; switch to a quantized CLIP ViT-L/14 which is smaller and more accurate
+    - The model only supports 80 COCO classes; switch to OWLv2, which supports any household object
+  correct: 0
+- source: 2805468bc463
+  question: You ask CLIP whether an image shows "a cup to the left of a bottle" vs "a cup to the right of a bottle". What happens, and what should you use?
+  options:
+    - A clear winner, since CLIP encodes spatial layout; use CLIP with a higher logit scale
+    - Near-equal cosines, near-random ranking; detect both objects and compare their box centres
+    - An error, since CLIP rejects phrases longer than five words; shorten the prompts to "cup left"
+    - Both score near zero; add more negative phrases until one of the two clearly wins
+  correct: 1

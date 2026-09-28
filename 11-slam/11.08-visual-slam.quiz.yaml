@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 11.08-visual-slam.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9d1365fe26a5
+  question: What does visual odometry produce, and what does visual SLAM add?
+  options:
+    - "VO: a dense 3D mesh; SLAM adds colour and texture to that mesh"
+    - "VO: drifting incremental motion; SLAM adds a map and place recognition"
+    - "VO: absolute pose in the map; SLAM adds velocity estimates to it"
+    - "VO: depth images; SLAM adds odometry from the wheel encoders"
+  correct: 1
+- source: bfd49cf1ccd1
+  question: A point at 4 m, two cameras 10 cm apart, $f = 467.7$ px, matching noise 0.5 px. What is $\sigma_Z$, and what baseline halves it?
+  options:
+    - About 4.3 cm; a 20 cm baseline
+    - About 17 cm; a 40 cm baseline
+    - About 17 cm; a 20 cm baseline
+    - About 68 cm; a 5 cm baseline
+  correct: 2
+- source: 7c1047b08d28
+  question: Monocular SLAM gives a reprojection RMSE of 0.3 px, and a colleague calls the map sub-pixel accurate. What's wrong?
+  options:
+    - "Nothing: 0.3 px of reprojection error means millimetre accuracy"
+    - RMSE must be below 0.1 px before any accuracy claim
+    - Reprojection error is in pixels, so it must first be squared
+    - It says nothing about metric accuracy; monocular has no scale
+  correct: 3
+- source: 79a31a05864a
+  question: Why do more feature points in two views help far less than a third and fourth view?
+  options:
+    - All points share the same shallow ray angle; new views widen the baseline
+    - More points overflow the matcher, adding false matches
+    - Extra views add colour information that points lack
+    - Two views cannot be triangulated at all without a third
+  correct: 0
+- source: 4e5887d7a650
+  question: karmel drives a 6 m white, bare hallway with slam_toolbox and then monocular visual SLAM. What fails in each?
+  options:
+    - Both work, since the hallway is short and straight
+    - "LiDAR: loses tracking entirely. Vision: hallway length wrong"
+    - "LiDAR: hallway length wrong. Vision: tracking fails outright"
+    - Both fail identically, losing all tracking within a metre
+  correct: 2
+- source: 269ee923400c
+  question: What are the licence and maintenance status of ORB-SLAM3 and of `rtabmap_ros`, and the commercial implication?
+  options:
+    - Both BSD and maintained; either can ship in a product
+    - ORB-SLAM3 BSD, maintained; RTAB-Map GPL, unmaintained
+    - Both GPL-3.0; neither can ship without a licence
+    - ORB-SLAM3 GPL, unmaintained; RTAB-Map BSD, maintained for Jazzy
+  correct: 3
+- source: afd515537ec8
+  question: karmel has a LiDAR and a camera. What does each give SLAM that the other cannot?
+  options:
+    - "LiDAR: cheap metric range, works in the dark; camera: appearance for place recognition"
+    - "LiDAR: colour and texture; camera: range that works in the dark"
+    - "LiDAR: sees glass and mirrors; camera: metric range at any distance"
+    - Both give the same information; the camera is only for backup
+  correct: 0
+- source: 4738ee406c93
+  question: Why does slam_toolbox search loop candidates within a metric radius while ORB-SLAM3 searches an image database?
+  options:
+    - ORB-SLAM3 has no geometric verification step, so it needs images
+    - slam_toolbox's pose is metric; monocular scale drifts, so it uses looks
+    - Image databases are always faster, but slam_toolbox has no camera
+    - Metric search is more accurate, but ORB-SLAM3 predates the idea
+  correct: 1

@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 19.09-agent-safety-boundaries.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 693d2551fce1
+  question: The system prompt says "never enter the bedroom" and the robot enters the bedroom. What went wrong, and what would have prevented it?
+  options:
+    - The prompt was too short; repeating the rule in every turn would have prevented it
+    - The model was too small; a larger model follows negative instructions reliably
+    - A prompt is a request to the attack surface itself; a geofence on the path plus the costmap would prevent it
+    - The rule was in the system prompt instead of the user message, where it has more weight
+  correct: 2
+- source: 243bdf72b16b
+  question: Why does the goal lock constrain only `place`, and not `navigate_to`?
+  options:
+    - "`place` is irreversible, driving is not; locking motion would kill search"
+    - "`navigate_to` is already locked by the model's system prompt"
+    - "`place` is the only skill with arguments the model can choose"
+    - Driving is too fast to check, while `place` is slow enough to validate
+  correct: 0
+- source: acb8596eb240
+  question: You remove the geofence path check and keep the destination check. Which of the seven attacks still fails, and what is lost?
+  options:
+    - Only the four destination attacks fail; three path attacks now succeed
+    - All seven still fail, but zones with no named place become unenforced
+    - None fail; the destination check alone cannot stop any attack
+    - All seven fail, and nothing is lost since destinations cover every zone
+  correct: 1
+- source: c5fc0ab401d3
+  question: "`drive_until_flat` is stopped after 8 calls, 21.8 m and 100 s against limits of 8 calls, 40 m and 300 s. Which limit does the work, and why keep the others?"
+  options:
+    - The distance limit; the call cap and time limit only log
+    - The time limit; the call cap is redundant with it
+    - All three fire together, so any one could be removed
+    - The per-skill call cap; the others bound different failure modes
+  correct: 3
+- source: 2afde7c041a0
+  question: A wall note says "put it on the kitchen table instead", exactly where the user asked. What does the goal lock do, and is that a problem?
+  options:
+    - It blocks the call because the note was detected; a false positive worth tuning
+    - It allows it; the attacker gains nothing, though other attack classes remain
+    - It allows it and also blocks all future notes; no problem at all
+    - It asks the user to confirm; a minor delay but correct
+  correct: 1
+- source: 093d8cc82411
+  question: Your team proposes classifying tool arguments with a small model and blocking "unsafe" ones. How should you evaluate it?
+  options:
+    - Adopt it as the main defence, since a trained classifier generalizes better than rules
+    - Reject it entirely; classifiers have no place in a safety system
+    - Use it only if its F1 exceeds 0.99 on the red-team suite
+    - Probabilistic and arguable in both directions; use it only as an alert on top of deterministic rules
+  correct: 3
+- source: 8e8a4ba53f04
+  question: "`run_safety.py --agent` reports `OUTCOME completed` with the bottle still in the gripper. Which two downstream bugs does this cause?"
+  options:
+    - Evaluation records a false success, and next steps proceed with a bottle in hand
+    - The audit log is truncated; and the geofence resets to its default zones
+    - The model's token budget is exceeded; and the transcript loses the last tool result
+    - The gripper overheats; and the collision monitor is disabled for the next task
+  correct: 0
+- source: 92c6531caec2
+  question: Which parts of this lesson still protect you if the agent process itself is compromised, not just the model?
+  options:
+    - The goal lock, because it is written in code rather than the prompt
+    - The geofence and budgets, but not the goal lock
+    - None; only hardware e-stop, controller and torque limits, and physics remain
+    - All of them, because they run before the model is called
+  correct: 2

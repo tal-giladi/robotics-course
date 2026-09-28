@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.04-timing-and-concurrency.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d00544048605
+  question: A loop body takes 4 ms. You want 40 Hz. With `time.sleep(0.025)` after the body, what rate do you get, before any oversleep?
+  options:
+    - 40 Hz
+    - About 43.5 Hz
+    - About 34.5 Hz
+    - About 25 Hz
+  correct: 2
+- source: 03beb02297ea
+  question: Your 50 Hz grid loop falls 70 ms behind because of a log flush. How many ticks should it skip, and why not run them all immediately?
+  options:
+    - Skip 3 and run this one; back-to-back ticks would compute several commands from the same sensor data and upset integrators.
+    - Skip none; run all 3 missed ticks at once to catch up and keep the average rate.
+    - Skip 4; the loop must re-align to a 100 ms boundary.
+    - Skip 1; only the most recent missed deadline matters.
+  correct: 0
+- source: be2ed7a8d251
+  question: Which clock should timestamp telemetry samples used to compute wheel speed?
+  options:
+    - "`time.time()` on the Pi at arrival, because it's synchronised by chrony."
+    - "`time.monotonic()` on the Pi at arrival, because it never jumps."
+    - The laptop's clock, because it's the reference for logging.
+    - The Pico's `ms` field, taken where the ticks were counted, so both differences describe the same interval.
+  correct: 3
+- source: a59c3c20a249
+  question: You add a thread running a pure-Python A* planner next to your 50 Hz control loop on a 4-core Pi. What happens, and what's the fix?
+  options:
+    - "Nothing: the planner runs on a spare core."
+    - The planner holds the GIL, so the loop waits and loses ticks though 3 cores idle; run the planner in a separate process.
+    - The loop runs faster because the planner warms the CPU cache.
+    - The loop crashes with a deadlock; use a lock around the planner.
+  correct: 1
+- source: 64090fb2e517
+  question: An asyncio teleop server sends commands every 50 ms; another task saves a camera JPEG on request. The robot stutters when someone takes a picture. Why?
+  options:
+    - Saving the JPEG synchronously blocks the event loop; use `await asyncio.to_thread(save_jpeg, frame)` or a separate process.
+    - The camera draws current that browns out the motors.
+    - asyncio tasks run at different priorities, and the save task wins.
+    - The JPEG is sent over the same serial link as the commands.
+  correct: 0
+- source: fca244f6064f
+  question: Why is Python acceptable for karmel's 50 Hz loops on the Pi but not for its encoder counting?
+  options:
+    - Python's integer type overflows at encoder counts above 65,535, so long drives lose their position.
+    - The encoders need 5 V logic levels that the Pi's 3.3 V GPIO pins can't read reliably.
+    - Each of ~8,000 edges/s needs handling within ~100 µs, which Python on Linux can't guarantee; the Pi loop only needs the cumulative count every 20 ms.
+    - The encoder decoding library only exists in C++, and Python bindings would add too much overhead.
+  correct: 2
+- source: 26be467864fc
+  question: "Loop stats: mean 20.01 ms, std 0.4 ms, p99 error 1.1 ms, max error 180 ms over 10 minutes. Is this healthy for a loop with a 300 ms watchdog?"
+  options:
+    - "Yes: the mean and p99 are excellent, so the max doesn't matter."
+    - "No: the std of 0.4 ms is too high for motor control."
+    - "No: the watchdog must have tripped during the 180 ms stall."
+    - Typical behavior is excellent, but one 180 ms stall (9 cm at 0.5 m/s) must be explained, e.g. GC, log rotation or SD writes.
+  correct: 3

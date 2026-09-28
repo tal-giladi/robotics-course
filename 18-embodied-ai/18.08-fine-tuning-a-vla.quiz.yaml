@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 18.08-fine-tuning-a-vla.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 7382f07b369e
+  question: What does SmolVLA train by default when you fine-tune it in LeRobot, and why does that matter for VRAM?
+  options:
+    - All parameters with LoRA adapters; adapters halve the activation memory
+    - Only the vision encoder; the action expert is frozen to keep peak VRAM near 4 GB
+    - The action expert (and state projection) with the VLM frozen; no gradients or optimizer state for it, ≈10–16 GB
+    - All parameters in full precision; VRAM stays low because SmolVLA has only 45M parameters
+  correct: 2
+- source: 0d5268c3408e
+  question: A100 at $2.50/h does 89 samples/s; an L4 at $0.80/h does 15 samples/s. Which is cheaper for 500,000 samples?
+  options:
+    - "The L4: about $2.5 vs $3.9 for the A100"
+    - "The A100: about $3.9 vs about $7.4 for the L4"
+    - "The L4: about $7.4 vs $14 for the A100"
+    - They cost the same, about $3.9, but the A100 is 6× faster
+  correct: 1
+- source: 5977408a1601
+  question: Two 640×480 RGB cameras, uncompressed, over a 25 Mbit/s uplink, plus 100 ms inference and network. At 30 Hz with 50-action chunks, what are the upload time and minimum threshold?
+  options:
+    - ≈0.07 s upload; threshold ≥ 0.1
+    - ≈0.59 s upload; threshold ≥ 0.59
+    - ≈4.7 s upload; threshold must exceed 1.0
+    - ≈0.59 s upload; threshold ≥ 0.42
+  correct: 3
+- source: 4fc3785d577c
+  question: Latency is 2 s and the chunk is 50 actions at 30 Hz. What does the arm do in async mode?
+  options:
+    - "Holds still: the chunk covers 1.67 s, so every action is stale on arrival and discarded"
+    - Executes each chunk late but completely, lagging 2 s behind the scene
+    - "Moves in jerks: executes 0.33 s of each chunk, then pauses 1.67 s"
+    - Works normally, because async mode hides any latency shorter than the episode
+  correct: 0
+- source: 703a4c18223c
+  question: Your 3-task policy moves the correct object in 6 of 15 trials. What is the most likely cause, and how do you check it?
+  options:
+    - Too few training steps; check whether the loss curve has flattened
+    - It ignores the instruction (40% ≈ 33% chance); check objects per episode and task strings
+    - The gripper calibration is off; check the follower's `--robot.id` matches calibration
+    - The camera is too far away; check whether the objects are visible at 640×480
+  correct: 1
+- source: 2ae4d5a51933
+  question: Why is a higher `chunk_size_threshold` not free?
+  options:
+    - It sends observations more often, multiplying server load, while freshness gains flatten
+    - It makes each chunk longer, so the arm runs open loop for more time
+    - It forces the server to use more denoising steps per chunk, raising latency
+    - It lowers the control rate, since the robot waits for each chunk to fill
+  correct: 0
+- source: 872895d0698c
+  question: 'Why does the skill contract use `"enum": ["bottle", "cup", "box"]` instead of a free-text object name?'
+  options:
+    - Enums are shorter, so the LLM spends fewer tokens per tool call
+    - Free text cannot be sent over the async inference protocol
+    - The policy only knows its training strings; an enum maps to them and rejects the rest
+    - The VLM tokenizer cannot handle words outside a fixed vocabulary of three objects
+  correct: 2

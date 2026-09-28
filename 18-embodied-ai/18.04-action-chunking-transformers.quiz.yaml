@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 18.04-action-chunking-transformers.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 98c1b2f0459a
+  question: An episode is 12 s at 30 Hz. How many policy calls does ACT make with `chunk_size=100, n_action_steps=100`, and with temporal ensembling?
+  options:
+    - 4 calls open-loop; 360 calls with ensembling
+    - 3 calls open-loop; 100 calls with ensembling
+    - 360 calls open-loop; 4 calls with ensembling
+    - 4 calls open-loop; 36 calls with ensembling
+  correct: 0
+- source: 13fa50938053
+  question: With temporal-ensembling weights $w_i = e^{-m i}$ and $m = 0.01$, which prediction gets the largest weight, and by how much over the newest of 100?
+  options:
+    - The newest; about 2.7× the oldest
+    - The oldest; about 1.01× the newest
+    - The newest; about 1.01× the oldest
+    - The oldest; about 2.7× the newest
+  correct: 3
+- source: 7224e49fceef
+  question: Why does ACT's CVAE use its encoder only during training, and what replaces $z$ at run time?
+  options:
+    - The encoder is too slow for real time; $z$ is sampled randomly from $\mathcal{N}(0, I)$ each step
+    - The encoder needs the true future action chunk; at run time $z$ is set to zero, the prior mean
+    - The encoder overfits to camera images; at run time $z$ is taken from the last training batch
+    - The encoder is only needed for the KL loss; at run time $z$ comes from the current joint state
+  correct: 1
+- source: b6e60a88aa4b
+  question: What did the ACT paper's ablations show for chunking, temporal ensembling and the CVAE?
+  options:
+    - Chunking had little effect; ensembling gave +30%; CVAE mattered only on scripted data
+    - Chunking 44% at $k=1$ vs 1% at $k=100$; ensembling +33%; CVAE 2% with vs 35.3% without
+    - Chunking 1% at $k=1$ vs 44% at $k=100$; ensembling +3.3%; CVAE on human data 35.3% vs 2% without
+    - Chunking 1% vs 44%; ensembling −3.3%; CVAE had no measurable effect on human data
+  correct: 2
+- source: 8ee8e097b34c
+  question: SO-101 policy with LeRobot defaults. A person slides the bottle 10 cm right just after a chunk starts. Roughly how long until the arm can respond?
+  options:
+    - About 33 ms, the next control step, even without ensembling
+    - About 10 ms, the time of one decoder forward pass
+    - Up to about 33 s, until the episode is reset
+    - Up to ~3.3 s (100 steps at 30 Hz); with ensembling, the next step
+  correct: 3
+- source: a2d184b7106c
+  question: Independent predictions each have σ = 6 mm. With $k = 10$, $m = 0.1$ ($N_\text{eff} = 9.25$), what is the σ of the ensembled action?
+  options:
+    - About 0.65 mm
+    - About 1.97 mm
+    - About 6 mm
+    - About 3.0 mm
+  correct: 1
+- source: dcdd1590ce2d
+  question: Why does ACT's decoder use $k$ learned query vectors rather than generating actions one at a time?
+  options:
+    - "It makes the whole chunk in one parallel pass (DETR-style): fast and no autoregressive error build-up"
+    - Each query attends to a different camera, so the number of queries equals the number of cameras
+    - The queries store the demonstrations' styles, replacing the need for a CVAE latent
+    - One-at-a-time generation cannot represent joint angles, only end-effector positions
+  correct: 0

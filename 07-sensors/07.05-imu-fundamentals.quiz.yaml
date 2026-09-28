@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.05-imu-fundamentals.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 197828c3c08c
+  question: An accelerometer lies flat on a table. What does it read, and what would it read in free fall?
+  options:
+    - $(0, 0, 0)$ on the table; $(0, 0, -9.81)$ m/s² in free fall
+    - $(0, 0, -9.81)$ on the table; $(0, 0, -19.6)$ m/s² in free fall
+    - $(0, 0, +9.81)$ on the table; $(0, 0, +9.81)$ m/s² in free fall
+    - $(0, 0, +9.81)$ m/s² on the table; $(0, 0, 0)$ in free fall
+  correct: 3
+- source: 759a7fa9ab75
+  question: Your gyro's bias is 0.52 °/s. Roughly how wrong is the raw integrated heading after 10 s, 60 s and 5 minutes?
+  options:
+    - 0.52°, 3.1° and 15.6°
+    - 5.2°, 31° and 156°
+    - 52°, 312° and 1560°
+    - 1.6°, 4.0° and 8.8°
+  correct: 1
+- source: 7628322644dd
+  question: Why must "still" be detected from the gyro's spread rather than its magnitude?
+  options:
+    - A still gyro reads its bias, which can exceed any threshold; the spread is ~0
+    - The magnitude is always zero when still, so it carries no information
+    - The spread is cheaper to compute than a magnitude on the microcontroller
+    - The magnitude includes gravity, which must first be subtracted out
+  correct: 0
+- source: db6f435c84ce
+  question: The magnetometer circle looks good with motors off, but driving the heading is 25° wrong. Why, and what do you do?
+  options:
+    - The calibration circle was too small; repeat it with a bigger rotation
+    - Soft-iron in the floor; recalibrate at every location the robot visits
+    - Motor currents change the field; move the IMU or use another heading source
+    - The gyro bias leaks into the heading; subtract it before the atan2
+  correct: 2
+- source: ba7454e8acc6
+  question: The six-position test gives $+x$ up = 9.93 and $-x$ up = −9.69 m/s². What are bias, scale, and the tilt error from the bias?
+  options:
+    - Bias +0.24 m/s², scale 0.988; about 1.4° of pitch error
+    - Bias −0.12 m/s², scale 1.012; about 0.70° of pitch error
+    - Bias +0.12 m/s², scale 1.0003; about 0.70° of pitch error
+    - Bias +0.12 m/s², scale 1.0003; about 7.0° of pitch error
+  correct: 2
+- source: 3f19dedb2b8b
+  question: Heading is stable when still but drifts 5° per metre when driving straight, always the same way. Bias, or something else?
+  options:
+    - "Bias: it only shows up while moving because the gyro warms up when driving"
+    - "Not bias, since it scales with distance: vibration, scale error, or misalignment"
+    - "Bias: a constant offset always has the same sign, which matches the symptom"
+    - "Not bias: it is magnetic interference, which only appears while driving"
+  correct: 1
+- source: 2365982ed3d1
+  question: Why is the gyro good for a 90° turn and bad for holding heading over ten minutes?
+  options:
+    - Over a second bias adds under 1°; over ten minutes it adds hundreds of degrees
+    - The gyro saturates on long runs and needs time to reset its internal counter
+    - The gyro only measures fast rotations, so slow heading changes are invisible
+    - Temperature drift is large at first and settles later, so short turns suffer less
+  correct: 0
+- source: fe3dbb9e6b30
+  question: You buy an ICM-20948 because the BNO055 is out of stock. What extra work does that create, and what do you gain?
+  options:
+    - No extra work, as it fuses on-chip; you gain a higher sample rate only
+    - You must write firmware for its fusion core; you gain an absolute heading
+    - You must add a magnetometer; you gain lower noise on the accelerometer
+    - You publish raw IMU and run your own filter; you gain a tunable filter
+  correct: 3

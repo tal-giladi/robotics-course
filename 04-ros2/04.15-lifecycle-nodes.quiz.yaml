@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.15-lifecycle-nodes.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c07dc5194a20
+  question: Which transition leads into each of `inactive`, `active` and `finalized`?
+  options:
+    - "`inactive` via `activate`; `active` via `configure`; `finalized` via `cleanup`."
+    - "`inactive` via `configure` (or `deactivate`); `active` via `activate`; `finalized` via `shutdown`."
+    - "`inactive` via `cleanup`; `active` via `configure`; `finalized` via `deactivate`."
+    - "`inactive` via `shutdown`; `active` via `activate`; `finalized` via `cleanup`."
+  correct: 1
+- source: 26d8564c5d80
+  question: In Jazzy's rclpy, what happens when `on_configure` returns `FAILURE`, and when it raises an exception?
+  options:
+    - Both move the node to `finalized` and log the exception.
+    - "`FAILURE` goes to `errorprocessing`; an exception goes straight back to `unconfigured`."
+    - "`FAILURE` returns to `unconfigured`; an exception is treated as `ERROR`, runs `on_error`, and by default also ends in `unconfigured`, unlogged."
+    - Both leave the node in `inactive` so it can retry `activate`.
+  correct: 2
+- source: 1340febd90ca
+  question: A lifecycle node is `active`, its subscription callback runs, but its output topic shows nothing. What's the most likely bug?
+  options:
+    - "`on_activate` doesn't call `super().on_activate(state)`, so the lifecycle publisher was never activated."
+    - The publisher uses BEST_EFFORT QoS, which lifecycle nodes can't send.
+    - The node is still `inactive`, and `ros2 lifecycle get` shows a cached state.
+    - The subscription and publisher share one callback group.
+  correct: 0
+- source: 6776028c9224
+  question: "At 0.3 m/s: `bond_timeout` 4.0 s, driver `cmd_vel_timeout` 0.5 s, Pico watchdog 300 ms. If the controller server freezes, which layer stops the robot, after how far?"
+  options:
+    - The Pico watchdog, after about 0.09 m.
+    - The bond, after about 1.2 m.
+    - The Pico watchdog, after about 0.15 m.
+    - The driver timeout, after about 0.15 m.
+  correct: 3
+- source: 3befcfde1ebc
+  question: Why does Nav2's lifecycle manager configure all nodes before activating any?
+  options:
+    - Activation is only possible once, so it must be batched.
+    - So every server validates config and allocates resources before any acts; if one fails, nothing has moved yet.
+    - Configuring is slow, so it's done in parallel while activation is serial.
+    - DDS discovery needs all nodes configured before topics appear.
+  correct: 1
+- source: 10b21dead79c
+  question: From `active`, you change `filter_alpha` with `ros2 param set`, then `deactivate` and `activate`. Does the new value take effect?
+  options:
+    - "Yes: `activate` re-reads all parameters."
+    - "Yes: parameters apply immediately in any state."
+    - "No: parameters are read only in `on_configure`; you need `deactivate` → `cleanup` → `configure` → `activate`."
+    - "No: lifecycle nodes can't change parameters at all."
+  correct: 2
+- source: 50d9ded7ff9d
+  question: Compare `inactive` with a Kubernetes pod whose readiness probe fails. Which is a correct difference?
+  options:
+    - A lifecycle node only becomes active when a transition is commanded, while a pod becomes ready by itself when its probe passes.
+    - A pod keeps serving traffic while not ready, while an inactive node drops it.
+    - An inactive node's process is stopped, while the pod's process is running.
+    - A pod is restarted automatically, while an inactive node is finalized.
+  correct: 0

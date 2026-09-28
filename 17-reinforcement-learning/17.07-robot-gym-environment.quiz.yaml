@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 17.07-robot-gym-environment.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 52ea6091bbeb
+  question: Why does the observation use $(\cos e, \sin e)$ rather than $e$?
+  options:
+    - $e$ is measured in degrees, which networks cannot process; $(\cos, \sin)$ converts it to radians
+    - $(\cos, \sin)$ doubles the input size, which gives the network more capacity for heading
+    - $e$ wraps at $\pm\pi$, so near-identical headings sit at opposite ends; $(\cos, \sin)$ is continuous in $[-1, 1]$
+    - $e$ is noisy near zero, and $(\cos, \sin)$ acts as a low-pass filter on the heading signal
+  correct: 2
+- source: 95d116c1deb0
+  question: The robot hits a wall at step 130 of a 200-step episode. What are `terminated` and `truncated`, and what happens to the next state's value?
+  options:
+    - "`terminated=True`, `truncated=False`; the bootstrap is masked, so the target is just the reward"
+    - "`terminated=False`, `truncated=True`; the target still bootstraps with $\\gamma V(s')$"
+    - "`terminated=True`, `truncated=True`; the target bootstraps with $\\gamma V(s')$ at half weight"
+    - "`terminated=False`, `truncated=False`; the episode continues from the wall position"
+  correct: 0
+- source: dee5d74bd450
+  question: What return does a policy that stands still for the whole episode get, and why is it useful to know?
+  options:
+    - 0, since standing still earns no reward; it shows the reward has no hidden per-step bias
+    - −20 (−0.1 × 200); it is the maximum penalty, used to normalize all returns
+    - +10, from the goal bonus; it shows the task is solved without moving at all
+    - −10 (−0.05 × 200); it is the floor any learned behaviour must beat and a reference for hacking
+  correct: 3
+- source: 784e227941cd
+  question: You change the control step from 0.1 s to 0.5 s and keep everything else. What happens?
+  options:
+    - Training gets 5× faster with no downside, since fewer decisions mean an easier learning problem
+    - The robot becomes more precise, since longer actions average out motor noise near the goal
+    - The robot overshoots the tolerance and oscillates near the goal, with 5× fewer decisions per metre
+    - Nothing changes, since the policy's output is a velocity and the step length does not matter
+  correct: 2
+- source: b9d300f5a664
+  question: Why are `is_success`, `collided` and `spin_rad` in `info` rather than in the observation?
+  options:
+    - They are only computed at episode end, so they are not available at every observation step
+    - They measure the policy; given as inputs, a policy could exploit whatever the metric is used for
+    - Gymnasium limits observations to 16 values, so extra metrics must go in `info`
+    - They are integers, and Gymnasium observation spaces only accept floating-point values
+  correct: 1
+- source: 4257b151e22b
+  question: The learned policy takes 38.8 steps and the hand-written one 48.4, both at 100% success. Does that justify deploying the learned one?
+  options:
+    - "Not on its own: it adds opacity and new failure modes; learning earns its place where the baseline is bad"
+    - "Yes: a 20% speed-up at equal success is a clear win, with no downside for deployment"
+    - "Yes: learned policies generalize better than hand-written ones to unseen environments"
+    - "No: learned policies are always slower on real hardware, so the 20% gain would vanish"
+  correct: 0
+- source: a84f1b7e5a83
+  question: Your environment uses `np.random.default_rng(0)` inside `reset()`. What breaks?
+  options:
+    - Seeding makes training non-reproducible, since each reset draws a new global seed
+    - The random generator is too slow, so resets dominate the training time
+    - Only evaluation breaks, since training environments ignore the seed passed to `reset()`
+    - Every episode is identical, and all 8 parallel envs produce the same data; use `self.np_random`
+  correct: 3
+- source: 6bf0dd6000e7
+  question: Why do 8 parallel environments help PPO but not SAC?
+  options:
+    - PPO uses a replay buffer that parallel envs fill faster; SAC discards data after each update
+    - PPO's bottleneck is collecting on-policy rollouts; SAC's is the gradient step per environment step
+    - SAC requires a GPU per environment, while PPO shares one GPU across all environments
+    - PPO's policy is deterministic, so parallel envs give independent data; SAC's is not
+  correct: 1

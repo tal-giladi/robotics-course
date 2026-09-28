@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 12.01-the-navigation-problem.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 835e5c8ba6c7
+  question: Which split correctly describes what the global planner knows that the local planner doesn't, and vice versa?
+  options:
+    - "Global: latest sensor data, current velocity, dynamics. Local: whole map, topology, route distance to goal."
+    - "Global: whole map and the robot's dynamics. Local: topology, route distance to goal and odometry drift."
+    - "Global: whole map, topology, route distance to goal. Local: latest sensor data, current velocity, acceleration limits."
+    - "Global: route distance and moving obstacles. Local: whole map, door topology and the robot's current velocity."
+  correct: 2
+- source: 06c381aeae73
+  question: karmel's controller runs at 20 Hz and cruises at 0.25 m/s. How far does it move per control cycle, and how far if the controller ran at 2 Hz?
+  options:
+    - 1.25 cm at 20 Hz; 12.5 cm at 2 Hz
+    - 12.5 cm at 20 Hz; 1.25 cm at 2 Hz
+    - 5 cm at 20 Hz; 50 cm at 2 Hz
+    - 1.25 cm at 20 Hz; 125 cm at 2 Hz
+  correct: 0
+- source: d6ecc49aff3a
+  question: What is the difference between a goal, a waypoint and a path?
+  options:
+    - "Goal: the planner's dense pose sequence. Waypoints: one target pose with tolerance. Path: an ordered list of goals."
+    - "Goal: one target pose with tolerance. Waypoints: an ordered list of goals. Path: the planner's dense pose sequence to the current goal."
+    - "Goal: an ordered list of poses. Waypoints: the planner's dense output. Path: the final target pose with tolerance."
+    - "Goal: one target pose with tolerance. Waypoints: the planner's dense output. Path: an ordered list of mission goals."
+  correct: 1
+- source: 7e9e1d9401e6
+  question: A purely reactive robot must reach a point directly behind a U-shaped sofa (open side facing away from the robot). What happens?
+  options:
+    - It follows the sofa's edge around the outside and reaches the goal, only more slowly than a global planner.
+    - It refuses to move at all, because the goal lies inside an obstacle's inflated region on its sensor map.
+    - It reaches the goal directly, because reactive control always descends toward the goal without dead ends.
+    - It drives into the U and stops or oscillates in a local minimum; a global planner would route around the sofa.
+  correct: 3
+- source: b4d5d69566d2
+  question: Why is `NavigateToPose` an action rather than a service?
+  options:
+    - Actions run at a higher priority than services, so navigation commands reach the controller with less latency.
+    - Services cannot carry pose messages, so goal poses must be sent through an action interface instead.
+    - Actions are one-way messages with no result, which suits goals that the robot may never actually reach.
+    - It runs for seconds to minutes, gives progress feedback, can be cancelled or preempted, and ends with a result.
+  correct: 3
+- source: 51cc91f4c47a
+  question: In RViz the global path goes around a box, but the robot hits the box. Where do you look first?
+  options:
+    - "The global side: rebuild the static map with the box in it and re-tune the global planner's inflation radius."
+    - "The localization side: AMCL must be misplacing the robot, so increase its particle count and re-run it."
+    - "The local side: is the box in the local costmap, does the controller use it, is the footprint right, is the controller starved?"
+    - "The behavior tree: the recovery branch must be driving the robot forward, so remove recoveries from the tree."
+  correct: 2
+- source: dabfcfb35e6a
+  question: At 0.5 m/s with 0.8 m/s² deceleration and 0.25 s total latency, what is the minimum look-ahead needed to stop before an obstacle?
+  options:
+    - About 0.16 m, the braking distance alone, since latency does not add distance
+    - About 0.28 m (0.125 m during latency + 0.156 m braking), plus a safety margin
+    - About 0.44 m (0.125 m during latency + 0.31 m braking), plus a safety margin
+    - About 0.13 m, the distance covered during latency, since braking is near-instant
+  correct: 1

@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 02.06-noise-grounding-emi.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 4937cf463a72
+  question: Why does a shared ground wire matter far more for its inductance than for its resistance?
+  options:
+    - Its resistance drops about 1.97 V at 3 A, while its inductance only adds about 15 mV.
+    - Resistance drops only about 15 mV at 3 A, but 100 nH with 2.95 A in 150 ns gives about 1.97 V; a switching bridge is all rate of change.
+    - Inductance only matters at DC, and the robot runs mostly at steady current.
+    - Resistance rises with temperature, while inductance stays constant and predictable.
+  correct: 1
+- source: 47703431fc00
+  question: A 100 nF ceramic sits at the driver's pins and a 470 µF electrolytic 40 mm away. Who supplies a 25 µs, 2.95 A load step?
+  options:
+    - The electrolytic supplies all of it; the ceramic only filters RF noise.
+    - The ceramic supplies all of it, since it is closer; the electrolytic is only for low-frequency ripple.
+    - The ceramic supplies the first fraction of a microsecond, then the electrolytic takes over; neither substitutes for the other.
+    - Both share the step equally for its whole duration.
+  correct: 2
+- source: 2aba5543a428
+  question: A 20 cm untwisted signal pair runs 5 mm from a motor wire with a 2 A step in 150 ns. What is the induced voltage, compared with $V_{IL}$ = 0.8 V?
+  options:
+    - About 0.037 V, negligible next to $V_{IL}$.
+    - About 3.7 V, far above $V_{IL}$.
+    - About 0.051 V, well within the margin.
+    - About 0.37 V, 46% of $V_{IL}$ and more than the 0.30 V low noise margin.
+  correct: 3
+- source: a9bb4e3c0cd6
+  question: You solder 100 nF across each motor's terminals to reduce brush noise. What happens to the driver's temperature?
+  options:
+    - "It rises: the bridge charges each capacitor every PWM cycle, dissipating about 318 mW per motor, over 20 °C more."
+    - It drops, because the capacitor absorbs the switching spikes.
+    - It is unchanged, because capacitors dissipate no power.
+    - It rises by about 1 °C, since the capacitor adds only about 3 mW.
+  correct: 0
+- source: c8e805490498
+  question: "`noise_probe.py` shows identical stats for `off` and `run50`, but outliers and I²C errors during `reverse`. What kind of coupling is it, and what do you change first?"
+  options:
+    - Resistive shared-impedance coupling; add an RC filter on the I²C lines first.
+    - $di/dt$-driven (magnetic or ground bounce); give the Pico its own ground return to the star and twist the motor pairs.
+    - Thermal drift in the sensors; add a heatsink to the motor driver first.
+    - Software timing; lower the I²C clock speed first.
+  correct: 1
+- source: 700ab965b850
+  question: Why does twisting a pair help more than moving it 25 mm away from the aggressor?
+  options:
+    - Twisting shrinks the loop area and alternates orientation so induced voltages cancel (0.370 → 0.051 V); distance helps only logarithmically.
+    - Twisting increases the wire's resistance, which damps the induced current.
+    - Twisting shields the pair electrically like a coaxial cable.
+    - Moving the pair away increases its capacitance, which makes noise worse.
+  correct: 0
+- source: 6b68419931ec
+  question: A 10 kΩ + 10 nF filter on the encoder channels makes odometry worse at high speed but better at low speed. Why?
+  options:
+    - The filter adds DC offset that shifts the thresholds at high speed.
+    - The filter's resistor limits the encoder's supply current at high speed.
+    - The filter introduces a phase shift between channels only at low speed.
+    - τ = 100 µs is 84% of the 119 µs edge spacing at top speed, so real edges are missed; use 1 kΩ + 10 nF.
+  correct: 3
+- source: d3ed263745a0
+  question: The robot works perfectly on a bench supply and glitches on battery. What changed electrically?
+  options:
+    - The battery's voltage is lower than the bench supply's, so the logic levels drop below $V_{IH}$ under load.
+    - The battery produces AC ripple from its internal chemistry that the bench supply filters out.
+    - The bench supply's capacitance and short single-point ground absorbed switching currents; battery wiring is longer and near the motor wires.
+    - The battery's BMS injects switching noise into the rail whenever it balances the cells.
+  correct: 2

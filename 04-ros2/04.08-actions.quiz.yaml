@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.08-actions.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c154b70cf67d
+  question: What does an action named `/drive_distance` consist of underneath?
+  options:
+    - "One service and one topic: `_action/call` and `_action/stream`."
+    - A dedicated action transport separate from topics and services.
+    - Two services and three topics for goal, feedback and result.
+    - Three services (send_goal, cancel_goal, get_result) and two topics (feedback, status).
+  correct: 3
+- source: 77b243362f8a
+  question: A 2.0 m goal at 0.4 m/s with a 10 Hz loop is cancelled after 2.0 s, with a correctly multi-threaded server. What does the client print?
+  options:
+    - "`SUCCEEDED, 2.00 m in 5.0 s`"
+    - "`CANCELED, 0.80 m in 2.0 s` (maybe 0.84 m), after about 20 feedback lines"
+    - "`CANCELED, 0.40 m in 1.0 s`, after 10 feedback lines"
+    - "`ABORTED, 0.00 m`, with no feedback"
+  correct: 1
+- source: 508114dd564a
+  question: Why must `drive_distance_server` use a MultiThreadedExecutor with a reentrant callback group, and what obligation does that create?
+  options:
+    - The execute callback occupies a thread for seconds, so cancel and battery callbacks need other threads; shared state then needs a lock.
+    - Actions require at least four threads by specification; no new obligation arises.
+    - It makes the goal execute faster; the obligation is to set a higher CPU priority.
+    - It lets several goals run on one robot; the obligation is to merge their velocities.
+  correct: 0
+- source: 149ee38d6e13
+  question: Which callback should reject a goal whose speed exceeds 0.5 m/s?
+  options:
+    - "`execute_callback`, which then sets the status to ABORTED."
+    - "`cancel_callback`, which cancels it right after acceptance."
+    - "`goal_callback`: the client sees `accepted == False` immediately and no goal exists."
+    - The feedback publisher, which reports the error to the client.
+  correct: 2
+- source: 40a887cc68b8
+  question: At 0.5 m/s with 1.0 m/s² deceleration, a 20 Hz loop and 50 ms cancel latency, how far does karmel move after the cancel?
+  options:
+    - 0.125 m
+    - 0.150 m
+    - 0.175 m
+    - 0.250 m
+  correct: 2
+- source: 50abe7f38116
+  question: The server logs `Cancel requested`, but the goal still ends SUCCEEDED 3 s later. What is the most likely bug?
+  options:
+    - The client sent the cancel to the wrong action name.
+    - The execute loop never checks `goal_handle.is_cancel_requested`, so it never calls `canceled()`.
+    - The cancel callback returned REJECT instead of ACCEPT.
+    - The status topic uses BEST_EFFORT and lost the CANCELED message.
+  correct: 1
+- source: d65737e39f03
+  question: The operator's laptop running the action client crashes mid-goal. What does the robot do, and what would make that safe?
+  options:
+    - It keeps executing to completion; add a client heartbeat the server monitors, and keep the `cmd_vel` watchdog and e-stop.
+    - It stops at once, because DDS notifies the server of the lost client.
+    - It pauses the goal until the client reconnects, then resumes.
+    - It aborts after the action's default 10 s timeout.
+  correct: 0

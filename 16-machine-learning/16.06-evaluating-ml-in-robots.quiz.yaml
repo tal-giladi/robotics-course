@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 16.06-evaluating-ml-in-robots.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f558dce89fa3
+  question: A detector with AP50 0.71 gives 0% task success; one changed line gives 89%. What was the line, and what does it say about offline metrics?
+  options:
+    - The score threshold from 0.9 to 0.5; offline AP overstates precision at high thresholds
+    - The image colour order from RGB to BGR; offline AP was computed on correctly ordered images
+    - TF lookup at capture time instead of now (46° error); offline AP can't see integration or latency
+    - The input resolution from 640 to 320; offline AP was measured at the wrong resolution
+  correct: 2
+- source: 837a63c09127
+  question: Why does a 2-of-3 confirmation rule help an 8 Hz detector and cripple a 0.6 Hz one?
+  options:
+    - The slow detector has more false positives, which the rule rejects, leaving too few true detections
+    - "It is a requirement in time: ~0.4 s at 8 Hz, but ~5 s at 0.6 Hz, longer than the object stays in view"
+    - The fast detector's scores are calibrated, while the slow one's are not, so its votes disagree
+    - At 0.6 Hz consecutive frames are independent, which makes a 2-of-3 vote statistically invalid
+  correct: 1
+- source: 1355ff517467
+  question: Your robot succeeds 18 times in 20 trials. Does it meet a "90% success" requirement?
+  options:
+    - "Undetermined: the 95% interval is ~[70%, 97%]; you need ~100+ trials, reported per condition"
+    - "Yes: 18/20 is exactly 90%, so the requirement is demonstrated"
+    - "No: the 95% interval's lower bound is below 90%, so the requirement is refuted"
+    - "Yes: with 20 trials the interval is ~[88%, 92%], which is close enough"
+  correct: 0
+- source: 7e3e86339dd0
+  question: Temperature scaling changes every score. Why does it not change AP50?
+  options:
+    - AP50 is computed on IoU only, so detection scores never enter its calculation at all
+    - Temperature scaling is applied after AP is computed, so AP always uses the raw scores
+    - It changes scores by a constant offset, which cancels in the precision and recall ratios
+    - It is monotone, so score order and the PR curve are unchanged; only the meaning of thresholds shifts
+  correct: 3
+- source: df64a6654ee0
+  question: The robot moves to a dim room the model never saw. What happens to detections per frame, the fraction of scores in 0.3–0.7, and PSI?
+  options:
+    - Count barely moves; the uncertain fraction nearly doubles and PSI jumps over tenfold
+    - Count halves; the uncertain fraction is unchanged and PSI stays under 0.1
+    - Count doubles; the uncertain fraction halves and PSI jumps over tenfold
+    - Count barely moves; the uncertain fraction and PSI also barely move
+  correct: 0
+- source: 17853068b6b0
+  question: You have two candidate configurations and one afternoon with the robot. How do you spend it?
+  options:
+    - Run 20 real episodes of each and ship whichever scores higher, since hardware is ground truth
+    - Pick in closed-loop simulation, then run 20–40 real episodes of the winner to catch what sim misses
+    - Run 200 real episodes of each, since that is needed to separate 80% from 90%
+    - Skip the robot and compare offline AP, since a single afternoon can't give significant results
+  correct: 1
+- source: 7c5eea9be8b2
+  question: What do you log from a deployed robot so that next month's model is better?
+  options:
+    - Only final task success per episode, since per-frame data is too large to store on the robot
+    - Only the model's weights and version, so the exact deployed model can be reproduced later
+    - Per-frame counts, scores, rejections, latency; per-episode outcomes and conditions; alarm frames; model and dataset ids
+    - All raw camera frames at full rate, since any subset may miss the examples you need
+  correct: 2

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.03-multimeter.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d7f5f47a72c9
+  question: Which jack does the red probe go in to measure the Pico's 3.3 V, and where do the probes touch?
+  options:
+    - VΩ jack; black on GND, red on 3V3, across the two points
+    - mA jack; black on GND, red on 3V3, across the two points
+    - VΩ jack; the meter inserted in series in the 3V3 wire
+    - 10 A jack; black on 3V3, red on GND, across the two points
+  correct: 0
+- source: 89a7c7132016
+  question: Why must a circuit be unpowered for resistance and continuity measurements?
+  options:
+    - Powered circuits have zero resistance, so the meter always reads a short
+    - The meter's battery would be recharged by the circuit and give a false reading
+    - The meter drives its own small current; circuit voltage corrupts the reading and can damage it
+    - Continuity mode only works on AC, and powered robot circuits are DC
+  correct: 2
+- source: 5eceb4508478
+  question: A meter in the 10 A range (shunt 0.01 Ω, leads 0.05 Ω) is placed across a 12.6 V pack with 0.1 Ω internal resistance. What current flows before the fuse blows?
+  options:
+    - About 10 A
+    - About 126 A
+    - About 210 A
+    - About 79 A
+  correct: 3
+- source: 882e30496c5f
+  question: You measure an LED's current in a 3.3 V circuit and get 3.6 mA; you calculated 3.9 mA. The meter is calibrated. Name the effect.
+  options:
+    - "Input loading: the meter's 10 MΩ input resistance adds in parallel"
+    - "Burden voltage: the meter's shunt drops some voltage and reduces the current"
+    - "Probe capacitance: the leads store charge and shift the reading"
+    - "Ground loop: the meter's ground differs from the circuit's ground"
+  correct: 1
+- source: 5a8d91fb133d
+  question: In Ω mode, the meter shows OL when you touch its lead from the VΩ jack to the inside of the mA jack. What does that mean?
+  options:
+    - The mA jack is working normally; OL means a closed circuit
+    - The meter's battery is flat and needs replacing
+    - The probe lead is shorted internally to COM
+    - The mA fuse is blown (or that jack is unfused on some models)
+  correct: 3
+- source: 519f3a312de4
+  question: Continuity beeps fine on the robot's power connector, but you suspect it is bad. What measurement next?
+  options:
+    - Resistance across the connector with the robot switched off
+    - Continuity again, but with the probes held for longer
+    - Voltage drop across the connector while the robot draws real current
+    - AC voltage on the connector with the robot idle
+  correct: 2
+- source: c05be0b7c011
+  question: Why probe a jumper wire on a Pi header rather than the pins themselves?
+  options:
+    - Pins are 2.54 mm apart; a slipping probe can short 5 V to a 3.3 V GPIO and kill the Pi
+    - Header pins are gold-plated, so probes give a falsely low reading on them
+    - Probing pins directly adds probe capacitance that resets the Pi
+    - The header pins are not connected until a jumper wire is plugged in
+  correct: 0

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 00.07-how-to-use-this-course.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: bd5aabc9136d
+  question: What's the difference between a hard prerequisite and an optional one, and where are they defined?
+  options:
+    - Hard (`requires`) lessons must be done before `next` unlocks a lesson; optional ones are foundations you may skip; both are in `curriculum/syllabus.yaml`.
+    - Hard (`requires`) lessons are graded exams; optional ones are ungraded readings; both are in `progress/progress.json`.
+    - Hard (`requires`) lessons are only recommended by `next`; optional ones are enforced; both are in `PROGRESS.md`.
+    - Hard (`requires`) lessons unlock the module; optional ones unlock the projects; both are in `course.py` itself.
+  correct: 0
+- source: 0dd8ff8f4b24
+  question: You read lesson 01.09 but didn't do the exercises. Which command do you run, and what effect does it have on later lessons?
+  options:
+    - "`python course.py done 01.09`; later lessons unlock with no warning."
+    - "`python course.py skip 01.09`; later lessons stay locked until you do the exercises."
+    - "`python course.py struggle 01.09`; `next` sends you to its optional foundations first."
+    - "`python course.py read 01.09`; later lessons unlock, but `next` warns they build on a lesson you only read."
+  correct: 3
+- source: c35b009608db
+  question: How do you try `course.py` commands without changing your real progress?
+  options:
+    - Run the commands with a `--dry-run` flag, which prints the changes without saving them.
+    - Set `COURSE_PROGRESS_FILE` and `COURSE_PROGRESS_MD` to paths in a temporary folder for that terminal session.
+    - Make `progress/progress.json` read-only, so `course.py` discards its writes.
+    - Run `git stash` before and `git stash pop` after the commands to restore your progress.
+  correct: 1
+- source: cb50e43a6c2c
+  question: You record `struggle 10.05 "…"` twice, and 10.05's optional foundations FM.15 and FM.16 are not done. What does `course.py` tell you?
+  options:
+    - It marks 10.05 as failed and locks all lessons that depend on it.
+    - It sends you back to the module's first lesson, 10.01, to review from the start.
+    - It notes a repeated struggle and says to do the first unfinished foundation (FM.15) before retrying 10.05.
+    - It says to do both FM.15 and FM.16 and then marks 10.05 as read automatically.
+  correct: 2
+- source: 9e297620835f
+  question: At 8 hours per week, roughly how long do the main path (238 h) and projects (138 h) take, without foundations or buffer?
+  options:
+    - 30 weeks
+    - 17 weeks
+    - 47 weeks
+    - 94 weeks
+  correct: 2
+- source: 17da51101cef
+  question: "`course.py next` keeps recommending 00.01 although you completed it yesterday. What are the two most likely causes?"
+  options:
+    - The syllabus changed overnight, and 00.01 was renumbered to a new lesson.
+    - The progress file is corrupted, and `course.py` resets to the first lesson on errors.
+    - You didn't do the exercises of 00.01, and you didn't run `course.py read` for it.
+    - "`COURSE_PROGRESS_FILE` points to a sandbox (or is now unset), or you're in a different clone with another `progress/` folder."
+  correct: 3
+- source: 5ec52b9acb36
+  question: Which of these is something the AI teacher must NOT do?
+  options:
+    - Mark lessons practiced without exercises, or have you run unread code on hardware.
+    - Read your progress before teaching and ask check questions.
+    - Verify version-sensitive instructions against current documentation.
+    - Restate safety rules before hardware steps and record progress with `course.py`.
+  correct: 0

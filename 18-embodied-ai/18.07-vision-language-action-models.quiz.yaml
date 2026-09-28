@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 18.07-vision-language-action-models.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 31d9b77e967b
+  question: Which four design parts distinguish the VLA models in this lesson?
+  options:
+    - Tokenizer, learning rate, dataset size and number of cameras
+    - Backbone, action head, action representation and deployment
+    - Robot embodiment, gripper type, control rate and license
+    - Pretraining corpus, context length, parameter count and benchmark
+  correct: 1
+- source: eeee95c75e09
+  question: An action dimension ranges over [−0.2, 0.2] rad and is binned into 256 bins. What is the bin width and the worst rounding error?
+  options:
+    - 0.78 mrad width; worst error 0.39 mrad
+    - 1.56 mrad width; worst error 1.56 mrad
+    - 3.12 mrad width; worst error 1.56 mrad
+    - 1.56 mrad width; worst error 0.78 mrad
+  correct: 3
+- source: 75e2a4934666
+  question: OpenVLA produces ≈42 tokens/s. How long would a 7-DoF, 20-step chunk take autoregressively, and what did OpenVLA-OFT change?
+  options:
+    - ≈3.3 s; OFT decodes all actions in parallel with a regression head
+    - ≈0.17 s; OFT added a diffusion head to improve multimodal grasps
+    - ≈3.3 s; OFT used a smaller VLM backbone so tokens come out 26× faster
+    - ≈33 s; OFT increased the number of bins to 1024 per dimension
+  correct: 0
+- source: 31d2d28630e4
+  question: Flow matching with $x_\tau = (1-\tau)\epsilon + \tau A$, $\epsilon = -10$ mm, $A = 20$ mm, $\tau = 0.25$. What are $x_\tau$ and the training target?
+  options:
+    - $x_\tau = 12.5$ mm; target velocity 10 mm
+    - $x_\tau = -2.5$ mm; target velocity 20 mm
+    - $x_\tau = -2.5$ mm; target velocity 30 mm
+    - $x_\tau = 2.5$ mm; target velocity 30 mm
+  correct: 2
+- source: e00998584b26
+  question: You cut SmolVLA's flow-matching steps from 10 to 1 on a task where demos grasp a mug by either its left or right side. What happens?
+  options:
+    - The gripper tends to aim between the two grasps, at the mug's middle, and fails or collides
+    - The policy picks one side at random each episode, just 10× faster
+    - The policy always picks the side that appeared most often in the demos
+    - Nothing changes; the number of steps only affects how smooth the trajectory is
+  correct: 0
+- source: 1a14336289da
+  question: Why does GR00T N1 use the 12th layer of its VLM and SmolVLA only the first 16 LLM layers?
+  options:
+    - Later layers are frozen during pretraining, so their features cannot be fine-tuned
+    - Middle-layer features are enough or better for control and cheaper; the last layers specialize in text
+    - Early layers hold the image tokens and later layers hold only the language tokens
+    - The full model does not fit on robot hardware, so layers are cut at the GPU memory limit
+  correct: 1
+- source: 93f6de69aba5
+  question: Which classification of the lesson's models is correct (home on one 24 GB GPU / API only / read about only)?
+  options:
+    - "Home: SmolVLA and GR00T N1.7; API: π0.5; read only: Gemini Robotics-ER 2"
+    - "Home: OpenVLA comfortably; API: Gemini Robotics VLA; read only: SmolVLA"
+    - "Home: π0.7 with LoRA; API: RT-2; read only: π0.5 and GR00T N1.7"
+    - "Home: SmolVLA (π0/π0.5 LoRA tightly); API: Gemini Robotics-ER 2; read only: RT-2, π0.7"
+  correct: 3

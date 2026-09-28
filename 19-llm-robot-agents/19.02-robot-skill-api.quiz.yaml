@@ -1,0 +1,75 @@
+# Multiple-choice version of the quiz in 19.02-robot-skill-api.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e9a0436f6d12
+  question: "`place` is declared `idempotent=False` while `pick` is `idempotent=True`. Both move the arm. Why the difference?"
+  options:
+    - "`place` is slower than `pick`, so repeating it wastes more robot time"
+    - A repeated `pick` sees it already holds the object; a repeated `place` acts on a changed world
+    - "`pick` has a timeout and `place` does not, so only `pick` can be safely retried"
+    - "`place` uses the base as well as the arm, and base motion is never idempotent"
+  correct: 1
+- source: d1e2a1c0439f
+  question: Both `pick` and `place` can return `OUT_OF_REACH`. Which one is marked retryable in the course's table?
+  options:
+    - "`pick`, because the object may drift into reach"
+    - "`place`, because surfaces are large"
+    - Neither; an unchanged retry fails the same way
+    - Both, because `OUT_OF_REACH` is in the `RETRYABLE` set
+  correct: 2
+- source: 1824ba6c8846
+  question: 'The model calls `navigate_to({"place": "kitchen", "timeout_s": 900})`. What happens, and how much robot time does it cost?'
+  options:
+    - It drives with the timeout clipped to 300 s; up to 300 s of robot time
+    - It drives with a 900 s timeout; up to 15 minutes of robot time
+    - It starts driving, then aborts at 300 s with `TIMEOUT`
+    - Rejected as `INVALID_ARGUMENTS` (900 s above max 300 s); zero robot time, zero motion
+  correct: 3
+- source: 892b9871d5b8
+  question: You add a seventh skill, `open_door(door)`, with a 25-turn budget. What are the extra input-token cost and the other cost?
+  options:
+    - ~4,000 tokens per task (~$0.02, near zero with caching); the real cost is evaluating a new branch in every plan
+    - ~160 tokens per task in total; the real cost is the extra latency of a larger tool block
+    - ~40,000 tokens per task (~$2); the real cost is the context window filling up
+    - ~950 tokens per task; the other cost is that the model forgets older skills
+  correct: 0
+- source: 3e39b395ff66
+  question: 'Without `"additionalProperties": false`, the model calls `navigate_to` with `{"place": "kitchen", "max_speed": 0.1}`. What happens, and why is it the worst outcome?'
+  options:
+    - It is rejected with an unknown-parameter error, wasting a turn
+    - It drives at 0.1 m/s as intended, but the log omits the speed
+    - It drives at the normal 0.3 m/s with `max_speed` silently dropped
+    - It crashes the gateway, because the extra key breaks schema validation
+  correct: 2
+- source: "7495583826e0"
+  question: Why is the allowlist checked before schema validation, and not the other way round?
+  options:
+    - Schema validation needs the allowlist's parameter types to work
+    - A forbidden skill shouldn't leak its parameters, and a set lookup is cheapest
+    - The allowlist can fix invalid arguments, so it must run first
+    - Validation errors are retryable while allowlist errors are not
+  correct: 1
+- source: 031a75b7c530
+  question: "`detect_objects` returns text read off a paper note as `untrusted_text_seen` rather than `text`. What does that rename buy, and not buy?"
+  options:
+    - It blocks the model from reading the text; it does not stop OCR errors
+    - It guarantees the model ignores the text; it does not reduce token cost
+    - It encrypts the text in transit; it does not label the source
+    - A data-not-instruction label; not enforcement, the model can still obey it
+  correct: 3
+- source: b7b3e0643017
+  question: "A colleague proposes one skill `do(action: string)` that accepts free text. Which are the three strongest objections?"
+  options:
+    - Nothing is enforceable, verifiable or testable
+    - It costs more tokens, is slower to parse and needs a larger model
+    - It cannot be serialized to JSON, cannot be logged and cannot be cached
+    - It breaks MCP, prevents voice use and needs a GPU on the robot
+  correct: 0
+- source: 4f7f4d29ff3c
+  question: "`pick` declares the precondition \"object detected in the last 120 s\" and also checks it at runtime. Isn't one redundant?"
+  options:
+    - Yes; the runtime check alone is enough, so the prose can be removed
+    - Yes; the prose alone is enough if the model is instructed well
+    - No; prose helps the model plan, the runtime check keeps the robot safe
+    - No; the prose is for human readers and the runtime check is for the logs
+  correct: 2

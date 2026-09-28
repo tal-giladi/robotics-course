@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 15.08-pick-and-place-pipeline.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 2fa32c7470bb
+  question: Why is `VERIFY` a separate phase from `CLOSE`?
+  options:
+    - "`CLOSE` always succeeds (the servo moves either way); whether the jaws hold the object is a different failure"
+    - "`CLOSE` takes too long to also verify, so splitting them keeps each phase under the timeout"
+    - "`VERIFY` needs the camera, which cannot run while the gripper servo is drawing current"
+    - "`VERIFY` is optional and skipped in production, so it must be separable from `CLOSE`"
+  correct: 0
+- source: 9396d0f17acd
+  question: Your verification uses only the servo load. What does it miss, and why does it look like it works?
+  options:
+    - It misses only light objects, whose load is too low; it looks fine because most test objects are heavy
+    - "It misses every failure: an empty jaw hits its stop with high load; it never false-alarms on success"
+    - It misses nothing, but false-alarms on soft objects; it looks fine because soft objects are rare
+    - It misses slippage during lift; it looks fine because load is only sampled once, at close
+  correct: 1
+- source: 7deb17a74d07
+  question: The pads brush the object, the jaws close on air, and your policy retries the same plan. What happens on attempts two and three?
+  options:
+    - The second attempt succeeds, since the brush centred the object between the jaws
+    - Both miss by the same amount, since the object did not move; retrying just wastes time
+    - The third attempt succeeds, since the retry policy lowers the approach speed each time
+    - Both miss, and each pushes the object further; blind retry makes the task harder than re-perceiving
+  correct: 3
+- source: bd07d0e7e638
+  question: Your jaw has a 45 mm stroke and reach error σ = 4 mm. Which objects are handled reliably, and where is the cliff?
+  options:
+    - Up to ~41 mm; the cliff is near stroke − σ ≈ 41 mm, and retries push it to 45 mm
+    - Up to ~30 mm; the cliff is near stroke − 3σ ≈ 33 mm, and retries don't help beyond it
+    - Up to ~37 mm; the cliff is near stroke − 2σ ≈ 37 mm, and retries help beyond it
+    - Up to ~20 mm; the cliff is near stroke/2 ≈ 22 mm, regardless of the reach error
+  correct: 1
+- source: 34515d4ef104
+  question: Why is `place_blocked` handled with `RETRY` rather than `SKIP_OBJECT`?
+  options:
+    - Placing is cheaper than picking, so retrying the place is always faster than picking another
+    - "`SKIP_OBJECT` is only defined for perception failures, so it cannot be mapped to a place tag"
+    - The object is in the gripper; skipping only makes sense with empty jaws, so place elsewhere or stop
+    - Retrying lets the blocking object move away, which is the most common cause of a blocked place
+  correct: 2
+- source: fec893b67903
+  question: Name a grasp failure no gripper-side signal can detect, and where you would catch it.
+  options:
+    - "Closing on air: width goes to zero; catch it by adding a force sensor to each pad"
+    - "Crushing the object: load spikes; catch it by lowering the torque limit before closing"
+    - "Brushing the object: load rises briefly; catch it by sampling load at a higher rate"
+    - "Squeeze-and-roll-out: width and load look normal; catch it after lift by checking the table again"
+  correct: 3
+- source: 99331fd3ac1d
+  question: Which phases are idempotent, and why does it matter for the retry policy?
+  options:
+    - Perceive, plan and moves to poses; `CLOSE`, `OPEN`, `NUDGE` change the world, so re-perceive after them
+    - Only `CLOSE` and `OPEN`, since they end in the same state; motions may be retried after perceiving
+    - All phases are idempotent, since each runs to completion; so any phase may be retried blindly
+    - Only `PERCEIVE`; every motion changes the world, so each needs a new plan before retrying
+  correct: 0
+- source: dd27af8cb996
+  question: The policy checks the global attempt budget before the failure tags. Why that order?
+  options:
+    - So that retries of common tags run faster, skipping the tag table lookup on most failures
+    - So that tags can increase the budget when a failure is known to be recoverable
+    - So the budget counter resets whenever a tag maps to `SKIP_OBJECT`
+    - So no tag can route around the budget; one clear stop reason, and no endless unattended runs
+  correct: 3

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 12.09-waypoints-and-missions.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6982399a4a6a
+  question: What is the difference between `goThroughPoses` and `followWaypoints`?
+  options:
+    - "`goThroughPoses` sends each pose as a separate goal and stops at each; `followWaypoints` plans one path through them all."
+    - "`goThroughPoses` skips unreachable poses and continues; `followWaypoints` aborts the whole mission on the first failure."
+    - They behave identically; `followWaypoints` is simply the older name kept for backward compatibility with ROS 1.
+    - "`goThroughPoses` plans one path through all poses without stopping; `followWaypoints` sends separate goals and can skip failures."
+  correct: 3
+- source: 4f6d4a232006
+  question: Your poll loop calls `getFeedback()` and gets `None` on the first call. Bug or normal?
+  options:
+    - "Bug: the goal was rejected, so check `getResult()` and resend the goal before polling again"
+    - "Bug: feedback only works after `waitUntilNav2Active()` is called a second time in the loop"
+    - "Normal: no feedback has arrived yet; keep the last non-None value and read again after the loop"
+    - "Normal: feedback is always `None` for `goToPose`, and only `followWaypoints` publishes it"
+  correct: 2
+- source: 83215de09846
+  question: karmel cruises at 0.25 m/s. A stop 4.4 m away reports `navigation_time` 62 s and `number_of_recoveries` 4. What do you check first?
+  options:
+    - "It should take ~17–20 s, so it is fighting something: check costmaps first, then localization, then the doorway"
+    - "It should take ~60 s, so this is normal: four recoveries are expected for a trip of 4.4 m"
+    - "It should take ~17–20 s, so the controller is too slow: raise `desired_linear_vel` to 0.5 m/s first"
+    - "It should take ~6 s, so the planner is at fault: switch to a faster planner plugin first"
+  correct: 0
+- source: 72546405c5e6
+  question: Why does a mission layer belong in your code rather than in Nav2?
+  options:
+    - Nav2 cannot run more than one goal per session, so missions must restart Nav2 between every stop.
+    - The right failure policy is domain-specific; Nav2 provides the mechanism (one goal, one result) and leaves policy out.
+    - Nav2's behavior trees cannot call Python, so any mission logic must live in a separate Python node.
+    - Mission logic in Nav2 would slow its controller loop below 20 Hz on a Raspberry Pi.
+  correct: 1
+- source: 7456dcf82826
+  question: You call `goToPose`, then 2 seconds later `goToPose` with a different pose, without cancelling. What happens?
+  options:
+    - The new goal is queued; the robot finishes the first pose, then drives on to the second one
+    - The new goal is rejected because a goal is active; the robot keeps heading for the first pose
+    - The new goal preempts the old one; the robot heads for the new pose and `getResult()` refers to it
+    - Both goals abort with an error, and the robot stops until you cancel and resend a single goal
+  correct: 2
+- source: ad5b8a77e34c
+  question: Where should "the kitchen is at (5.0, 2.3)" live, and why not in the Python?
+  options:
+    - In a places file loaded at run time, keyed by name, so re-mapping or moving furniture needs no rebuild and all layers share it.
+    - In the Nav2 params YAML under the planner, so the planner can use named places as its preferred goals.
+    - In the Python mission script as constants, so the coordinates are version-controlled alongside the logic.
+    - In the map's PGM image as a colored pixel, so the location moves automatically whenever the map changes.
+  correct: 0
+- source: 5881af1ec1dd
+  question: Your mission script dies with an unhandled exception during a goal. Is the robot safe?
+  options:
+    - "Yes: Nav2 detects the script's exit and cancels the goal, so the robot stops within one control cycle"
+    - "No, and it isn't stopped: Nav2 keeps driving; safety comes from collision monitor, timeouts and the Pico watchdog"
+    - "Yes: the goal handle is owned by the script, so its death aborts the action and zeroes `cmd_vel`"
+    - "No: the robot stops but the costmaps are cleared, so the next goal may drive into obstacles"
+  correct: 1

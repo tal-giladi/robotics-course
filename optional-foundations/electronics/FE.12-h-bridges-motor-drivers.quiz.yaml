@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.12-h-bridges-motor-drivers.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9bb6d62205fe
+  question: Why can't a Pico GPIO pin drive karmel's motor directly? Give two numbers.
+  options:
+    - The pin gives 5 V and ~40 mA; the motor needs 12 V and up to 400 mA
+    - The pin gives 3.3 V and ~400 mA; the motor needs 12 V and up to 40 A
+    - The pin gives 3.3 V and ~4 mA; the motor needs 9–12.6 V and up to 4 A
+    - The pin gives 1.8 V and ~4 mA; the motor needs 3.3 V and up to 4 mA
+  correct: 2
+- source: 588f43dd49a2
+  question: A MOSFET bridge has $R_{DS(on)}$ = 0.3 Ω (HS + LS). How much heat at 2 A, and what voltage does the motor lose?
+  options:
+    - 0.6 W and 1.2 V
+    - 2.4 W and 0.6 V
+    - 1.2 W and 0.15 V
+    - 1.2 W and 0.6 V
+  correct: 3
+- source: 23e1306f58e2
+  question: Which H-bridge switch combination is forbidden, and what happens if it occurs?
+  options:
+    - "Both low-side switches at once: it brakes the motor and destroys it"
+    - "Both switches on one side at once (shoot-through): it shorts the battery and destroys them"
+    - "Diagonal switches at once: the motor spins at full speed and burns out"
+    - "All switches off at once: the motor coasts and the driver overheats"
+  correct: 1
+- source: d21394f9bb23
+  question: A robot with an L298N runs at 10.8 V. You replace it with a DRV8874 without changing code. What changes?
+  options:
+    - "Motors get 2–3 V more at the same duty: faster, cooler driver, and open-loop calibration must be redone"
+    - "Motors get 2–3 V less at the same duty: slower, but the calibration stays valid"
+    - Nothing changes, because both drivers accept the same PWM inputs and voltages
+    - Motors spin backward, because the DRV8874 uses the opposite input polarity
+  correct: 0
+- source: d63b9fd9057e
+  question: Why is DRV8833 ruled out for karmel, even though its current rating would be acceptable with a ramp?
+  options:
+    - Its 10.8 V supply minimum is above a discharged 3S pack (9.9 V at cutoff)
+    - Its 10.8 V supply maximum is below a full 3S pack (12.6 V plus braking spikes)
+    - Its PWM input needs 5 V logic, which the 3.3 V Pico cannot provide
+    - Its current sense output exceeds 3.3 V, which would damage the Pico ADC
+  correct: 1
+- source: 419af7565dc9
+  question: The DRV8874 carrier's CS pin reads 2.2 V on the Pico's ADC (1.1 V/A). What is the motor current, and is the driver current-limiting?
+  options:
+    - 2.0 A; not yet (limit ≈ 2.9 A), but worth investigating
+    - 2.0 A; yes, the limit is 2.0 A at 3.3 V SLEEP
+    - 2.42 A; yes, it is past the 2.2 A limit
+    - 0.5 A; no, the motor is lightly loaded
+  correct: 0
+- source: df924ec15554
+  question: After rewiring, the left motor spins forward correctly but won't reverse; the right works both ways. What do you check first?
+  options:
+    - The left motor's brushes, since worn brushes only work in one direction
+    - The battery voltage, since reverse needs more voltage than forward
+    - The left carrier's PMODE connection and the IN2 (GP3) wire and its GPIO assignment
+    - The right driver's fault pin, since it may be disabling the left side
+  correct: 2

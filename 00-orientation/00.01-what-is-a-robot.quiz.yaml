@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 00.01-what-is-a-robot.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: aa14af81148a
+  question: What is the difference between open-loop and closed-loop control, with a robot example of each?
+  options:
+    - Open loop measures the result before acting ("drive until the ToF reads 0.30 m"); closed loop just sends commands ("drive 3.6 s").
+    - Open loop sends commands without measuring the result ("drive 3.6 s"); closed loop uses the measured result ("drive until the ToF reads 0.30 m").
+    - Open loop runs on the microcontroller ("drive 3.6 s"); closed loop runs on the Raspberry Pi ("drive until the ToF reads 0.30 m").
+    - Open loop uses a fixed loop rate ("drive 3.6 s"); closed loop changes its rate as needed ("drive until the ToF reads 0.30 m").
+  correct: 1
+- source: d95a14245248
+  question: Which assignment of karmel components to the sense–think–act steps is correct?
+  options:
+    - "Sense: DRV8874 drivers; Think: code on the Pico and Pi 5; Act: wheel encoders."
+    - "Sense: code on the Pi 5; Think: VL53L1X ToF sensor; Act: gear motors."
+    - "Sense: wheel encoders and ToF sensor; Think: code on the Pico and Pi 5; Act: DRV8874 drivers and gear motors."
+    - "Sense: gear motors; Think: DRV8874 drivers; Act: US-100 ultrasonic sensor."
+  correct: 2
+- source: 170be879c912
+  question: A loop runs at 20 Hz and the robot moves at 0.4 m/s. How far does it move between decisions?
+  options:
+    - 8 cm
+    - 0.2 cm
+    - 20 cm
+    - 2 cm
+  correct: 3
+- source: 837e32936d2b
+  question: You make a 50 Hz loop 10 times faster (500 Hz), but the ToF reading it uses is still 0.3 s old. Roughly how much does the overshoot improve?
+  options:
+    - "Barely: the reaction distance drops only from about 0.200 m to 0.191 m, because latency dominates."
+    - "About tenfold: the reaction distance drops from about 0.200 m to 0.020 m."
+    - "About half: the reaction distance drops from about 0.200 m to 0.100 m."
+    - Not at all, and it gets worse because the faster loop reads the sensor more often.
+  correct: 0
+- source: 19728bdb951d
+  question: Why is a chatbot not a robot, while a thermostat arguably is a very small one?
+  options:
+    - The chatbot has no microcontroller, while the thermostat runs its logic on a small embedded chip.
+    - "The chatbot only exchanges text, while the thermostat senses temperature and switches a heater that changes it: a closed physical loop."
+    - The chatbot cannot move, while the thermostat has a moving mechanical part that counts as an actuator.
+    - The chatbot has no sensors at all, while the thermostat has several sensors that make it fully autonomous.
+  correct: 1
+- source: 11e412c6c907
+  question: A robot stops at the right distance on the desk but hits the wall on the living room floor. Its code drives for a computed time. What is the cause and the smallest fix?
+  options:
+    - The loop rate is too low on the floor; raise the control loop frequency.
+    - The floor reflects the ToF beam differently; recalibrate the range sensor for each room.
+    - The motors overheat on carpet; lower the PWM duty to protect them.
+    - "Open-loop control: slip, carpet or battery change the real speed; drive until a sensor says the goal is reached."
+  correct: 3
+- source: ac76aabc4410
+  question: What does "autonomy" mean in this course, and at which level does karmel start?
+  options:
+    - How much of the sense–think–act loop runs without a human; karmel starts teleoperated.
+    - How much of the robot's code runs on-board instead of on a laptop; karmel starts fully on-board.
+    - How long the robot can run on one battery charge; karmel starts at about one hour.
+    - How much of the sense–think–act loop is driven by an LLM; karmel starts with language goals.
+  correct: 0

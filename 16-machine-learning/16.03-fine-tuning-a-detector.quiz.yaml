@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 16.03-fine-tuning-a-detector.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5bed52f1ccea
+  question: Why does replacing the box predictor and training 1.4 epochs work, when the same network from random weights learns nothing in that time?
+  options:
+    - The box predictor holds most of the parameters, so replacing it resets exactly what needs learning
+    - Pretrained weights raise the learning rate automatically, so 1.4 epochs equal 100 from scratch
+    - The backbone already knows vision; only ~15k new parameters (0.08%) must be learned, the rest is nudged
+    - Random weights need batch normalization statistics, which only the pretrained model provides
+  correct: 2
+- source: 793075c50756
+  question: Loading COCO weights reports 19.8 M trainable parameters; loading none reports 43.3 M. Same architecture. Why?
+  options:
+    - COCO weights prune unused channels, so the pretrained model is physically smaller
+    - "`trainable_backbone_layers` defaults to 3 with weights and 5 without, freezing early stages"
+    - Without weights, torchvision adds a second detection head for random initialization
+    - COCO weights are stored in half precision, which halves the reported parameter count
+  correct: 1
+- source: "761328185e85"
+  question: "Run B (frame split): val 0.930, test 0.891. Run A (session split): val 0.893, test 0.915. Which model do you ship, and what did the leak cost?"
+  options:
+    - A; the leak cost 2.4 points of real accuracy, since every decision optimized for memorization
+    - B; its higher validation score shows it learned more, and test variance explains the rest
+    - A; the leak only cost honesty (4 points of optimism), not any real accuracy
+    - B; the leak cost 3.7 points of validation, but test scores within 3 points are equivalent
+  correct: 0
+- source: 7d150efea5ae
+  question: You have only 50 labelled images. What do you change about the recipe?
+  options:
+    - Unfreeze everything, raise the learning rate, avoid augmentation, and train for many more epochs
+    - Train from random weights, since pretrained features overfit on tiny datasets
+    - Freeze more, lower the learning rate, augment harder, train fewer iterations, and distrust small differences
+    - Keep the recipe, but evaluate on the training images, since there are too few to split
+  correct: 2
+- source: e124157ca946
+  question: You add a vertical-flip augmentation to karmel's training. What happens to train loss, val AP and the robot?
+  options:
+    - Train loss down, val AP up, and the robot detects bottles lying on their side much better
+    - Train loss unchanged, val AP unchanged, and the robot becomes robust to camera shake
+    - Train loss up sharply, val AP drops to zero, and the robot stops detecting anything
+    - "Train loss up slightly, val AP down a little, no robot benefit: it never sees upside-down bottles"
+  correct: 3
+- source: 13040b828e12
+  question: Your fine-tune reaches test AP50 0.95 and the robot still fails to pick up the cup half the time. Which explanations fit that number?
+  options:
+    - The test set was too large, the learning rate was too low, and the model was trained too long
+    - AP50 overstates recall, the robot's camera is higher resolution, and the model was quantized
+    - AP50 is too loose for grasping, detections are stale from latency, and the test room isn't the robot's world
+    - The cup class was over-represented, the backbone was frozen, and augmentation was too strong
+  correct: 2
+- source: 9896cbb49db8
+  question: Why evaluate the test set exactly once, and how would you compare ten variants?
+  options:
+    - The test set is expensive to run; compare ten variants on it overnight, then report the best
+    - The test set changes each run; compare variants on a fixed random subset of the test images
+    - Only the first evaluation is deterministic; average ten test runs per variant to remove noise
+    - Each peek leaks into decisions; compare on validation, pick one, then test once (or hold out a second test set)
+  correct: 3

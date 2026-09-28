@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 05.06-frame-conventions-rep103-rep105.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3967a05881e8
+  question: What are REP-103's body axes and the optical-frame axes?
+  options:
+    - "Body: x forward, y right, z down; optical: z forward, x right, y down."
+    - "Body: x forward, y left, z up; optical: x forward, y left, z up."
+    - "Body: x forward, y left, z up; optical: z forward, x right, y down."
+    - "Body: y forward, x right, z up; optical: z forward, x left, y up."
+  correct: 2
+- source: d6d72ab0f6fb
+  question: Why does the robot's pose in `odom` never jump, and why is `odom` still useless for going to the kitchen tomorrow?
+  options:
+    - It's integrated from incremental motion, so it's smooth, but the same integration accumulates unbounded error.
+    - It's reset every minute, so it can't jump, but it forgets the kitchen's location.
+    - It's filtered by AMCL, so it's smooth, but AMCL only runs while driving.
+    - It's published at 1 kHz, so it's smooth, but it's only valid indoors.
+  correct: 0
+- source: b6e9c06f85aa
+  question: Why does AMCL publish `map → odom` instead of `map → base_link`?
+  options:
+    - "`map → base_link` would need a 3D transform, while AMCL is 2D."
+    - "`map → base_link` is reserved for Nav2's controller."
+    - Publishing `map → odom` saves bandwidth, since it changes less often.
+    - base_link's parent is already odom and TF allows one parent; this keeps one tree and keeps `odom → base_link` continuous.
+  correct: 3
+- source: 55fd5a24016b
+  question: Odometry says $(1.0, 0.0, 0°)$ and the localizer says $(1.0, 0.2, 0°)$. What is `map → odom`?
+  options:
+    - $(1.0, 0.2, 0°)$
+    - $(0.0, 0.2, 0°)$
+    - $(0.0, -0.2, 0°)$
+    - $(2.0, 0.2, 0°)$
+  correct: 1
+- source: c61b584ab8dd
+  question: You run Nav2's local costmap in `map` instead of `odom`. What happens to recently seen obstacles at each AMCL correction?
+  options:
+    - They're re-projected automatically, so nothing changes.
+    - They disappear, because the costmap is cleared on each correction.
+    - The same obstacle appears twice, offset by the jump; the costmap smears and the path may look blocked.
+    - They shift smoothly with the robot, which improves accuracy.
+  correct: 2
+- source: dfea67e7c488
+  question: '`tf2_echo map base_link` says `"map" ... does not exist` right after launch but works a minute later. Bug or expected?'
+  options:
+    - "Expected: `map` exists only once the localizer publishes `map → odom`; code must wait for it."
+    - "A bug: `map` must be published statically at launch."
+    - "A bug: the TF buffer drops frames older than 10 s."
+    - "Expected: TF needs a minute to warm up its cache on every launch."
+  correct: 0
+- source: 0475093d0460
+  question: What is the difference between the flange (`tool0`) frame and the TCP frame, and who defines each?
+  options:
+    - The flange is the gripper's fingertip, defined by you; the TCP is the base of the arm, defined by the maker.
+    - They are the same frame with two names.
+    - The flange is defined by ROS; the TCP by the URDF's root link.
+    - The flange is the last joint's mounting face, defined by the arm maker; the TCP is the tool's working point, a fixed offset you define.
+  correct: 3

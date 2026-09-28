@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 10.09-amcl-in-ros2.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 31361ec78648
+  question: Which transform does AMCL publish, and why that one rather than the robot's pose?
+  options:
+    - "`map → base_footprint`, so planners get the pose directly"
+    - "`odom → base_footprint`, replacing the wheel odometry"
+    - "`map → odom`, the drift correction, keeping jumps off the smooth `odom` frame"
+    - "`base_footprint → laser`, correcting the LiDAR mount"
+  correct: 2
+- source: a6fc4c08b1bf
+  question: AMCL runs, the map is loaded, the LiDAR publishes, and `/amcl_pose` is silent. Most likely causes, and the distinguishing command?
+  options:
+    - Never activated, or no initial pose; `ros2 lifecycle get /amcl`
+    - Wrong QoS, or wrong frame; `ros2 topic info -v /scan`
+    - Too few particles, or too many beams; `ros2 param dump /amcl`
+    - Missing map, or missing TF; `ros2 run tf2_tools view_frames`
+  correct: 0
+- source: dae72ba5b88b
+  question: You publish `/initialpose` from your own node and AMCL ignores it. Which two independent reasons?
+  options:
+    - Wrong frame name, and wrong covariance size
+    - AMCL is inactive, and the map is not loaded yet
+    - No matched subscriber yet, and a `now()` stamp TF can't serve yet
+    - Too few particles, and a pose outside the map bounds
+  correct: 2
+- source: 8d5e8b76ddbe
+  question: In karmel's config, `recovery_alpha_slow` and `recovery_alpha_fast` are 0.0. What does that remove, and what does it buy?
+  options:
+    - Removes resampling; buys lower CPU usage
+    - Removes KLD sampling; buys a fixed particle count
+    - Removes the motion model; buys faster convergence
+    - Removes kidnap recovery; buys accuracy while localized
+  correct: 3
+- source: a051983c9bf4
+  question: "`/amcl_pose` reports σ_x = 16 cm in one run and 59 cm in another. Which is localized, and how do you tell?"
+  options:
+    - The 16 cm run, since smaller σ means closer to the truth
+    - Can't tell from σ; check the scan overlays the map, or tape-measure a marked pose
+    - The 59 cm run, since a wider cloud is more likely to hold the truth
+    - Both, since any σ under 1 m means AMCL has converged
+  correct: 1
+- source: eb00a555ac8e
+  question: You raise `max_beams` from 60 to 360 "to use all the data". What happens?
+  options:
+    - Accuracy improves six-fold at six times the CPU
+    - Nothing, since AMCL caps beams at 60 internally
+    - Correlated beams over-peak the weights; worse and slower
+    - The map resolution is automatically increased to match
+  correct: 2
+- source: dca13559a0f1
+  question: The robot localizes perfectly in simulation but drifts 40 cm in the real room, with σ = 5 cm. Where do you look first?
+  options:
+    - The laser's static transform, then the map, then odometry calibration
+    - AMCL's `alpha1…5`, then `max_particles`, then `max_beams`
+    - The Wi-Fi link, then the CPU load, then the QoS profiles
+    - The simulator's noise settings, then Gazebo's physics step
+  correct: 0
+- source: 9df242ae46b0
+  question: Why does AMCL take its motion from TF instead of subscribing to `/odom`?
+  options:
+    - "`/odom` publishes too slowly for AMCL's scan-rate updates"
+    - "`/odom` carries no covariance, which AMCL's motion model needs"
+    - REP-105 requires every localizer to read odometry only from TF
+    - TF interpolates odometry at each scan's stamp, from any producer
+  correct: 3

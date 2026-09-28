@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 02.03-motor-drivers-in-depth.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6bbe5224cfc3
+  question: In the brake state, what voltage drives the circulating current down, and in the coast state?
+  options:
+    - "Brake: the full supply opposes it; coast: only the back-EMF, so coast decays slowly."
+    - "Brake: only the motor's back-EMF around $R_M + R_{DS}$, so it decays slowly; coast: about 13.8 V ($V_M + 2V_{SD}$) opposes it, so it decays fast."
+    - "Both: only the back-EMF, so they decay at the same rate."
+    - "Brake: the diode drops (about 1.4 V); coast: the back-EMF alone."
+  correct: 1
+- source: 60fea1c7cca0
+  question: $R = 2\ \Omega$, $L = 1$ mH, 12 V at 50% duty in drive/brake. What is $\tau_e$ and the peak-to-peak ripple at 2 kHz and at 20 kHz?
+  options:
+    - $\tau_e = 2$ ms; 0.375 A at 2 kHz and 0.0375 A at 20 kHz.
+    - $\tau_e = 0.5$ ms; 3.0 A at 2 kHz and 0.30 A at 20 kHz.
+    - $\tau_e = 0.5$ ms; 1.5 A at 2 kHz and 0.15 A at 20 kHz.
+    - $\tau_e = 0.5$ ms; 1.5 A at both frequencies.
+  correct: 2
+- source: 77491081a00f
+  question: You change `decay="slow"` to `decay="fast"`. What happens to top speed, deadband, and the PID integral term at low speeds?
+  options:
+    - Top speed rises; deadband shrinks; the integral term settles faster.
+    - Top speed drops sharply; deadband is unchanged; the integral term is unaffected.
+    - Top speed barely changes; deadband shrinks; the integral term winds down to zero.
+    - Top speed barely changes; deadband grows a lot; the integral winds up until the robot lurches.
+  correct: 3
+- source: 31b614f0b3d8
+  question: karmel's SLEEP pin moves from 3.3 V to 5 V. What is the new trip current and the worst-case battery current with both motors stalled (regulator 1.68 A)?
+  options:
+    - About 4.46 A per motor; about 6.1 A total, within the fuse rating.
+    - About 2.95 A per motor; about 7.6 A total, within all ratings.
+    - About 4.46 A per motor; about 10.6 A total, above the 10 A fuse and the cells' 8 A rating.
+    - About 6.70 A per motor; about 15.1 A total, far above the fuse.
+  correct: 2
+- source: a90ff1616990
+  question: The driver runs at 2.1 A continuously and reads 121 °C, but your calculation said 71 °C. What was wrong, and does it make the design safer or less safe?
+  options:
+    - It used the wrong $R_{DS(on)}$; the calculation was pessimistic, so the design is safer.
+    - The IR thermometer reads high on shiny chips; the design is as safe as calculated.
+    - It used the JEDEC $R_{\theta JA}$ of 36 °C/W from a large test board; a small carrier is closer to 70 °C/W, so it was optimistic and less safe.
+    - It ignored switching losses at 20 kHz; the calculation was pessimistic, so the design is safer.
+  correct: 2
+- source: ff24917bf748
+  question: Why does a 1k/2k divider on the CS pin change the current limit, while a 47k/68k divider barely does?
+  options:
+    - The divider sits in parallel with the carrier's 2.49 kΩ; 3 kΩ drops it about 45% (trip rises 83%), 115 kΩ only about 2%.
+    - The small divider draws current from the motor supply, reducing the voltage available to the motors.
+    - The large divider filters the CS signal, while the small one passes all the switching noise.
+    - The small divider pulls CS above 3.3 V, which disables current regulation.
+  correct: 0
+- source: 61d0155e5f65
+  question: The robot brakes hard with the battery connected and nothing happens; with a blown fuse, the bus goes to 34 V. Where did the energy go?
+  options:
+    - "Connected: into the motor windings as heat; blown fuse: into the DRV8874's body diodes."
+    - "Connected: into the pack and resistive losses; blown fuse: only into the 470 µF bulk capacitor, which charges to about 34 V."
+    - "Connected: into the regulator's output; blown fuse: into the Pi's 5 V rail."
+    - "Connected: into the caster's friction; blown fuse: into the encoder supply."
+  correct: 1
+- source: 37c33cc03c74
+  question: You want smooth, silent motors and minimum driver heat. What PWM frequency do you choose?
+  options:
+    - About 1 kHz, where switching losses are lowest.
+    - About 100 kHz, where ripple is lowest.
+    - About 8 kHz, where torque is highest.
+    - "About 20 kHz: just above hearing; ripple falls as $1/f$ but switching losses grow linearly with $f$."
+  correct: 3

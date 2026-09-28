@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in F3D.06-gears-inserts-fasteners.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 0e1766f14ea4
+  question: What does `M2.5 × 6 ISO 7380` describe?
+  options:
+    - A 2.5 mm thread with 0.6 mm pitch, 6 mm head diameter, socket head
+    - A 2.5 mm thread, 6 mm total length including head, countersunk head
+    - A 2.5 mm thread (0.45 mm pitch), 6 mm long under the head, button head
+    - A 6 mm thread, 2.5 mm long, with an ISO flat washer
+  correct: 2
+- source: 9c8f998ea705
+  question: Why is a heat-set insert better than screwing into a printed hole for a bracket you will remove 20 times?
+  options:
+    - Printed threads wear and creep; a knurled brass insert survives many cycles
+    - Inserts are cheaper than the extra plastic needed for threads
+    - Printed holes can't be threaded at all without a tap
+    - Inserts insulate the sensor electrically from the chassis
+  correct: 0
+- source: 1f63aec8b6b0
+  question: A 3 mm bracket is screwed into a 5.7 mm insert in a blind hole. What is the longest screw, and what do you buy?
+  options:
+    - 8.7 mm, so M3 × 8
+    - 8.2 mm, so M3 × 10
+    - 5.7 mm, so M3 × 6
+    - 8.2 mm, so M3 × 8
+  correct: 3
+- source: 940222ee59fe
+  question: Two module-1.5 gears have 20 and 40 teeth. What are the pitch diameters, centre distance and ratio?
+  options:
+    - 30 and 60 mm; 90 mm; 2:1
+    - 30 and 60 mm; 45 mm; 2:1
+    - 20 and 40 mm; 30 mm; 2:1
+    - 30 and 60 mm; 45 mm; 1:2 speed-up
+  correct: 1
+- source: 6803c9937b5e
+  question: A 1 N·m torque is applied to a 20 mm pitch-diameter gear. What is the tangential tooth force?
+  options:
+    - 50 N
+    - 20 N
+    - 100 N
+    - 200 N
+  correct: 2
+- source: 7bad702c9a92
+  question: You print a pair of gears at exactly the theoretical centre distance with no backlash. What happens when you turn them?
+  options:
+    - They mesh perfectly, since the involute profile is exact
+    - They skip teeth under load, since there is too much clearance
+    - They wear in after a few minutes and then run smoothly
+    - They bind or turn stiffly, since printed teeth come out oversize
+  correct: 3
+- source: ee8e1f9bce0b
+  question: An insert went in flush but sits 0.5 mm below the surface after cooling, and the screw clamps loosely. What happened?
+  options:
+    - The iron was too hot or pushed too far, or the hole too large
+    - The insert was too cold, so it cracked the surrounding plastic
+    - The screw was too long and pushed the insert down
+    - The plastic shrank upward around the insert while cooling
+  correct: 0

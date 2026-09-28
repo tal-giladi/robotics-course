@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in F3D.07-materials-chassis-ordering.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c27a0c17b698
+  question: Rank PLA, PETG and ASA by heat limit, with the numbers.
+  options:
+    - PLA 80 °C, PETG 60 °C, ASA 93 °C
+    - PLA 60 °C, PETG 93 °C, ASA 80 °C
+    - PLA 60 °C, PETG 80 °C, ASA 93 °C
+    - PLA 50 °C, PETG 70 °C, ASA 110 °C
+  correct: 2
+- source: 7576c0d6b718
+  question: A sunny car dashboard reached about 69 °C. Which of PLA, PETG and ASA have positive thermal margin, and by how much?
+  options:
+    - All three; PLA +9.4 °C, PETG +20 °C, ASA +33 °C
+    - PETG +10.6 °C and ASA +23.6 °C; PLA is −9.4 °C
+    - Only ASA, at +23.6 °C; PETG and PLA are both negative
+    - PLA +0.6 °C, PETG +10.6 °C and ASA +23.6 °C
+  correct: 1
+- source: dd0265fe8944
+  question: Which material do you choose for karmel's bumper, and why?
+  options:
+    - TPU, because it is flexible and absorbs collision energy without cracking
+    - ASA, because it resists UV light when the robot drives outdoors
+    - PLA, because it is stiff and keeps the bumper's shape exactly
+    - PETG, because it is the strongest of the common filaments
+  correct: 0
+- source: 31b69d32d126
+  question: Why is it usually better to cut karmel's 250 × 200 mm deck than to print it?
+  options:
+    - Printed decks can't hold heat-set inserts near their edges
+    - Acrylic is lighter than any printed plastic of the same size
+    - Print services won't print parts larger than 150 mm on any side
+    - It exceeds a 180 mm bed and warps; a cut plate is flatter and cheaper
+  correct: 3
+- source: 7794cb400d3e
+  question: Estimate the filament cost of a 45 g PETG LiDAR mount at ₪120/kg with 5 % waste.
+  options:
+    - ₪5.40
+    - ₪5.67
+    - ₪6.00
+    - ₪56.70
+  correct: 1
+- source: 98f47c81b58c
+  question: Which set of information belongs in an order for a functional part from a print service?
+  options:
+    - G-code, printer model, nozzle temperature, fan speed and bed type
+    - Only the STL file and the quantity; the service picks the rest
+    - STEP and STL/3MF in mm, material, walls/infill, orientation and critical dimensions
+    - A photo of the robot, your budget, and a request for their advice
+  correct: 2
+- source: f517db2fd913
+  question: A PETG bracket was designed with hole compensation measured on a PLA coupon. What is likely to happen to its holes?
+  options:
+    - They come out a bit smaller, since PETG squishes and oozes more
+    - They come out a bit larger, since PETG shrinks more on cooling
+    - They come out exact, since compensation is material-independent
+    - They come out oval, since PETG prints only in one direction
+  correct: 0

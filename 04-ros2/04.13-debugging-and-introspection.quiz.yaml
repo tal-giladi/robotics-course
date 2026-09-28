@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.13-debugging-and-introspection.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 2bf65bee355e
+  question: Which order of the debugging layers is correct?
+  options:
+    - Content, flow, contract, wiring, discovery, process, config, logic.
+    - Process, discovery, wiring, contract, flow, content, config, logic.
+    - Logic, config, content, flow, contract, wiring, discovery, process.
+    - Discovery, process, contract, wiring, content, flow, logic, config.
+  correct: 1
+- source: d45349db9733
+  question: "`ros2 topic info /scan` shows 1 publisher and 0 subscriptions, but you're sure your node subscribes. What are the two most likely causes?"
+  options:
+    - A QoS mismatch, or a message type mismatch.
+    - A firewall on the data ports, or a different RMW.
+    - The node subscribes to a different fully qualified name, or it isn't running or never created the subscription.
+    - The daemon is stale, or the LiDAR publishes too fast.
+  correct: 2
+- source: 90f7d9ff7db3
+  question: How do you enable DEBUG output for only `/karmel1/battery_health` at start-up from a launch file?
+  options:
+    - "`ros_arguments=['--log-level', 'karmel1.battery_health:=debug']` in the `Node` action."
+    - "`parameters=[{'log_level': 'debug'}]` in the `Node` action."
+    - "`ros_arguments=['--log-level', '/karmel1/battery_health:=debug']` in the `Node` action."
+    - Set `RCUTILS_LOGGING_SEVERITY=DEBUG` in the launch environment.
+  correct: 0
+- source: 2a759c4aa861
+  question: "`ros2 topic delay /odom` averages 4 ms at 50 Hz. A controller uses the latest odometry each 20 ms cycle. What's the worst-case age of the odometry it uses?"
+  options:
+    - About 4 ms
+    - About 20 ms
+    - About 44 ms
+    - About 24 ms
+  correct: 3
+- source: 2b54e331828a
+  question: "Which of these does `ros2 doctor` detect: (a) best-effort publisher with reliable subscriber, (b) YAML matching no node, (c) 1 Hz instead of 10 Hz, (d) a subscriber with no publisher?"
+  options:
+    - (a) and (d)
+    - (a), (b) and (d)
+    - All four
+    - (b) and (c)
+  correct: 0
+- source: 42b7298df956
+  question: 'After fixing a QoS mismatch, a new error appears: "No battery data for 3.8 s". Did your fix break something?'
+  options:
+    - "Yes: the new QoS drops samples that the old one kept."
+    - "Probably not: the QoS fault masked a flow fault; the watchdog only arms after a first sample, and data now arrives too slowly."
+    - "Yes: changing QoS resets the node's clock."
+    - "Probably not: it's a one-time warning that appears after any restart."
+  correct: 1
+- source: d3266a42cd7d
+  question: Why is logging the effective configuration once at start-up more useful than logging parameters when they're declared?
+  options:
+    - It uses less disk space than logging each declaration.
+    - Declared values are always identical to effective ones, so it avoids duplicates.
+    - It is what the node actually runs with after defaults, YAML, `-p` and validation, so silent config faults become visible.
+    - It is required for `ros2 param dump` to work.
+  correct: 2

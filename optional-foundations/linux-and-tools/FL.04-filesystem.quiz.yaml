@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.04-filesystem.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 759bed7b8469
+  question: Where are the ROS 2 Jazzy binaries installed, and why aren't they on your `PATH` by default?
+  options:
+    - "`/opt/ros/jazzy`; `/opt` is for add-ons you opt into by sourcing `setup.bash`"
+    - "`/usr/bin/ros2`; they are on `PATH`, but ROS hides them until first launch"
+    - "`~/ros2_ws/install`; each user must build them before they are available"
+    - "`/etc/ros/jazzy`; `/etc` is config only, so binaries there are never on `PATH`"
+  correct: 0
+- source: 415da98f7dc7
+  question: What's the difference between `/dev/ttyACM0` and `/dev/ttyUSB0`?
+  options:
+    - "ACM: converter chips (CH340, CP2102, FTDI); USB: boards doing USB serial themselves (Pico)"
+    - "ACM: analog serial devices; USB: digital serial devices"
+    - "ACM: the first port on the Pi; USB: any port added later"
+    - "ACM: boards doing USB serial themselves (Pico); USB: converter chips (CH340, CP2102, FTDI)"
+  correct: 3
+- source: 5c15c5e35ae3
+  question: "`ls -l` shows `crw-rw---- 1 root video 81, 0 … /dev/video0`. What do `c`, `video` and `81, 0` mean?"
+  options:
+    - Camera device; owning user; width 81 and height 0 in pixels
+    - Character device; owning user; size 81 KB with 0 bytes free
+    - Character device; owning group; major 81 (driver) and minor 0 (first device)
+    - Compressed file; owning group; 81 links and 0 open handles
+  correct: 2
+- source: 02d371db0f38
+  question: After a reboot your LiDAR is `/dev/ttyUSB0` and the motor board `/dev/ttyUSB1`; yesterday it was swapped. Robust fix?
+  options:
+    - Plug the devices in one at a time in the same order after each boot
+    - Use `/dev/serial/by-id/...` or a udev rule making a fixed symlink
+    - Hard-code `/dev/ttyUSB0` for the LiDAR and swap cables if needed
+    - Add `sleep 10` at boot so the devices enumerate in a stable order
+  correct: 1
+- source: ceea1d31c5dc
+  question: "`cat /sys/class/thermal/thermal_zone0/temp` prints `61234`. What temperature, and where is this file stored on disk?"
+  options:
+    - 61.234 °C; on the SD card, updated by a background service
+    - 612.34 °C; nowhere, `/sys` is virtual and generated on read
+    - 61.234 °C; nowhere, `/sys` is virtual and generated on read
+    - 61234 K; in RAM, flushed to disk every minute
+  correct: 2
+- source: ed4dab444170
+  question: You ran `ln -s karmel.yaml ~/robot/config/active.yaml` from `~/robot`, where `karmel.yaml` lives. `cat` on the link fails. Why?
+  options:
+    - Symlinks cannot point to YAML files; they only work for directories
+    - A relative target resolves from the link's directory, where there's no `karmel.yaml`
+    - The link needs `sudo` to be read because it was created by `ln -s`
+    - Relative targets resolve from your home directory, not from `~/robot`
+  correct: 1
+- source: a2ed8d4afa57
+  question: In WSL, where is `C:\Users\you\Downloads`, and why shouldn't your workspace live there?
+  options:
+    - "`/home/you/Downloads`; WSL deletes it when Windows restarts"
+    - "`/mnt/c/Users/you/Downloads`; it is read-only from inside Linux"
+    - "`/c/Users/you/Downloads`; Windows antivirus locks every file there"
+    - "`/mnt/c/Users/you/Downloads`; slow cross-OS access and permissions don't map"
+  correct: 3

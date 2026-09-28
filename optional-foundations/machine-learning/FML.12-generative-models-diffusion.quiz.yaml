@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.12-generative-models-diffusion.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f05dcbff3e72
+  question: Why does an MSE-trained policy fail on left/right demonstrations, and what does a generative policy do instead?
+  options:
+    - MSE learns the conditional mean, about 0 rad/s into the obstacle; a generative policy samples near ±0.8
+    - MSE overfits to the last demonstration; a generative policy averages all of them
+    - MSE can't output negative values; a generative policy adds a sign bit
+    - MSE learns the median, +0.8; a generative policy picks −0.8 instead
+  correct: 0
+- source: 3806bbe58534
+  question: For DDPM's one-jump forward process, what is $a_t$ for $a_0 = 0.5$, $\bar\alpha_t = 0.25$, $\varepsilon = 1.0$?
+  options:
+    - $a_t = 0.875$
+    - $a_t = 1.25$
+    - $a_t = 0.616$
+    - $a_t = 1.116$
+  correct: 3
+- source: 96c69865ca25
+  question: "In flow matching, with $a_0 = 0.2$ (noise), $a_1 = -0.8$ (demo), $t = 0.5$: what is the training target, and $a_t$?"
+  options:
+    - Target $-1.0$; $a_t = -0.3$
+    - Target $1.0$; $a_t = -0.3$
+    - Target $-1.0$; $a_t = -0.5$
+    - Target $-0.6$; $a_t = -0.3$
+  correct: 0
+- source: 42dbe6e1702e
+  question: What is the reparameterization trick for, in a VAE?
+  options:
+    - It reduces the latent dimension so that the decoder trains much faster
+    - It replaces the KL divergence term with a simpler MSE penalty on $z$
+    - $z = \mu + \sigma\varepsilon$ makes sampling differentiable, so the encoder can train
+    - It normalizes $z$ to zero mean and unit variance before decoding
+  correct: 2
+- source: d13483757d0f
+  question: You cut a flow-matching policy from 10 Euler steps to 1 to hit a latency target. What happens on a scene with two valid ways to act?
+  options:
+    - It still picks one mode, just with more noise on the action
+    - It collapses toward the average action, driving into the obstacle
+    - It alternates between the two modes on every call
+    - It fails to produce any output until 10 steps are restored
+  correct: 1
+- source: 678e41b2a3de
+  question: Which generative approach does the action part of ACT, Diffusion Policy and π0 use?
+  options:
+    - "ACT: flow matching; Diffusion Policy: denoising diffusion; π0: conditional VAE"
+    - "ACT: GAN; Diffusion Policy: denoising diffusion; π0: autoregressive tokens"
+    - "ACT: denoising diffusion; Diffusion Policy: conditional VAE; π0: flow matching"
+    - "ACT: conditional VAE; Diffusion Policy: denoising diffusion; π0: flow matching"
+  correct: 3
+- source: 974d60e01fea
+  question: Your diffusion policy gives the same action distribution no matter where the obstacle is. What do you check first?
+  options:
+    - That the number of denoising steps is at least 100
+    - That the noise schedule starts at $\bar\alpha = 1$
+    - That the observation actually reaches the network in training and sampling
+    - That the action normalization uses the test set's statistics
+  correct: 2

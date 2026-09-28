@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 19.06-task-planning-decomposition.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d7b69dce7e7b
+  question: Why can a plan not contain `pick("bottle-1")`, and what replaces it?
+  options:
+    - Ids are too long for the planner's token budget; a short alias replaces them
+    - The gateway forbids literal strings; the planner passes the label "water bottle" to `pick` instead
+    - Ids exist only after the detector runs; a `detect_objects` step binds a variable like `$target` for later steps
+    - "`pick` takes only coordinates; the plan passes the object's last known pose"
+  correct: 2
+- source: d2b415ecff5a
+  question: What does the `fresh` set model, and which physical fact does it stand for?
+  options:
+    - Variables detected since the last `navigate_to`; the object must be recent and within the arm's reach
+    - Objects never picked before; the gripper must be empty before a new pick
+    - Places visited in this task; the robot should not search the same room twice
+    - Detections newer than 120 s; the camera image buffer expires after two minutes
+  correct: 0
+- source: 236fc2c8c1e9
+  question: The `sightseeing` plan passes checks 1–6 and fails check 7. Why does it pass with `goal=None`?
+  options:
+    - Check 7 is skipped for short plans, and this one has only three steps
+    - It fails a precondition that `goal=None` disables
+    - "`goal=None` makes the validator infer the goal from the plan itself"
+    - With no stated goal there is nothing for check 7 to compare, so it is accepted
+  correct: 3
+- source: 87a40455ec15
+  question: How does the goal check defend against the injected note from 19.03?
+  options:
+    - It filters camera text for imperative sentences before the planner sees it
+    - The goal is taken from the user before the camera reads anything, so the bed plan fails
+    - It asks the LLM to confirm the goal after reading the note, and rejects low-confidence answers
+    - It blocks all plans that include `detect_objects`, since that is how the note enters
+  correct: 1
+- source: 93de73035fdf
+  question: The compiler stops fusing bind steps with their consumers, and you run with `--grasp-p 0.5`. What happens?
+  options:
+    - Nothing changes; fusing is only an optimisation to save ticks
+    - The retry re-runs detection and pick correctly, so success rises to 75%
+    - Retries get `OBJECT_NOT_FOUND` with no second real grasp, and the plan fails
+    - The validator rejects the plan before execution with `LITERAL_OBJECT_ID`
+  correct: 2
+- source: 989b122f44e1
+  question: One planning call costs about $0.011; the step-by-step agent about $0.19. What does the expensive version give you?
+  options:
+    - It reacts to surprises, and handles conditionals, loops and mid-task judgement
+    - It is safer, because each step skips the gateway's per-call checks
+    - It needs no validator, because the model sees every result
+    - It is faster, since the robot never waits for a whole plan
+  correct: 0
+- source: 75e8a6a6c2a0
+  question: Why does the validator use `spec.input_schema()` rather than its own table of what each skill accepts?
+  options:
+    - The schema is faster to query than a Python dictionary
+    - One source of truth, so model, gateway and validator cannot drift
+    - The model cannot read a table, only JSON Schema
+    - A separate table would need to be sent to the model each turn
+  correct: 1
+- source: 67cb452304bd
+  question: A colleague proposes skipping the validator because "the gateway checks every call anyway". What do they lose?
+  options:
+    - Only speed; the gateway catches everything the validator does, a bit later
+    - Schema checking of arguments, which the gateway does not perform
+    - The e-stop path, which runs through the validator
+    - Sequence correctness, goal alignment, zero-cost failure before moving, and reviewability
+  correct: 3

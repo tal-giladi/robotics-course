@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.02-ohms-law-series-parallel.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e9e0f7eaccab
+  question: A 2 kΩ resistor carries 1.5 mA. What voltage is across it?
+  options:
+    - 0.75 V
+    - 1.33 V
+    - 3.0 V
+    - 30 V
+  correct: 2
+- source: ec7e4509a10d
+  question: What is 22 kΩ ∥ 100 kΩ, and where does that number matter for the battery divider?
+  options:
+    - ≈ 122 kΩ; it is the total load the battery sees
+    - ≈ 18.0 kΩ; it is the source resistance the ADC sees
+    - ≈ 18.0 kΩ; it is what sets the divider ratio
+    - ≈ 4.5 kΩ; it is the ADC's own input impedance
+  correct: 1
+- source: 01f721bb250a
+  question: Why not use 1 MΩ / 220 kΩ for the battery divider to save current?
+  options:
+    - The ratio changes to 4.5:1, so the ADC would saturate at full battery voltage
+    - 1 MΩ resistors are not rated for battery voltages above 5 V
+    - It would draw more current, not less, because of the higher total resistance
+    - ≈180 kΩ source resistance vs ADC input ≥100 kΩ drops readings; 103 µA is already negligible
+  correct: 3
+- source: c30ef9f49298
+  question: At what battery voltage would the 100 k / 22 k divider put exactly 3.3 V on the pin?
+  options:
+    - About 18.3 V
+    - About 15.0 V
+    - About 12.6 V
+    - About 4.0 V
+  correct: 0
+- source: 4894ff0eb85a
+  question: A cheap meter reads a divider's output 3% lower than a better meter. Both are accurate. What's going on?
+  options:
+    - The cheap meter has a larger burden voltage from its current shunt
+    - The cheap meter samples faster and catches the divider's ripple
+    - The cheap meter's lower input resistance loads the divider like a parallel resistor
+    - The better meter adds a small offset to compensate for probe leads
+  correct: 2
+- source: 6cd7abbe8bcf
+  question: The HC-SR04's echo is 5 V. Why is 1 k / 2 k preferred over 100 k / 200 k, though both give 3.33 V?
+  options:
+    - The 100 k / 200 k pair draws too much current from the sensor's echo pin
+    - The Pico's input needs at least 1.67 mA to register a logic high
+    - The 1 k / 2 k pair gives a higher voltage because of lower resistor tolerance
+    - With 67 kΩ source resistance, pin capacitance slows edges and blurs the pulse timing
+  correct: 3
+- source: 5685aa42177b
+  question: Your battery reading on GP26 is exactly 0 V regardless of the battery. Two most likely wiring faults?
+  options:
+    - R_top is open (not connected to the battery), or the junction wire goes to the wrong pin
+    - R_bottom is open, or the battery voltage is above the ADC's range
+    - The resistors are swapped, or the ADC reference is set to 5 V
+    - The divider ratio is too high, or the pin is configured as an output
+  correct: 0

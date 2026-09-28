@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 14.10-move-gripper-to-position.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1d0bf16aa9b6
+  question: Your arm returns to within 1 mm every time but sits 12 mm from the commanded point. Which do you fix, and how?
+  options:
+    - "The repeatability, in hardware: replace the servos with metal-gear ones to remove the 12 mm of play"
+    - "The accuracy, in hardware: the 12 mm offset comes from encoder resolution, so use higher-resolution servos"
+    - "The accuracy, in software: fit a correction to measured (commanded, actual) pairs; it is likely a calibration error"
+    - "Neither: 12 mm is within normal tolerance for a hobby arm, and 1 mm repeatability cannot be improved"
+  correct: 2
+- source: "501759840544"
+  question: Why is 0.088° of servo resolution irrelevant to this lesson's numbers?
+  options:
+    - Through the Jacobian half a step is ~0.47 mm worst case, far below repeatability and calibration error
+    - The servos interpolate between steps internally, so their effective resolution is far finer than 0.088°
+    - Through the Jacobian half a step is ~4.7 mm, which dominates, but the correction fit removes it
+    - Resolution only matters for velocity control, and this lesson uses position control exclusively
+  correct: 0
+- source: 038125f65028
+  question: "`reach.py` reports `FK check ... residual 0.009 mm`. What has it proved?"
+  options:
+    - That the physical arm will reach the target to within 0.009 mm on this pose
+    - That the arm's calibration is correct to 0.009 mm across the whole workspace
+    - That the target lies inside the workspace box and is safe to execute
+    - Only that IK converged (self-consistency); nothing about where the physical arm will go
+  correct: 3
+- source: 87b68b336b98
+  question: Why is the workspace box checked before IK rather than after?
+  options:
+    - IK is expensive, and the box check is only a performance shortcut that skips unreachable targets
+    - It is the only check that knows the world, and it prevents a tempting converged solution for a forbidden point
+    - IK modifies the target when it fails, so the box must see the original target before that happens
+    - The box check needs the joint angles, which are only available before IK changes the arm's state
+  correct: 1
+- source: aa6fcca38f01
+  question: You command the same target from the left and from the right and the results differ by 2 mm. What is that, and how does it change your protocol?
+  options:
+    - Thermal drift; let the servos warm up for ten minutes before each measurement run
+    - Calibration error; recalibrate the servos and repeat until left and right agree
+    - Encoder noise; average ten readings per target so the 2 mm cancels out
+    - Backlash; always approach each target from the same direction and home pose
+  correct: 3
+- source: c84329727141
+  question: You fit an affine correction on 20 measured points and mean error drops from 9 mm to 0.3 mm. What do you do before believing it?
+  options:
+    - "Hold points out: fit on half, test on the other half, and compare held-out to fitted error"
+    - Add more parameters to the fit, since a larger model reduces the error below 0.3 mm
+    - Accept it, since a 30× improvement cannot come from fitting noise on 20 points
+    - Refit on the same 20 points with a different seed to confirm the result is stable
+  correct: 0
+- source: cca8fcd6148b
+  question: After correction your accuracy is 1.8 mm and repeatability 1.6 mm. Is more calibration worth doing?
+  options:
+    - "Yes: a quadratic correction would bring accuracy well below 1.6 mm"
+    - "Yes: collect ten times more points and the accuracy will approach 0.2 mm"
+    - "No: accuracy can't beat repeatability; improve mechanics or close the loop visually"
+    - "No: but raising the servo resolution would push both numbers below 1 mm"
+  correct: 2

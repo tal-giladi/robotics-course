@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FL.11-git-for-robotics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e4fd78d60d29
+  question: Which classification of files into commit / LFS / ignore is correct?
+  options:
+    - Commit `camera_calibration.yaml`, `uv.lock`; LFS `chassis.stl`, `detector.onnx`; ignore `install/`, the 12 GB bag, `.env`
+    - Commit `camera_calibration.yaml`, `.env`; LFS `chassis.stl`, the 12 GB bag; ignore `install/`, `uv.lock`, `detector.onnx`
+    - Commit `uv.lock`, `chassis.stl`; LFS `detector.onnx`, the 12 GB bag; ignore `install/`, `.env`, `camera_calibration.yaml`
+    - Commit `camera_calibration.yaml`, `uv.lock`, `install/`; LFS the 12 GB bag, `detector.onnx`; ignore `chassis.stl`, `.env`
+  correct: 0
+- source: d550ede2808d
+  question: What does Git store in history for a file tracked by LFS?
+  options:
+    - A compressed delta of the file against its previous version
+    - The full file content, plus a flag telling clones to skip downloading it
+    - A symbolic link to the file on the LFS server's filesystem
+    - A small pointer file with the spec version, SHA-256 `oid` and `size`
+  correct: 3
+- source: 1c6954f788ec
+  question: "A 320×240 RGB image stream at 30 Hz: what is the raw data rate, and does 10 minutes fit in a 1 GB budget?"
+  options:
+    - About 2.3 MB/s, so 10 min is about 1.4 GB; it does not fit
+    - About 6.9 MB/s, so 10 min is about 4.1 GB; it does not fit
+    - About 0.69 MB/s, so 10 min is about 0.41 GB; it fits
+    - About 6.9 MB/s, so 10 min is about 0.41 GB; it fits
+  correct: 1
+- source: 05515ff06d12
+  question: You added `*.onnx` to LFS tracking today, but `detector.onnx` was committed normally last month. Is the repository fixed?
+  options:
+    - Yes; LFS converts the old blob into a pointer the next time you push
+    - Yes; `git gc` removes the old blob once the file is tracked by LFS
+    - No; old commits keep the full blob, so rewrite with `git lfs migrate import`
+    - No; you must delete the file and commit it again so that LFS picks it up
+  correct: 2
+- source: 4697762c1de7
+  question: Why commit both `karmel.repos` and `karmel.lock.repos`?
+  options:
+    - "`karmel.repos` is for the laptop and `karmel.lock.repos` is for the Pi's arm64 builds"
+    - "`karmel.repos` lists public repos and `karmel.lock.repos` lists private ones with tokens"
+    - "`karmel.lock.repos` is a backup in case `vcs import` corrupts the main file"
+    - "`karmel.repos` states intent (branches); the `--exact` export pins tested commit SHAs"
+  correct: 3
+- source: 686972226bd6
+  question: A teammate's clone crashes loading `detector.onnx` with "invalid protobuf", and the file is 133 bytes. What is wrong?
+  options:
+    - The model was exported with a newer ONNX opset than their runtime supports
+    - They have the LFS pointer, not the model; run `git lfs install && git lfs pull`
+    - Git converted line endings in the binary file; add `*.onnx binary` to `.gitattributes`
+    - The file was truncated by a shallow clone; re-clone with `--depth 0`
+  correct: 1

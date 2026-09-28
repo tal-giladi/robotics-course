@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 19.11-voice-interface.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 800450cc6594
+  question: Why must the stop word be recognised before the ASR rather than after it?
+  options:
+    - The ASR cannot transcribe single short words like "stop" reliably
+    - The pipeline takes ~3.8 s (≈1.15 m at 0.3 m/s); the spotter answers in 0.02 s (≈6 mm)
+    - Running the stop word through the ASR sends private audio to the cloud
+    - The agent would refuse to stop without a full sentence to parse
+  correct: 1
+- source: 2fb9bffbea72
+  question: A VAD segment is closed at frame `i` instead of `i - hang + 1`. What happens?
+  options:
+    - Each utterance loses its last 400 ms, cutting off final words
+    - Nothing measurable; the ASR trims silence itself
+    - The pipeline takes ~3.8 s (≈1.15 m at 0.3 m/s); the spotter 0.02 s
+    - The VAD never closes the segment, so the utterance runs to the 12 s limit
+  correct: 2
+- source: cfff3baf07a4
+  question: You set the VAD threshold to −55 dBFS in a room whose noise floor is −48 dBFS. What happens?
+  options:
+    - "Each utterance gains 400 ms of silence: slower ASR and wrong endpoints"
+    - Every frame counts as silence, so the robot never hears any command
+    - Only loud speech is detected, so quiet users are ignored
+    - The VAD adapts automatically, so segments are normal
+  correct: 0
+- source: 7ec948c86ef6
+  question: Your voice loop takes 4.28 s to first word. Where do you spend one engineering week?
+  options:
+    - "The ASR: switch small → tiny to save 0.58 s with no downside"
+    - "The hangover: cut it to zero, since it is pure waiting"
+    - "The TTS: stream audio to save the most time"
+    - "The agent, the largest term: answer early, use a smaller model"
+  correct: 3
+- source: 295fd358d186
+  question: An unrecognised voice says "take the knife to the bedroom". What should happen, and why is that better than a system-prompt refusal?
+  options:
+    - It refuses via the prompt, since only the model can judge the request
+    - It ignores the voice completely, as if nothing was said
+    - It can answer questions in `observe` mode, but motion skills are not allowed
+    - It asks for a PIN before executing, then proceeds normally
+  correct: 2
+- source: 392e66c4eb8f
+  question: The ASR returns "put it on the deck" with confidence 0.62. What two things stop the robot doing something wrong?
+  options:
+    - Below 0.75 it asks for confirmation; and `place` is an enum, so "deck" is rejected
+    - The model corrects "deck" to "desk"; and the geofence blocks the move
+    - The ASR re-runs at higher quality; and the planner picks the closest name
+    - The user must say the wake word again; and the arm speed is limited
+  correct: 0
+- source: 97224adcdbe3
+  question: Why does `VoiceLoop` set `self.awake = False` after every command?
+  options:
+    - To save CPU between commands by stopping the microphone
+    - One command per wake, or anything said next commands the arm
+    - To reset the ASR model's internal state after each utterance
+    - Because the wake-word detector crashes if left active
+  correct: 1
+- source: 083bed6ef61c
+  question: You measure your wake word's false-accept rate at 4 per hour. Is that acceptable?
+  options:
+    - Yes, anything under 10 per hour is standard for consumer devices
+    - No, any false accept is unacceptable on a robot
+    - Yes, as long as the stop word has the same rate
+    - Depends what a wake grants; if it can trigger skills, it's too high
+  correct: 3

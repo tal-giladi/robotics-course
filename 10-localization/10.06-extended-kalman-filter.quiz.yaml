@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 10.06-extended-kalman-filter.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3d3e463d7c90
+  question: Why can't a linear Kalman filter track a differential-drive robot's pose?
+  options:
+    - Its noise is not Gaussian, which a linear filter requires
+    - "Motion and landmark models involve cos, sqrt and atan2 of the state: no constant F or H"
+    - The state has three variables, and linear filters only handle two
+    - Wheel encoders are discrete, and linear filters need continuous inputs
+  correct: 1
+- source: 4117e1ea705c
+  question: karmel drives 8 cm with equal wheels at $\theta = 90°$. What is $F$, and what does its only non-trivial entry mean?
+  options:
+    - "$F_{13} = -0.08$: a heading error $\\delta\\theta$ becomes $0.08\\,\\delta\\theta$ m of $x$ error"
+    - "$F_{23} = 0.08$: a heading error becomes $0.08\\,\\delta\\theta$ m of $y$ error"
+    - "$F_{13} = 0.08$: an $x$ error becomes $0.08$ rad of heading error"
+    - "$F_{33} = 0.08$: the heading error shrinks by 8 % this step"
+  correct: 0
+- source: c4e77fca1731
+  question: You double the wheel-noise constant $k$. What happens to $Q$, to $K$, and to $P$ after a landmark update?
+  options:
+    - Q doubles; K is unchanged; P collapses the same
+    - Q halves; K shrinks; the sawtooth gets shorter
+    - Q quadruples; K grows; P re-grows faster, taller sawtooth
+    - Q is unchanged; K grows; P no longer collapses
+  correct: 2
+- source: 1dfb2fdefb06
+  question: A landmark is 3 m directly to the robot's left. Which $H$ entry is zero, and what does a range measurement teach?
+  options:
+    - The $y$ entry of the range row; only forward position
+    - The heading entry of the range row; only heading
+    - The $x$ entry of the bearing row; only lateral position
+    - The $x$ entry of the range row; only lateral position
+  correct: 3
+- source: df0340fa6fc2
+  question: Over a tour your filter's mean NIS is 0.4 with $m = 2$, and its position RMSE is 8 cm. Diagnose.
+  options:
+    - "Overconfident: S is too small; raise R and k together"
+    - "Underconfident: S is too big, e.g. R inflated; shrink R first"
+    - "Consistent: an NIS below m is always a healthy sign"
+    - "Diverging: an NIS below 1 means landmarks are being lost"
+  correct: 1
+- source: 2158c4966855
+  question: You set the gate to $d^2 < 0.1$ instead of 5.991. What happens over a 50 s tour?
+  options:
+    - ~95 % rejected; drifts toward dead reckoning, then accepts again in a ragged cycle
+    - Nothing changes, since honest measurements always have $d^2 < 0.1$
+    - All outliers pass, since a tighter gate admits more measurements
+    - The filter crashes on the first rejection with a singular S
+  correct: 0
+- source: 8f3dcda9126e
+  question: Analytic and numerical $H$ agree except in the bearing row, off by about $3\times10^6$ at one pose. What is wrong?
+  options:
+    - The analytic $H$ has a sign error in the bearing row
+    - ε is too large; use $10^{-12}$ in the numerical Jacobian
+    - "Nothing in $H$: the numerical bearing wrapped across ±π; wrap angle differences"
+    - The landmark is at the robot's position, so $H$ is singular
+  correct: 2
+- source: ca234f328d67
+  question: On the real robot you have no ground truth. How do you decide whether the EKF's covariance is trustworthy?
+  options:
+    - Check that $P$ shrinks after every update and never grows
+    - Compare the EKF pose with raw odometry at the end of a drive
+    - Run in simulation only, since real robots can't be validated
+    - NIS averaging m, a few-percent rejection rate, and a taped closed loop vs 2σ
+  correct: 3

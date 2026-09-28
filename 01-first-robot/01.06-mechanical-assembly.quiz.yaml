@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.06-mechanical-assembly.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: cd9ffcaa849a
+  question: Left wheel effective radius 44.6 mm, right 45.0 mm. You command a 3 m straight run with $b = 0.200$ m. Which way does the robot veer, and by how much?
+  options:
+    - Right, by about 7.7°
+    - Left, by about 7.7°
+    - Left, by about 0.77°
+    - Right, by about 15.4°
+  correct: 1
+- source: 317343b48b2b
+  question: Why is the ball caster's height the dimension you adjust, rather than the motor bracket height?
+  options:
+    - The caster carries the most load, so its height has the largest effect on traction.
+    - The motor brackets are glued in place and can't be moved after assembly.
+    - All other stacked dimensions are fixed by the parts, so one adjustable element absorbs the total error; the caster carries the least load and needs no accuracy.
+    - The caster sets the wheelbase $b$, which odometry depends on directly.
+  correct: 2
+- source: 7a0bfc8b2408
+  question: Your robot has 1.3° of total toe-in. What does it cost you — odometry accuracy, energy, or both?
+  options:
+    - "Almost entirely energy (and tyre wear): about 1.1% sideways drag; the distance error is only about 0.006%."
+    - "Almost entirely odometry accuracy: about 1.1% distance error, with negligible energy loss."
+    - "Both equally: about 1.1% extra energy and 1.1% distance error."
+    - "Neither: toe-in below 2° has no measurable effect on a small robot."
+  correct: 0
+- source: a29c29042b96
+  question: You move the battery from $x = -20$ mm to $x = -70$ mm (further back). What happens to traction and to forward tipping?
+  options:
+    - Traction improves and forward tipping gets worse.
+    - Both traction and forward tipping get worse.
+    - Traction is unchanged; forward tipping gets better.
+    - Traction gets worse (drive-wheel weight falls from 80% to 30%); forward tipping gets better.
+  correct: 3
+- source: 8f3b8de89213
+  question: A robot drives a commanded 2 m straight and ends up 80 mm to the left, every time, the same 80 mm. A colleague says the encoders are losing ticks. Are they right?
+  options:
+    - "Yes: lost ticks always accumulate on the same side, giving a repeatable drift."
+    - "No: it is wheel slip on the floor, which odometry cannot see."
+    - Yes, but only if the error grows with speed; otherwise it's the caster.
+    - "No: a perfectly repeatable error is systematic (unequal radii, wrong $b$ or ticks per rev); lost ticks are random."
+  correct: 3
+- source: 074b5c10d78b
+  question: Why do the motors need `MOTOR_RIGHT_REVERSED = True` in the firmware rather than swapped wires?
+  options:
+    - Swapping wires would reverse the encoder too, which the PIO program can't handle.
+    - The DRV8874 is damaged if motor leads are reversed relative to its outputs.
+    - The motors are mirror images; a named config flag is visible, versioned and testable, while swapped wires get "fixed" later.
+    - Swapped wires change the motor's electrical polarity, which halves its torque.
+  correct: 2
+- source: 40df3cad9f80
+  question: You have no calipers. How do you measure the effective wheel radius to better than 1%?
+  options:
+    - Measure the tyre's diameter with a ruler across its widest point and halve it.
+    - Wrap a string around the unloaded tyre, measure the string and divide by $2\pi$.
+    - Read the radius from the wheel's datasheet and subtract the tyre compression.
+    - Roll the loaded robot straight for 10 wheel turns, measure the distance $D$, and compute $r = D/(10 \cdot 2\pi)$.
+  correct: 3

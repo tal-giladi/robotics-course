@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 16.01-where-ml-helps-robots.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: be9f6a6a9a4c
+  question: Which set of answers to the six questions (model, data, variety, latency, failure, verify) pushes a component towards being engineered?
+  options:
+    - Physics unknown, data plentiful, inputs open-world, loose deadlines, failure is cheap, no certification needed
+    - Physics can be written down, data plentiful, inputs open-world, loose deadlines, failure is cheap, must be certified
+    - Physics unknown, data scarce, inputs fixed, hard ms deadlines, failure is cheap, no certification needed
+    - Physics can be written down, data scarce, inputs fixed, hard ms deadlines, failure causes harm, must be certified
+  correct: 3
+- source: 6061e8779cea
+  question: Why is detecting bottles and cups the textbook case for a learned component, while AprilTag detection is not?
+  options:
+    - Bottles can't be written down and labels are cheap; tags are designed patterns a classical decoder handles exactly
+    - Bottles are rigid objects with exact geometry; tags vary with lighting, so only learning can decode them
+    - Bottle detection has hard millisecond deadlines; tag detection can tolerate a second of latency
+    - Bottles are rare in training data; tags appear in every dataset, so a network adds no new information
+  correct: 0
+- source: c7850abb1517
+  question: karmel spins at 0.6 rad/s while searching. Model A takes 90 ms per frame, model B 1.2 s. Using the current heading to aim, what heading error does each cause?
+  options:
+    - "A: about 0.05°; B: about 0.7°"
+    - "A: about 3.1°; B: about 41°"
+    - "A: about 5.4°; B: about 72°"
+    - "A: about 3.1°; B: about 4.1°"
+  correct: 1
+- source: 221f882ce0b7
+  question: A detector's false-positive rate is 0.2% per frame at 5 Hz. How many false alarms per hour, and what changes if they come from one poster passed daily?
+  options:
+    - 36 per hour; poster errors are independent, so requiring three consecutive frames removes them
+    - 3.6 per hour; poster errors are rare, so they can be ignored in practice
+    - 360 per hour; poster errors dominate, so the detector must be replaced entirely
+    - 36 per hour; poster errors aren't independent, so temporal confirmation fails and you need plausibility checks or data
+  correct: 3
+- source: 8bf6373d08a5
+  question: You fit an MLP and a 3-parameter physics model to motor logs recorded with a full battery. Whose error grows more when the battery is nearly empty?
+  options:
+    - "The physics model's: its three parameters were fitted at full voltage and cannot adapt to low voltage"
+    - "Neither: both models see the voltage as an input, so they extrapolate equally well"
+    - "The MLP's (about 6×): it only interpolates, while speed ∝ duty × voltage still holds outside the range"
+    - Both grow equally, since the battery's internal resistance is missing from both models
+  correct: 2
+- source: 4bea5fdd1515
+  question: A detector scores 0.95 on a "bottle" the LiDAR places 3.5 m away; the box is 70 px tall on the 320×240 stream ($f_y$ = 233.9 px). Accept or reject?
+  options:
+    - "Accept: a 0.95 score is well above any threshold, and geometry is only a tie-breaker"
+    - "Reject: the implied height is about 1.05 m, which no bottle has, whatever the score"
+    - "Reject: the implied height is about 0.10 m, which is too small for a bottle at that range"
+    - "Accept: the implied height is about 0.30 m, which is a plausible wine bottle"
+  correct: 1
+- source: d4247e222468
+  question: Where does ML not belong in karmel under any score, and what goes there instead?
+  options:
+    - The safety path; use a range threshold, a watchdog on the Pico and a hardware e-stop
+    - Object detection; use HSV thresholds and contours, which are always more reliable
+    - Navigation planning; use A* on the costmap, since learned planners cannot find paths
+    - Localization; use wheel odometry alone, since learned models drift over time
+  correct: 0

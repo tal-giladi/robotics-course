@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.20-optimization-basics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 2829e3edee47
+  question: What is the gradient-descent update, and the condition on η for a quadratic with largest curvature $\lambda_\text{max}$?
+  options:
+    - $\mathbf{x} \leftarrow \mathbf{x} + \eta\nabla f$; converges for $0 < \eta < 2/\lambda_\text{max}$
+    - $\mathbf{x} \leftarrow \mathbf{x} - \eta\nabla f$; converges for $0 < \eta < 2\lambda_\text{max}$
+    - $\mathbf{x} \leftarrow \mathbf{x} - \eta\nabla f$; converges for $0 < \eta < 2/\lambda_\text{max}$
+    - $\mathbf{x} \leftarrow \mathbf{x} - \eta\nabla f$; converges for $\eta > 1/\lambda_\text{max}$
+  correct: 2
+- source: 1a68d1e3dd3c
+  question: For $F = \frac{1}{2}\|\mathbf{r}\|^2$, what are the gradient and the Gauss-Newton step?
+  options:
+    - $\nabla F = J\mathbf{r}$; solve $J J^\top\,\boldsymbol\Delta = -J\mathbf{r}$
+    - $\nabla F = \mathbf{r}$; solve $J\,\boldsymbol\Delta = \mathbf{r}$
+    - $\nabla F = J^\top\mathbf{r}$; set $\boldsymbol\Delta = -J^\top\mathbf{r}$
+    - $\nabla F = J^\top\mathbf{r}$; solve $J^\top J\,\boldsymbol\Delta = -J^\top\mathbf{r}$
+  correct: 3
+- source: 38a116b73ac2
+  question: What does λ do in Levenberg-Marquardt, at both extremes?
+  options:
+    - "λ → 0: tiny gradient-descent step; λ → ∞: Gauss-Newton step"
+    - "λ → 0: Gauss-Newton step; λ → ∞: tiny gradient-descent step"
+    - "λ → 0: Newton step with exact Hessian; λ → ∞: no step at all"
+    - "λ → 0: random search step; λ → ∞: Gauss-Newton step"
+  correct: 1
+- source: 14ed6304f171
+  question: You run 2-link IK from $q_0 = (10°, 10°)$ and from $q_0 = (90°, -60°)$ for the same target. What might differ?
+  options:
+    - The solution branch (elbow-up vs elbow-down), both with zero residual
+    - Only the number of iterations; the final joint angles are identical
+    - The second start fails with a large residual, since it is far away
+    - "The residual: the closer start finds a smaller final error"
+  correct: 0
+- source: 3cee84818d04
+  question: Why is gradient descent slow when parameters have very different sensitivities?
+  options:
+    - η must suit the flattest direction, so steep directions oscillate forever and never converge
+    - The gradient points exactly at the minimum, but its length is too small in steep directions
+    - Each parameter needs its own separate optimizer run, which multiplies the iterations
+    - η must suit the steepest direction, so flat directions shrink slowly; iterations grow with the condition number
+  correct: 3
+- source: bae81bffa849
+  question: How is pose-graph SLAM an instance of least-squares optimization?
+  options:
+    - Unknowns are landmarks; each pose is fixed and solved once in closed form by SVD
+    - Unknowns are sensor readings; the graph is optimized by gradient ascent on likelihood
+    - Unknowns are poses; each constraint is a weighted residual minimized with Gauss-Newton/LM
+    - Unknowns are loop closures; they are chosen by a discrete search over the graph
+  correct: 2
+- source: fe3e8499dfda
+  question: A trilateration solver returns a position 3 m away on the robot, with small residuals. Beacons are at (0,0), (5,0) and (10,0). What's wrong?
+  options:
+    - The beacons are collinear, so there is a mirror-image solution with equal residuals
+    - The beacons are too far apart, so the solver lacks numerical precision
+    - Three beacons are too few; trilateration in 2D needs at least four
+    - The residuals are small because the solver stopped early; add iterations
+  correct: 0

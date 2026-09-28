@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FPY.01-python-for-csharp-devs.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 7f8682dcc50b
+  question: What do `-13 % 12` and `-13 // 12` evaluate to in Python, and why is that useful for a 12-slot ring buffer?
+  options:
+    - "`-1` and `-1`; the negative index wraps from the end of the list automatically"
+    - "`11` and `-1`; floor division rounds toward zero, keeping the index in range"
+    - "`-1` and `-2`; the sign follows the dividend, so you can detect backward steps"
+    - "`11` and `-2`; `%` takes the divisor's sign, so `(i - k) % n` is always in `[0, n)`"
+  correct: 3
+- source: 51df5e8a7f42
+  question: A C# colleague writes `occupancy = [[0.0] * width] * height`. What goes wrong, and what is the fix?
+  options:
+    - All rows are the same list, so marking a cell marks the whole column; use a comprehension or `np.zeros`
+    - The inner lists are tuples, so assigning a cell raises `TypeError`; use `list()` around each row
+    - Floats are copied by reference, so all cells share one value; use `[0] * width` with ints
+    - The grid is transposed, so `[y][x]` indexes the wrong axis; swap `width` and `height`
+  correct: 0
+- source: 2252bc1f887f
+  question: '`for w in ["left", "right", "caster"]: bus.on(w, lambda msg: handle(w, msg))` makes every callback report `"caster"`. Why, and what is a fix?'
+  options:
+    - "`bus.on` overwrites earlier callbacks; register them in reverse order"
+    - "The closures capture the variable `w`, read after the loop ends; use `lambda msg, w=w: handle(w, msg)`"
+    - Lambdas are compiled once per loop; move the lambda outside the `for` statement
+    - Strings are interned, so all three `w` values are the same object; use `w.copy()`
+  correct: 1
+- source: a686c00b8242
+  question: What is the Python equivalent of C# `using (var port = new SerialPort(...)) { ... }`, and what can a context manager do that `Dispose()` cannot?
+  options:
+    - "`try: ... finally: port.close()`; it can retry the block automatically after an exception"
+    - "`with serial.Serial(...) as port:`; it runs `__exit__` even when the process is killed"
+    - "`with serial.Serial(...) as port:`; `__exit__` sees the exception and can react or suppress it"
+    - "`async with serial.Serial(...) as port:`; it closes the port without blocking the loop"
+  correct: 2
+- source: 0184e7494f00
+  question: "`stats = (s.range_m for s in samples)`, then `print(max(stats)); print(min(stats))`. What happens?"
+  options:
+    - Both print correctly, since the generator restarts on each call
+    - "`max` raises `TypeError`, because generators have no `__len__`"
+    - "`max` works; `min` raises `ValueError` because the generator was exhausted"
+    - Both print the same value, because the generator caches its last item
+  correct: 2
+- source: 01bd65d26934
+  question: The Pico's 16-bit counter reads 32000, then −32000 one frame later (2464 ticks/rev, 50 Hz, max about 17 rad/s). What does the wrap formula give, and is it believable?
+  options:
+    - −64000 ticks backward, about 26 revolutions; the counter must have been reset
+    - 1536 ticks backward; plausible, since the robot was reversing at that moment
+    - 1536 ticks forward, about 0.62 rev; plausible, since it's under one revolution
+    - 1536 ticks forward, about 196 rad/s; impossible, so frames were lost or corrupt
+  correct: 3
+- source: 83938993458b
+  question: Why can the parser consume a `serial.Serial`, a file and an `io.StringIO` without any interface?
+  options:
+    - All three inherit from `io.IOBase`, which the parser checks with `isinstance`
+    - "Duck typing: all three are iterables yielding lines, and the parser only iterates them"
+    - The `Iterable[str]` hint makes Python convert each argument to a list at runtime
+    - The parser reads bytes with `.read()`, which every Python object provides
+  correct: 1

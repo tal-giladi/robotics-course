@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FCV.01-how-cameras-form-images.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5aea1db62b6c
+  question: Why does a color camera need a Bayer filter at all?
+  options:
+    - Photodiodes respond to all visible wavelengths, so a per-pixel filter makes each measure one color band
+    - Photodiodes see only green light, so red and blue filters extend the sensor's range
+    - The filter blocks infrared light, which would otherwise wash out all three colors
+    - The filter increases light sensitivity, since colored pixels collect more photons
+  correct: 0
+- source: 11ad0e750054
+  question: A pixel collects 400 e⁻ with 3 e⁻ read noise. What is its SNR, and what is it if you double the exposure?
+  options:
+    - About 19.8; about 39.6 when doubled
+    - About 133; about 267 when doubled
+    - About 20.0; about 28.3 when doubled
+    - About 19.8; about 28.1 when doubled
+  correct: 3
+- source: 5fed97503841
+  question: The robot rotates at 2 rad/s with 20 ms exposure. How much blur does karmel's camera ($f \approx 467.7$ px) see near the image center?
+  options:
+    - About 1.9 px
+    - About 9.4 px
+    - About 18.7 px
+    - About 47 px
+  correct: 2
+- source: 61bf873bd5a5
+  question: Why are there twice as many green pixels as red or blue in a Bayer pattern?
+  options:
+    - Green filters are cheaper to make, so manufacturers use more of them
+    - Luminance and most detail are dominated by green, so extra green gives better sharpness
+    - Green light has the shortest wavelength, so it needs denser sampling
+    - Red and blue are computed from green, so green needs double coverage
+  correct: 1
+- source: 46ee6056d30d
+  question: A vertical pole looks tilted in images taken while the robot turns, but straight when it stands still. What is it, and what removes it?
+  options:
+    - Rolling-shutter skew; a global-shutter sensor removes it
+    - Lens distortion; a camera calibration removes it
+    - Motion blur; a shorter exposure time removes it
+    - Chromatic aberration; a better lens removes it
+  correct: 0
+- source: 7b3b808b1a6d
+  question: You point the camera at a fine black-and-white checkerboard 3 m away, where each square covers about 1 pixel. What artifacts appear?
+  options:
+    - Barrel distortion, since the board is far from the optical center
+    - Motion blur, since each square is only one pixel wide
+    - Vignetting, since the corners get less light at that distance
+    - "Aliasing: moiré and false color, since red and blue are sampled every 2 px"
+  correct: 3

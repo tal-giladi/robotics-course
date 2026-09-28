@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 15.02-grippers.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c27474415f0e
+  question: Your gripper has a 45 mm stroke. What is the widest object you should plan to grasp, and why not 45 mm?
+  options:
+    - About 45 mm; the stroke is measured with clearance already included by the maker
+    - About 35 mm; the jaws must descend around it despite pose and positioning errors
+    - About 22 mm; each jaw can only travel half the stroke toward the object
+    - About 40 mm; the pads compress by 5 mm, which is all the margin needed
+  correct: 1
+- source: 7c98bd08b543
+  question: A 20 kg·cm servo drives a jaw with a 40 mm lever at 30% torque and $\eta = 0.7$. What force per pad, and what mass at $\mu = 0.6$, safety 2, 1 m/s²?
+  options:
+    - About 14.7 N per pad; about 817 g
+    - About 10.3 N per pad; about 286 g
+    - About 34.3 N per pad; about 1.9 kg
+    - About 10.3 N per pad; about 572 g
+  correct: 3
+- source: e63fe5b2f78f
+  question: You swap a 20 mm suction cup for a 40 mm one at the same 60 kPa. How do pull-off force and payload change?
+  options:
+    - Both 2×; force scales with diameter, and a larger cup also seals more easily
+    - Force 4×, payload unchanged; the pump's flow rate limits the payload, not the area
+    - Both 8×; force scales with volume, so doubling the diameter multiplies it by eight
+    - Both 4×; but finding a flat, clean 40 mm patch is usually the binding constraint
+  correct: 3
+- source: 638a0e23cdf1
+  question: Why can a coin-sized suction cup out-lift an entire servo-driven jaw?
+  options:
+    - The pump's motor is far stronger than the servo, and suction transfers its full power without gearbox losses
+    - The atmosphere does the work (up to ~31.7 N on 20 mm); the pump only removes air, while a jaw needs a flat patch less
+    - Suction cups exploit static electricity on plastic surfaces, which adds to the vacuum force
+    - The cup's rubber lip has a friction coefficient above 2, which multiplies the pump's holding force
+  correct: 1
+- source: 4ace17573731
+  question: Switching from rigid pads to Fin Ray fingers raises pick success but worsens place accuracy. Why?
+  options:
+    - The finger wraps the object, tolerating pose error; but its deformation shifts the object in the tool frame
+    - Fin Ray fingers grip harder, so picks succeed; but the extra force deforms the object during placing
+    - Fin Ray fingers are longer, so they reach more objects; but their length amplifies arm vibration
+    - The finger's lower friction lets objects self-center; but they then slide during the place motion
+  correct: 0
+- source: de9f574cc36a
+  question: Your pump reads 60 kPa but the cup keeps dropping a smooth plastic box. Which checks, in order?
+  options:
+    - Replace the pump, then the cup, then the tubing, until the box stays attached
+    - Raise pump pressure to 90 kPa, then slow down the lift, then add a second cup
+    - Vacuum at the cup, then approach along the surface normal, then pull-off vs shear
+    - Clean the box surface, then swap to a smaller cup, then lower the pump pressure
+  correct: 2
+- source: 81820ae7cb15
+  question: "Two grippers cost the same: one has twice the stroke, the other twice the force. Which do you buy for a kitchen pick-and-place robot?"
+  options:
+    - "Force: heavier kitchen items like pots need it, while stroke can be extended with longer fingers"
+    - "Force: grip force is the main cause of failed picks, while stroke only matters for boxes"
+    - "Stroke: wider jaws also produce more force, since the lever arm doubles with the stroke"
+    - "Stroke: it rules out most household objects, while force mostly suffices and pads can recover some"
+  correct: 3

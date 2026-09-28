@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.12-executors-and-callbacks.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 27e15c5e0d00
+  question: Why does `client.call()` inside a timer callback deadlock under `rclpy.spin(node)`, although the server is in another process and answers?
+  options:
+    - The server's response is dropped because the client uses BEST_EFFORT QoS.
+    - The single-threaded executor's only thread is blocked in the timer callback, so nobody processes the response that would complete the future.
+    - The timer callback holds the GIL, so the server process can't run.
+    - The client can't send requests from inside a callback at all.
+  correct: 1
+- source: 837d7b1dcb07
+  question: You switch to `MultiThreadedExecutor(num_threads=8)` and it still hangs. What did you forget?
+  options:
+    - To increase the service's QoS depth above 1.
+    - To call `rclpy.init()` with the thread count.
+    - To make the timer period longer than the service latency.
+    - The client is still in the same mutually exclusive group as the blocked timer; put it in a separate group.
+  correct: 3
+- source: babd1f736e65
+  question: One thread runs a 50 Hz control callback (1 ms) and a 2 Hz logging callback (120 ms). What's the utilization, approximate control rate and worst gap?
+  options:
+    - 0.29, about 40 Hz, worst gap about 120 ms
+    - 0.05, 50 Hz, worst gap 20 ms
+    - 0.29, 50 Hz, worst gap about 21 ms
+    - 0.24, about 38 Hz, worst gap about 240 ms
+  correct: 0
+- source: 2372a182dc02
+  question: What does a `MutuallyExclusiveCallbackGroup` guarantee, and what does it not guarantee?
+  options:
+    - No callback of any group runs concurrently; nothing about ordering.
+    - Callbacks run in the order they were registered; nothing about locking.
+    - No two callbacks of that group run at once; callbacks in other groups can still run concurrently, so shared state needs a lock.
+    - Each callback gets its own thread; nothing about timing.
+  correct: 2
+- source: 78d7257ddc7c
+  question: A slow pure-Python callback computes for 400 ms. You move it to its own group on a `MultiThreadedExecutor`. Does the 20 Hz timer recover?
+  options:
+    - "Mostly not: the pure-Python loop holds the GIL, so jitter stays high; offload to a process or GIL-releasing code."
+    - Yes, completely, since it now runs on its own core.
+    - Yes, but only with `num_threads` set to at least 4.
+    - No, and the timer stops entirely until the callback finishes.
+  correct: 0
+- source: fc6f3add3939
+  question: A node appears in `ros2 node list` and its services are listed, but `ros2 param get` times out. What's your leading hypothesis?
+  options:
+    - The parameter name is misspelled.
+    - The node's DDS participant crashed while the process lives on.
+    - "A blocked executor: discovery runs on DDS threads, but answering the parameter service needs the executor."
+    - The parameter service uses a different domain ID.
+  correct: 2
+- source: ae939118b929
+  question: Why does `drive_distance_server` use a `ReentrantCallbackGroup` and also a `threading.Lock`?
+  options:
+    - The reentrant group lets callbacks run during a long `execute`; the lock protects the shared `_busy` flag they can now touch concurrently.
+    - The group sets thread priorities; the lock stops the executor from shutting down.
+    - The group is required for actions; the lock serializes feedback messages.
+    - The lock replaces the group on Python 3.12; both are kept for compatibility.
+  correct: 0

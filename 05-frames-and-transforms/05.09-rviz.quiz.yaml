@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 05.09-rviz.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c128c8210160
+  question: "What does RViz do with a `LaserScan` stamped `frame_id: laser` when the Fixed Frame is `map`?"
+  options:
+    - Draws it at the robot's current pose, ignoring the stamp.
+    - Looks up $T_{\text{map}\leftarrow\text{laser}}$ at the message's stamp, applies it to every beam end point and draws the result.
+    - Converts the scan into a map and overlays it on the saved map.
+    - Draws it in the laser frame and then moves the camera to match.
+  correct: 1
+- source: 602976c4f1a6
+  question: The robot jumps sideways in RViz every few seconds, but `/odom` is smooth. Which is the Fixed Frame, and is this a bug?
+  options:
+    - "`odom`; it's a bug in the odometry filter."
+    - "`base_link`; it's expected because base_link moves."
+    - "`map`; not a bug: the localizer corrects `map → odom`, which may jump."
+    - "`map`; it's a bug in AMCL's publishing rate."
+  correct: 2
+- source: 80e2afb2d26a
+  question: "`ros2 topic hz /scan` reports 10 Hz, the LaserScan display status is Ok, and nothing is drawn. What's the most likely cause?"
+  options:
+    - A missing TF from `laser` to the fixed frame.
+    - The scan's range limits are set to zero.
+    - The display's topic name has a typo.
+    - "A QoS mismatch: the display is Reliable and the driver publishes Best Effort."
+  correct: 3
+- source: 3ed57a9cafd4
+  question: Why does the RobotModel display need `/robot_description` to be transient local, when `/tf_static` places the frames?
+  options:
+    - The URDF text gives the geometry and is published once; only transient local lets a later RViz receive it.
+    - Transient local makes the URDF update faster when joints move.
+    - RViz can't subscribe to volatile topics at all.
+    - The URDF is too large for volatile delivery.
+  correct: 0
+- source: d86db4cf41fb
+  question: "With `Decay Time: 10` on the LaserScan, which fixed frame produces the blur?"
+  options:
+    - "`map`, because it jumps at each localization correction."
+    - "`odom`, because it drifts slowly as wheel errors accumulate."
+    - "`base_link`, because it moves with the robot, so each scan lands elsewhere."
+    - "`laser`, because sensor frames are not allowed as fixed frames."
+  correct: 2
+- source: 1a7cc7ad4d28
+  question: RViz reports `Invalid frame ID "map" ... frame does not exist`, but `tf2_echo odom base_link` works. What is missing?
+  options:
+    - The `map → odom` edge, which a localizer (fake_localization, AMCL or slam_toolbox) must publish.
+    - The `odom → base_link` edge, which odometry must publish.
+    - The URDF, which robot_state_publisher must load.
+    - A static `map` frame declared in the RViz config.
+  correct: 0
+- source: 0375585ec51e
+  question: The bottle marker stays on screen after you kill the detector. What is missing in the publisher?
+  options:
+    - The marker's `frame_locked` flag.
+    - "`Marker.lifetime`: without it the marker persists, so you debug a stale picture."
+    - A `DELETEALL` action on shutdown in RViz's config.
+    - A transient-local QoS on the marker topic.
+  correct: 1
+- source: d8b2fc11ea8e
+  question: You want a teammate to see exactly what you see in RViz. What do you send, and what must be true on their machine?
+  options:
+    - A screenshot; nothing else is needed.
+    - Your `~/.rviz2` folder; their ROS domain must match yours.
+    - The bag file of your session; RViz replays views from bags.
+    - The `.rviz` config (ideally in the package, started with `-d`); they need the same topics, frames, built packages and distro.
+  correct: 3

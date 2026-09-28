@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.09-reading-encoders.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6df68bd4dd02
+  question: Why does a wheel encoder need two channels rather than one, and what does the second channel add?
+  options:
+    - The second channel is a backup that keeps counting if the first one fails.
+    - The second channel, offset by a quarter cycle, makes a Gray code whose order reveals direction (and allows 4× resolution).
+    - The second channel measures wheel speed while the first one measures distance.
+    - The second channel carries the index pulse that marks one full wheel revolution.
+  correct: 1
+- source: 388c10ed7539
+  question: The wheel turns exactly one revolution and the count changes by 1,320 rather than 2,464. What do you conclude, and what do you change?
+  options:
+    - You have the 1:56 motor with 2× decoding; set decoding to 4× in `config.py`.
+    - The encoder is missing half its edges; switch the PIO program to 4× decoding.
+    - You have the 1:30 (333 RPM) motor; set the gear ratio to 30.0 in both `karmel.yaml` and the firmware `config.py`.
+    - The wheel slipped during the test; repeat it with the robot on the floor.
+  correct: 2
+- source: df962d558d69
+  question: At 100 Hz, how much does the wheel-speed estimate change per extra tick in the window, and why is that a problem only at low speed?
+  options:
+    - About 0.0255 rad/s; at low speed the encoder stops producing edges altogether.
+    - About 2.55 rad/s; at high speed the error is hidden by motor inertia.
+    - About 0.255 rad/s; at 1 rad/s the window holds only about 4 ticks, so ±1 tick is ±25%.
+    - About 0.255 rad/s; at low speed the PIO counter overflows between windows.
+  correct: 2
+- source: d766262104f7
+  question: A colleague reads the encoders from the Pi with a Python loop polling two GPIOs at 10 kHz. What happens at full speed?
+  options:
+    - The Pi counts correctly but uses 100% CPU, slowing other programs.
+    - The count doubles, because each edge is sampled twice at 10 kHz.
+    - The loop crashes with a timing exception that makes the bug obvious.
+    - It misses transitions and may even count backwards; odometry under-reports distance, which looks like a tuning problem.
+  correct: 3
+- source: da5c87c353b7
+  question: Why does `QuadratureEncoderPIO.reset()` remember an offset instead of setting the state machine's `Y` register to zero?
+  options:
+    - The offset lets the firmware report the total distance since power-up as well.
+    - The `Y` register is read-only from the CPU side on the RP2350.
+    - Setting `Y` to zero would also reset the encoder's direction bit.
+    - The running state machine may be mid-update, so a CPU write would race and corrupt the count; a CPU-side offset is race-free.
+  correct: 3
+- source: e37a6336ab3e
+  question: Forward driving makes the left count go up and the right count go down, but both wheels visibly turn the right way. What's wrong and where do you fix it?
+  options:
+    - "`MOTOR_RIGHT_REVERSED` is wrong; fix it by swapping the motor leads."
+    - "`ENCODER_RIGHT_REVERSED` has the wrong value; odometry reports a spin in place; fix it in the firmware `config.py`."
+    - The right encoder's A and B wires are loose; fix it by re-soldering them.
+    - The wheelbase $b$ is negative in the config; fix it in `karmel.yaml`.
+  correct: 1
+- source: dc03e500d0f3
+  question: The encoder count increases smoothly while the robot is on its stand with the wheels spinning in the air. What does that tell you?
+  options:
+    - The encoder is miswired and counts noise when there's no load.
+    - The PIO program ignores the direction channel when the wheels are unloaded.
+    - Encoders measure shaft rotation, not position; turning ticks into position assumes rolling without slip.
+    - The encoder measures position correctly, but the stand needs to be calibrated out.
+  correct: 2

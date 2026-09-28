@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.10-python-environments-ubuntu.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a3ec7548f082
+  question: What does the `EXTERNALLY-MANAGED` file do, and where is it on Ubuntu 24.04?
+  options:
+    - It marks the OS Python as apt-managed, so pip refuses to install outside a venv; `/usr/lib/python3.12/EXTERNALLY-MANAGED`
+    - It lists packages pip must never upgrade, but allows others; `/etc/pip/EXTERNALLY-MANAGED`
+    - It redirects pip installs into `~/.local`, keeping the system clean; `/usr/lib/python3.12/EXTERNALLY-MANAGED`
+    - It tells apt to ignore pip-installed packages when upgrading; `/usr/local/lib/python3.12/EXTERNALLY-MANAGED`
+  correct: 0
+- source: ea6215eea14d
+  question: A ROS 2 node needs `pyserial`. What is the course's preferred way to provide it?
+  options:
+    - "`pip install pyserial` inside a dedicated venv created for the node"
+    - "`pip install --break-system-packages pyserial` on the robot image"
+    - "`<exec_depend>python3-serial</exec_depend>` plus `rosdep install`"
+    - Copy the `serial` module into the package's own source tree
+  correct: 2
+- source: cf676b9d9d63
+  question: Why does a ROS workspace venv need `--system-site-packages`?
+  options:
+    - So pip can install into `/usr/lib/python3` without hitting the PEP 668 error
+    - So `colcon` can find the venv's interpreter when building C++ packages
+    - So the venv uses the system Python binary instead of making its own copy
+    - So the venv still sees apt-installed libraries like `python3-numpy` that ROS packages need
+  correct: 3
+- source: 2343d5557458
+  question: After `colcon build` with the venv active, `ros2 run` says `No module named 'simple_pid'`. What does `head -1` on the installed executable show, and what is the fix?
+  options:
+    - "`#!/usr/bin/env python3`; add the venv's `site-packages` to `PYTHONPATH` in `.bashrc`"
+    - "`#!/usr/bin/python3`; rebuild with `python -m colcon build` from the venv, or provide the dependency via apt/rosdep"
+    - The venv's python path; run `pip install simple_pid` again with `--force-reinstall`
+    - "`#!/usr/bin/python3`; delete `build/` and `install/`, then run `colcon build` again as before"
+  correct: 1
+- source: 84c8d563d515
+  question: What do you commit from a uv project, and what does `uv sync` on the Pi do?
+  options:
+    - Commit `pyproject.toml` and `.venv/`; `uv sync` downloads missing wheels into that venv
+    - Commit `pyproject.toml` only; `uv sync` resolves the newest compatible versions for the Pi
+    - Commit `pyproject.toml`, `uv.lock`, `.python-version`; `uv sync` makes `.venv` match the lockfile exactly
+    - Commit `uv.lock` only; `uv sync` installs those versions into the system Python
+  correct: 2
+- source: 0a74dcaa42e0
+  question: Your teammate says "just use conda for the robot". What is the right answer?
+  options:
+    - Fine, as long as conda's Python is also 3.12, since `rclpy` is pure Python code
+    - Fine, but install ROS 2 with pip inside the conda env so the versions match
+    - Avoid it because conda environments are too large for a Raspberry Pi SD card
+    - "Avoid it: Jazzy binaries target Ubuntu's system Python; use apt/rosdep and a system-based venv"
+  correct: 3
+- source: 0336dc95002d
+  question: Is `pip install --user X` a workaround for PEP 668 on Ubuntu 24.04?
+  options:
+    - Yes, because user site-packages are outside the OS-managed directory
+    - No; it gets the same error, since user site-packages are visible to the system interpreter
+    - Yes, but only when combined with `--no-deps` to avoid touching apt packages
+    - No; it succeeds but installs into the venv of the last activated project
+  correct: 1

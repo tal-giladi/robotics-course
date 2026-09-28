@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in FC.06-pico-c-sdk.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 30f6c56c5254
+  question: In `arm-none-eabi-gcc`, which part tells you there is no operating system?
+  options:
+    - "`arm`, the target architecture"
+    - "`eabi`, Arm's Embedded ABI"
+    - "`none`, the vendor/OS field"
+    - "`gcc`, the bare compiler"
+  correct: 2
+- source: 39f2c21eb92d
+  question: Why must `include(pico_sdk_import.cmake)` come before `project()`?
+  options:
+    - It downloads the SDK, which `project()` needs to read the board name
+    - It installs the cross toolchain file, and `project()` is where the compiler is probed and fixed
+    - It defines `pico_add_extra_outputs`, which `project()` calls to make the UF2 file
+    - It sets `CMAKE_BUILD_TYPE`, which `project()` locks once it has run
+  correct: 1
+- source: a6424844f57a
+  question: "`arm-none-eabi-size` prints `text 31056  data 0  bss 2664`. How much flash and static RAM does this use on a Pico 2?"
+  options:
+    - Flash 31,056 B (0.74 % of 4 MB); RAM 2,664 B (0.50 % of 520 kB)
+    - Flash 33,720 B (0.80 % of 4 MB); RAM 2,664 B (0.50 % of 520 kB)
+    - Flash 31,056 B (0.74 % of 4 MB); RAM 33,720 B (6.5 % of 520 kB)
+    - Flash 31,056 B (1.5 % of 2 MB); RAM 2,664 B (1.0 % of 264 kB)
+  correct: 0
+- source: 63c2b5e356c4
+  question: You drag a `.uf2` built with `PICO_BOARD=pico` onto a Pico 2 in BOOTSEL mode. What happens?
+  options:
+    - The drive rejects the file with a copy error, and the board stays in BOOTSEL mode
+    - It runs in RP2040 compatibility mode, but at half the clock speed
+    - It runs normally, since both chips share the same Arm instruction set
+    - "The drive accepts it and reboots, but nothing runs: the boot ROM ignores the wrong family ID"
+  correct: 3
+- source: 2cc9aa1d8437
+  question: What integer stores `0.02` in Q16.16, and what is the relative error of the round trip?
+  options:
+    - 1310, error about 0.05 %
+    - 1311, error about 0.02 %
+    - 2, error about 0 %
+    - 1311, error about 2 %
+  correct: 1
+- source: cc94a696b00d
+  question: Which of `int32_t`, Q16.16, `float` and `double` would you use for karmel's wheel-speed PID on an RP2350, and why?
+  options:
+    - "`double`, because the M33's FPU runs double precision at integer speed"
+    - Q16.16, because fixed point avoids FPU context switches in interrupts
+    - "`float`, because the M33 has a hardware single-precision FPU and 7 digits is ample"
+    - "`int32_t`, because the encoder counts are integers and floats drift over time"
+  correct: 2
+- source: a287f392f8fa
+  question: Your firmware works with `printf` enabled and hangs when you turn USB stdio off. What is the likely cause?
+  options:
+    - The logging provided a delay that something needed; wait on the peripheral's ready flag instead
+    - The linker drops `main` when stdio is off; add `pico_enable_stdio_uart` to keep it
+    - Without USB stdio the chip boots into BOOTSEL mode; hold the reset pin during power-up
+    - The watchdog is fed by `printf` internally; call `watchdog_update()` yourself in the loop
+  correct: 0
+- source: 2d08f926dc3c
+  question: You have 31 kB of firmware and want a 40 kB lookup table and a 6 kB buffer. Does it fit on a Pico 2?
+  options:
+    - "No: the table and buffer both go to RAM, and 46 kB exceeds the stack budget"
+    - Only if the table is compressed, since flash is limited to 64 kB per image
+    - Yes, but only after moving the buffer into flash as well
+    - "Yes, comfortably: a `const` table lives in flash and the buffer uses little RAM"
+  correct: 3

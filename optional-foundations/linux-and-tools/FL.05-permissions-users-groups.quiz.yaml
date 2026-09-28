@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.05-permissions-users-groups.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e198e47b3f55
+  question: "Decode `crw-rw---- 1 root video 81, 0 /dev/video0`: who can read frames from the camera?"
+  options:
+    - Everyone, since the device is readable by others
+    - Only root, since the owner is root
+    - Only members of `video`, not root
+    - Root and members of `video` (in their current session)
+  correct: 3
+- source: e3b21b9cd002
+  question: You ran `sudo usermod -aG dialout $USER` five minutes ago in this SSH session, and the driver still fails. What do you do?
+  options:
+    - Log out and reconnect; group membership is set at login
+    - Run the command again with `-G` instead of `-aG`
+    - Restart the driver with `sudo` so it inherits the group
+    - Wait for the group cache to refresh after about ten minutes
+  correct: 0
+- source: ff897d379a15
+  question: On Ubuntu 24.04 on the Pi 5, which group gives access to `/dev/gpiochip*` and `/dev/i2c-1`, and how do you check on an unknown system?
+  options:
+    - "`gpio`; `groups` lists every group the device needs"
+    - "`dialout`; `ls -l /dev/gpiochip* /dev/i2c-*` shows the group"
+    - "`i2c`; `lsmod` shows which group owns each driver"
+    - "`video`; `getent group video` shows the device list"
+  correct: 1
+- source: b31408d90cab
+  question: What's wrong with `sudo echo '...' > /etc/udev/rules.d/99-karmel.rules`?
+  options:
+    - "`echo` cannot write multi-character rules; use `printf` instead"
+    - udev rules must be created with `udevadm`, not written as files
+    - Your unprivileged shell does the `>` before `sudo` runs; use `| sudo tee`
+    - "`sudo` strips the quotes, so the rule is written without them"
+  correct: 2
+- source: e387bbca2aa3
+  question: Octal for `rwxr-x---`? For `rw-------`?
+  options:
+    - "`755` and `600`"
+    - "`750` and `644`"
+    - "`570` and `006`"
+    - "`750` and `600`"
+  correct: 3
+- source: 22b30e19b946
+  question: The webcam works in Cheese on the desktop, but your ROS camera node started over SSH gets `Permission denied` on `/dev/video0`. Why?
+  options:
+    - The desktop session gets a `uaccess` ACL; SSH doesn't, so join `video`
+    - Cheese holds the camera open, so no other process can open it
+    - SSH sessions run with a different kernel that lacks the camera driver
+    - The ROS node needs `sudo` because cameras are always root-only
+  correct: 0
+- source: b62be6ec6fef
+  question: In a udev rule, what's the difference between `ATTRS{idVendor}=="2e8a"` and `ATTRS{idVendor}="2e8a"`?
+  options:
+    - "`==` assigns; `=` matches, which is the normal form for `ATTRS`"
+    - They are equivalent; udev accepts both forms for `ATTRS`
+    - "`==` matches; `=` assigns, which is invalid for `ATTRS`"
+    - "`==` is case-sensitive; `=` ignores case"
+  correct: 2

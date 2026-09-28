@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 20.04-safety-case.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9efa67655075
+  question: Why does the e-stop stop karmel in a longer distance than the collision monitor at 0.5 m/s, despite acting 180 ms sooner?
+  options:
+    - The relay takes 300 ms to open, which cancels its head start
+    - It removes power, so the robot coasts (~0.6 m/s²) instead of motor braking (~1.5 m/s²)
+    - The e-stop also disables the LiDAR, so the robot cannot see the obstacle
+    - The motors free-spin faster when power is cut, briefly accelerating the robot
+  correct: 1
+- source: 1ae74ece10b7
+  question: A severity-3 hazard's controls are the collision monitor, the velocity limit, the keepout filter and the skill allowlist. What is wrong?
+  options:
+    - All four are onboard software, one layer; it needs the e-stop too
+    - Four controls are too many; each extra control adds a new failure mode
+    - The velocity limit and keepout filter duplicate each other, so one should go
+    - Severity 3 needs a model-based refusal as well as the software controls
+  correct: 0
+- source: 1b4d65b3ffbf
+  question: karmel's margin is 0.365 m and you want 0.6 m/s. The collision monitor path gives 0.237 m. What is the binding constraint, and what single change fixes it?
+  options:
+    - The collision monitor; lower its dead time below 0.1 s
+    - The Pico watchdog (0.303 m); shorten it to 100 ms
+    - The e-stop's coasting distance; add a mechanical brake
+    - The 0.5 s `cmd_vel` timeout (0.432 m); shorten it to 0.3 s
+  correct: 3
+- source: 9f9c9b76ef2a
+  question: You raise the Pico watchdog from 300 ms to 5 s "because it kept tripping". The Pi crashes at 0.3 m/s. How far does it go, and what did the tripping mean?
+  options:
+    - About 0.39 m; the tripping was electrical noise on the serial line
+    - About 1.53 m; a stall above the watchdog, now hidden
+    - About 0.12 m; the tripping was caused by the watchdog being too sensitive
+    - About 15 m; the tripping meant the battery was low
+  correct: 1
+- source: ec3042c1fc00
+  question: Why is "the model refuses dangerous requests" not counted as a control?
+  options:
+    - It is too slow, adding seconds of latency to every command
+    - It costs money per call, so it cannot run continuously
+    - It is non-deterministic, offboard and steerable by input
+    - It has not been certified to a safety integrity level
+  correct: 2
+- source: 3a9c002f5faf
+  question: What is the safe state of a 6-DOF arm holding a bottle at full extension when the e-stop is pressed?
+  options:
+    - Torque off immediately, since an unpowered arm cannot hurt anyone
+    - Open the gripper to drop the bottle before power is removed
+    - Move quickly to the park pose on battery backup, then cut power
+    - Not torque off; park it safely, then hold or collapse harmlessly
+  correct: 3
+- source: 7bba4b16a40d
+  question: Your safety case passes with ten hazards and thirty-seven controls, none ever tested. What is its actual value?
+  options:
+    - A design document, but zero as a safety argument
+    - Full value, since the hazard analysis is the hard part
+    - "Partial value: about 70% of controls usually work when fitted"
+    - None at all, not even as a design document
+  correct: 0

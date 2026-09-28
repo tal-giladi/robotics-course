@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 00.05-ros2-in-one-page.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 0987c84a6e83
+  question: What problem does robot middleware solve that a single program with threads doesn't?
+  options:
+    - It makes each component run faster by moving work from Python into compiled C++ code.
+    - It guarantees hard real-time deadlines for every message exchanged between threads.
+    - It lets independent programs in different languages and machines discover each other and exchange typed, timestamped data, with tools to inspect and replay.
+    - It replaces the microcontroller, so motor control can run directly inside the main program.
+  correct: 2
+- source: 084e6b785002
+  question: 'Match each to topic, service or action: LiDAR scans; "save map"; "go to the kitchen".'
+  options:
+    - "Scans: service; save map: topic; go to kitchen: action."
+    - "Scans: topic; save map: action; go to kitchen: service."
+    - "Scans: action; save map: service; go to kitchen: topic."
+    - "Scans: topic; save map: service; go to kitchen: action."
+  correct: 3
+- source: ee732327310a
+  question: A detector takes 0.4 s per LiDAR scan published at 10 Hz. With a depth-1 queue, what is the maximum age of the scan when its result is ready?
+  options:
+    - 0.5 s
+    - 0.4 s
+    - 0.1 s
+    - 4.0 s
+  correct: 0
+- source: b85653c5ac31
+  question: Your node publishes `geometry_msgs/Twist` on `/cmd_vel`, but karmel's controller on Jazzy subscribes to `TwistStamped`. What happens?
+  options:
+    - ROS 2 converts the message automatically and the robot drives normally.
+    - The controller crashes on the first message because it cannot parse it.
+    - The robot moves but ignores the timestamp, so it drives with a small delay.
+    - "The robot doesn't move: different types on the same topic don't connect, so no data flows."
+  correct: 3
+- source: 3373151edcb5
+  question: What does TF answer, and why does it need time?
+  options:
+    - Where one frame is relative to another; frames move, so data from 80 ms ago must use where the robot was then.
+    - How long a message took to arrive; it needs time to measure network latency between machines.
+    - Which node publishes a topic; it needs time to know when each node started.
+    - How fast the robot is moving; it needs time to differentiate position into velocity.
+  correct: 0
+- source: dccf93665348
+  question: RViz on your laptop shows the robot model but no LiDAR scan, while `ros2 topic hz /scan` on the Pi shows 10 Hz. What is the cheapest likely cause to check first?
+  options:
+    - The LiDAR driver is publishing on the wrong frame rate for RViz.
+    - The Pi's CPU is too loaded to serialize scan messages.
+    - The LiDAR's laser is blocked by the robot's chassis.
+    - "A QoS mismatch: RViz subscribes as reliable while the driver publishes best effort."
+  correct: 3
+- source: 29d338642393
+  question: Why does karmel's `base_node`, and not the Pico, speak ROS 2?
+  options:
+    - The Pico's firmware license forbids linking ROS 2 libraries.
+    - ROS 2 only runs over Wi-Fi, and the Pico has no wireless connection.
+    - The Pico's clock is too slow to publish the 50 Hz telemetry that ROS 2 requires.
+    - ROS 2 needs a Linux computer's resources and networking; a narrow serial protocol keeps the Pico simple and safe.
+  correct: 3

@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 04.16-your-robot-as-ros2-node.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6a212687c336
+  question: Why does `base_node` send a `V` command at 50 Hz even when the commanded speed is zero?
+  options:
+    - To keep the USB link from entering power-save mode.
+    - To let the Pico measure the round-trip latency.
+    - To feed the Pico's 300 ms watchdog, so it only trips when something is actually wrong.
+    - To re-synchronise the encoder counters every cycle.
+  correct: 2
+- source: ed48debe0a7b
+  question: $R = 0.045$ m, $L = 0.200$ m. What goes on the wire for $v = 0.3$ m/s, $\omega = -1.0$ rad/s?
+  options:
+    - "`V <seq> 4444 8889`"
+    - "`V <seq> 8889 4444`"
+    - "`V <seq> 6667 6667`"
+    - "`V <seq> 8889 -4444`"
+  correct: 1
+- source: 1f56bcbf16d4
+  question: "`twist_to_wheels` scales both wheels by the same factor when one saturates. What would go wrong with clipping each wheel?"
+  options:
+    - The motors would overheat at the clipped limit.
+    - Encoder counts would overflow on the saturated wheel.
+    - The robot would drive faster than the limit on the other wheel.
+    - Clipping changes $v/\omega$ and thus the arc radius, so the robot follows a different path than requested.
+  correct: 3
+- source: 524255c670b1
+  question: You kill the teleop node with Ctrl-C while driving at 0.4 m/s. How far does the robot travel, and what stops it?
+  options:
+    - "About 0.28 m: `cmd_vel_timeout` (0.5 s) zeroes the target, then the 1.0 m/s² limit decelerates; the Pico watchdog never trips."
+    - "About 0.12 m: the Pico watchdog trips 300 ms later and brakes."
+    - "About 0.08 m: `base_node` brakes immediately at 1.0 m/s²."
+    - It keeps driving until the battery monitor stops it.
+  correct: 0
+- source: e38453fbb684
+  question: "`/odom` is fine but RViz shows the robot model in the wrong place with the wheels not spinning. Which topic do you check first?"
+  options:
+    - "`/cmd_vel`, since the wheels aren't being commanded."
+    - "`/tf_static`, since the base footprint may be missing."
+    - "`/joint_states`, which `robot_state_publisher` needs for the wheel transforms."
+    - "`/diagnostics`, since the serial link may be down."
+  correct: 2
+- source: 7498d1dcf023
+  question: "`/diagnostics` shows `serial connection: OK`, `telemetry messages: 12043`, `rejected lines: 3102`, `reconnects: 0`. Is the robot healthy?"
+  options:
+    - "Yes: the connection is OK and there were no reconnects."
+    - "No: about 20% of lines are rejected, so the link is noisy or corrupted; find the cause."
+    - "Yes: rejected lines are normal start-up noise."
+    - "No: the Pico has reset 3102 times."
+  correct: 1
+- source: a93f12f6e9cb
+  question: Why does `base_node` watch the Pico's `ms` field for a decrease?
+  options:
+    - A decrease means the firmware restarted and reset the encoders; without re-basing, odometry would jump by tens of metres.
+    - A decrease means the USB clock drifted, which needs a time sync.
+    - A decrease means the battery is low and the Pico is throttling.
+    - A decrease means messages arrived out of order and must be re-sorted.
+  correct: 0
+- source: c721bc5e1abb
+  question: Where should "refuse to drive faster than 0.2 m/s in the kitchen" live, and why not in `base_node`?
+  options:
+    - In `base_node`, because it has the lowest latency to the motors.
+    - In the Pico firmware, because it can't be bypassed.
+    - In the teleop node, because the operator decides the speed.
+    - "In its own node between planner and driver (or Nav2 config): it's context-dependent behaviour; driver limits protect hardware."
+  correct: 3

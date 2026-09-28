@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 18.10-evaluating-learned-policies.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 4d313adeb1f9
+  question: You observe 9/10 successes. What is the Wilson 95% interval, and what can you honestly claim?
+  options:
+    - About [85%, 95%]; the policy succeeds about 90% of the time
+    - About [60%, 98%]; more often than not, but not 80% with confidence
+    - About [80%, 100%]; you can claim at least 80% success
+    - About [10%, 90%]; you cannot claim anything from 10 trials
+  correct: 1
+- source: 971500c89cfc
+  question: Why does the Wald interval fail at 10/10, and what does the rule of three say instead?
+  options:
+    - Wald divides by zero and returns no interval; failure-rate bound ≈ 3%
+    - Wald widens to [0%, 100%]; failure-rate bound is 3 failures per 10 trials
+    - Wald is fine at 10/10; the rule of three only applies to fewer than 3 trials
+    - Standard error is 0, so it collapses to [100%, 100%]; 95% failure-rate bound ≈ 3/n ≈ 30%
+  correct: 3
+- source: 92a960ced611
+  question: Policy A scores 18/20, policy B 14/20. Is A better?
+  options:
+    - Not established; the difference interval includes 0 (Fisher p ≫ 0.05)
+    - Yes; a 20-point difference is significant at 20 trials each
+    - Yes, because A's lower Wilson bound is above B's point estimate
+    - No; B is better, since its interval is wider
+  correct: 0
+- source: 45be4ce79f34
+  question: SPRT with $p_0 = 0.6$, $p_1 = 0.9$, $\alpha = 0.05$, $\beta = 0.2$; the first five trials are S S F S S. What is $\Lambda$, and do you stop?
+  options:
+    - $\Lambda = 1.62$; continue
+    - $\Lambda = 3.01$; stop and accept $p_1$
+    - $\Lambda = 0.236$; continue (bounds −1.56 and +2.77)
+    - $\Lambda = -1.39$; stop and accept $p_0$
+  correct: 2
+- source: 016415c00de0
+  question: Your filter clips steps relative to the last commanded position instead of the measured one, and the servo is stalled against an object. What happens?
+  options:
+    - The filter trips immediately, since the command stops changing
+    - Nothing; the clipping keeps every step small, so the servo stays safe
+    - The joint oscillates around the object at the step size
+    - The command runs away from the real position, then jumps when it slips free
+  correct: 3
+- source: 6065a571b027
+  question: What does shadow mode catch on the deployment ladder that simulation does not?
+  options:
+    - Contact forces and grasp slip, because the arm moves at reduced speed
+    - Unit/sign errors, camera mismatches and latency on real inputs, with no motion
+    - Long-term drift in success rate after weeks of use in production
+    - Bugs in the training code, because the policy is retrained on live data
+  correct: 1
+- source: bae79962c06c
+  question: A held-out condition scores 3/10 and the in-distribution one 17/20. The team wants to ship because "overall 20/30 = 67%". What is wrong?
+  options:
+    - Nothing, if the 67% lower bound exceeds the target
+    - 30 trials are too few; pooling is fine once you reach 100
+    - Pooling hides failure in the held-out condition; report per condition and restrict preconditions
+    - The held-out trials should be dropped, since they test an unsupported case
+  correct: 2
+- source: 0cebc9f5c6ed
+  question: Which order of the envelope between a learned policy and the arm is correct, from innermost to outermost?
+  options:
+    - Skill contract → safety filter → driver `max_relative_target` → servo torque/current limits → person with e-stop
+    - Person with e-stop → servo limits → driver `max_relative_target` → safety filter → skill contract
+    - Safety filter → skill contract → servo limits → driver `max_relative_target` → person with e-stop
+    - Driver `max_relative_target` → skill contract → person with e-stop → safety filter → servo limits
+  correct: 0

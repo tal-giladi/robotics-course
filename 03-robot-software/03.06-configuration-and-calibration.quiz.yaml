@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.06-configuration-and-calibration.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a6a651b47cae
+  question: "Why does `karmel.yaml` store `encoder_cpr_motor`, `gear_ratio` and `quadrature_multiplier` instead of just `ticks_per_wheel_rev: 2464`?"
+  options:
+    - YAML can't store integers larger than 1024 reliably.
+    - The firmware needs the three values separately for PIO decoding.
+    - 2464 is derived from three facts; storing it creates a second truth that can disagree when one changes.
+    - Storing three values makes the file easier for ROS 2 to parse.
+  correct: 2
+- source: 9cb9cbbe8c8b
+  question: Your wheel radius is 1% too small in the config. The robot drives 10 m. What does odometry report?
+  options:
+    - "9.9 m: it under-reports, so commanded distances are overdriven."
+    - "10.1 m: it over-reports, so commanded distances fall short."
+    - "10.0 m: the error cancels between the two wheels."
+    - 9.9 m on straights only; turns are reported correctly and cancel it.
+  correct: 0
+- source: 65b4386c60d3
+  question: "Which is worse for navigating an apartment: a 2% wheel-radius error or a 2% wheelbase error?"
+  options:
+    - The radius error, because it compounds into heading after every turn.
+    - Both are equal, since each is 2 cm per metre.
+    - Neither matters once a LiDAR is added.
+    - "The wheelbase error: it corrupts heading (7.2° per turn), which rotates all later motion; radius is a pure scale on distance."
+  correct: 3
+- source: 62bfdf0d3d37
+  question: "You set `max_linear_speed_m_s: 1.2` while the wheels can deliver 0.765 m/s. What happens when the robot is asked for 1.0 m/s?"
+  options:
+    - The config clips the request to 1.2 m/s and the robot reaches it, since the limit is higher.
+    - The robot saturates at 0.765 m/s while every layer above believes it does 1.0 m/s; distances run long, integrators wind up, turns get lost.
+    - The firmware rejects the out-of-range command and the robot stops until a valid one arrives.
+    - The robot reaches 1.0 m/s briefly by over-driving the motors, then the fuse blows.
+  correct: 1
+- source: fa870e756898
+  question: A teammate proposes putting the PID gains in `karmel.yaml`. What is a reasonable resolution?
+  options:
+    - Keep them only in the firmware, since the Pico is the only place they run.
+    - Put them only in ROS parameters and delete them from everywhere else.
+    - Keep them in the file as authoritative startup values and have bringup send them with `set_param`, so the copy is enforced.
+    - Put them in the file and trust the firmware to read it at boot.
+  correct: 2
+- source: e45f32645285
+  question: What does the `uncertainty` block in a calibration file buy you that the measured value alone does not?
+  options:
+    - It tells you when to stop measuring, feeds the EKF's noise model, and lets you judge whether a disagreement is a calibration problem.
+    - It lets the firmware correct the value automatically at runtime.
+    - It is required by the YAML schema for any floating-point value.
+    - It makes the measured value more accurate by averaging in the spread.
+  correct: 0
+- source: 9a4112ba79c2
+  question: "`karmel_description` ships a copy of the robot config. Why is that acceptable?"
+  options:
+    - Because ROS 2 automatically keeps copies in sync at build time.
+    - Because the copy is only used in simulation, where accuracy doesn't matter.
+    - Because the copy is read-only, so it can't disagree with the original.
+    - An installed package can only read its own `share` directory, and `check_config_sync.py` checks the copy in CI.
+  correct: 3

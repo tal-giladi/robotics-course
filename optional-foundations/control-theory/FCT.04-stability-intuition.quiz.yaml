@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FCT.04-stability-intuition.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 457a037fc200
+  question: A pole sits at −40 s⁻¹. What does its response look like, and what is its time constant?
+  options:
+    - A decaying oscillation at 40 rad/s; time constant 25 ms
+    - A pure exponential decay with no oscillation; time constant 40 ms
+    - A growing exponential, since the pole is at 40; time constant 25 ms
+    - A pure exponential decay with no oscillation; time constant 25 ms
+  correct: 3
+- source: 432fc5a2b830
+  question: A pair of poles sits at $-1 \pm 20j$. Describe the response.
+  options:
+    - "A 20 rad/s oscillation decaying slowly as $e^{-t}$: stable but lightly damped (ζ ≈ 0.05)"
+    - A fast decay with time constant 50 ms and a small 1 rad/s ripple on top
+    - "An oscillation at 1 rad/s whose envelope decays as $e^{-20t}$: well damped"
+    - An oscillation at 20 rad/s that grows slowly, since the imaginary part dominates
+  correct: 0
+- source: 6bc1a97b8716
+  question: Why can't an ideal first-order plant under P control go unstable, while the real wheel can?
+  options:
+    - The ideal plant has no saturation; the real wheel's duty limit causes instability
+    - Its one pole only moves left with gain (lag ≤ 90°); real filters, sampling and delays add lag to 180°
+    - The ideal plant has infinite bandwidth, while the real wheel has a resonance at high speed
+    - Its pole moves right with gain but never crosses zero; the real wheel's friction pushes it over
+  correct: 1
+- source: 71b37cadf618
+  question: How much phase lag does a 20 ms delay add at 50 rad/s?
+  options:
+    - About 1.0°
+    - About 18°
+    - About 57°
+    - About 90°
+  correct: 2
+- source: ea0cb85f6a1c
+  question: You add a 10 ms filter to the speed measurement of a loop that had 60° of phase margin at a 40 rad/s crossover. Roughly how much margin remains?
+  options:
+    - About 38°
+    - About 56°
+    - About 22°
+    - About 50°
+  correct: 0
+- source: 1aac491554d0
+  question: A wheel loop oscillates at 13–14 Hz on the robot but not in a simulation that has no delay. What delay would explain it, and how do you confirm?
+  options:
+    - About 70 ms; confirm by lowering the PWM frequency and seeing if it changes
+    - About 2 ms; confirm by measuring the encoder ISR latency on a scope
+    - About 200 ms; confirm by checking the ROS 2 topic latency with `ros2 topic delay`
+    - About 20 ms; confirm by timestamping command and response, or adding it to the simulation
+  correct: 3
+- source: 8745f8784cd2
+  question: What are sensible minimum gain and phase margins, and why keep margin at all?
+  options:
+    - About 1.2× and 15°, just enough to stay stable with a perfect model
+    - About 2× (6 dB) and 45°, so model errors like battery, load and delay don't destabilize it
+    - About 10× (20 dB) and 90°, so the loop never overshoots at all
+    - About 2× (6 dB) and 45°, mainly to reduce steady-state error
+  correct: 1

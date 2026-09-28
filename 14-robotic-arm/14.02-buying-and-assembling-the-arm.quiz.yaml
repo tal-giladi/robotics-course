@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 14.02-buying-and-assembling-the-arm.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 4bcc0bd89056
+  question: Why must servo ids be set with only one motor connected to the bus?
+  options:
+    - All servos ship as id 1 on a half-duplex bus without arbitration, so they would all reply at once
+    - The bus supplies too little current to power more than one servo while its EEPROM is being written
+    - Each servo must be homed to 2048 before getting an id, which only works with one servo on the bus
+    - The controller assigns ids in wiring order, so extra servos would get ids in the wrong sequence
+  correct: 0
+- source: be07c67d13e7
+  question: What does `set_half_turn_homings()` accomplish during calibration, and what can it not fix?
+  options:
+    - It widens each joint's travel to a full half turn; it can't fix a servo whose id is still set to 1
+    - It offsets each motor so the held pose reads 2048; it can't widen travel or fix travel across the 0/4095 seam
+    - It records each joint's min and max range; it can't fix a horn mounted 90° off centre
+    - It moves each joint to its mechanical centre; it can't fix joints whose torque is disabled
+  correct: 1
+- source: e3f70878ba9c
+  question: "A calibration row reads `range_min: 1500, range_max: 3900`. What are `mid`, the span in degrees, and the reading for raw count 3000?"
+  options:
+    - mid 2700, span ≈ 211°, raw 3000 reads ≈ +83.5°
+    - mid 2048, span ≈ 211°, raw 3000 reads ≈ +83.7°
+    - mid 2700, span ≈ 211°, raw 3000 reads ≈ +26.4°
+    - mid 2700, span ≈ 105°, raw 3000 reads ≈ +13.2°
+  correct: 2
+- source: d6404fedf7bf
+  question: You mount the `elbow_flex` horn 90° away from centre and calibrate anyway. What do you observe, and when?
+  options:
+    - Calibration fails immediately with an out-of-range error, before any range is recorded for the elbow
+    - Calibration succeeds and the arm works normally, since `homing_offset` fully compensates the horn offset
+    - The elbow moves 90° in the wrong direction on every command, symmetrically on both sides of the workspace
+    - Calibration looks fine; later the joint hits its stop ~90° early on one side, losing about half the travel
+  correct: 3
+- source: 378ab976c653
+  question: Why is the gripper reported as a clamped 0–100 %, while arm joints are reported in unclamped degrees?
+  options:
+    - The gripper servo has lower resolution than the arm servos, so a percentage hides the quantization steps
+    - Arm joints are limited in hardware, so clamping in software would be redundant for them
+    - '"How open" is inherently relative to closed/open ends; a joint angle has meaning past the range, which you want to see'
+    - The gripper has no encoder, so its position is estimated from the commanded percentage only
+  correct: 2
+- source: e528e4b461e5
+  question: You have a 7.4 V follower arm and want to power it from karmel's 3S battery. What goes wrong?
+  options:
+    - 3S is 7.4 V nominal, matching the servos; the only issue is that the battery drains twice as fast
+    - "3S is 9.6–12.6 V, above the servos' window: you need a buck converter and still get only 1.62 N·m stall"
+    - 3S is 11.1 V, which the servos accept, but their stall torque drops to 0.8 N·m at that voltage
+    - 3S packs cannot supply stall current for six servos, so the arm browns out on every fast move
+  correct: 1
+- source: a8755727972f
+  question: Your calibration JSON is gone, and you have datasets recorded before it disappeared. What is the damage?
+  options:
+    - "None: datasets store raw counts, so any new calibration reinterprets them correctly"
+    - The servos lose their ids and must be re-addressed one at a time before the arm moves again
+    - The datasets become unreadable, because LeRobot encrypts them with the calibration file's hash
+    - Positions are relative to the old `mid`; a new calibration shifts it, so old data maps to different poses
+  correct: 3

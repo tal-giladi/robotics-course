@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 18.06-train-first-policy-lerobot.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5e3134ef79b7
+  question: Your dataset has 60 episodes × 15 s at 30 fps. How many steps are 10 epochs at batch 8?
+  options:
+    - 3,375 steps
+    - 270,000 steps
+    - 33,750 steps
+    - 4,500 steps
+  correct: 2
+- source: a66728baaf10
+  question: Why can a checkpoint with a lower training loss perform worse on the arm?
+  options:
+    - Lower loss always means the learning rate was too high, which corrupts the weights
+    - Training loss is computed on camera images only and ignores the joint state input
+    - "LeRobot looks for `follower`: it recalibrates or uses old offsets, so reaches go wrong"
+    - Checkpoints with low loss are saved in a different precision that the arm cannot load
+  correct: 2
+- source: ade8945414b4
+  question: You calibrated the follower as `blue_follower` and roll out with `--robot.id=follower`. What happens?
+  options:
+    - LeRobot reuses the only calibration file it finds, so the rollout works normally
+    - Loss measures fit on demo states; on the arm it visits its own states, where tight fits are brittle
+    - The rollout fails immediately with a missing-device error because the ID names the USB port
+    - The policy detects the mismatch from the camera images and corrects the joint offsets
+  correct: 1
+- source: 8f8fd68f26eb
+  question: ACT in LeRobot defaults to `n_action_steps=100`. At 30 Hz, how long does the arm run without looking at the camera, and what failure does that cause?
+  options:
+    - 0.33 s; the arm jitters because it re-plans too often
+    - 3.3 s; the arm stops between chunks while waiting for inference
+    - 33 s; the whole episode runs open loop and cannot recover
+    - 3.3 s; if the bottle moves or the grasp slips, it keeps executing the old plan
+  correct: 3
+- source: 5cdeedcce8bd
+  question: Two checkpoints score 13/20 and 16/20. Can you conclude the second is better?
+  options:
+    - No; Wilson intervals overlap heavily and Fisher's test gives p ≈ 0.48; you need many more trials
+    - Yes; a 15-point difference in success rate is significant at 20 trials each
+    - Yes, if both were run on the same day with the same bottle position
+    - No; you can never compare checkpoints, only the final policy against a human
+  correct: 0
+- source: 96b57ea09efc
+  question: ACT on 45,000 frames for 5 epochs takes 1–2 h on an A10G. What does 60,000 steps at batch 8 cost on `a10g-small` at $1.00/h?
+  options:
+    - About $1–2, since it is the same job as 5 epochs
+    - About $2.1–4.3 (≈ 2.1–4.3 h)
+    - About $0.5–1, since steps at batch 8 are faster
+    - About $10–20 (≈ 10–20 h)
+  correct: 1
+- source: 8eed83240719
+  question: You record all 50 demos in the afternoon and evaluate at night with the ceiling light on. What happens, and how do you fix the next dataset?
+  options:
+    - Nothing much; the vision backbone is pretrained and ignores lighting changes
+    - Success drops a little; fix it by lowering the camera exposure at night
+    - The arm moves slower; fix it by recording at a higher frame rate
+    - Success often drops sharply; record under deployment lighting or vary it
+  correct: 3

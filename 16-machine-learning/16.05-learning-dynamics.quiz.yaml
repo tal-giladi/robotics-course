@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 16.05-learning-dynamics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 7d6971c916f9
+  question: Why is `speed ∝ duty × battery_voltage` the single most valuable term in this model for a battery-powered robot?
+  options:
+    - Battery voltage sets the encoder resolution, so without it every speed reading is scaled wrong
+    - Duty cycle alone is nonlinear, and multiplying by voltage linearizes the motor's deadband
+    - The voltage term captures motor temperature, which dominates speed error on long runs
+    - A 3S pack swings ~27% (12.6 → 9.9 V), which the H-bridge passes straight to the motor speed
+  correct: 3
+- source: 9270ca493252
+  question: The physics model's RMSE is 0.005 in range and 0.004 at an unseen voltage; the MLP's is 0.048 and 0.288. What single property explains both columns?
+  options:
+    - "Parameter count: the MLP has too few parameters to fit both regimes, while the physics model has enough"
+    - "Training time: the MLP was stopped early, while the physics model was fitted to convergence"
+    - "Where the knowledge comes from: physics structure holds everywhere, the MLP has none outside its training hull"
+    - "Noise level: the unseen voltage had less sensor noise, which helps the physics model and hurts the MLP"
+  correct: 2
+- source: f3a94697ca63
+  question: You hold each duty for 0.15 s with τ = 0.113 s and average the last 0.05 s. What fraction of final speed have you reached, and which way is the gain biased?
+  options:
+    - About 59–73% (≈ 66% on average); $k$ is under-estimated by about a third
+    - About 95–99% (≈ 97% on average); $k$ is essentially unbiased
+    - About 59–73% (≈ 66% on average); $k$ is over-estimated by about a third
+    - About 26–41% (≈ 34% on average); $k$ is under-estimated by about two thirds
+  correct: 0
+- source: 6ad7151bafda
+  question: With a well-tuned PI controller, feedforward doesn't change the steady-state error. So why add it?
+  options:
+    - It improves the transient (~20% lower IAE) and spares the integrator; with conservative PI it's worth ~5× in IAE
+    - It removes the need for an integrator, so the controller can be tuned as pure proportional control
+    - It lets you raise the gains without oscillation, because feedforward adds phase margin to the loop
+    - It reduces sensor noise, because the feedforward term filters the encoder signal before feedback
+  correct: 0
+- source: 742690e46e66
+  question: You log only duties in [0.4, 0.8] and fit. The in-range prediction is excellent. Where does the robot misbehave?
+  options:
+    - "At top speed: duties above 0.8 saturate, so the model overshoots on long straight runs"
+    - "At mid speed: the fit overfits the [0.4, 0.8] range, so cruising speed oscillates"
+    - "Near zero speed: the deadband is unidentified, so the offset is wrong in slow approaches and fine positioning"
+    - "When turning: the model has no ω term, so every turn drifts by the same fixed angle"
+  correct: 2
+- source: 7909142bddd0
+  question: When is a neural network the right choice for a motor model?
+  options:
+    - Whenever more than 1,000 data points are available, since networks then beat physics everywhere
+    - When the motor is brushless, since brushless dynamics cannot be written down analytically
+    - When the robot runs at a constant battery voltage, so extrapolation never becomes an issue
+    - When the physics residual is large and structured; fit a small residual model on top, with a fallback
+  correct: 3
+- source: f6a77a8ccbdc
+  question: Your two wheels fit to k = 19.8 and k = 18.9 with the same deadband. What will the robot do, and what do you do?
+  options:
+    - Drive straight, since a 4.5% difference is within encoder noise; no action is needed
+    - Arc under open-loop commands (odometry won't see it); use per-wheel feedforward constants
+    - Spin in place, since the wheels fight each other; average the two gains into one constant
+    - Arc under open-loop commands; odometry will detect it and correct the heading automatically
+  correct: 1

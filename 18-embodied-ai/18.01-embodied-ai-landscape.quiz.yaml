@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 18.01-embodied-ai-landscape.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1ff4b992c15f
+  question: Which list correctly gives the three layers of a 2026 embodied-AI system with a typical rate and example for each?
+  options:
+    - Reasoning brain 10–50 Hz (ACT); visuomotor policy 100–1000 Hz (SmolVLA); control 0.1–1 Hz (Nav2)
+    - Reasoning brain 0.1–1 Hz (LLM agent); visuomotor policy 10–50 Hz (ACT); control and safety 100–1000 Hz (servo PID, e-stop)
+    - Reasoning brain 100–1000 Hz (LLM agent); visuomotor policy 10–50 Hz (ACT); control 0.1–1 Hz (e-stop)
+    - Reasoning brain 0.1–1 Hz (MoveIt); visuomotor policy 100–1000 Hz (Diffusion Policy); control 10–50 Hz (LLM agent)
+  correct: 1
+- source: 9e660c551784
+  question: For a 450M-parameter policy, what is the memory floor for full mixed-precision AdamW training, and why is real usage higher?
+  options:
+    - 0.9 GB (2 bytes/param); real usage is higher because of the tokenizer vocabulary
+    - 1.8 GB (4 bytes/param); real usage is higher because optimizer states are duplicated per GPU
+    - 7.2 GB (16 bytes/param); activations stored for backprop grow with batch, resolution and chunk length
+    - 7.2 GB (16 bytes/param); real usage is higher because weights are kept in FP64 during training
+  correct: 2
+- source: a91a61973958
+  question: Why are ACT and Diffusion Policy labelled MATURE despite being small, task-specific 2023 models?
+  options:
+    - "Maturity means reliability: widely reproduced, default baselines, stable LeRobot code, run on consumer hardware"
+    - "Maturity means scale: they were pretrained on the largest cross-embodiment robot datasets available"
+    - "Maturity means generality: one checkpoint solves many tasks zero-shot without any fine-tuning"
+    - "Maturity means novelty: they introduced architectures that newer VLA models have not replaced yet"
+  correct: 0
+- source: d64fb26e9de4
+  question: A policy runs at 30 Hz, predicts 50 actions, executes all 50, and inference takes 0.6 s. If the robot waits for inference, what fraction of the time does it move?
+  options:
+    - About 26%
+    - About 64%
+    - About 97%
+    - About 75%
+  correct: 3
+- source: d3a3da923bb1
+  question: Your bottles are transparent and depth-based pose estimation keeps failing. Which change fits the layered design?
+  options:
+    - Replace the whole stack, including navigation and safety limits, with one end-to-end VLA policy
+    - Move grasp planning up into the LLM reasoning layer so it can reason about transparency
+    - Raise the control loop rate to 1000 Hz so the servo PID compensates for the pose error
+    - Use an RGB-trained learned policy or grasp detector for the final approach; keep navigation and safety classical
+  correct: 3
+- source: e08644ccf9dc
+  question: As of 2026-09, which of these can you run today with an API key or open weights?
+  options:
+    - Gemini Robotics 2 VLA, π0.7 and GR00T N1.7
+    - Gemini Robotics-ER 2, π0.5 and GR00T N1.7
+    - Gemini Robotics-ER 2, π0.7 and π0.5
+    - Gemini Robotics 2 VLA, π0.5 and Gemini Robotics-ER 2
+  correct: 1
+- source: 024b4502f561
+  question: Why must a learned policy never command the servos directly?
+  options:
+    - Its output rate is too slow for servos, so hard limits are only needed to interpolate between actions
+    - It can output any value, even far outside training, with no warning; hard limits, watchdog and e-stop must enforce safety
+    - Servos only accept joint angles, while policies always output end-effector poses in Cartesian space
+    - Learned policies are nondeterministic, so identical inputs must be averaged over several runs before sending
+  correct: 1

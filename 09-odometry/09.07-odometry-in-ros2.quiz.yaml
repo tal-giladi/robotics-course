@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 09.07-odometry-in-ros2.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: fa1306758ae6
+  question: In `nav_msgs/Odometry`, which frame is the pose expressed in, and which is the twist expressed in?
+  options:
+    - Both in `header.frame_id` (`odom`)
+    - Pose in `child_frame_id`; twist in `header.frame_id`
+    - Pose in `header.frame_id` (`odom`); twist in `child_frame_id`
+    - Both in `child_frame_id` (the base frame)
+  correct: 2
+- source: 9f740f6d4ed0
+  question: At which indices of the 36-element covariance array are the variances of x, y and yaw, and where does the x–yaw covariance go?
+  options:
+    - x 0, y 7, yaw 35; x–yaw at 5 and 30
+    - x 0, y 1, yaw 2; x–yaw at 2 and 12
+    - x 0, y 7, yaw 14; x–yaw at 2 and 12
+    - x 0, y 6, yaw 30; x–yaw at 5 and 30
+  correct: 0
+- source: 4d48aeb2617d
+  question: Why does karmel publish `odom → base_footprint` rather than `odom → base_link`?
+  options:
+    - REP-105 forbids `base_link` as a child of `odom` on wheeled robots
+    - "`base_footprint` is the URDF root; a frame has one parent, so the tree would split"
+    - "`base_link` is published by the EKF, so odometry must use a different frame"
+    - "`base_footprint` is on the floor, which makes odometry more accurate"
+  correct: 1
+- source: 03bef32013fb
+  question: "`base_node` and your node read the same ticks with identical parameters. What pose difference after 10 m, and what differs anyway?"
+  options:
+    - Several cm in pose; the messages are otherwise identical
+    - About 1 cm in pose; only the frame names differ
+    - Nothing at all in pose or any other message field
+    - Under 1 mm in pose; stamps, twist and covariance differ
+  correct: 3
+- source: 8c13a0516f5a
+  question: Why is a constant pose covariance acceptable in karmel's EKF setup but wrong in general?
+  options:
+    - The EKF fuses only odometry velocities; in general pose uncertainty grows without bound
+    - karmel's odometry is calibrated, so its pose uncertainty stays constant in practice
+    - The EKF rescales every covariance it receives to match its own process noise
+    - A constant covariance is always correct for wheeled robots on flat floors
+  correct: 0
+- source: 2c9a174bfa5d
+  question: After enabling `use_ekf:=true`, RViz flickers. What is the likely cause?
+  options:
+    - The EKF runs slower than RViz's frame rate
+    - "Two owners of `odom → base_footprint`: the EKF and the controller"
+    - The EKF publishes `map → odom`, which conflicts with AMCL
+    - The IMU's covariance is zero, so the EKF oscillates
+  correct: 1
+- source: 5c8d78a174ef
+  question: What does REP-105 guarantee about the `odom` frame, and what doesn't it?
+  options:
+    - Accuracy to 1 % of distance; not continuity after a reset
+    - Alignment with `map` at start-up; not continuity over time
+    - Continuity (no jumps); not accuracy, since it drifts without bound
+    - That it never drifts; not that it is published at a fixed rate
+  correct: 2

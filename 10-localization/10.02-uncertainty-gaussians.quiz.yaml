@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 10.02-uncertainty-gaussians.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: aea450669269
+  question: $\Sigma = \operatorname{diag}(0.09, 0.01)$ m². What are the 1σ and 95 % semi-axes, and which way does the ellipse point?
+  options:
+    - "1σ: 9 × 1 cm; 95 %: 18 × 2 cm; long along x"
+    - "1σ: 30 × 10 cm; 95 %: 73.4 × 24.5 cm; axis-aligned, long along x"
+    - "1σ: 30 × 10 cm; 95 %: 60 × 20 cm; tilted at 45°"
+    - "1σ: 10 × 30 cm; 95 %: 24.5 × 73.4 cm; long along y"
+  correct: 1
+- source: f4829acebbc6
+  question: What fraction of a 2D Gaussian lies inside its 1σ ellipse, and why is it not 68 %?
+  options:
+    - 68.3 %, the same as in 1D
+    - 46.6 %, since 68 % is squared
+    - 39.3 %, since $d^2$ is chi-square with 2 dof
+    - 86.5 %, since two axes add coverage
+  correct: 2
+- source: c72e2791789b
+  question: For $\begin{bmatrix} 0.04 & 0 \\ 0 & 0.04 \end{bmatrix}$, what is the major-axis angle?
+  options:
+    - "Undefined: equal eigenvalues make a circle (σ = 20 cm), so the angle can't matter"
+    - "0°: the major axis always lies along x for a diagonal matrix"
+    - "45°: equal variances put the major axis on the diagonal"
+    - "90°: ties are broken toward the y axis by convention"
+  correct: 0
+- source: 365585e7e36a
+  question: A robot drives straight along +x for 3 m with only random wheel noise. Which ellipse axis grows faster, and how do they scale?
+  options:
+    - Along-track (x), as $d^{1.5}$; sideways as $\sqrt d$
+    - Both equally, as $\sqrt d$
+    - Both equally, as $d$
+    - Sideways (y), as $d^{1.5}$; along-track as $\sqrt d$
+  correct: 3
+- source: 4017a8e89bc1
+  question: "Two observations are 30 cm from the estimate (worked-example Σ): one along the major axis (−29.6°), one along +x. Which does a 95 % gate accept?"
+  options:
+    - Both, since both are 30 cm away
+    - Neither, since 30 cm exceeds 1σ
+    - Only the major-axis one ($d^2 = 1.41$); +x is rejected ($d^2 = 7.86$)
+    - Only the +x one ($d^2 = 1.41$); the major-axis one is rejected
+  correct: 2
+- source: 5d95097f433f
+  question: Your EKF's 95 % ellipse contains the truth only 60 % of the time. Which two causes, and how do you tell them apart?
+  options:
+    - Overconfident Q/R (all regions under-covered) vs non-Gaussian banana (inner over, outer under)
+    - Wrong map (all regions over-covered) vs wrong wheel radius (only x under-covered)
+    - Too-large Q (outer under-covered) vs too-large R (inner under-covered)
+    - Clock skew (random coverage) vs QoS drops (coverage falls over time)
+  correct: 0
+- source: 9a42ebe2ab59
+  question: Why is the 3D "1σ ellipsoid" of a pose covariance an especially misleading picture?
+  options:
+    - It holds 68 % in 3D, but people read it as 95 %
+    - It holds only 19.9 %, and its shape depends on metre vs radian units
+    - It ignores correlations, which only appear in 2D slices
+    - It is always a sphere, so it hides the heading error
+  correct: 1

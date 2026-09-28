@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.01-plan-the-build.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 7baa81e0ce4d
+  question: What is the job of each computer on karmel, and which job must never move from the Pico to the Pi?
+  options:
+    - The Pi runs hard real-time I/O and the Pico runs ROS 2; encoder counting must never move to the Pi.
+    - The Pi runs the application and the Pico runs networking; the Wi-Fi link must stay on the Pico.
+    - The Pi runs the motor PID and the Pico runs logging; the logging must never move to the Pi.
+    - The Pi runs the application (ROS 2, planning, networking); the Pico runs real-time I/O; the motor-stop watchdog must stay on the Pico.
+  correct: 3
+- source: 904b9947fbda
+  question: The encoder gives 11 pulses per motor revolution on one channel, the gear ratio is 56 and the wheel is 90 mm. How far does the rim travel per tick with 4× decoding?
+  options:
+    - 0.459 mm
+    - 0.029 mm
+    - 0.115 mm
+    - 0.230 mm
+  correct: 2
+- source: c5fefeac0ccc
+  question: Why is the DRV8874's current-sense pin left unconnected in Stage 1?
+  options:
+    - At about 1.1 V/A it can exceed the RP2350's 3.8 V absolute maximum; later you'd add a divider, filter capacitor and Schottky clamp.
+    - It outputs a negative voltage that would damage the ADC; later you'd add an inverting op-amp.
+    - It only works when the driver is in sleep mode; later you'd add a wake-up line from the Pico.
+    - It needs a 5 V ADC that the Pico lacks; later you'd move it to the Pi's ADC input.
+  correct: 0
+- source: c962814e4d1f
+  question: A Pico 2 button input uses `Pin.PULL_DOWN`; you press it (to 3.3 V) once and release. The pin keeps reading 1. What's the likely cause and fix?
+  options:
+    - A bouncing button; add a 100 ms software debounce.
+    - The pin was left in output mode; call `Pin.IN` before reading it.
+    - The 3.3 V rail is floating; add a decoupling capacitor near the Pico.
+    - Erratum RP2350-E9 leakage holds the pin near 2.2 V; wire the button to GND with `Pin.PULL_UP`, or add a ≤ 8.2 kΩ pull-down.
+  correct: 3
+- source: ffb452eb6d29
+  question: The Pi draws 5 V × 2.5 A through a 90%-efficient regulator from a 10.8 V pack. What current does the battery supply for the Pi?
+  options:
+    - 2.78 A
+    - 1.29 A
+    - 1.16 A
+    - 2.50 A
+  correct: 1
+- source: e4c6e52d0aba
+  question: At full speed the left encoder count grows 20% slower than the right though both wheels turn equally. The encoders are read by a Python loop on the Pi via gpiozero. What's wrong?
+  options:
+    - The encoder cables are too long and need shielding at high speed.
+    - The counts-per-rev constant is different for the left wheel.
+    - Linux + Python can't reliably sample about 8,000 edges/s and misses edges; counting belongs on the Pico's PIO.
+    - The left motor is weaker and slips at full speed, so it produces fewer edges.
+  correct: 2
+- source: 2bba531f09c5
+  question: Why are the fuse and the switch placed in the positive wire rather than the ground wire?
+  options:
+    - Fuses and switches are polarized and only work on the positive side.
+    - The ground wire carries less current, so a fuse there would never blow.
+    - Opening ground while USB or serial links exist sends return current through signal grounds and can damage the Pi, Pico or laptop.
+    - The ground wire must stay connected to the chassis to shield the motors from noise.
+  correct: 2

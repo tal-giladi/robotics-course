@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 06.10-sim-to-real-gap.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 288c197bb4a2
+  question: "Which is more dangerous: a gap where the simulation is optimistic, or one where it is pessimistic?"
+  options:
+    - Pessimistic, because the robot will refuse to go where it safely could
+    - Optimistic, because it yields plans the real robot cannot execute
+    - Both equally, because any gap at all invalidates the simulation
+    - Pessimistic, because simulators usually overestimate noise and friction
+  correct: 1
+- source: 82a1f256e985
+  question: The real robot reaches 99 % of commanded wheel speed 286 ms later than the simulation. At 0.4 m/s, how much position error is that, and which planner does it hurt more?
+  options:
+    - 0.114 m; the global planner, because it recomputes the whole path every cycle
+    - 1.14 m; the local planner, because it ignores the robot's dynamics entirely
+    - 0.0114 m; neither planner, since it is below the map's resolution
+    - 0.114 m; the local planner, which keeps correcting for stale commands
+  correct: 3
+- source: 36ea3d4cae2c
+  question: "`sysid_fit.py` reports $\\tau = 115$ ms for a Gazebo run, yet `gz_ros2_control` has no motor model. Why?"
+  options:
+    - The fit covers the whole loop, including the controller's acceleration limiter
+    - Gazebo silently adds a 115 ms first-order lag to every revolute joint
+    - The 115 ms is ROS 2 network latency between the bridge and controller
+    - The fit is invalid; the script returns 115 ms whenever no model exists
+  correct: 0
+- source: 6100d95ce691
+  question: You add a black rug and a glass door to the Gazebo apartment and run SLAM. What do the simulated and real maps show?
+  options:
+    - "Simulated: the rug and the door are both invisible. Real: both appear as solid obstacles"
+    - Both maps show the glass door as an opening, and both ignore the rug on the floor
+    - "Simulated: both solid, since `gpu_lidar` ignores materials. Real: an opening at the glass"
+    - "Simulated: the black rug causes dropouts in the map. Real: identical to the simulation"
+  correct: 2
+- source: b7b28e4f99ea
+  question: The battery drops from 12.6 V to 9.9 V. What happens to top speed, and does karmel still meet its 0.5 m/s limit?
+  options:
+    - Unchanged, since the velocity controller fully compensates for voltage
+    - Falls about 21 % to roughly 0.70 m/s; met, but with less headroom
+    - Falls about 21 % to roughly 0.45 m/s; the limit is no longer met
+    - Rises slightly, because lower voltage means the motors draw more current
+  correct: 1
+- source: de5c50a5da75
+  question: Nav2 works in simulation but overshoots corners on the robot. What are the first three checks, in order?
+  options:
+    - (1) Retune the costmap, (2) rebuild the map, (3) replace the LiDAR
+    - (1) Step response, (2) map quality, (3) Wi-Fi latency to the laptop
+    - (1) Reinstall Nav2, (2) raise planner frequency, (3) raise speed limits
+    - (1) Parity gate, (2) stationary sensor stats, (3) step response on both
+  correct: 3
+- source: c07a22d48b14
+  question: What is domain randomization, and when is it the right answer rather than system identification?
+  options:
+    - Sampling a parameter from a range each run; right when it varies or can't be measured
+    - Randomizing the world layout each run; right when the robot has only one sensor
+    - Adding white noise to every sensor; right when the parameter is fixed and measurable
+    - Picking a random seed per run; right whenever system identification is too slow
+  correct: 0
+- source: abfbd73f3904
+  question: Which is a sim-to-real gap that no amount of simulation work can close, with the right thing to do instead?
+  options:
+    - LiDAR noise; add a larger `stddev` to the simulated sensor
+    - Wheel friction; measure it once and write it into the URDF
+    - Compute load on the Pi 5; run the real stack on the real computer
+    - Motor lag; fit $\tau$ and add it to the simulated controller
+  correct: 2

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.02-supervised-learning.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 690c40201367
+  question: "Regression or classification: (a) grasp width in mm; (b) whether a door is open; (c) battery voltage in 10 minutes?"
+  options:
+    - (a) classification; (b) classification; (c) regression
+    - (a) regression; (b) regression; (c) classification
+    - (a) regression; (b) classification; (c) classification
+    - (a) regression; (b) classification; (c) regression
+  correct: 3
+- source: babba527caff
+  question: Why can a model that is linear in its parameters still represent $\text{speed} \propto d \cdot V$?
+  options:
+    - Because the optimizer adds interaction terms automatically during training
+    - Because "linear" refers to how the parameters enter; you can give $d \cdot V$ as a feature
+    - Because $d \cdot V$ is approximately linear over the robot's operating range
+    - Because the bias term absorbs the product of the two inputs
+  correct: 1
+- source: 1f33a3206e11
+  question: With $X^\top X = \begin{bmatrix}126 & 18\\18 & 3\end{bmatrix}$ and $X^\top y = [163.8, 22.5]$, does $w = (1.6, -2.1)$ solve the normal equations?
+  options:
+    - "Yes: $201.6 - 37.8 = 163.8$ and $28.8 - 6.3 = 22.5$"
+    - "No: row 1 gives $201.6 + 37.8 = 239.4$, not 163.8"
+    - "No: row 2 gives $28.8 + 6.3 = 35.1$, not 22.5"
+    - Only row 1 holds; row 2 gives $18 - 6.3 = 11.7$
+  correct: 0
+- source: 15411c21573b
+  question: A corridor classifier has TP=160, FP=3, FN=35, TN=202. What are precision and recall?
+  options:
+    - Precision 0.821, recall 0.982
+    - Precision 0.982, recall 0.985
+    - Precision 0.982, recall 0.821
+    - Precision 0.905, recall 0.821
+  correct: 2
+- source: 907748b35c84
+  question: Why do the mean range and nearest range work so badly as features for corridor vs room?
+  options:
+    - They are too noisy, since single LiDAR beams have large errors
+    - They are highly correlated, so the model can't separate their effects
+    - They need normalization first, which the lesson's classifier skipped
+    - "Their distributions overlap; they miss what a corridor is: narrow one way, long the other"
+  correct: 3
+- source: 8acc4090ec9e
+  question: You train the engineered-features classifier only on scans facing along the corridor, then deploy on a robot that turns freely. Does accuracy drop?
+  options:
+    - No or barely, since the span features don't depend on heading
+    - Yes, sharply, since every feature is tied to beam 0's direction
+    - Yes, slightly, since turning adds motion blur to the scans
+    - No, since the classifier re-trains itself on the new headings
+  correct: 0
+- source: bee7af09485b
+  question: Your motor model has test RMSE 0.44 rad/s and the encoder noise is 0.30 rad/s. Where is the remaining error most likely from?
+  options:
+    - Overfitting to training noise, so the test error is inflated
+    - "Model mismatch: a linear model can't represent the deadband at low duty"
+    - Too little training data at high duty, where the motor saturates
+    - Encoder quantization, which adds error on top of the 0.30 noise
+  correct: 1

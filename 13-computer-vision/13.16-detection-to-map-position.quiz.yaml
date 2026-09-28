@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.16-detection-to-map-position.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6c7492f453a2
+  question: Why can't a bounding box alone give a 3D position, no matter how good the detector is?
+  options:
+    - Boxes are axis-aligned, so they cannot represent rotated objects and their 3D centre is always offset
+    - "Projection destroys depth: the box fixes direction, never distance, so an independent depth source is needed"
+    - Detectors output normalized coordinates, which lose the metric scale needed to compute 3D positions
+    - The box centre is biased toward the image centre, so the direction to the object is unreliable
+  correct: 1
+- source: 714c16a3b806
+  question: karmel's 320×240 camera ($f_y = 233.9$, $c_y = 120$) is 0.145 m above the floor. A box's bottom edge is at $v = 132$. How far is the object, and what is one pixel worth there?
+  options:
+    - About 2.83 m; one pixel ≈ 0.012 m
+    - About 0.35 m; one pixel ≈ 0.030 m
+    - About 1.41 m; one pixel ≈ 0.118 m
+    - About 2.83 m; one pixel ≈ 0.236 m
+  correct: 3
+- source: 9c2f0821f8d7
+  question: Your detector's boxes are consistently 3 px too tall. What does that do to a known-size distance estimate, and does averaging 100 frames help?
+  options:
+    - Objects are reported too close (≈ 3/h relative); averaging doesn't help, since it is a bias, not noise
+    - Objects are reported too far (≈ 3/h relative); averaging over 100 frames removes the error
+    - Objects are reported too close (≈ 3/h relative); averaging over 100 frames reduces it tenfold
+    - Distance is unaffected, since only the box width is used in the known-size formula
+  correct: 0
+- source: fd938781421d
+  question: Two cup detections arrive 0.3 m apart, each with $\sigma = 0.25$ m per axis. Same object or two, with a 99% gate ($\chi^2_{3,0.99} = 11.345$)?
+  options:
+    - "Two objects: $d^2 = 112$, far above the gate"
+    - "One object: $d^2 = 1.44$, far below the gate"
+    - "One object: $d^2 = 0.72$, far below the gate"
+    - "Two objects: 0.3 m exceeds $\\sigma$, so they differ"
+  correct: 2
+- source: 374a76f19253
+  question: The robot spins at 1.0 rad/s, the pipeline is 0.5 s behind, and TF is looked up at "now". A bottle 2 m away is detected. What happens over ten seconds?
+  options:
+    - Each detection lands ~1 m sideways at the same spot, so the map holds one bottle in the wrong place
+    - Each detection lands ~0.5 m sideways, but association merges them into one correct bottle over time
+    - Detections land correctly, because TF interpolates the rotation between the capture and lookup times
+    - Each detection lands ~1 m sideways at a different spot along an arc, so the map fills with phantom bottles
+  correct: 3
+- source: cda6a09ea4c7
+  question: When is the floor-plane method better than a depth camera, and when is it useless?
+  options:
+    - "Better: objects on tables and shelves, far objects. Useless: close floor objects and anything transparent."
+    - "Better: close floor objects, transparent or shiny items, no depth camera. Useless: tables, beyond 2–3 m, unknown pitch."
+    - "Better: any object beyond 3 m, where depth cameras fail. Useless: anything closer than 1 m to the robot."
+    - "Better: moving objects, since it needs no depth. Useless: static objects, which depth cameras handle better."
+  correct: 1
+- source: d8c96ff3c478
+  question: "`Detection3D.results[0].pose` is a `PoseWithCovariance` with 36 covariance numbers. Which do you fill for a detection from a box and depth?"
+  options:
+    - All 36 values, using the box aspect ratio to estimate the object's yaw and its uncertainty
+    - Position and the x, y, z 3×3 block; orientation stays identity with a zero block, since the box says nothing about it
+    - Only the diagonal of all six axes, with orientation variance set to a large default value
+    - Position only, leaving the whole covariance zero, since detection uncertainty is unknown
+  correct: 1

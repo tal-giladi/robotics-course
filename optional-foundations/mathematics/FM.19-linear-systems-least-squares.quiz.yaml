@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.19-linear-systems-least-squares.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1781e6302c83
+  question: Why does an overdetermined system usually have no exact solution, and what does least squares minimize?
+  options:
+    - Noisy equations are inconsistent; it minimizes $\|A\mathbf{x} - \mathbf{b}\|^2$
+    - There are too few equations; it minimizes $\|\mathbf{x}\|^2$
+    - The matrix is singular; it minimizes $\|A\mathbf{x} - \mathbf{b}\|_1$
+    - The unknowns are correlated; it minimizes $\max_i |r_i|$
+  correct: 0
+- source: df1e963a4ae2
+  question: Write the normal equations and state the geometric property of the residual at the solution.
+  options:
+    - $A A^\top\,\hat{\mathbf{x}} = A\mathbf{b}$; the residual is parallel to the columns of $A$
+    - $A^\top A\,\hat{\mathbf{x}} = A^\top\mathbf{b}$; the residual is orthogonal to every column of $A$
+    - $A^\top A\,\hat{\mathbf{x}} = A^\top\mathbf{b}$; the residual has zero length at the solution
+    - $A\,\hat{\mathbf{x}} = \mathbf{b}$; the residual is orthogonal to $\mathbf{b}$
+  correct: 1
+- source: 83debc095c90
+  question: Runs with wheel angles 20 and 40 rad measured 0.90 m and 1.82 m. Least-squares radius through the origin?
+  options:
+    - 0.0450 m
+    - 0.0455 m
+    - 0.0454 m
+    - 0.0303 m
+  correct: 2
+- source: 070e1402a1c5
+  question: $\kappa(A) = 300$. What is $\kappa(A^\top A)$, and why does that matter?
+  options:
+    - 600; the normal equations lose one extra digit compared with `lstsq` on $A$
+    - 300; transposing does not change conditioning, so either method is fine
+    - 17.3; the normal equations are better conditioned than $A$ itself
+    - 90,000; the normal equations lose about twice as many digits as `lstsq` on $A$
+  correct: 3
+- source: a9e816bfe085
+  question: You fit $d = r\phi + c$ but all eight runs were exactly 1.0 m long. What happens?
+  options:
+    - The fit is perfect, since eight runs are more than enough for two unknowns
+    - $c$ becomes exactly zero, and $r$ is estimated with normal accuracy
+    - The fit fails with a divide-by-zero error that tells you to add runs
+    - κ is huge, so $r$ and $c$ trade off; runs of different lengths are needed
+  correct: 3
+- source: 6e768373cd5f
+  question: A 2-link arm's Jacobian has singular values 0.24 and 0.0005. What does that tell you physically?
+  options:
+    - "It is near a singularity: in one direction the pseudo-inverse amplifies joint speeds ~2000×"
+    - "It is near a singularity: in one direction the tip moves 2000× faster than the joints"
+    - "It is well-conditioned: both values are positive, so every direction is reachable"
+    - The second link is 0.0005 m long and can be ignored in the kinematics
+  correct: 0
+- source: a5fc45f9fc22
+  question: Calibrated wheel radius is 43.6 mm on carpet and 44.6 mm on tile, with tiny residuals within each floor. What's going on, and how do you report it?
+  options:
+    - It is noise; average them and report 44.1 mm for both surfaces
+    - The effective radius depends on the surface; fit and report per surface
+    - The carpet runs were measured wrong; report only the tile value
+    - The encoder drifts over time; recalibrate before every run instead
+  correct: 1

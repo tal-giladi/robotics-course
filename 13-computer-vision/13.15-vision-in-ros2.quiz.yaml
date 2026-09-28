@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.15-vision-in-ros2.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 4fca25ef4895
+  question: A camera publishes `rgb8`; your node calls `imgmsg_to_cv2(msg, desired_encoding="passthrough")`, then `cv2.cvtColor(img, cv2.COLOR_BGR2HSV)`. What is wrong?
+  options:
+    - Red and blue are swapped silently, so every hue is wrong; use `desired_encoding="bgr8"`
+    - '`passthrough` returns grayscale, so saturation is always zero; use `desired_encoding="rgb8"`'
+    - "`cvtColor` raises an error on `rgb8` data, so the node crashes; use `COLOR_RGB2GRAY` first"
+    - "Nothing is wrong: `passthrough` always converts to BGR, which is what OpenCV expects"
+  correct: 0
+- source: 083cc7673216
+  question: Your detector takes 200 ms per frame on a 15 Hz camera, subscribed with depth 8. What throughput and detection age do you expect?
+  options:
+    - 15 Hz throughput, about 200 ms age (the queue absorbs the difference)
+    - 5 Hz throughput, about 1.6 s age (depth 1 would cut age to ~200 ms)
+    - 5 Hz throughput, about 200 ms age (the queue only affects throughput)
+    - 1.9 Hz throughput, about 1.6 s age (the queue slows the detector)
+  correct: 1
+- source: f16a93102063
+  question: Why does the same table show 6 Hz of detections for depth 1, depth 5 and depth 10?
+  options:
+    - Depth is ignored for BEST_EFFORT subscriptions, so all three settings behave identically
+    - The camera itself drops to 6 Hz under load, so the queue depth never fills up at all
+    - cv_bridge limits conversions to 6 Hz, which is the real bottleneck independent of the queue
+    - The queue only chooses which frames are processed; throughput is $\min(f, 1/L)$ either way
+  correct: 3
+- source: 48b7a4dc4799
+  question: karmel streams 640×480 `bgr8` plus aligned `16UC1` depth, both at 15 Hz. What is the byte rate, and what is your first move?
+  options:
+    - About 14 MB/s (110 Mbit/s); switch middleware to a zero-copy transport first
+    - About 23 MB/s (184 Mbit/s); switch middleware to a zero-copy transport first
+    - About 23 MB/s (184 Mbit/s); reduce resolution and compress what leaves the robot
+    - About 2.3 MB/s (18 Mbit/s); no action needed, since Wi-Fi handles that easily
+  correct: 2
+- source: 49f8055af9ea
+  question: You subscribe to `/camera/image_raw` with RELIABLE QoS and get nothing. You add `time.sleep(1.0)` before creating the subscription. What happens?
+  options:
+    - "Nothing changes: RELIABLE never matches a BEST_EFFORT publisher; `ros2 topic info -v` shows it"
+    - "It works: the sleep lets discovery finish before the subscription is created"
+    - It works for a while, then stops again once the publisher's queue fills up
+    - The node crashes, because sleeping before spinning blocks the ROS executor
+  correct: 0
+- source: 76c27e45e58c
+  question: Why must a detection carry the image's `header.stamp` rather than the inference finish time?
+  options:
+    - ROS 2 rejects messages whose stamp is later than the current time, so finish times would be dropped
+    - The inference finish time is always zero on the Pi, because the clock is not synchronized to the camera
+    - Latency varies and the consumer can't know it; the capture time is when the geometry was true and what TF indexes
+    - The capture stamp is smaller, so the message uses fewer bytes when serialized over the network
+  correct: 2
+- source: 33c2e8d5e246
+  question: You want annotated detections in RViz occasionally, without paying for them every frame. What do you do, and what does `image_transport` do similarly?
+  options:
+    - Publish the debug image only when `get_subscription_count() > 0`; `compressed` encodes only once someone subscribes
+    - Publish the debug image at 1 Hz with a timer; `compressed` always encodes but drops frames when no one listens
+    - Publish the debug image on a BEST_EFFORT topic; `compressed` switches to lossless when RViz subscribes
+    - Draw boxes in RViz itself from the detections; `compressed` does the same by sending only box coordinates
+  correct: 0

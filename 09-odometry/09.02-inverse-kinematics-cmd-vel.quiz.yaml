@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in 09.02-inverse-kinematics-cmd-vel.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 04af641156ea
+  question: Which is the inverse kinematics for $\omega_L$ and $\omega_R$?
+  options:
+    - $\omega_L = (v + \omega L/2)/r$, $\omega_R = (v - \omega L/2)/r$
+    - $\omega_L = (v - \omega L)/r$, $\omega_R = (v + \omega L)/r$
+    - $\omega_L = r(v - \omega L/2)$, $\omega_R = r(v + \omega L/2)$
+    - $\omega_L = (v - \omega L/2)/r$, $\omega_R = (v + \omega L/2)/r$
+  correct: 3
+- source: bbd3c29a8cd1
+  question: Why does multiplying both wheel speeds by the same factor keep the robot on the same path?
+  options:
+    - The turning radius depends only on the ratio of the wheel speeds
+    - The controller normalises wheel speeds before applying them
+    - Faster wheels slip more, which exactly cancels the extra speed
+    - The path depends only on the sum of the wheel speeds
+  correct: 0
+- source: 93975f646943
+  question: A request needs wheels $(-20, 10)$ rad/s and the limit is 16. What are the scaled wheels and the keep-rotation wheels?
+  options:
+    - Scaled $(-16, 10)$; keep-rotation $(-16, 8)$
+    - Scaled $(-16, 8)$; keep-rotation $(-16, 14)$
+    - Scaled $(-16, 8)$; keep-rotation $(-15, 15)$
+    - Scaled $(-10, 5)$; keep-rotation $(-16, 14)$
+  correct: 1
+- source: 79564a5e797e
+  question: Limits are $v \le 0.5$ m/s and $|\omega| \le 2.5$ rad/s. Can a command inside them saturate a 17 rad/s wheel? And with $|\omega|$ up to 3.0?
+  options:
+    - Yes at 2.5 (18.9 rad/s); yes at 3.0 (20 rad/s)
+    - No at 2.5 (11.1 rad/s); no at 3.0 (12.2 rad/s)
+    - No at 2.5 (16.67 rad/s); yes at 3.0 (17.8 rad/s)
+    - Yes at 2.5 (17.2 rad/s); yes at 3.0 (17.8 rad/s)
+  correct: 2
+- source: 2cba4d88ccdb
+  question: A robot drives requested arcs perfectly at low speed but wider arcs at full speed, never tighter. Most likely cause?
+  options:
+    - Per-wheel clipping of the outer wheel, pushing the ratio toward 1
+    - The inner wheel slipping, which always makes the arcs tighter
+    - A wrong wheelbase in the kinematics, wrong at every speed
+    - Encoder quantisation, which grows with speed
+  correct: 0
+- source: dde5352ce5ab
+  question: Why do navigation stacks prefer "scale" while heading controllers prefer "keep rotation"?
+  options:
+    - Scaling is cheaper to compute, and heading loops run faster
+    - Navigation ignores rotation, and heading loops ignore speed
+    - Scale keeps the yaw rate; keep rotation keeps the path geometry
+    - A planner validated the path geometry; a heading loop needs yaw rate
+  correct: 3

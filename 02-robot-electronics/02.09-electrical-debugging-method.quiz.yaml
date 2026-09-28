@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 02.09-electrical-debugging-method.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d2dacbecba0e
+  question: Why is OUT1–OUT2 the first measurement rather than the battery voltage?
+  options:
+    - The battery voltage can't be measured safely while the motor is commanded.
+    - "It splits the problem in half with one probe: a correct OUT clears everything upstream, a wrong OUT puts the fault upstream."
+    - OUT1–OUT2 is the only node that shows the PWM frequency on a DC meter.
+    - The battery is protected by the fuse, so it is never the cause.
+  correct: 1
+- source: 286ad90315e4
+  question: What precondition makes bisection valid, and which case violates it?
+  options:
+    - Every node must be measured against the same ground; violated by using a second meter.
+    - The fault must be intermittent; violated by a permanent short circuit.
+    - Badness must propagate downstream; violated when a second source (e.g. a bench supply on VIN) feeds the middle of the chain.
+    - The chain must have an even number of nodes; violated by an odd-length wiring chain.
+  correct: 2
+- source: 16b261109931
+  question: A DC meter reads 1.65 V on a pin driven with 50% duty at 20 kHz. Is anything wrong?
+  options:
+    - "No: a DC meter averages, and the average of a 0/3.3 V square wave at 50% is 1.65 V."
+    - "Yes: the pin should read 3.3 V, so the output driver is weak."
+    - "Yes: the meter shows the pin is floating halfway between the rails."
+    - No, but the true peak level is 1.65 V, so the signal is too weak for the driver.
+  correct: 0
+- source: 3cd05ed67305
+  question: You measure 11.7 V at the driver's VIN using the Pico's ground as reference, and the driver misbehaves. What is the flaw?
+  options:
+    - VIN must be measured with the motors disconnected, otherwise the motor's back-EMF adds to the reading.
+    - The Pico's ground is noisier than the battery negative, so the meter reads about 1 V too high.
+    - 11.7 V is above the driver's recommended range, so the driver's under-voltage lockout keeps tripping.
+    - The driver's pins are referenced to its own ground; if the grounds differ, the number describes a voltage the driver never sees.
+  correct: 3
+- source: ceb1a9a3e49d
+  question: SLEEP is unconnected on a Pololu DRV8874 carrier. What do you measure, and what is the verdict?
+  options:
+    - "VIN normal, IN1/IN2 normal, SLEEP 0 V, OUT 0 V: driver asleep, which looks exactly like a dead chip."
+    - "VIN 0 V, IN1/IN2 0 V, OUT 0 V: the fuse has blown."
+    - "VIN normal, IN1/IN2 0 V, OUT 11.7 V: the driver runs at full output."
+    - "VIN normal, IN1/IN2 normal, OUT normal: the motor itself is dead."
+  correct: 0
+- source: 0b5e94bdefa6
+  question: "`out = 11.7 V` with a commanded 50% duty. What class of fault is this, and why is it more alarming than `out = 0 V`?"
+  options:
+    - A blown driver output stage; more alarming because a shorted chip may overheat and catch fire.
+    - An input stuck (e.g. IN2 low from a wrong pin or open wire), giving full output; alarming because the robot runs at full speed while thinking it's slow.
+    - A meter error from PWM averaging; more alarming because you can't trust any later reading either.
+    - A battery overvoltage on the motor rail; more alarming because it will also damage the Pico's pins.
+  correct: 1
+- source: 66bd690e4a3b
+  question: You find an injected fault in 12 measurements, but `fault_tree.py` says bisection would take 8. What did you probably do?
+  options:
+    - Measured every node twice to confirm each reading.
+    - Started at the motor and worked backwards to the battery.
+    - Used the oscilloscope instead of the meter for the command chains.
+    - Walked the command chains from the start instead of testing their far ends first, re-measuring proven nodes.
+  correct: 3
+- source: cad63c262daa
+  question: Why does this lesson insist on writing the fault tree down rather than just knowing it?
+  options:
+    - A written tree is required before you are allowed to open the robot.
+    - A written tree lets `course.py` grade your debugging automatically.
+    - It keeps the expected ranges memory loses, makes debugging reproducible by others, and turns each new fault into a permanent addition.
+    - It lets you skip measurements that the tree marks as unlikely.
+  correct: 2

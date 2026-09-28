@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.11-unsupervised-learning.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f868f7eb2b5f
+  question: What do k-means' two alternating steps do, and why does the loop always stop?
+  options:
+    - Split and merge clusters; it stops when k is reached
+    - Assign points to the nearest center, then move centers to their points' mean; inertia never increases
+    - Move centers randomly, then keep the move if it helps; it stops after a fixed number of tries
+    - Assign points by density, then prune noise; it stops when no noise remains
+  correct: 1
+- source: ed7f76059ed0
+  question: Why must features be standardized before k-means on (jitter in mm, signal in kcps)?
+  options:
+    - k-means uses Euclidean distance, so signal (thousands) would dwarf jitter (tens)
+    - k-means requires all features to be between 0 and 1 to converge
+    - Unscaled features make k-means pick the wrong number of clusters
+    - k-means uses cosine similarity, which fails on features with different units
+  correct: 0
+- source: adffe11f927d
+  question: The first 5 PCA components explain 0.519, 0.197, 0.150, 0.046, 0.032 of the variance. What fraction do the first three explain?
+  options:
+    - "0.716"
+    - "0.944"
+    - "0.519"
+    - "0.866"
+  correct: 3
+- source: a4ec92e254bf
+  question: Why does a 2-number autoencoder beat 2-component PCA on corridor scans?
+  options:
+    - The autoencoder uses more training data than PCA does
+    - PCA can't handle more than 100 input dimensions
+    - Scans vary along a curved manifold; PCA fits only a flat subspace
+    - The autoencoder's output is clipped, which removes noise
+  correct: 2
+- source: a3084c18fd35
+  question: You train the scan autoencoder in your apartment corridor and deploy it in an office with a much wider corridor. What happens to the anomaly alarm?
+  options:
+    - It never fires, since wider corridors have fewer features
+    - It fires about 1 % of the time, as set by the threshold
+    - It fires only when the robot is near walls
+    - It fires constantly, since the wide corridor is out of distribution
+  correct: 3
+- source: 7c1919c5bc40
+  question: How do you choose the anomaly threshold without any examples of faults?
+  options:
+    - Set it to the maximum training error, so no normal scan alarms
+    - "From held-out normal errors: pick the percentile for an acceptable false-alarm rate"
+    - Set it to twice the mean training error, a standard rule
+    - Set it by fitting a classifier on synthetic faults only
+  correct: 1
+- source: 92d91e138acf
+  question: Which method would you use to split a 2-D LiDAR point cloud into separate obstacles, and why not k-means?
+  options:
+    - PCA, since obstacles lie along principal directions; k-means is too slow
+    - k-means with a large k, since extra clusters can be merged afterward
+    - DBSCAN, which finds dense groups of any shape; k-means needs k and assumes round clusters
+    - An autoencoder, since reconstruction error separates obstacles from walls
+  correct: 2

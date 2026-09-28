@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 05.07-tf2-broadcast-listen.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 7032a0018bdb
+  question: What is the difference between `/tf` and `/tf_static`, including QoS?
+  options:
+    - "`/tf` is for 2D transforms and `/tf_static` for 3D; both use reliable, volatile QoS."
+    - "`/tf` carries dynamic transforms (volatile, interpolated, expiring); `/tf_static` carries fixed ones published once with transient-local durability, valid at all times."
+    - "`/tf_static` is republished at 10 Hz with best-effort QoS; `/tf` is latched."
+    - Both are identical; `/tf_static` just has a higher priority in the buffer.
+  correct: 1
+- source: 6658d8e009a1
+  question: '`lookup_transform("base_link", "laser", Time())` returns translation (0, 0, 0.12). What does it mean, and how do you use it?'
+  options:
+    - base_link is 0.12 m above the laser; apply its inverse to scan points.
+    - The laser has moved 0.12 m since the last scan; subtract it from each point.
+    - "It's `T_base_link_laser`: the laser is 0.12 m above base_link; $p_B = T_{BL}\\,p_L$."
+    - It's the laser's range offset; add 0.12 m to every range reading.
+  correct: 2
+- source: f6a4587076b3
+  question: You call `lookup_transform("map", "base_link", self.get_clock().now())` with no timeout while odometry runs at 30 Hz. What happens?
+  options:
+    - An `ExtrapolationException` into the future; pass `Time()` or the data's stamp with a short timeout.
+    - It blocks until the next odometry sample arrives, then succeeds.
+    - It returns the latest transform silently, which is fine.
+    - It returns an interpolated transform from 33 ms ago.
+  correct: 0
+- source: 6c377d04cdf4
+  question: Why does a 1 s timeout in a timer callback always fail on a single-threaded executor?
+  options:
+    - The TF buffer only holds 0.5 s of history by default.
+    - Timeouts are ignored inside callbacks by rclpy.
+    - The timer callback runs before the TF listener is constructed.
+    - The listener's `/tf` callbacks run on the same thread stuck in your wait, so the buffer never gets the transform.
+  correct: 3
+- source: b12f8263ed90
+  question: A detection was made 0.5 s ago in `camera_optical_frame`, and the robot has moved. Which fixed frame do you choose for `lookup_transform_full`, to get its position relative to the robot now?
+  options:
+    - "`map`, because it's globally correct."
+    - "`odom`, because it's world-fixed and continuous over half a second."
+    - "`base_link`, because that's the target frame."
+    - "`camera_optical_frame`, because the detection is in it."
+  correct: 1
+- source: e07ad37ed670
+  question: "`tf2_echo odom base_footprint` says the frames are in two unconnected trees, but `odom base_link` works. What is the likely cause?"
+  options:
+    - base_link has two parents (`odom` and `base_footprint`); publish odometry to `base_footprint` instead.
+    - base_footprint is missing from the URDF entirely, so nothing ever publishes it.
+    - The two frames use different timestamps, so TF can't join them into one tree.
+    - "`/tf_static` was published with volatile durability, so the late listener missed it."
+  correct: 0
+- source: cfa3c3a155f0
+  question: A calibration node re-sends `base_link → camera_link` on a `StaticTransformBroadcaster` with refined values, but `tf2_echo` still shows the old ones. Why?
+  options:
+    - The static topic is latched, so subscribers must restart to see updates.
+    - The new values are cached for 10 s before being applied.
+    - TF2 averages all static transforms for the same child.
+    - rclpy's broadcaster ignores a later transform for a child it already sent; publish the final value once, or use `/tf`.
+  correct: 3

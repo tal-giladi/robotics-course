@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 08.05-integral-control.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f53fb4e83b3b
+  question: Why does a PI loop settle with exactly zero steady-state error (when the setpoint is reachable)?
+  options:
+    - The proportional term becomes large enough to cancel any error
+    - The integral grows until it saturates, forcing the error to zero
+    - At steady state the integral stops changing, so $e = 0$; I holds the command
+    - The integral filters out noise, so the measured error averages to zero
+  correct: 2
+- source: 65cf816c2ed8
+  question: $k_i = 2$, $\Delta t = 0.02$ s, a constant error of 5 rad/s. How much does the integral grow per period and per second?
+  options:
+    - 0.2 duty per period; 10 duty per second
+    - 10 duty per period; 500 duty per second
+    - 0.02 duty per period; 1 duty per second
+    - 0.2 duty per period; 0.2 duty per second
+  correct: 0
+- source: e27a150db6dc
+  question: What is integral windup, and which two rules prevent it here?
+  options:
+    - Noise accumulating in I; prevented by a low-pass filter and a lower $k_i$
+    - I shrinking as the battery drains; prevented by voltage feedforward
+    - The integral overflowing its integer type; prevented by using floats
+    - I accumulating while saturated; prevented by conditional integration and clamping
+  correct: 3
+- source: 7f5b77624bc7
+  question: An unreachable setpoint for 3 s, then a reachable one; no anti-windup; integral grows 12/s saturated and unwinds 20/s after. How long is the output stuck at 1.0?
+  options:
+    - About 0.6 s
+    - About 1.75 s
+    - About 3.0 s
+    - About 0.15 s
+  correct: 1
+- source: f06842d6e204
+  question: After a watchdog trip (the Pi froze 0.5 s), the wheels jump to full speed when commands resume, despite anti-windup. What is missing?
+  options:
+    - A lower $k_i$, so the integral grows more slowly after the freeze
+    - A derivative term, to damp the jump when the loop resumes
+    - An integrator reset on watchdog or mode change, and a clamp on `dt`
+    - A faster watchdog, so the freeze is detected within 50 ms
+  correct: 2
+- source: de1e5fe6fbe0
+  question: Why does the firmware store `integral += ki * error * dt` instead of `sum += error * dt` and `ki * sum` at output?
+  options:
+    - It is faster, since it saves one multiplication per control period
+    - Changing $k_i$ at runtime won't jump the output, and clamping to ±1 is direct
+    - It is more accurate, because floating-point sums lose precision otherwise
+    - It lets the integral be shared between the left and right wheel loops
+  correct: 1
+- source: 9b2e9f6fa756
+  question: With your anti-windup, the simulated wheel held 16.3 rad/s when asked for 25, although it can reach 19. Why?
+  options:
+    - The motor's deadband eats the last 13% of the duty range
+    - The encoder saturates above 16 rad/s and under-reports speed
+    - The P gain is too low; raising it would reach 19 rad/s
+    - Each I step would overshoot the headroom, so the simple rule refuses them all
+  correct: 3

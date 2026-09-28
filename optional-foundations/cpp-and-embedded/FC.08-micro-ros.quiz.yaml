@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in FC.08-micro-ros.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a04278dd613c
+  question: What does the micro-ROS agent do, and what breaks if it is not running?
+  options:
+    - It compiles the firmware's message types; without it the build fails at link time
+    - It relays topics to the cloud; without it only local nodes can see the robot
+    - It holds the DDS participant and proxies for the MCU; without it no entity can be created
+    - It resets the MCU on errors; without it the firmware keeps running unsupervised
+  correct: 2
+- source: 0928bcbc585e
+  question: Why is a `sensor_msgs/msg/JointState` with two joints 124 bytes when the same data fits in a 47-byte ASCII line?
+  options:
+    - CDR adds a header, `frame_id`, name strings, length prefixes and alignment padding
+    - CDR stores every number as a 16-byte decimal for exact round-tripping
+    - XRCE-DDS adds a 77-byte encryption envelope to every message
+    - micro-ROS pads all messages to a fixed 128-byte slot, minus a 4-byte CRC
+  correct: 0
+- source: 3776db052888
+  question: You want `JointState` (147 bytes with framing) at 100 Hz over a 115200-baud UART. Does it fit, and what is the highest rate at half the link?
+  options:
+    - Fits at 13 % of the link; half the link allows about 390 Hz
+    - Fits at 64 % of the link; half the link allows about 78 Hz
+    - Doesn't fit (about 128 %); half the link allows about 78 Hz
+    - Doesn't fit (about 128 %); half the link allows about 39 Hz
+  correct: 3
+- source: f1419fc8c6ed
+  question: Your node needs 1 node, 3 publishers, 6 subscriptions and 1 timer. What fails, where, and what is the fix?
+  options:
+    - The build fails at link time; add `-lmicroros` twice to the CMake target
+    - The sixth subscription fails at run time (pool of 5); rebuild `libmicroros.a` with a larger pool
+    - The fourth publisher fails at run time; merge publishers onto fewer topics
+    - Nothing fails, but the executor must be sized for 10 handles including publishers
+  correct: 1
+- source: 64598198cf23
+  question: The agent is killed while the robot drives at 0.5 m/s (200 ms ping interval, 100 ms ping timeout, 10 ms step). Worst case, how far is the blind travel?
+  options:
+    - About 0.155 m, plus braking
+    - About 0.05 m, plus braking
+    - About 0.10 m, plus braking
+    - About 0.31 m, plus braking
+  correct: 0
+- source: 6d229d459217
+  question: Why does the firmware run the control step in the superloop instead of an `rclc` timer?
+  options:
+    - "`rclc` timers can only run at up to 10 Hz, which is too slow for motor control"
+    - "`rclc` timers use floating point, which is slow on the Cortex-M33"
+    - "`rclc` timers only run while the session lives, but control must survive middleware failure"
+    - The superloop can run on the second core, which `rclc` does not support
+  correct: 2
+- source: 302d3451b2ef
+  question: The agent shows frames arriving, but `ros2 topic list` on another machine doesn't show the topic, while the Pi does. Where is the problem?
+  options:
+    - "In the firmware: the publisher was created with best-effort QoS"
+    - "In micro-ROS: the entity pool is full, so the topic is only local"
+    - "In the serial link: frames arrive but CRCs fail, so the agent drops them"
+    - "In ordinary ROS 2 networking: `--net=host`, `ROS_DOMAIN_ID` or multicast"
+  correct: 3
+- source: 8a6dc346e256
+  question: On a Pico 2 (4 MB flash, 520 kB RAM), micro-ROS costs 90 kB flash and 20 kB RAM. Is memory the reason not to use it?
+  options:
+    - Yes, since 20 kB RAM leaves too little for the control loop's stack
+    - No, it is about 2 % of flash and 4 % of RAM; decide on the agent, protocol and bandwidth
+    - Yes, since 90 kB of flash exceeds the XIP cache and slows every call
+    - No, since micro-ROS runs from the agent's memory, not the Pico's
+  correct: 1

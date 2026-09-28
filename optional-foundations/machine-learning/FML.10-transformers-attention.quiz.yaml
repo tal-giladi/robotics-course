@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.10-transformers-attention.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d90a604e7837
+  question: What is the scaled dot-product attention formula, and what are Q, K, V for?
+  options:
+    - "$\\mathrm{softmax}(QK^\\top/\\sqrt{d_k})\\,V$; Q: what a token looks for, K: what it offers to match, V: content passed along"
+    - "$\\mathrm{softmax}(QV^\\top/\\sqrt{d_k})\\,K$; Q: the query text, V: the matching score, K: the output content"
+    - "$\\mathrm{softmax}(QK^\\top)\\,V/d_k$; Q: the query image, K: the key frames, V: the value network's output"
+    - "$\\mathrm{softmax}(QK^\\top/\\sqrt{d_k})\\,V$; Q: the output content, K: the positions, V: what a token looks for"
+  correct: 0
+- source: 2512d2396ee4
+  question: Why divide by $\sqrt{d_k}$ in attention?
+  options:
+    - To normalize each output vector to unit length before the next layer
+    - To make the attention cost linear instead of quadratic in length
+    - Dot products grow with dimension; unscaled, softmax saturates and gradients vanish
+    - To average the heads together when using multi-head attention
+  correct: 2
+- source: 6f68777c8b69
+  question: How many tokens does a ViT produce for a 224×224 image with patch size 16, including the CLS token?
+  options:
+    - "196"
+    - "197"
+    - "225"
+    - "257"
+  correct: 1
+- source: 8ed2da3f9601
+  question: You shuffle the patch tokens of a scan fed into a transformer with no positional embeddings. What happens to the CLS output?
+  options:
+    - It changes completely, since attention weights depend on order
+    - It becomes zero, since the tokens no longer match their keys
+    - It changes slightly, in proportion to how far tokens moved
+    - "Nothing: attention is permutation-equivariant and CLS pools symmetrically"
+  correct: 3
+- source: bb8d14f155a6
+  question: What is cross-attention, and where does ACT use it?
+  options:
+    - Attention across heads; ACT uses it to merge its camera views
+    - Queries from one sequence, keys/values from another; ACT's action queries attend to image/state tokens
+    - Attention with a causal mask; ACT uses it to predict actions one step at a time
+    - Queries and keys from the same sequence; ACT's encoder uses it on images
+  correct: 1
+- source: 88ba5ffa6fed
+  question: Your VLA runs at 3 Hz after you raised camera resolution from 224 to 448. What is the most likely reason?
+  options:
+    - Token count ×4 per camera, so attention cost is about ×16
+    - The camera driver can't deliver 448×448 frames faster than 3 Hz
+    - The model weights double in size, so they no longer fit in cache
+    - Token count ×2 per camera, so attention cost is about ×4
+  correct: 0
+- source: d65b2b8dd949
+  question: What does a causal mask guarantee, and why is it needed during training?
+  options:
+    - Each token attends only to itself; it prevents overfitting to context
+    - Token $i$ attends only to later tokens; it speeds up parallel training
+    - Token $i$ depends only on tokens $0..i$; otherwise parallel training reads future targets
+    - All tokens attend equally; it keeps gradients balanced across positions
+  correct: 2

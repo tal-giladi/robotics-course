@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.07-package-management.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 7971cbf746e6
+  question: What does `sudo apt update` do?
+  options:
+    - Downloads the package indexes and installs any newer versions it finds
+    - Downloads and verifies the package indexes; it installs or upgrades nothing
+    - Upgrades all installed packages to the newest versions in the index
+    - Removes stale packages and refreshes the local keyring of repositories
+  correct: 1
+- source: 867dc2407db3
+  question: "In a deb822 stanza, what do `Suites: noble noble-updates` and `Components: main universe` mean?"
+  options:
+    - Use the `noble` and `noble-updates` pockets, taking only `main` from the first and only `universe` from the second
+    - Use the `noble-updates` pocket only if `noble` fails, and prefer `universe` over `main` when both exist
+    - Use two Ubuntu releases side by side, with `main` for stable and `universe` for beta packages
+    - Use the `noble` release plus the `noble-updates` bug-fix pocket, each with `main` (Canonical) and `universe` (community)
+  correct: 3
+- source: bb3fbab05490
+  question: Why is `Signed-By` per repository safer than `apt-key add`?
+  options:
+    - The key is trusted only for that one repository, not for every repository on the system
+    - The key is stored encrypted, so other users on the machine cannot read or copy it
+    - The key is re-downloaded on every `apt update`, so it can never expire
+    - The key signs only source packages, while binaries are verified by Canonical's key
+  correct: 0
+- source: 70a938605f44
+  question: "`apt update` shows `EXPKEYSIG F42ED6FBAB17C654 Open Robotics`. What happened and what is the right fix?"
+  options:
+    - The ROS repository was removed; switch the source to the Ubuntu `universe` component
+    - The key is valid but the index is corrupt; delete `/var/lib/apt/lists` and retry
+    - The Open Robotics key expired on this machine; install the current `ros2-apt-source` package per the docs
+    - The Open Robotics key expired; add `trusted=yes` to the ROS source so it keeps working
+  correct: 2
+- source: b7990fe6787f
+  question: Why is installing the `ros2-apt-source` package better than copying the ROS key by hand?
+  options:
+    - A package verifies the key's fingerprint on each boot, which a copied file cannot do
+    - A package puts the key in the global keyring, so every repository can use it
+    - A package lets `apt upgrade` update the key and source definition when keys are extended or rotated
+    - A package removes the need for a `.sources` file, since the key carries the repository URL
+  correct: 2
+- source: 06c04b93d260
+  question: How do you find out which package installed `/opt/ros/jazzy/bin/ros2`?
+  options:
+    - "`dpkg -S /opt/ros/jazzy/bin/ros2`"
+    - "`apt show /opt/ros/jazzy/bin/ros2`"
+    - "`dpkg -L /opt/ros/jazzy/bin/ros2`"
+    - "`which -p /opt/ros/jazzy/bin/ros2`"
+  correct: 0
+- source: b0038afc976c
+  question: "`apt install ros-jazzy-slam-toolbox` on the Pi gives unmet dependency errors on `ros-jazzy-rclcpp`; the laptop installs it fine. What is your first move?"
+  options:
+    - Download the `.deb` from the laptop's cache and install it on the Pi with `dpkg -i`
+    - Run `sudo apt update && sudo apt full-upgrade` on the Pi so its ROS packages match the current sync
+    - Build slam_toolbox from source on the Pi, since the binary package is broken for arm64
+    - Remove `ros-jazzy-rclcpp` with `apt remove` and then install slam_toolbox again
+  correct: 1

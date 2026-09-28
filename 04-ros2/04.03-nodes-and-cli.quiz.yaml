@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.03-nodes-and-cli.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6aff5e7d29ab
+  question: Node `battery_monitor` in namespace `/karmel` subscribes to `battery/voltage` and publishes `~/status` and `/diagnostics`. What are the resolved names?
+  options:
+    - "`/battery/voltage`, `/karmel/status`, `/karmel/diagnostics`"
+    - "`/karmel/battery/voltage`, `/karmel/battery_monitor/status`, `/diagnostics`"
+    - "`/karmel/battery/voltage`, `/karmel/status`, `/diagnostics`"
+    - "`/karmel/battery_monitor/battery/voltage`, `/battery_monitor/status`, `/karmel/diagnostics`"
+  correct: 1
+- source: 8569e48d652b
+  question: What does `ros2 node info` tell you that `ros2 topic list` doesn't, and when is it the first command to run?
+  options:
+    - The node's CPU and memory use; run it first when the robot is slow.
+    - The node's source file and package; run it first when a build fails.
+    - The node's publishers, subscribers, services and actions with types; run it first when one component misbehaves.
+    - The node's QoS history; run it first when messages arrive late.
+  correct: 2
+- source: 7de3c13a2517
+  question: The turtle starts at $(5.544, 5.544, 0)$. What is its pose after `linear.x = 1.0` for 1 s, then `angular.z = 1.5708` for 1 s?
+  options:
+    - $(6.544, 5.544, 0)$, then $(6.544, 5.544, 1.5708)$
+    - $(6.544, 5.544, 0)$, then $(6.544, 6.544, 1.5708)$
+    - $(5.544, 6.544, 0)$, then $(5.544, 6.544, 1.5708)$
+    - $(6.544, 5.544, 0)$, then $(7.544, 5.544, 1.5708)$
+  correct: 0
+- source: 172e9d4d6a9b
+  question: You run `ros2 topic pub --rate 10 /turtle1/cmd_vel ...` and start a second `turtlesim_node` with default arguments. What happens?
+  options:
+    - The second simulator refuses to start because the node name is taken.
+    - Only the first turtle moves; the second waits for its own publisher.
+    - The two turtles alternate, each receiving every second message.
+    - The second turtle moves too, since it subscribes to the same topic; the CLI warns about duplicate node names.
+  correct: 3
+- source: 5efbecca7b00
+  question: "`ros2 node list` still shows `/battery_sim` after you killed the `ros2 run` process in a script. Which two explanations are plausible?"
+  options:
+    - The node process is still alive (only the wrapper was killed), or the daemon cache is stale (`--no-daemon` won't show it).
+    - The node restarted automatically, or DDS keeps nodes listed for 10 minutes.
+    - The kill signal was ignored by Python, or the node is running on the Pi instead.
+    - The launch file respawned it, or the node name is reserved by ROS 2.
+  correct: 0
+- source: 54ef0d56cb56
+  question: Why does `ros2 topic hz /turtle1/cmd_vel` show nothing while the teleop node is running, and is that a bug?
+  options:
+    - "It is a bug: teleop should publish at a fixed 10 Hz."
+    - Teleop publishes only when a key is pressed, so there is no rate; not a bug, and a base must treat silence as "stop".
+    - "`ros2 topic hz` can't measure Twist messages."
+    - The topic uses BEST_EFFORT QoS, which `hz` can't subscribe to.
+  correct: 1
+- source: 0ea59a83ec38
+  question: How do you move all of turtlesim's topics under `/robot2` without touching code?
+  options:
+    - Set `ROS_NAMESPACE=/robot2` in `~/.bashrc` and rebuild.
+    - Change `ROS_DOMAIN_ID` to 2 before starting it.
+    - "`ros2 run turtlesim turtlesim_node --ros-args -r __ns:=/robot2`."
+    - "`ros2 run turtlesim turtlesim_node --ros-args -r __node:=robot2`."
+  correct: 2

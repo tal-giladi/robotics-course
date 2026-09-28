@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FCT.05-discrete-time-sampling.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 7661bfcad8f1
+  question: What is the Nyquist frequency for a 200 Hz IMU, and where does a 130 Hz vibration appear?
+  options:
+    - Nyquist 100 Hz; the vibration appears at 30 Hz
+    - Nyquist 200 Hz; the vibration appears at 130 Hz
+    - Nyquist 100 Hz; the vibration appears at 70 Hz
+    - Nyquist 400 Hz; the vibration appears at 130 Hz
+  correct: 2
+- source: 53620550efe3
+  question: Why does a sampled controller behave as if it had extra delay, and roughly how much?
+  options:
+    - The zero-order hold lags by T/2 and compute/send adds about T, so about 1.5 T
+    - The sampler averages two readings, so about 2 T
+    - The ADC conversion time adds a fixed delay of about 0.1 T
+    - The controller always waits a full period to start, so exactly T
+  correct: 0
+- source: f815f2257355
+  question: What are the exact discrete $a$ and $b$ for karmel's wheel at 50 Hz ($\tau = 0.08$ s, $K = 19.3$)?
+  options:
+    - $a = 0.75$, $b = 4.83$
+    - $a = 0.7788$, $b = 15.0$
+    - $a = 0.2212$, $b = 4.27$
+    - $a = 0.7788$, $b = 4.27$
+  correct: 3
+- source: dc12c37789c4
+  question: With a one-period computation delay, what is the largest stable P gain at 100 Hz ($b = 2.27$), and what happens if you halve the rate?
+  options:
+    - About 0.441; at 50 Hz it roughly doubles to about 0.88
+    - About 0.441; at 50 Hz it roughly halves to about 0.234
+    - About 2.27; at 50 Hz it roughly halves to about 1.14
+    - About 0.441; at 50 Hz it stays the same, since $b$ is fixed
+  correct: 1
+- source: ca4acacdb146
+  question: Why do encoder counts not alias the way sampled IMU readings do?
+  options:
+    - Encoders are sampled at a much higher rate than the IMU's 200 Hz
+    - Encoder signals are digital, and aliasing only affects analog signals
+    - The count over a period integrates speed, which acts as a built-in low-pass filter
+    - The Pico's PIO filters the encoder pulses with a hardware anti-aliasing stage
+  correct: 2
+- source: 675c346b47fd
+  question: A 50 Hz heading controller oscillates at about 1 Hz only when driving at 0.5 m/s. What could cause it, and how do you test it?
+  options:
+    - Motor vibration at 99 Hz aliased to 1 Hz; drive at 0.4 m/s and watch it move
+    - Wheel slip at that speed; drive on a grippier floor and see if it stops
+    - Too high a heading $K_p$; halve the gain and see if the frequency halves
+    - Wi-Fi jitter at that speed; run the controller on the Pico and compare
+  correct: 0
+- source: 52db876f5efe
+  question: You want a closed-loop time constant of 50 ms for a heading loop. What loop rate is reasonable, and which inner loop must be faster?
+  options:
+    - 3–10 Hz; the IMU filter must be faster
+    - 300–1000 Hz; the path planner must be faster
+    - About 6 Hz, twice the bandwidth; the Nav2 controller must be faster
+    - 30–100 Hz; the wheel-speed loop must be clearly faster
+  correct: 3

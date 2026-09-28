@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 08.09-feedforward-exact-speed.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: cf42156be31d
+  question: Your wheels are 65 mm in diameter. What wheel speed holds 0.3 m/s?
+  options:
+    - 4.62 rad/s (44 rpm)
+    - 9.23 rad/s (88 rpm)
+    - 19.5 rad/s (186 rpm)
+    - 9.23 rpm (0.97 rad/s)
+  correct: 1
+- source: 79f4d186e9cc
+  question: Why does the feedforward need the measured battery voltage, and what is it worth?
+  options:
+    - "Speed at a given duty scales with voltage: about ±12% over a 3S pack"
+    - The encoder's output scales with voltage, by about ±2% over the pack
+    - The Pico's clock slows at low voltage, by about ±5% over the pack
+    - Voltage sets the deadband only, worth under 1% of the speed
+  correct: 0
+- source: d67d591df77c
+  question: With a perfect feedforward, what is the integral term's steady-state value, and what does a large one tell you?
+  options:
+    - Exactly the full duty; a large value means the motor is failing
+    - Near 1.0; a large value means the battery is fully charged
+    - Near zero; a large value is the model's error, measured for you
+    - Near zero; a large value means $k_i$ is set too high
+  correct: 2
+- source: 36754c184666
+  question: You switch the feedforward off and leave $k_p = 0.02$, $k_i = 0.3$. What changes in the step response, and what does not?
+  options:
+    - Steady accuracy is lost; rise speed and tracking are unchanged
+    - Nothing changes, since the integral fully replaces feedforward
+    - Steady accuracy is lost and the loop starts to oscillate
+    - Steady accuracy stays; feedback does far more work, tracking worsens
+  correct: 3
+- source: 22e9a96fcd6d
+  question: A robot holds exactly 11.111 rad/s on both wheels and still travels at 0.497 m/s in a slight arc. Which two causes?
+  options:
+    - The true radius differs from 45 mm, and the two radii differ
+    - The encoders drop ticks, and the gyro has a constant bias
+    - The battery is low, and the feedforward table is out of date
+    - The integral wound up, and the loop rate is too low
+  correct: 0
+- source: cd73dc48fbe4
+  question: With feedforward on, a 0 → 0.5 m/s step overshoots 18%; with it off it does not. What is happening, and the right fix?
+  options:
+    - The feedforward gain is too high; lower $\omega_{max}$ by 18%
+    - The step fills the integral while the motor catches up; ramp the setpoint
+    - The derivative kicks on the step; switch D to the measurement
+    - The motor saturates; lower $k_i$ until the overshoot disappears
+  correct: 1
+- source: 25c9fa636d0d
+  question: Why can the firmware run $k_p = 0.02$, a gain far too small without feedforward?
+  options:
+    - Because the motor gain $K$ is very large on karmel
+    - Because the integral term does most of the work instead
+    - Because the loop runs at 1 kHz on the Pico, so gain matters less
+    - Because feedforward supplies ~95% of the duty; feedback only trims
+  correct: 3

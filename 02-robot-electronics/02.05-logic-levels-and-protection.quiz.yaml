@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 02.05-logic-levels-and-protection.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 03b38b1e51ad
+  question: Which comparison is right when a sensor drives a Pico input at 3.3 V?
+  options:
+    - Compare the Pico's $V_{OH}$ ≥ 2.62 V and $V_{OL}$ ≤ 0.50 V against the sensor's input thresholds.
+    - Compare the sensor's $V_{OH}$/$V_{OL}$ against the Pico's $V_{IH}$ = 2.0 V and $V_{IL}$ = 0.8 V, then check the absolute maximum.
+    - Compare the sensor's $V_{IH}$/$V_{IL}$ against the Pico's $V_{IH}$ = 2.0 V and $V_{IL}$ = 0.8 V.
+    - Compare the sensor's supply voltage against the Pico's 3.3 V; thresholds don't matter.
+  correct: 1
+- source: eac6e1951481
+  question: Why is 5 V on GP15 fine and 5 V on GP26 not, with the Pico powered?
+  options:
+    - GP15 has an internal series resistor; GP26 is connected directly to the core.
+    - GP15 is on the 5 V bank of the chip; GP26 is on the 3.3 V bank.
+    - GP15 is only fine if configured as output; GP26 is always an input.
+    - GP15 is a fault-tolerant pin rated to 5.5 V with IOVDD present; GP26 is a standard ADC pin limited to IOVDD + 0.5 V.
+  correct: 3
+- source: d92832fcd421
+  question: A 1k/2k divider from a 4.75–5.25 V USB rail feeds a Pico pin, with 5% resistors. What is the worst-case high, and what would you change?
+  options:
+    - About 3.33 V, exactly nominal; use 1% resistors for margin.
+    - About 3.50 V, safe; no change needed.
+    - About 3.61 V, only 20 mV under the 3.63 V limit; change the ratio, e.g. to 2.2k/3.3k.
+    - About 3.61 V; tighten to 1% resistors and keep the ratio.
+  correct: 2
+- source: e643887331a3
+  question: You connect a 12 V rail to GP26 through 10 kΩ with the Pico powered. What does the pin read, what current flows, and is the Pico damaged?
+  options:
+    - It reads 12 V, about 1.2 mA flows, and the pin is destroyed instantly.
+    - It reads about 3.3 V correctly scaled, about 0.87 mA flows, and all is fine.
+    - The clamp holds it near 3.8 V (full scale, meaningless); about 0.82 mA flows; it likely survives but is outside the absolute maximum.
+    - It reads 0 V, because the clamp shorts the input; no current flows.
+  correct: 2
+- source: 05bec43004e3
+  question: Why does a resistor divider work on an HC-SR04 echo line but break an I²C bus?
+  options:
+    - The echo line is push-pull and one-way; I²C is open-drain and bidirectional, so a divider leaves the line at an ambiguous level.
+    - The echo line is slow, while I²C is too fast for the divider's capacitance.
+    - The echo line is 5 V, while I²C is always 3.3 V, so no divider is needed.
+    - The echo line carries analog data, while I²C carries digital data.
+  correct: 0
+- source: 5def13936238
+  question: A robot's ultrasonic sensor stops responding whenever the Pi is shut down and rebooted. What would you measure first?
+  options:
+    - The echo pulse width with an oscilloscope while the Pi reboots.
+    - The Pico's 3V3 pin and the echo line with the Pi off and battery on, to detect back-powering through a clamp diode.
+    - The I²C bus capacitance during the reboot.
+    - The battery's resting voltage before and after the reboot.
+  correct: 1
+- source: f5a5d5b9fc41
+  question: You need to drive a 5 V CMOS input from the Pico. Which number rules out a direct connection, and what is a valid solution?
+  options:
+    - $V_{IH}$ = 2.0 V, below 3.3 V, so direct works; no solution needed.
+    - $V_{IL}$ = 1.5 V, so direct works with a pull-down.
+    - $V_{IH}$ = 5.0 V; use a resistor divider to scale the input.
+    - $V_{IH}$ = 0.7 × 5 = 3.5 V, above 3.3 V; use a MOSFET stage with a 5 V pull-up or a 74LVC buffer at 5 V.
+  correct: 3

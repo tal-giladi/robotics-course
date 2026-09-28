@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 19.05-behavior-trees.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ed577b512bd8
+  question: What does a composite's `memory` flag change, and where does each value belong?
+  options:
+    - "`memory=True` resumes at the RUNNING child; guards go under `memory=False` so they are re-checked, work under `memory=True`"
+    - "`memory=True` re-ticks from the first child; guards go under `memory=True` so they are always checked first"
+    - "`memory=True` caches each child's last result; use it everywhere to save CPU on each tick"
+    - "`memory=False` stops the tree after one failure; use it only for the root Selector"
+  correct: 0
+- source: 1c774d6e8825
+  question: Why must an action leaf never block, and what replaces blocking?
+  options:
+    - Blocking leaks memory; replace it with a thread per leaf that reports back on completion
+    - A blocked leaf stops ticks, so guards go unchecked; use `initialise`, `update`, `terminate`
+    - Blocking violates the ROS 2 executor; replace it with a timer callback and a shared flag
+    - A blocked leaf returns FAILURE after the timeout; use `start`, `wait` and `stop` instead
+  correct: 1
+- source: e4162dd1503b
+  question: "A 47.6-second task at a 0.1 s tick period: how many ticks, and what is the worst-case reaction to the e-stop?"
+  options:
+    - About 47.6 ticks; worst case about 1 s
+    - About 4,760 ticks; worst case about 10 ms
+    - About 476 ticks; worst case one tick (100 ms) plus the cancellation time
+    - About 476 ticks; worst case the full length of the running skill
+  correct: 2
+- source: cad68b23bb1f
+  question: You wrap only the `Pick` leaf in `Retry(3)` instead of the navigate-detect-pick sequence, with `--grasp-p 0.3`. What happens?
+  options:
+    - Three real grasp attempts, giving about 66% success
+    - The retry loops forever because `Pick` never returns SUCCESS
+    - The tree re-detects the object automatically before each retry
+    - One real grasp; the retries get `OBJECT_NOT_FOUND`
+  correct: 3
+- source: 688cc0a0d4d7
+  question: A 30 s deadline expires while `navigate_to` is driving. How do the two executives behave?
+  options:
+    - "Tree: cancels at 30.1 s, empty-handed; FSM: stops at 33.3 s holding the bottle"
+    - Both stop at exactly 30.0 s, because both check the deadline every control step
+    - The FSM fires at 30.1 s; the tree waits until navigation completes at 33.3 s
+    - The tree fires at 33.3 s after `pick`; the FSM cancels navigation at 30.1 s
+  correct: 0
+- source: e9341c525856
+  question: When would you still choose a state machine over a behavior tree?
+  options:
+    - When the task needs guards re-checked continuously while something runs
+    - Sequential phases with named recoveries and nothing to re-check, like docking
+    - When the robot has more than one executive running at once
+    - When recovery must interrupt work instead of following it
+  correct: 1
+- source: b4341e15ab18
+  question: "`FindObject` is a Selector whose first child is `ObjectKnown?`. What is it for, since the object is never known on the first tick?"
+  options:
+    - It is a leftover from debugging and can be removed without effect
+    - It raises FAILURE so the Selector always runs the search
+    - "It makes the sub-tree re-enterable: a retry skips the search if done"
+    - It blocks the e-stop from interrupting the search
+  correct: 2
+- source: 034ea1db8bfc
+  question: Nav2 ticks its navigation tree at 100 Hz. Why can it, and what goes wrong at 100 Hz for karmel's Python tree?
+  options:
+    - Nav2 runs on a GPU; karmel's tree would miss e-stops at 100 Hz
+    - Nav2's tree is smaller; karmel's would overflow the blackboard
+    - Nav2 skips ticks when busy; karmel's tree would crash on overrun
+    - Nav2 is C++; karmel's Python tree would cost 10× CPU for no gain
+  correct: 3

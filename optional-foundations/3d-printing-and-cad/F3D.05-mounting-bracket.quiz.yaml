@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in F3D.05-mounting-bracket.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 223a7e8a73cf
+  question: Why must `sensor_center_h` be a derived value rather than a fixed number in the bracket model?
+  options:
+    - The requirement is 95 mm above the floor, and deck height differs between robots
+    - CAD cannot store fixed numbers larger than the part's bounding box
+    - The sensor's optical centre moves with temperature, so it must be recomputed
+    - The slicer rescales fixed numbers when changing layer height
+  correct: 0
+- source: 23f7d0101d39
+  question: A VL53L1X at 80 mm above the floor, tilted up 3° (cone half-angle 13.46°). Where does its cone reach the floor?
+  options:
+    - About 333 mm
+    - About 250 mm
+    - About 433 mm
+    - About 1,520 mm
+  correct: 2
+- source: f225ab88535b
+  question: You double the insert spacing from 12 to 24 mm on a 26 mm-wide base with 4.6 mm knurls. What happens?
+  options:
+    - The inserts fit, with 1.8 mm of plastic left at each side
+    - The screws no longer reach the sensor's mounting holes
+    - The base bends because the inserts are too far apart
+    - Each insert's knurl reaches past the edge and breaks out of the side wall
+  correct: 3
+- source: cf9c862253e3
+  question: Why is the bracket printed lying on its side even though that makes its holes horizontal?
+  options:
+    - It needs no supports that way, and support removal would weaken the holes
+    - Every layer contains the whole L, so the loaded corner is continuous plastic
+    - It prints faster that way, since the part has fewer layers
+    - Horizontal holes are more accurate than vertical ones in FDM
+  correct: 1
+- source: 65cbfa506024
+  question: Board 2 mm, standoff 2.5 mm, upright 3.6 mm and nut 1.6 mm. Which M2 screw length do you buy?
+  options:
+    - M2 × 10, the closest length to the 9.7 mm sum
+    - M2 × 8, so the screw doesn't protrude past the nut
+    - M2 × 16, so there is plenty of spare thread
+    - M2 × 12, so it passes fully through the nut with thread showing
+  correct: 3
+- source: edcaf97bd4f5
+  question: After mounting, the sensor reads a steady 250 mm on an empty floor. The bracket was designed for a 60 mm deck with a 5° tilt. What do you check first?
+  options:
+    - That the sensor's timing budget and filter settings are correct
+    - That the optical centre is really 95 mm up and the tilt is up, not down
+    - That the I²C address is not shared with another sensor
+    - That the floor is not reflective enough to cause false returns
+  correct: 1

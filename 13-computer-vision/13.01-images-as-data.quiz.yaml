@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.01-images-as-data.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3c6dfd82dd1d
+  question: A frame has shape `(480, 640, 3)`. How many bytes is it, and how many MB per second at 30 fps uncompressed?
+  options:
+    - 307,200 bytes; about 9.2 MB/s
+    - 921,600 bytes; about 2.76 MB/s
+    - 921,600 bytes; about 27.6 MB/s
+    - 7,372,800 bytes; about 221 MB/s
+  correct: 2
+- source: c9c5626b2ff1
+  question: What is `img[10, 20]` in terms of x and y, and what do `cv2.circle(img, (10, 20), ...)` coordinates mean?
+  options:
+    - "`img[10, 20]` is x = 10, y = 20; the circle is at x = 10, y = 20, the same pixel"
+    - "`img[10, 20]` is y = 10, x = 20; the circle is at y = 10, x = 20, the same pixel"
+    - "`img[10, 20]` is x = 10, y = 20; the circle is at y = 10, x = 20, a different pixel"
+    - "`img[10, 20]` is y = 10, x = 20; the circle is at x = 10, y = 20, a different pixel"
+  correct: 3
+- source: ebc13ac99ccd
+  question: What does OpenCV return for the HSV of `BGR = (0, 128, 255)`?
+  options:
+    - "`[30, 255, 255]`"
+    - "`[15, 255, 255]`"
+    - "`[105, 255, 255]`"
+    - "`[15, 128, 255]`"
+  correct: 1
+- source: 65043b998e5d
+  question: Your ball detector works on `cv2.imread` images but never fires on frames from `bridge.imgmsg_to_cv2(msg)`. Most likely cause and fix?
+  options:
+    - The topic is `rgb8`, so red and blue are swapped; use `imgmsg_to_cv2(msg, desired_encoding="bgr8")`
+    - The topic is compressed JPEG, so pixels are blurred; use `compressed_imgmsg_to_cv2(msg)` instead
+    - The topic is `mono8`, so there is no color; use `imgmsg_to_cv2(msg, desired_encoding="rgb8")`
+    - The topic's frames are flipped vertically; call `cv2.flip(img, 0)` before the HSV conversion
+  correct: 0
+- source: cd413fcfeda1
+  question: What does `a = np.full((2, 2), 250, dtype=np.uint8); print(a + 10, cv2.add(a, np.full_like(a, 10)))` print?
+  options:
+    - "`a + 10` is all 255s (numpy saturates); `cv2.add` is all 4s (OpenCV wraps)"
+    - Both are all 260s, because the result is promoted to a wider integer type
+    - "`a + 10` is all 4s (numpy wraps); `cv2.add` is all 255s (OpenCV saturates)"
+    - Both are all 255s, because uint8 arithmetic always saturates in both libraries
+  correct: 2
+- source: 1c2d41fbe4f0
+  question: Why does halving the light change an orange pixel's V but not its H or S (ideally)?
+  options:
+    - H and S are stored as angles, which are unaffected by brightness, while V is a linear sum of R, G, B
+    - R, G, B scale by the same factor; V = max scales, while S and H are ratios where it cancels
+    - The camera's auto white balance restores H and S after every frame, but cannot restore V
+    - Halving the light only reduces the blue channel, which affects V but leaves the hue and saturation
+  correct: 1
+- source: e1bbfa037526
+  question: Why is a red object harder to threshold in OpenCV HSV than an orange one?
+  options:
+    - Red sits at the hue wrap-around (≈ 0–5 and ≈ 170–179), so you need two ORed masks or a hue shift
+    - Red has the lowest saturation of all hues, so it falls below typical S thresholds in normal light
+    - OpenCV's hue range stops at 150, so red hues are clipped and cannot be selected with `inRange`
+    - Red light is absorbed by the camera's IR filter, so red objects appear dark and have unreliable V
+  correct: 0

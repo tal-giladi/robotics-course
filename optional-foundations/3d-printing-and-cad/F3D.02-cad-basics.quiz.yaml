@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in F3D.02-cad-basics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8f0b67c5385b
+  question: What is the difference between a sketch constraint and a dimension?
+  options:
+    - A constraint fixes a value; a dimension states a relationship with no number
+    - A constraint applies to 3D features; a dimension applies only to 2D sketches
+    - A constraint is optional; a dimension is required before extruding
+    - A constraint is a relationship with no number; a dimension fixes a value
+  correct: 3
+- source: 95abde1b2763
+  question: A sketch has two unconstrained circles and a line. How many DOF does it have?
+  options:
+    - "6"
+    - "10"
+    - "8"
+    - "12"
+  correct: 1
+- source: f324390678d0
+  question: You extrude an under-constrained sketch and then change a dimension in it. Will CAD report an error?
+  options:
+    - Yes, CAD refuses to rebuild any under-constrained sketch
+    - Yes, but only if the change makes the geometry self-intersect
+    - Usually not; the solver finds some solution, so bugs are silent
+    - No, since CAD auto-constrains all sketches on extrude
+  correct: 2
+- source: 162e8aaba5c6
+  question: Why is the feature tree like event sourcing, and what is the practical consequence?
+  options:
+    - The part is an ordered list of operations replayed from the start; later references can break when earlier features change
+    - The part is stored as final geometry with an undo log; you can only edit the last feature
+    - Each feature is saved as a separate file; you must re-export after every change to keep them in sync
+    - Features are applied in parallel; their order does not matter, so references never break
+  correct: 0
+- source: 13581f7e76d1
+  question: Which is a reason to choose Onshape Free, and a reason not to?
+  options:
+    - "For: works fully offline; against: needs a paid Windows license"
+    - "For: unlimited private documents; against: no assemblies at all"
+    - "For: browser-based with versioning; against: public, non-commercial only"
+    - "For: exports G-code directly; against: has no STL export"
+  correct: 2
+- source: ee4d5ef1f49c
+  question: After changing the plate width, one fillet feature shows an error. What most likely happened, and how do you fix it?
+  options:
+    - The fillet radius is now larger than the plate; reduce the radius to fit
+    - The CAD cache is stale; close and reopen the document to rebuild
+    - The sketch became over-constrained; delete one dimension
+    - Its referenced edges changed or vanished; reselect edges in a way that survives changes
+  correct: 3

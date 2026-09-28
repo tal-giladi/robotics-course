@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 17.04-deep-q-networks.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f37cb7f2a181
+  question: Why can't you just discretize karmel's state finely and use the 17.03 tabular code?
+  options:
+    - Tabular Q-learning only supports four actions, while karmel needs continuous velocity commands
+    - Discretizing adds quantization noise that makes the Q-learning update diverge on every step
+    - The table grows as the product of all bins and generalizes to nothing; a network shares weights across similar states
+    - The table would fit in memory, but lookups would be too slow for a 20 Hz control loop
+  correct: 2
+- source: cbc4b2a846fd
+  question: What does the replay buffer fix, and what does the target network fix?
+  options:
+    - "Buffer: the moving target. Target net: correlated consecutive samples from the robot."
+    - "Buffer: correlated data and reuse. Target net: the moving target, making each interval plain regression."
+    - "Buffer: exploration, by replaying random actions. Target net: overestimation from the max."
+    - "Buffer: sparse rewards, by replaying successes. Target net: the exploration schedule."
+  correct: 1
+- source: 9a355a69eac4
+  question: $\gamma = 0.99$, $r = -0.05$, transition truncated by the time limit, $Q_{\theta^-}(s',\cdot) = [2.0, 3.0, 1.0, 2.5]$. What is the target?
+  options:
+    - −0.05
+    - "2.425"
+    - "2.95"
+    - "2.92"
+  correct: 3
+- source: 3e0decc6e355
+  question: You keep everything but set the target refresh to every 1 step. What happens and why?
+  options:
+    - "It becomes the no-target ablation: fine on this small task, but it removes the decoupling that long tasks need"
+    - It learns much better, since a target updated every step is always the most accurate one
+    - It fails immediately with diverging values on every task, including this small one
+    - Nothing changes, since the target network is only used for logging, not for learning
+  correct: 0
+- source: c993a40ba879
+  question: Your DQN reaches 100% success but `steps_vs_shortest` is 1.9. Is it a good policy?
+  options:
+    - "Yes: 100% success is the only metric that matters for a deployed robot"
+    - "Yes: 1.9 is close to 1.0, which is within normal noise for DQN"
+    - "Not really: routes are twice as long; check step cost vs goal reward, γ, or early stopping"
+    - "Not really: 1.9 means half the episodes failed and were counted twice"
+  correct: 2
+- source: 2551dd30680b
+  question: Why does the max in the TD target bias values upward, and how does Double DQN help?
+  options:
+    - The max ignores negative rewards; Double DQN adds them back with a second reward head
+    - The max uses a stale network; Double DQN refreshes the target network twice as often
+    - The max favours frequent actions; Double DQN samples actions twice to balance their counts
+    - The max picks lucky noise (Jensen); Double DQN selects with the online net and evaluates with the target net
+  correct: 3
+- source: 9481b1668021
+  question: Success stays near 0.2 and mean return around −40 from the first log line to the last. Which checks, in order?
+  options:
+    - Is a gradient step running (loss, warmup), is the buffer sampled randomly, is ε decaying vs a random baseline
+    - Is γ above 0.99, is the network deeper than three layers, is the target refreshed every step
+    - Is the reward normalized, is Double DQN enabled, is the learning rate above 0.01
+    - Is the GPU used, is the batch size above 256, is the replay buffer larger than one million
+  correct: 0
+- source: feaeb937b227
+  question: Why does `torch.no_grad()` around the target computation matter algorithmically, not just for speed?
+  options:
+    - Without it, the target network's weights are updated too, which doubles the effective learning rate
+    - Q-learning is semi-gradient; differentiating through the target optimizes another objective and destabilizes
+    - Without it, gradients flow into the replay buffer and corrupt the stored transitions
+    - It prevents the target from being computed on the GPU, which would change floating-point results
+  correct: 1

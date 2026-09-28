@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.12-tracking.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ea6ea21330a9
+  question: What problem does a tracker solve that a detector cannot, and which robot behaviours need it?
+  options:
+    - Finding objects the detector's classes don't include; e.g. unknown obstacles, novel household items
+    - Estimating object size from one frame; e.g. choosing gripper width, checking whether an object fits
+    - Identity over time and bridging missed frames; e.g. keeping a grasp target, servoing through occlusions
+    - Removing false positives within a single frame; e.g. filtering reflections, rejecting posters on walls
+  correct: 2
+- source: 3fd3be0e7246
+  question: A 40 px wide object moves 25 px per frame horizontally. What IoU does an IoU tracker see between consecutive boxes, and does a 0.3 gate hold?
+  options:
+    - IoU ≈ 0.23; no, the track breaks every frame (SORT's prediction fixes it)
+    - IoU ≈ 0.375; yes, the track holds as long as speed stays constant
+    - IoU ≈ 0.23; yes, because the gate compares against the detection score
+    - IoU ≈ 0.60; yes, since the boxes still overlap by more than half
+  correct: 0
+- source: f8df57c5ef72
+  question: Why does ByteTrack never start new tracks from low-confidence detections?
+  options:
+    - They lack an appearance embedding, which ByteTrack needs to initialize a new track's identity
+    - They arrive one frame later than high-confidence boxes, so the Kalman filter cannot initialize on them
+    - They are only used for evaluation, never for tracking, since their boxes are usually misaligned
+    - They are mostly clutter; used to continue a track they pass a spatial check, but starting tracks makes ghosts
+  correct: 3
+- source: b95afee83f96
+  question: In a Kalman update, the innovation is +5 px and the position gain is 0.2. How much does the estimate move, and what does 0.2 say about $P$ vs $R$?
+  options:
+    - 4 px toward the measurement; $P = 4R$, so the filter trusts the detection more
+    - 1 px toward the measurement; $P = R/4$, so the filter trusts its motion model more
+    - 1 px toward the measurement; $P = 4R$, so the filter trusts the detection more
+    - 5 px toward the measurement; $P = R/5$, so the filter trusts both equally
+  correct: 1
+- source: f0500b47635e
+  question: "Over a sequence: 400 ground-truth object-frames, 30 misses, 10 false positives, 6 ID switches. What is MOTA?"
+  options:
+    - "0.900"
+    - "0.925"
+    - "0.885"
+    - "0.115"
+  correct: 2
+- source: e4d5dd2e1040
+  question: The detector runs at 15 fps on a laptop recording and 5 fps on the Pi, with `max_age = 9` frames. What happens on the Pi, and the proper fix?
+  options:
+    - Tracks die after 0.2 s instead of 0.6 s; triple `max_age` to 27 frames on the Pi and keep the rest unchanged
+    - Nothing changes, since `max_age` counts frames and the tracker is therefore independent of frame rate
+    - Tracks coast 1.8 s instead of 0.6 s; lower the detection threshold on the Pi to compensate for fewer frames
+    - Tracks coast 1.8 s instead of 0.6 s and objects move 3× further per frame; express time in seconds and use each frame's $\Delta t$
+  correct: 3
+- source: 547bd84f0905
+  question: Two identical cups cross behind the bottle and come out swapped. Which tracker can prevent this, and what would help?
+  options:
+    - ByteTrack reliably; its low-confidence second pass keeps identities through any crossing
+    - SORT reliably; its Kalman filter always predicts crossing paths correctly for any motion
+    - None reliably; appearance cues or 3D positions help more, and truly identical cups may not matter
+    - The IoU tracker reliably; boxes of crossing objects never share IoU above the gate threshold
+  correct: 2

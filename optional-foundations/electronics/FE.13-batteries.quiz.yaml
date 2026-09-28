@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.13-batteries.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8fcf0f7e95ba
+  question: A pack is labeled 4S2P, with cells of 3.6 V and 3.0 Ah. What are its nominal voltage, full voltage, capacity and energy?
+  options:
+    - 7.2 V, 8.4 V, 12.0 Ah, 86.4 Wh
+    - 14.4 V, 16.8 V, 3.0 Ah, 43.2 Wh
+    - 14.4 V, 16.8 V, 12.0 Ah, 172.8 Wh
+    - 14.4 V, 16.8 V, 6.0 Ah, 86.4 Wh
+  correct: 3
+- source: ea346d0498cc
+  question: What does "2C" mean for a 3.5 Ah cell, and how long could it sustain it?
+  options:
+    - 7 A, for at most about half an hour
+    - 1.75 A, for about two hours in total
+    - 7 A, for about two hours in total
+    - 2 A, for about 1.75 hours in total
+  correct: 0
+- source: ed3520b537da
+  question: A robot reads 11.3 V at rest and 10.1 V with motors drawing 6 A. What is the internal resistance, and what does 9.5 V under the same load next month mean?
+  options:
+    - 1.2 Ω; later 1.8 Ω means an aging cell or bad contact
+    - 0.2 Ω; later 9.5 V just means the pack is less charged
+    - 0.2 Ω; later 0.3 Ω means an aging cell or bad contact
+    - 0.1 Ω; later 0.3 Ω is normal break-in of new cells
+  correct: 2
+- source: 0d2106c5c317
+  question: Why does karmel use cylindrical 18650 Li-ion cells instead of a LiPo pouch for Stage 1?
+  options:
+    - Higher current capability, which the robot's 8 A peaks require
+    - More energy for the size, local matched cells, a steel can that tolerates bumps
+    - No BMS is needed, because 18650 cells cannot be over-discharged
+    - They charge from USB directly, so no CC/CV charger is required
+  correct: 1
+- source: 7763bbf9e261
+  question: "Which pair is correct: one thing a typical 3S BMS does, and one thing it does not do?"
+  options:
+    - "Does: cuts off per-cell over-discharge. Doesn't: charge the pack (needs a CC/CV charger)"
+    - "Does: charges the pack with CC/CV. Doesn't: cut off on short circuit"
+    - "Does: reports state of charge as a fuel gauge. Doesn't: cut off over-charge"
+    - "Does: reliably balances every cell. Doesn't: disconnect on over-current"
+  correct: 0
+- source: 8a8258ca5cf2
+  question: Your robot draws 15 W on average from a 37.8 Wh pack. With 85 % usable energy, what is the runtime?
+  options:
+    - About 2.52 h
+    - About 1.86 h
+    - About 2.14 h
+    - About 0.34 h
+  correct: 2
+- source: 4833b77c14c5
+  question: A 3S pack measures 11.1 V; the cell groups are 4.05, 4.02 and 3.03 V. What's happening, and what do you do?
+  options:
+    - Normal imbalance; charge it with a balance charger and keep using it
+    - The pack is simply discharged; charge it fully and re-measure
+    - The meter is wrong; 11.1 V is a normal total for a 3S pack
+    - A failing cell group is badly out of balance; stop using it, don't charge, retire it
+  correct: 3

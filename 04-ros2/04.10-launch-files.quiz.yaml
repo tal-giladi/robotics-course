@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.10-launch-files.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e071e5047442
+  question: Node `battery_health` in `/karmel2` uses `battery/voltage`, `/rosout` and `~/debug`. What are the resolved names?
+  options:
+    - "`/battery/voltage`, `/karmel2/rosout`, `/karmel2/debug`"
+    - "`/karmel2/battery/voltage`, `/karmel2/rosout`, `/battery_health/debug`"
+    - "`/karmel2/battery/voltage`, `/rosout`, `/karmel2/battery_health/debug`"
+    - "`/karmel2/battery_health/battery/voltage`, `/rosout`, `/karmel2/debug`"
+  correct: 2
+- source: 7906e9a1eaa9
+  question: For a node in `/karmel1`, what does `('battery/voltage', 'pack/voltage')` resolve to, compared with `('battery/voltage', '/pack/voltage')`?
+  options:
+    - "`/pack/voltage` in both cases."
+    - "`/karmel1/pack/voltage` vs `/pack/voltage`."
+    - "`/karmel1/pack/voltage` in both cases."
+    - "`/pack/voltage` vs `/karmel1/pack/voltage`."
+  correct: 1
+- source: 8f7d83595ce8
+  question: Why can't you write `if LaunchConfiguration('sim_only') == 'true':` inside `generate_launch_description()`?
+  options:
+    - It runs before arguments are parsed; `LaunchConfiguration` is a lazy substitution, so the comparison is simply `False`.
+    - Launch files forbid Python `if` statements for security reasons.
+    - "`LaunchConfiguration` returns a boolean, not a string."
+    - The comparison raises an exception because the argument is undeclared.
+  correct: 0
+- source: f18517c12c36
+  question: "`two_robots.launch.py` includes `battery_system.launch.py` twice with `use_monitor:=false`. You change karmel1's include to `true`. Which monitors exist?"
+  options:
+    - Both, because arguments are global across includes.
+    - None, because the last include's value wins.
+    - Only `/karmel2/battery_monitor`.
+    - Only `/karmel1/battery_monitor`, since each include has its own argument scope.
+  correct: 3
+- source: 25f5227cb51f
+  question: A node logs default thresholds although the launch passes `--params-file .../health.yaml` with `-r __ns:=/karmel1`, and the file starts with `battery_health:`. What's the minimal fix?
+  options:
+    - Change the key to `/**/battery_health:` (or `/karmel1/battery_health:`).
+    - Move the file into the package's `config/` folder.
+    - Pass the file with `-p` instead of `--params-file`.
+    - Remove the namespace from the launch file.
+  correct: 0
+- source: d9119ad0a477
+  question: Where do launch files have to be for `ros2 launch pkg name.launch.py` to find them in an `ament_python` package?
+  options:
+    - In `src/pkg/launch/`, found by scanning the source tree.
+    - In `install/pkg/lib/pkg/`, put there by `console_scripts`.
+    - In `install/pkg/share/pkg/launch/`, copied by a `data_files` entry in `setup.py`.
+    - In `~/.ros/launch/`, registered by `ros2 launch --install`.
+  correct: 2
+- source: d6ed64563d15
+  question: "`battery_sim` drains 0.05 V/s from 12.6 V. Roughly when does karmel1 (10.5 V, α = 0.3 at 2 Hz) log LOW, and karmel2 (12.3 V, α = 0.5 at 5 Hz)?"
+  options:
+    - About 42 s and 6 s exactly, with no filter lag.
+    - About 43 s and about 6 s.
+    - About 50 s and about 12 s.
+    - About 21 s and about 3 s.
+  correct: 1

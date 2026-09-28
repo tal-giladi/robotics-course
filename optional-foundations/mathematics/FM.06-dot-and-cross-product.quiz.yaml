@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.06-dot-and-cross-product.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3a40efcfd2b3
+  question: What does $\mathbf{a}\cdot\mathbf{b} = 0$ tell you geometrically?
+  options:
+    - The vectors are parallel and point the same way
+    - The vectors are perpendicular (or one is zero)
+    - The vectors are parallel and point opposite ways
+    - The vectors have equal length
+  correct: 1
+- source: 399a2ced4b21
+  question: The robot's heading is $(0.6, 0.8)$ and a detected person is at relative position $(-1.0, 0.5)$. In front or behind? Left or right?
+  options:
+    - In front (dot 0.2) and left (cross 1.1)
+    - Behind (dot −0.2) and right (cross −1.1)
+    - Behind (dot −0.2) and left (cross 1.1)
+    - In front (dot 1.0) and right (cross −0.5)
+  correct: 2
+- source: 726857cc425e
+  question: A 0.15 m lever arm along $+x$ with a force of 20 N along $-y$. Torque vector?
+  options:
+    - $(0, 0, 3)$ N·m, counterclockwise viewed from above
+    - $(-3, 0, 0)$ N·m, about the x axis
+    - $(0, -3, 0)$ N·m, along the force
+    - $(0, 0, -3)$ N·m, clockwise viewed from above
+  correct: 3
+- source: 5fddd916d7b2
+  question: An arm holds a load straight up (gripper directly above the shoulder). What gravity torque does the shoulder feel?
+  options:
+    - Zero, because $\mathbf{r}$ is parallel to $\mathbf{F}$
+    - The maximum, because the whole arm length is the lever
+    - Half the horizontal-pose torque, because $\cos 90° = 0.5$
+    - The same as horizontal, because the load weight is unchanged
+  correct: 0
+- source: b82aa0179459
+  question: karmel turns at 1.5 rad/s about $+z$. What is the velocity of its front ToF sensor at $(0.125, 0, 0.05)$?
+  options:
+    - $(0, 0.1875, 0)$ m/s, to the left
+    - $(0, -0.1875, 0)$ m/s, to the right
+    - $(0.1875, 0, 0)$ m/s, forward
+    - $(0, 0.075, 0)$ m/s, to the left
+  correct: 0
+- source: 2bc4d44c4ea0
+  question: Your floor-plane normal sometimes points down, so the whole floor is marked as an obstacle. Fix?
+  options:
+    - Normalize the normal to unit length so its sign becomes consistent
+    - Use the dot product of the two edge vectors instead of the cross product
+    - "Flip the normal when it points away from up: `if n @ np.array([0, 0, 1]) < 0: n = -n`"
+    - Take the absolute value of each component of the normal
+  correct: 2
+- source: 9b1048dc7ac9
+  question: Why is $\mathbf{a}\cdot\hat{\mathbf{u}}$ the progress along $\hat{\mathbf{u}}$, but $\mathbf{a}\cdot\mathbf{u}$ (not normalized) isn't?
+  options:
+    - The unnormalized product has the wrong sign whenever $\mathbf{u}$ is longer than $\mathbf{a}$
+    - The unnormalized product gives the perpendicular component instead of the parallel one
+    - The unnormalized product is in squared units, so it is only off by a square root
+    - It equals $\lVert\mathbf{a}\rVert\lVert\mathbf{u}\rVert\cos\theta$; only a unit $\mathbf{u}$ leaves the projected length
+  correct: 3

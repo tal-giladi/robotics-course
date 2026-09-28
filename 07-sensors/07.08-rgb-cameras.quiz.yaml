@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.08-rgb-cameras.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: fd96ec94b34e
+  question: How many Mbit/s is a 640×480 `rgb8` stream at 15 fps, and what happens over an 80 Mbit/s Wi-Fi link?
+  options:
+    - 36.9 Mbit/s; it fits comfortably with room to spare
+    - 110.6 Mbit/s; frames drop silently, a stuttering stream
+    - 110.6 Mbit/s; the publisher blocks and reports an error
+    - 13.8 Mbit/s; it fits, but only in `mono8` encoding
+  correct: 1
+- source: 3eeb4c05df78
+  question: Turning at 1 rad/s with a 33 ms exposure, how much blur, versus driving toward an object 2 m away at 0.3 m/s?
+  options:
+    - About 2.6 px turning; about 17.6 px driving forward
+    - About 17.6 px in both cases, since exposure is the same
+    - About 1.8 px turning; about 0.3 px driving forward
+    - About 17.6 px turning; about 2.6 px driving forward
+  correct: 3
+- source: 8835f4a68b90
+  question: What does `K[0] == 0.0` mean in a `CameraInfo`, and what will a 3D projection node do with it?
+  options:
+    - Uncalibrated camera; projection divides by zero, giving inf/nan
+    - Ideal pinhole with no distortion; projection works as normal
+    - Focal length in millimetres; the node converts it automatically
+    - Mono camera; the node falls back to the default intrinsics
+  correct: 0
+- source: d8d01423db23
+  question: You calibrate at 1280×720 and stream at 640×480 with the same `camera_info_url`. What breaks, and how?
+  options:
+    - Nothing, since intrinsics are independent of resolution
+    - Only the distortion coefficients, uniformly across the image
+    - "Intrinsics off by 2×: zero error at centre, growing to edges"
+    - Colours shift, because the Bayer pattern no longer aligns
+  correct: 2
+- source: 099898ddfaef
+  question: A driver reports a 20 ms stamp age; a stopwatch gives 130 ms end-to-end. Who is lying, and how do you confirm?
+  options:
+    - The stopwatch; human reaction time adds ~110 ms to it
+    - "The driver: it stamps at publish, not exposure; reproduce with `fake_camera.py`"
+    - "Neither: the gap is display latency in RViz, not the driver"
+    - "The network: DDS delays frames; confirm with `ros2 topic hz`"
+  correct: 1
+- source: 0920af193ef9
+  question: Why does the course use a USB webcam instead of the Raspberry Pi Camera Module?
+  options:
+    - On Ubuntu 24.04 libcamera isn't operational, so CSI needs a day of unverified work
+    - The Pi Camera Module has too low a resolution for the course's vision lessons
+    - USB webcams use less CPU than CSI cameras on the Raspberry Pi 5
+    - The Pi 5 has no CSI connector, so only USB cameras can be attached
+  correct: 0
+- source: 69aa43412ce7
+  question: You need 30 fps for a tracker but the Pi is at 100 % CPU. Which three levers, in order?
+  options:
+    - Compression, then higher fps, then a faster Wi-Fi router
+    - Colour depth up, then resolution up, then a second camera
+    - Compression, then `rgb8`, then separate camera processes
+    - Lower resolution, then `mono8`, then composing nodes in one process
+  correct: 3
+- source: 6551e2152a88
+  question: A vertical door frame leans in every frame while the robot turns and is straight when still. Sensor fault?
+  options:
+    - "Yes: the lens is loose and shifts while the robot turns"
+    - "Yes: the auto-exposure fails under changing light levels"
+    - "No: rolling-shutter skew, rows read at different headings"
+    - "No: lens distortion, which only shows while the robot turns"
+  correct: 2

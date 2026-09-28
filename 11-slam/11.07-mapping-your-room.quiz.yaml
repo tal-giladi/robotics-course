@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 11.07-mapping-your-room.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 66ca3602cfe3
+  question: Driving at 0.35 m/s and turning at 1.2 rad/s with a 10 Hz LiDAR, how far apart are consecutive scans, and what matters?
+  options:
+    - 35 cm and 69°; the distance is the problem
+    - 3.5 cm and 6.9°; the angle is the problem, so slow the turns
+    - 3.5 cm and 0.69°; neither matters at this rate
+    - 0.35 cm and 12°; the distance is the problem
+  correct: 1
+- source: 45b327a967e5
+  question: What exactly is the origin of the `map` frame in a map you just made?
+  options:
+    - The Gazebo world origin, as in simulation
+    - The bottom-left corner of the `.pgm` image
+    - The `origin:` field of the `.yaml` file
+    - The robot's pose when SLAM processed its first scan
+  correct: 3
+- source: e64017b2b175
+  question: You saved `home.pgm`, `home.yaml`, `home.posegraph` and `home.data`. To add the balcony, which files do you need?
+  options:
+    - "`home.posegraph` + `home.data`; the `.pgm`/`.yaml` alone can't be extended"
+    - "`home.pgm` + `home.yaml`; the pose graph is only a backup"
+    - Only `home.yaml`, which references everything else
+    - All four, since slam_toolbox checks them against each other
+  correct: 0
+- source: 47ef401e7d0d
+  question: You map a living room with a large mirror on one wall. What does the map show, and what can happen on the second pass?
+  options:
+    - A hole where the mirror is; the robot stops before it
+    - Nothing unusual; mirrors absorb the laser completely
+    - A phantom room behind it; a wrong loop closure can fold the map
+    - A doubled wall; the second pass averages it out
+  correct: 2
+- source: fee5c66ea7bf
+  question: Mapping is fine until a 7 m bare corridor, after which everything is wrong. Name the failure and cheap mitigations.
+  options:
+    - Degenerate scan matching; drive slowly and straight, add features
+    - LiDAR overheating; pause and let it cool down
+    - A wrong loop closure; disable loop closing entirely
+    - Map too large; lower the grid resolution
+  correct: 0
+- source: 8790f4906e27
+  question: When would you choose slam_toolbox's localization mode over AMCL, and what do you give up?
+  options:
+    - When the map is a `.pgm`; you give up loop closure
+    - When the robot often gets kidnapped; you give up accuracy
+    - Always, since it is strictly better than AMCL
+    - With a pose graph and known start; you give up relocalization
+  correct: 3
+- source: b491938ffbf9
+  question: "`check_slam_inputs.py` reports `scan timestamp age +1789827000.000 s`. What is wrong?"
+  options:
+    - The LiDAR is buffering scans for weeks
+    - "Two clocks: `use_sim_time` is inconsistent across nodes"
+    - The scan stamps are in nanoseconds, not seconds
+    - The TF buffer is too short for the scan rate
+  correct: 1
+- source: 56e7d7df7ac0
+  question: Why insist on revisiting already-mapped places four times in a flat rather than once at the end?
+  options:
+    - Each revisit refreshes the timestamps stored in the map
+    - slam_toolbox needs at least four loops before it converges
+    - Frequent closures keep drift small, so each is easy to find
+    - Revisits let the LiDAR recalibrate its range against walls
+  correct: 2

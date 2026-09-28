@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 20.01-final-architecture.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5c4b429a5022
+  question: "`collision_monitor` subscribes to `/scan` as `reliable`; the LiDAR driver publishes with `qos_profile_sensor_data`. What happens, and what does `ros2 topic hz /scan` show?"
+  options:
+    - It receives data with some dropped frames; `hz` shows about 5 Hz
+    - The subscriber gets nothing (reliable request vs best-effort offer); `hz` still shows a healthy 10 Hz
+    - The publisher upgrades to reliable automatically; `hz` shows 10 Hz
+    - The subscriber gets nothing; `hz` also shows nothing, so the bug is easy to spot
+  correct: 1
+- source: 9fd5afdbd833
+  question: karmel's camera publishes VGA JPEG at 15 fps (≈45 kB per frame). What is the bandwidth and share of the robot's total, and what would raw cost?
+  options:
+    - ≈676 kB/s, ≈87% of total; raw ≈13.8 MB/s
+    - About 45 kB/s, ≈10% of the total; raw ≈0.9 MB/s
+    - About 676 kB/s, ≈20% of the total; raw ≈1.4 MB/s
+    - About 6.8 MB/s, ≈99% of the total; raw ≈138 MB/s
+  correct: 0
+- source: 99d5e8686126
+  question: The obstacle chain's worst case is 201 ms, 100 ms of which is the LiDAR scan period. To halve reaction time, what do you change?
+  options:
+    - Raise the controller from 20 to 40 Hz, which removes about 100 ms
+    - Move `collision_monitor` to the laptop to give it more CPU
+    - Switch to a 20 Hz LiDAR, which removes 50 ms directly
+    - Lower the DDS history depth to 1 to cut queueing latency
+  correct: 2
+- source: 42afdd7abe5a
+  question: You move AMCL from the Pi to your laptop over Wi-Fi to free CPU. What breaks?
+  options:
+    - Nothing; `/scan` is only 30 kB/s, well within Wi-Fi bandwidth
+    - The map fails to load because the map server stays on the Pi
+    - Only RViz, which loses the particle cloud display
+    - Wi-Fi delay breaks `map`→`odom` tf lookups, so Nav2 aborts goals
+  correct: 3
+- source: e2512cba0791
+  question: Why does `/tf` have `multi_writer_ok = True` while `/cmd_vel` does not?
+  options:
+    - "`/tf` is disjoint edges, one owner each; `/cmd_vel` is one actuator"
+    - "`/tf` uses best-effort QoS, while `/cmd_vel` is reliable"
+    - "`/tf` is published at a higher rate, so collisions average out"
+    - "`/cmd_vel` is only read by the firmware, which accepts one sender"
+  correct: 0
+- source: dd26c9d40e60
+  question: The compute plan gives the Pi 3.2 usable cores out of 4. Why not 4?
+  options:
+    - One core is reserved exclusively for the GPU driver
+    - The Pi 5 throttles to 80% clock speed under sustained load
+    - Kernel, DDS, interrupts and ssh need CPU too; it is a margin
+    - ROS 2 can only use 80% of each core due to the executor design
+  correct: 2
+- source: d0a2e552b6aa
+  question: A colleague proposes running the LLM planner on the Pi "to remove the network dependency". Which argument is right?
+  options:
+    - Good idea; a quantized model fits and removes the only failure mode
+    - Good idea if the planner runs at low priority below the control loop
+    - Bad idea only because of power draw on the battery
+    - A useful model won't fit, and slow jobs must not starve real-time ones
+  correct: 3

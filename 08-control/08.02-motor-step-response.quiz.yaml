@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 08.02-motor-step-response.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 58c4e66e8119
+  question: A step response settles at 12 rad/s. At what speed do you read off τ?
+  options:
+    - 6.00 rad/s (50%)
+    - 7.58 rad/s (63.2%)
+    - 11.88 rad/s (99%)
+    - 10.20 rad/s (85%)
+  correct: 1
+- source: 988a8ecb2056
+  question: $K = 19.3$ rad/s per duty, deadband 0.12. What duty gives 6 rad/s, and what speed does duty 0.10 give?
+  options:
+    - Duty 0.31; duty 0.10 gives 1.93 rad/s
+    - Duty 0.43; duty 0.10 gives 1.93 rad/s
+    - Duty 0.19; duty 0.10 gives 0 rad/s
+    - Duty 0.43; duty 0.10 gives 0 rad/s
+  correct: 3
+- source: e6ff727924c4
+  question: With τ = 0.08 s, how long until a step response is within 1% of its final value?
+  options:
+    - About 0.37 s (4.6 τ)
+    - About 0.08 s (1 τ)
+    - About 0.24 s (3 τ)
+    - About 0.80 s (10 τ)
+  correct: 0
+- source: 40e67049bdda
+  question: The fit on the firmware's speed estimate gives τ = 97 ms, the fit on ticks 80 ms. Which goes into the simulator, and what does the controller see?
+  options:
+    - 97 ms into the simulator; the controller sees exactly 80 ms
+    - 80 ms into the simulator; the controller sees about 15 ms more lag
+    - The average, 88 ms, into both the simulator and the controller
+    - 97 ms into the simulator; the controller sees about 15 ms less lag
+  correct: 1
+- source: 2a24dd2daab3
+  question: Your static curve has slope 17 at 10.2 V. A teammate measured 21 at 12.5 V on the same robot. Is something broken?
+  options:
+    - "Yes: a 24% gain difference means one motor is damaged"
+    - "Yes: the teammate's encoder must be counting extra ticks"
+    - "Probably not: normalised to 10.8 V both are about 18"
+    - "Probably not: slopes always vary ±25% between runs"
+  correct: 2
+- source: 0fc54b2e5835
+  question: Why validate a model on a staircase instead of the step you fitted?
+  options:
+    - A fitted model always matches its own data; a new input tests the structure
+    - A staircase has less noise than a step, so the fit becomes more accurate
+    - Steps saturate the motor, so they cannot be used for validation at all
+    - The staircase measures the deadband, which the step cannot show
+  correct: 0
+- source: b86cae23438d
+  question: The discrete model uses $\alpha = 1 - e^{-\Delta t/\tau}$. What is α for Δt = 10 ms and τ = 80 ms, and what does it mean?
+  options:
+    - "0.125: the speed reaches 12.5% of its final value in the first period"
+    - "0.882: each period the speed covers 88.2% of the remaining distance"
+    - "0.118: each 10 ms the speed covers 11.8% of the remaining distance"
+    - "0.118: the speed lags its target by exactly 11.8 ms each period"
+  correct: 2

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 18.03-teleop-data-collection.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 13da0930751c
+  question: In a LeRobot SO-101 recording, what is stored as `action` and what as `observation.state`, and why does it matter?
+  options:
+    - "`action` is the follower's measured joints; `observation.state` is the leader's; the policy learns what actually happened"
+    - "`action` = leader's joints (the intended command, valid even if the follower lags); `observation.state` = follower's measured joints"
+    - Both store the follower's joints at different timestamps; the difference gives the velocity the policy learns
+    - "`action` is the motor current; `observation.state` is the leader's joints; the policy learns torque control"
+  correct: 1
+- source: 382f75671818
+  question: Why does the leader arm use lower gear ratios (1/147, 1/191) on most joints than the follower (1/345)?
+  options:
+    - Lower reduction gives the leader higher position resolution for precise recording
+    - Lower reduction makes the leader faster so it can move ahead of the follower
+    - Easier to back-drive by hand with torque off; the follower needs reduction for torque
+    - Lower reduction draws less current, so the leader can run from USB power alone
+  correct: 2
+- source: 7c57ba3e5a7a
+  question: "40 episodes × 12 s at 30 fps with two 640×480 cameras at 3.6 kB/frame/camera: how many frames and how much video?"
+  options:
+    - 14,400 frames; about 104 MB
+    - 14,400 frames; about 52 MB
+    - 28,800 frames; about 208 MB
+    - 480 frames; about 3.5 MB
+  correct: 0
+- source: 89f193a69ac0
+  question: What is the "golden rule" test for camera placement?
+  options:
+    - The gripper must be visible in every camera at all times during the task
+    - Each camera must cover the full workspace at the highest resolution available
+    - Cameras must be placed where a human observer would naturally stand
+    - You should be able to do the task yourself looking only at the recorded images
+  correct: 3
+- source: 53c413432e3a
+  question: 8 of your 50 episodes contain a 2 s pause above the bottle. What will the trained policy likely do?
+  options:
+    - Nothing different; the pauses are averaged out by the other 42 episodes
+    - Sometimes hover and freeze above the bottle, since the data says "stay still" there
+    - Move faster over the bottle to compensate for the recorded pauses
+    - Pause exactly 2 s above the bottle in 16% of runs, then continue normally
+  correct: 1
+- source: db6981eb3fa3
+  question: You recorded 20 episodes and the power failed. How do you add 30 more to the same dataset?
+  options:
+    - Re-run `lerobot-record` with `--resume=true`, the same `--dataset.root` and `--dataset.num_episodes=50`
+    - Record a new 30-episode dataset and merge both folders by copying the Parquet files together
+    - Re-run `lerobot-record` with the same settings, `--resume=true`, `--dataset.root` and `--dataset.num_episodes=30`
+    - Delete the partial dataset and re-record all 50 episodes, since resuming is not supported
+  correct: 2
+- source: 1283e781fd49
+  question: In LeRobot dataset v3.0, where do episode boundaries live, and why not one file per episode?
+  options:
+    - In `meta/episodes/` as lengths and offsets into shared Parquet/MP4 files; fewer files load and stream faster
+    - In each MP4's metadata header; one file per episode would exceed the Hub's file size limit
+    - In a separate Parquet file per episode; shared files are used only for the camera video
+    - In the `info.json` file as a list of frame indices; one file per episode breaks video decoding
+  correct: 0

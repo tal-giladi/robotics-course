@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.08-adc.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: fde915535bb7
+  question: How many distinct codes does a 12-bit ADC produce, and what is the step size with a 3.3 V reference?
+  options:
+    - 4,096 codes; ≈ 3.3 mV
+    - 65,536 codes; ≈ 0.050 mV
+    - 4,096 codes; ≈ 0.806 mV
+    - 1,024 codes; ≈ 3.22 mV
+  correct: 2
+- source: 09ff5b3506b5
+  question: "`read_u16()` returns 36,000 on karmel's battery pin (divider factor 5.545). What's the battery voltage? Above the 9.9 V cutoff?"
+  options:
+    - ≈ 1.81 V, below the cutoff
+    - ≈ 10.05 V, above the cutoff
+    - ≈ 9.75 V, below the cutoff
+    - ≈ 11.2 V, above the cutoff
+  correct: 1
+- source: c3286a421494
+  question: Why doesn't averaging fix a 30 mV offset?
+  options:
+    - Averaging reduces random noise by √N; an offset is in every sample, so it stays
+    - Averaging only works on AC signals, and an offset is a DC quantity
+    - Averaging doubles the offset because the errors add up in the sum
+    - Averaging needs at least 1,000 samples before any offset starts to shrink
+  correct: 0
+- source: 8ac1689ee143
+  question: You add 100 nF from GP26 to AGND on the 100 k / 22 k divider. What cutoff results, and does it slow battery readings meaningfully?
+  options:
+    - ≈ 88 Hz; yes, readings lag by several seconds
+    - ≈ 0.88 Hz; yes, readings lag by about a second
+    - ≈ 16 Hz; no, but it adds PWM ripple to the reading
+    - ≈ 88 Hz; no, battery voltage changes over seconds
+  correct: 3
+- source: 567306400fba
+  question: Your battery reading is consistently 0.15 V higher than the multimeter at all voltages. What kind of error, and the fix?
+  options:
+    - Random noise; fix it by averaging many more samples per reading
+    - A constant offset; fix it with an offset (or two-point) calibration
+    - A gain error; fix it by swapping the divider for 1 % resistors
+    - Aliasing; fix it by sampling the ADC at a much faster rate
+  correct: 1
+- source: 9b62640ba58d
+  question: When would you choose the INA219 over the ADC divider?
+  options:
+    - When you need current (and power, charge) or better accuracy without calibration
+    - When you need the cheapest, simplest way to measure battery voltage
+    - When you only need voltage and are willing to calibrate
+    - When the battery voltage is below 3.3 V and needs no divider
+  correct: 0
+- source: 9f80c2e6e469
+  question: What's the danger in connecting the DRV8874's current-sense output (≈ 1.1 V/A) directly to GP27?
+  options:
+    - It reads too small a voltage, so currents below 3 A are invisible
+    - It shorts the motor supply to the ADC reference through the pin
+    - Above 3 A it exceeds 3.3 V (3.85 V at stall), beyond the pin's limit
+    - The sense output is AC, so the ADC reads only the average of zero
+  correct: 2

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 00.02-the-robotics-stack.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1aeaff5acff0
+  question: Which list gives the eight stack layers in the right order, top to bottom?
+  options:
+    - Motor drivers, motors, control, perception/localization/planning, ROS 2 middleware, high-level planning, AI/application, physical robot.
+    - AI/application, high-level planning, ROS 2 middleware, perception/localization/planning, control, motor drivers, motors, physical robot.
+    - AI/application, ROS 2 middleware, control, high-level planning, perception/localization/planning, motors, motor drivers, physical robot.
+    - High-level planning, AI/application, perception/localization/planning, ROS 2 middleware, motor drivers, control, physical robot, motors.
+  correct: 1
+- source: c39d62df4528
+  question: Why do layers get faster as you go down the stack?
+  options:
+    - Lower layers run on faster processors, so they can afford higher rates.
+    - Lower layers carry less data per message, so the middleware can deliver them more often.
+    - Each layer controls faster-changing dynamics and must correct disturbances between upper-layer decisions.
+    - Higher layers are written in Python and lower layers in C, which sets their maximum rates.
+  correct: 2
+- source: ac12f4ce71ee
+  question: karmel's motor time constant is 80 ms. Using the $T \le \tau/10$ rule, what is the minimum wheel-PID rate?
+  options:
+    - 12.5 Hz
+    - 80 Hz
+    - 1250 Hz
+    - 125 Hz
+  correct: 3
+- source: 81ed43f564aa
+  question: The LLM agent crashes while karmel is driving to the kitchen with Nav2 running on the Pi. What happens to the robot?
+  options:
+    - It keeps driving and arrives; only the result report is lost.
+    - It stops immediately, because Nav2 needs the agent's heartbeat.
+    - It keeps its last velocity command and drives until it hits something.
+    - It returns to the starting point, because the goal is cancelled.
+  correct: 0
+- source: 7fed56b2e17c
+  question: At 0.5 m/s with 1 m/s² braking and 94 ms reaction latency, what is the stopping distance?
+  options:
+    - 0.125 m
+    - 0.047 m
+    - 0.297 m
+    - 0.172 m
+  correct: 3
+- source: 5f37b2121704
+  question: The robot drives smoothly in simulation but stutters on the real robot whenever you watch the camera feed in RViz on your laptop. What is the likely cause?
+  options:
+    - The camera driver steals CPU from the Pico's wheel PID loop.
+    - RViz sends extra `cmd_vel` messages that conflict with Nav2's commands.
+    - The motors draw more current while the camera is on, causing brownouts.
+    - Raw images saturate the Wi-Fi link, so `cmd_vel` and odometry arrive late or in bursts.
+  correct: 3
+- source: b253645a602f
+  question: Where does ROS 2 stop and the microcontroller take over on karmel, and what crosses that boundary?
+  options:
+    - At the Pico's PWM output; raw PWM duty values cross it over I2C.
+    - "At `base_node` on the Pi; protocol v1 lines cross over USB serial: `V`/`S`/`P` down, `T` telemetry up."
+    - At the DDS layer on the Pi; ROS 2 messages cross it over Wi-Fi to the Pico.
+    - At the Nav2 controller; `cmd_vel` messages cross it over CAN bus to the motor drivers.
+  correct: 1

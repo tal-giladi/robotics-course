@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in 13.11-segmentation.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 819850e6174d
+  question: Which segmentation type fits "which part of the floor is free?" and "pick up the left one of two touching cups"?
+  options:
+    - "Floor: instance (each tile is an object). Cups: semantic (one class label is enough to pick one)."
+    - "Floor: promptable (click on the floor). Cups: semantic (the left cup has its own class)."
+    - "Floor: semantic (every pixel needs a class). Cups: instance or promptable (semantic would merge them)."
+    - "Floor: semantic (every pixel needs a class). Cups: semantic too, since touching cups stay separate."
+  correct: 2
+- source: fa22f8f23632
+  question: Why does SAM return three masks for a single click, and how should a robot choose?
+  options:
+    - A click is ambiguous (part, object, group); prefer a box prompt, then highest predicted IoU with sanity checks
+    - SAM runs three model sizes in parallel; pick the mask from the largest model since it is the most accurate
+    - SAM samples three random seeds; average the three masks pixel-wise to get the final object mask
+    - A click gives foreground, background and edge masks; use the foreground mask and discard the others
+  correct: 0
+- source: 77905b95533c
+  question: A mask has covariance eigenvalues 900 and 100 px². What is the elongation, and the size of a uniform rectangle with these moments?
+  options:
+    - Elongation 9; about 104 × 34.6 px
+    - Elongation 3; about 30 × 10 px
+    - Elongation 3; about 60 × 20 px
+    - Elongation 3; about 104 × 34.6 px
+  correct: 3
+- source: a0bd5d18d0b7
+  question: A bottle's box fill ratio is 0.35. What does that tell you, and what goes wrong with box centre and box depth?
+  options:
+    - It is partly occluded; the box centre is still correct, but depth must be read from the top third of the box
+    - It is very close to the camera; the box centre is fine, but depth saturates, so reduce the exposure time
+    - It is a false positive; any box with fill ratio below 0.5 should be discarded before grasp planning
+    - It is diagonal or thin; the box centre may miss it and box depth is dominated by background, so use mask centroid and depth
+  correct: 3
+- source: fc103f0714b1
+  question: Your team wants SAM 3 on karmel's Raspberry Pi 5 for "segment the red cup". Which obstacles apply?
+  options:
+    - Needs a depth camera, only supports English prompts, and requires ROS 2 Rolling instead of Jazzy
+    - 848 M parameters assuming CUDA, gated checkpoints needing approval, and a custom license to review
+    - Runs only on TPUs, outputs boxes rather than masks, and cannot handle color words like "red"
+    - Requires internet access per frame, is limited to 80 COCO classes, and is GPL-licensed
+  correct: 1
+- source: "55859e015658"
+  question: You prompt SAM with a box and get a mask 3× the box area. Likely cause and fix?
+  options:
+    - It chose the "whole" candidate, leaking into a neighbour; pick a smaller one or clip to the box
+    - The box was given in normalized coordinates; convert it to pixels and re-run the same prompt
+    - The image resolution is too low; upsample the frame 3× so the mask matches the box size
+    - SAM always over-segments box prompts; divide the mask area by three before using it
+  correct: 0

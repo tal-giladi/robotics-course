@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FCV.04-projective-geometry.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: fa75d34d3dd5
+  question: How do you get the intersection of two image lines in homogeneous coordinates, and how do you recognise parallel lines?
+  options:
+    - Dot product of the line vectors; parallel if the result is 0
+    - Cross product of the line vectors; parallel if the result has $w = 1$
+    - Solve a 2×2 system; parallel if the determinant is 1
+    - Cross product of the line vectors; parallel if the result has $w = 0$
+  correct: 3
+- source: da4dc8eb29bf
+  question: Why does a homography have 8 degrees of freedom, and how many point correspondences determine it?
+  options:
+    - 9 entries minus overall scale; 4 points, no 3 collinear
+    - 8 independent entries plus a fixed 1; 8 points
+    - 9 entries minus overall scale; 3 points, since each gives 3 equations
+    - 6 for rotation/translation plus 2 for scale; 4 points
+  correct: 0
+- source: 6baa8bfe2de4
+  question: Where is the horizon row for a camera with f = 500 px, principal point row 240, pitched 10° down?
+  options:
+    - Row 328.2
+    - Row 240
+    - Row 151.8
+    - Row 153.2
+  correct: 2
+- source: 3f11427c3048
+  question: Apply $H = \begin{bmatrix}2&0&0\\0&2&0\\0&0.01&1\end{bmatrix}$ to (100, 100).
+  options:
+    - (200, 200)
+    - (100, 100)
+    - (200, 202)
+    - (100, 101)
+  correct: 1
+- source: 093a4819ed48
+  question: A floor homography places a detected mug 3 m away, but it's on a table 1 m away. Why?
+  options:
+    - The camera's focal length is wrong, so all distances are tripled
+    - The mug's pixel is above the floor, so its ray hits the floor much farther away
+    - The homography was computed at a different camera pitch
+    - The mug is too small, so the detector's box is misplaced
+  correct: 1
+- source: c5c92a224344
+  question: Why is the error of a pixel-to-floor mapping much larger at 2 m than at 0.5 m for the same 1 px error?
+  options:
+    - Lens distortion is stronger near the image edges
+    - Far pixels are blurrier, so detection error grows
+    - The homography is only valid within 1 m of the camera
+    - Near the horizon, distance per pixel row grows roughly with $d^2$
+  correct: 3

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 12.03-sampling-based-planning.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a6c4f67b4038
+  question: What is karmel's configuration space if you model it as its real rectangle, and why is the disk model only 2D?
+  options:
+    - "$(x, y, \\theta)$: a rotated rectangle covers different floor; a disk looks the same at every heading, so C-space is $(x, y)$."
+    - "$(x, y)$: a rectangle's heading never affects collision; a disk needs $(x, y, \\theta)$ because it can spin in place."
+    - "$(x, y, \\theta, v)$: a rectangle needs velocity too; a disk has no velocity limits, so C-space is $(x, y)$."
+    - "$(x, y, \\theta)$: the rectangle adds heading; a disk is 2D only because the planner ignores the robot's size."
+  correct: 0
+- source: 2939a0c0aae1
+  question: Why does RRT explore unexplored space quickly (Voronoi bias)?
+  options:
+    - RRT deliberately samples only outside the current tree's bounding box until the whole space is covered.
+    - Frontier nodes next to large empty regions own large Voronoi cells, so random samples pick them more often.
+    - Nodes near the start own the largest Voronoi cells, so the tree grows outward evenly in all directions.
+    - Each new node is connected to its farthest neighbour, which pushes the tree toward empty regions.
+  correct: 1
+- source: d9f3498038d7
+  question: Which two changes turn RRT into RRT*?
+  options:
+    - Pick the nearest node as parent, and bias 50% of samples toward the goal instead of sampling uniformly.
+    - Grow two trees from start and goal, and connect them as soon as their nearest nodes can see each other.
+    - Pick the lowest-cost parent within radius $r$, and shortcut the final path once the goal has been reached.
+    - Pick the lowest-cost parent within radius $r$, and rewire neighbours within $r$ through $q_{\text{new}}$ when cheaper.
+  correct: 3
+- source: cf23724f8324
+  question: A corridor leaves 0.05 m² free for the robot's center in a 20 m² sampling area. What is the probability of missing it with 2,000 uniform samples?
+  options:
+    - About $e^{-5} \approx 0.0067$ (and the real failure rate is higher, since RRT needs several nodes in it)
+    - About $e^{-0.5} \approx 0.61$ (and the real failure rate is lower, since RRT only needs one node in it)
+    - About $0.0025$, the probability that a single sample lands in the corridor
+    - Exactly zero, since 2,000 samples exceed the 400 needed to cover the corridor once
+  correct: 0
+- source: 0ae8a362dffc
+  question: You run plain RRT (not RRT*) with 10× more `max_iterations`. Does the path get shorter?
+  options:
+    - "Yes: more iterations give a denser tree, so the returned path gets close to optimal"
+    - "No: RRT returns at the first solution; more iterations only help find a path in hard cases"
+    - "Yes: path length shrinks roughly with the square root of the iteration count"
+    - "No: more iterations make paths longer, because the tree wanders farther before reaching the goal"
+  correct: 1
+- source: 70c89f2c58bc
+  question: Why can't a sampling planner report "no path exists"?
+  options:
+    - It can, once the number of samples exceeds the number of cells in the equivalent occupancy grid.
+    - It only checks the sampled nodes, not the edges, so it cannot tell which regions are connected.
+    - It only knows the configurations it sampled; failure means "not found yet", and a tiny passage may still exist.
+    - It samples only free space, so it has no record of obstacles from which to build a proof of absence.
+  correct: 2
+- source: c421f3cb40c1
+  question: Your arm planner produces paths where the forearm passes through a thin shelf board, though every waypoint is collision-free. Cause and fix?
+  options:
+    - Motions between waypoints are checked too coarsely; lower `longest_valid_segment_fraction` below the board thickness.
+    - The waypoints are too close together; raise the motion-check step so fewer checks disagree about the board.
+    - The shelf is missing from the planning scene; add it as a box and re-run with the same settings.
+    - The planner is not RRT*; switch to RRT* so rewiring removes edges that pass through obstacles.
+  correct: 0

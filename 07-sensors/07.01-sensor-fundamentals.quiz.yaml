@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.01-sensor-fundamentals.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1b75bb358db8
+  question: A sensor reads 1.048, 1.049, 1.048, 1.050 m for a target at 1.000 m. Is it accurate, is it precise, and what do you do?
+  options:
+    - Accurate but not precise; average many more samples to bring the spread down
+    - Precise but not accurate; measure at several distances, then apply a calibration line
+    - Neither accurate nor precise; the sensor is faulty and should be replaced
+    - Accurate and precise; a 48 mm difference is within any range sensor's tolerance
+  correct: 1
+- source: f36ed081ac53
+  question: You need σ below 1 mm from a sensor with single-reading σ of 4 mm at 10 Hz. How many samples, and what does it cost?
+  options:
+    - More than 4 samples; 0.4 s per measurement
+    - More than 16 samples; no latency cost at all
+    - More than 16 samples; 1.6 s per measurement, ~0.8 s stale
+    - More than 64 samples; 6.4 s per measurement
+  correct: 2
+- source: afa07575b3fe
+  question: Why does the course's outlier test use the median and MAD instead of the mean and σ?
+  options:
+    - Outliers inflate the very mean and σ used to test them; the median and MAD resist them
+    - Median and MAD are much cheaper to compute on the Pico than the mean and σ
+    - Mean and σ only work for Gaussian sensors, and range sensors have uniform noise
+    - Median and MAD remove the sensor's constant bias as well as its outliers
+  correct: 0
+- source: 91742f1db305
+  question: The bench shows bias +5 mm at 0.25 m and +60 mm at 3.00 m. Offset or gain, and what is the gain?
+  options:
+    - Offset error of about +32 mm; gain 1.000
+    - Gain error; gain 0.980, reads 2 % short
+    - Offset error of +5 mm; gain 1.020
+    - Gain error; gain 1.020, reads 2 % long
+  correct: 3
+- source: 3bd1cd24ff57
+  question: Your VL53L1X gives 10 readings/s and the control loop runs at 50 Hz. What must the loop do between readings?
+  options:
+    - Reuse the last reading with its timestamp, and treat it as no data once it is too old
+    - Hold the last value forever, since the sensor always updates again eventually
+    - Extrapolate linearly from the last two readings for as long as none arrives
+    - Treat every loop without a fresh reading as an obstacle at 0 m and stop
+  correct: 0
+- source: 1dfeca611940
+  question: Dropouts are 1 % at every distance while standing still and 25 % while driving. Where do you look?
+  options:
+    - The sensor's range limit, since driving increases the distance to targets
+    - The Wi-Fi link, since telemetry packets drop while the robot is moving
+    - "What exists only with motors running: electrical noise, vibration, or geometry"
+    - The calibration line, since the bias of the sensor grows with speed
+  correct: 2
+- source: dec6cd4d1631
+  question: How much does a 150 ms latency cost karmel at 0.5 m/s, and what do you do with the number?
+  options:
+    - 0.75 cm; ignore it, since it is below the sensor's own noise
+    - About 10 cm with half a sensor period; add it to the braking distance
+    - 75 cm; reduce the robot's speed limit to 0.05 m/s to compensate
+    - 7.5 cm; subtract it from the costmap inflation radius
+  correct: 1
+- source: 4108e7134f88
+  question: Why does the course bench record a dropout as an empty cell rather than −1 or 0?
+  options:
+    - Empty cells use less disk space in the CSV files the bench writes
+    - The Pico's wire protocol cannot send negative numbers or zero
+    - −1 and 0 would be flagged as outliers and crash the analysis script
+    - −1 and 0 look valid and would silently corrupt means, σ and filters
+  correct: 3

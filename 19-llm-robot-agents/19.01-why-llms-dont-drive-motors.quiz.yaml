@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 19.01-why-llms-dont-drive-motors.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e0c4899937b9
+  question: karmel drives at 0.25 m/s. A decision loop polls every 0.5 s and answers in 1.5 s. How much margin does it need to guarantee a stop?
+  options:
+    - 0.375 m, within karmel's 0.365 m stop margin after rounding
+    - 0.125 m, so the loop can safely stop the robot
+    - At least 0.5 m before braking and sensor error, more than karmel's 0.365 m, so it must not be the stopper
+    - 2 m, since the robot keeps moving for the full 2 s poll-plus-answer window at 1 m/s
+  correct: 2
+- source: 2cec7528ee8c
+  question: Why does adding the firmware watchdog prevent the collision in the experiment, and why is it still not acceptable?
+  options:
+    - It stops the motors 300 ms after the last command, so the robot moves in short bursts; but a failure mechanism is on the happy path
+    - It slows the motors to half speed during LLM calls; unacceptable because the speed limit is not configurable
+    - It forces the LLM to answer within 300 ms; unacceptable because the model's answers get worse
+    - It replays the last command until a new one arrives; unacceptable because the robot overshoots the goal
+  correct: 0
+- source: e1e65e224362
+  question: A vendor announces a model with 50 ms latency. Does the layering change?
+  options:
+    - Yes; at 50 ms the LLM can replace the reactive layer, since latency was the only argument
+    - Yes; the LLM can take over the executive, but the servo loop stays in firmware
+    - No; non-determinism, per-call cost/context and availability when unreachable are unaffected by speed
+    - No, but only because 50 ms is still slower than the 1 kHz motor loop
+  correct: 2
+- source: 6f30eb44a048
+  question: You move "retry a failed grasp twice" from the executive up into the LLM. The model API goes down after the first failed grasp. What does the robot do?
+  options:
+    - The executive notices the outage and retries twice by default
+    - The arm retries indefinitely because no one tells it to stop
+    - The firmware watchdog drives the robot back to its dock
+    - "Nothing sensible: no retry and no decision to stop; the task never terminates"
+  correct: 3
+- source: 2cdd58e6b1dd
+  question: The LLM's answer applied at $t = 2$ s was computed from the range reading at $t = 0$ s. What is that in control terms, and what is its standard consequence?
+  options:
+    - Dead time; it cuts phase margin and can make the loop oscillate or go unstable
+    - Integral windup; it causes overshoot once the error changes sign
+    - Quantization error; it limits the resolution of the range reading
+    - Sensor noise; it is removed by low-pass filtering the range reading
+  correct: 0
+- source: 3c9149e7e0d9
+  question: "Which of these is a layer-3 responsibility: refusing to drive with a person within 0.5 m, refusing an off-limits room, refusing to pick up a knife?"
+  options:
+    - All three, since each one is a safety rule
+    - Only the person within 0.5 m, a sensor-triggered hard stop
+    - Only the knife, since it is the most dangerous
+    - The off-limits room and the knife, but not the person
+  correct: 1
+- source: 619117cff706
+  question: "Model API: p50 1.2 s, p99 7 s, 1 in 200 requests times out at 30 s. The robot must move at most 0.2 m after a hazard appears. What follows if the model is in the loop?"
+  options:
+    - "Design for p99: about 0.03 m/s, which is slow but workable"
+    - "Design for p50: about 0.17 m/s, since timeouts are rare"
+    - "Design for the timeout: ≈3 mm/s, so the model must not be in this loop"
+    - "Design for the mean: about 0.1 m/s with a firmware watchdog"
+  correct: 2

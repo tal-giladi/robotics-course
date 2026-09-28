@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 06.05-robot-in-gazebo.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 920d6193a6ac
+  question: Your URDF has nine links and the SDF Gazebo simulates has three. Is something broken?
+  options:
+    - "No: fixed-jointed links are merged into their parent; only the two wheels stay separate"
+    - "Yes: Gazebo dropped every link that had no `<visual>` element in the URDF"
+    - "Yes: the xacro macros failed to expand six of the links during conversion"
+    - "No: Gazebo only simulates the three heaviest links and ignores the lighter ones"
+  correct: 0
+- source: ad62261f0707
+  question: A wheel is a cylinder with $m = 0.08$ kg, $r = 0.045$ m, $h = 0.010$ m. What are $I_{zz}$ (about the axle) and $I_{xx}$?
+  options:
+    - $I_{zz} = 1.62\times10^{-4}$, $I_{xx} = 4.117\times10^{-5}$ kg m²
+    - $I_{zz} = 4.117\times10^{-5}$, $I_{xx} = 8.10\times10^{-5}$ kg m²
+    - $I_{zz} = 8.10\times10^{-5}$, $I_{xx} = 4.117\times10^{-5}$ kg m²
+    - $I_{zz} = 8.10\times10^{-5}$, $I_{xx} = 8.10\times10^{-5}$ kg m²
+  correct: 2
+- source: 00c02493e5bc
+  question: Why is `ixx=iyy=izz=0.001` on a 1.23 kg, 0.25 m chassis a bug even though it violates no physical law?
+  options:
+    - Gazebo requires inertia values of at least 1.0, so the value is clamped and the robot becomes sluggish
+    - It implies all the mass within about 6 cm of the centre, so the robot spins up too easily under torque
+    - Equal diagonal values are physically impossible for any rigid body, so the solver rejects the link
+    - It implies the chassis is hollow and very light, so it bounces and floats in the simulation
+  correct: 1
+- source: 44bf50c5a4c0
+  question: You set the caster's friction to 1.0 and command a pure rotation of 1.5 rad/s for 4 s. What do `/odom` and Gazebo's ground truth say?
+  options:
+    - Both report about 6 rad, since caster friction only affects straight driving
+    - "`/odom` reports well under 6 rad, while ground truth reports about 6 rad"
+    - Both report far less than 6 rad, because the wheels stall against the caster
+    - "`/odom` reports about 6 rad; ground truth shows less, as the caster drags"
+  correct: 3
+- source: 56e7627cf54e
+  question: "`/scan` publishes but RViz says its frame does not exist. What is the fix and why does it happen?"
+  options:
+    - Add a static transform from `map` to `lidar`, because Gazebo never publishes any TF of its own
+    - "Add `<gz_frame_id>laser</gz_frame_id>`: the merged `laser` link gets a scoped name TF lacks"
+    - Rename the RViz fixed frame to `lidar`, because RViz defaults to a frame the robot lacks
+    - Make the laser joint `continuous`, because fixed joints are never published to TF at all
+  correct: 1
+- source: fcbc5ca01e83
+  question: Your controller's acceleration limit is 2.5 m/s². What minimum floor friction coefficient do the wheels need, and what happens below it?
+  options:
+    - $\mu \ge 0.255$; below it wheels slip while accelerating and `/odom` over-reports distance
+    - $\mu \ge 2.5$; below it the robot cannot start moving at all from standstill
+    - $\mu \ge 0.255$; below it `/odom` under-reports distance because the encoders stop
+    - $\mu \ge 0.0255$; below it the robot accelerates faster than it was commanded to
+  correct: 0
+- source: 9ba9b63679a9
+  question: Why does the course put friction and sensors in a separate `karmel.gazebo.xacro` rather than the main URDF?
+  options:
+    - Gazebo can only parse xacro files, while the main URDF must stay plain XML for ROS 2 tools
+    - Friction values change every run and have to be regenerated separately before each launch
+    - They are Gazebo-only extensions, included only with `use_sim:=true`, keeping the URDF clean
+    - The main URDF is flashed into the Pico firmware, which has no room for sensor definitions
+  correct: 2
+- source: 134ef2c4170b
+  question: The robot spawns, controllers activate, `/joint_states` shows the wheels turning, but `gz model -m karmel -p` never changes. Which hypothesis order is right?
+  options:
+    - (1) `ROS_DOMAIN_ID` mismatch, (2) `/clock` not bridged, (3) wrong QoS on `/cmd_vel`
+    - (1) Bad inertia, (2) joint limits, (3) friction, as friction is costly to check
+    - (1) Bridge lacks `/cmd_vel`, (2) URDF has no wheels, (3) Gazebo is still paused
+    - (1) Near-zero friction, (2) robot beached on a collision, (3) bad inertia or limits
+  correct: 3

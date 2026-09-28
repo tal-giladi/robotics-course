@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.01-python-robotics-ecosystem.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 815e72536a46
+  question: You need the nearest map point for each of 400 LiDAR points against a 10,000-point map, 10 times per second. Which tool fits?
+  options:
+    - A NumPy brute-force distance matrix, recomputed per point in a loop.
+    - "`scipy.spatial.cKDTree`, built once per map and queried with the whole array: about $O(400 \\log 10{,}000)$."
+    - A Python dictionary keyed by rounded coordinates, rebuilt each scan.
+    - "`cv2.findContours` on a rasterised map, run per scan."
+  correct: 1
+- source: 74ada619b466
+  question: Why does `isinstance(SimBase(...), DifferentialBase)` return `True` though `SimBase` does not inherit from it?
+  options:
+    - "`SimBase` is registered with `DifferentialBase.register()` at import time."
+    - Python's `isinstance` ignores inheritance for classes defined in the same module.
+    - "`DifferentialBase` is an abstract base class that every class inherits implicitly."
+    - "`DifferentialBase` is a `@runtime_checkable` `typing.Protocol`; the check is structural, based on the methods present."
+  correct: 3
+- source: b960fea7d014
+  question: You move a pure-Python A* planner into a thread next to a 50 Hz control loop, and then an OpenCV `GaussianBlur` instead. What happens?
+  options:
+    - The A* thread holds the GIL and delays the control loop; the OpenCV call releases the GIL and runs on another core.
+    - Both run truly in parallel on the Pi 5's four cores.
+    - Both hold the GIL and slow the control loop equally.
+    - The OpenCV call holds the GIL, while the A* thread runs freely.
+  correct: 0
+- source: c119a5e61636
+  question: After `pip install opencv-python` on the Pi, your ROS 2 node can't find `cv2`. Which is a plausible mechanism?
+  options:
+    - OpenCV doesn't support ARM, so the install silently did nothing.
+    - ROS 2 nodes can only import packages from the ROS workspace's `src` folder.
+    - The install went into a venv or `--user` that `ros2 run` (system interpreter) doesn't use, or PEP 668 refused it.
+    - The node needs to be rebuilt with `colcon build` after every pip install.
+  correct: 2
+- source: 3dafdb95cc03
+  question: Your 20 Hz obstacle-check loop spends 0.4 ms in a Python loop over 360 beams. Should you vectorize it?
+  options:
+    - "Yes: 0.4 ms × 20 Hz is 8% of a core, which is too much."
+    - "No: it's 8 ms per second, about 0.8% of one core; keep the clear version."
+    - "Yes: any Python loop over sensor data should be vectorized."
+    - No, but only because NumPy isn't available on the Pi.
+  correct: 1
+- source: cd3484e2525a
+  question: Which of these run at C/C++ speed when called from Python?
+  options:
+    - "`np.linalg.inv`, `cv2.Canny` and `rclpy.spin`."
+    - A Python `for` loop calling `math.cos`, and `list.sort` with a Python key.
+    - Only `rclpy.spin`; the others are pure Python.
+    - All five, since each ends up calling C functions.
+  correct: 0
+- source: 72fdedaf0238
+  question: You're asked to add "just a small REST API" so a web UI can read the robot's state. What does a robotics engineer reach for instead?
+  options:
+    - A Flask server inside the control process, since it's the simplest option.
+    - A shared SQLite database that the control loop writes every cycle.
+    - A cron job that dumps the state to a JSON file every second.
+    - A ROS 2 topic plus a bridge (`foxglove_bridge` or `rosbridge`), so the web UI subscribes like any other consumer.
+  correct: 3

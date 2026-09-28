@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.02-angles-and-radians.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e44ffa41228b
+  question: What is one radian, geometrically, and how many are in a full turn?
+  options:
+    - The angle whose arc length equals the diameter; a full turn is $\pi \approx 3.142$ rad
+    - The angle whose arc length equals the radius; a full turn is $2\pi \approx 6.283$ rad
+    - 1/360 of a full turn; a full turn is 360 rad
+    - The angle whose chord equals the radius; a full turn is 6 rad
+  correct: 1
+- source: 1d4b679e8e3d
+  question: A wheel of radius 0.035 m spins at 300 RPM. What is its rim speed?
+  options:
+    - 1.10 m/s
+    - 10.5 m/s
+    - 0.18 m/s
+    - 66.0 m/s
+  correct: 0
+- source: 4e5cac986517
+  question: Wrap −3.5 rad to $(-\pi, \pi]$.
+  options:
+    - −0.358 rad (−20.5°)
+    - 3.5 rad (200.5°)
+    - 2.783 rad (159.5°)
+    - −2.783 rad (−159.5°)
+  correct: 2
+- source: 69c7158a8b13
+  question: A heading controller computes `error = target - current` without wrapping. The robot is at −179° and the target is 179°. What does the robot do?
+  options:
+    - Sees −2° error and turns 2° right to reach the target directly
+    - Sees 0° error because both angles point backward, so it does nothing
+    - Sees −358° error and turns right almost a full circle
+    - Sees +358° error and turns left almost a full circle instead of 2° right
+  correct: 3
+- source: 63bb82f1a907
+  question: Why does ROS use $(-\pi, \pi]$ rather than $[0, 2\pi)$ for yaw differences?
+  options:
+    - The error then has a meaningful sign (which way to turn) and zero is centered
+    - It avoids floating-point overflow when angles grow large over time
+    - Quaternion conversion only works for angles in $(-\pi, \pi]$
+    - It halves the numerical resolution needed to store the angle
+  correct: 0
+- source: ca903208912c
+  question: The average of two IMU yaw readings, 3.13 rad and −3.13 rad, comes out as 0. Why, and what is the fix?
+  options:
+    - The IMU has a sign error on one axis; negate the second reading before averaging
+    - The readings are in degrees, not radians; convert both before averaging
+    - The mean is correct; the robot really is facing forward on average
+    - Both point nearly backward but the arithmetic mean is forward; use `atan2(sum(sin), sum(cos))`
+  correct: 3
+- source: f21dd6836cf1
+  question: An encoder has 2464 ticks per revolution on a wheel of radius 0.045 m. What linear distance does one tick represent?
+  options:
+    - 0.0255 mm
+    - 0.230 mm
+    - 0.115 mm
+    - 1.15 mm
+  correct: 2

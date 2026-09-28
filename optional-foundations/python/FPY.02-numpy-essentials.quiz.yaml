@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FPY.02-numpy-essentials.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 47d6caad786a
+  question: What is the shape of `np.ones((480, 640, 3)) * np.array([0.5, 1.0, 1.0])`, and what does it do to an OpenCV image?
+  options:
+    - "`(480, 640, 3)`; it halves channel 0, which is blue in OpenCV's BGR order"
+    - "`(480, 640, 3)`; it halves channel 0, which is red in OpenCV's order"
+    - "`(3, 480, 640)`; it halves the first row of every channel"
+    - It raises a broadcasting error, since `(3,)` doesn't match `(480,)`
+  correct: 0
+- source: e4d5c2ee796d
+  question: "`ranges.mean(axis=0)` on a `(100, 360)` array of 100 scans: what shape is it and what does it mean?"
+  options:
+    - "`(100,)`: the average range of each scan across its 360 beams"
+    - "`(360,)`: the mean range of each beam across the 100 scans"
+    - "`(1, 360)`: the mean of the first scan, kept as a row vector"
+    - "`()`: a single scalar, the mean over all 36,000 readings"
+  correct: 1
+- source: d7cd44118dee
+  question: Why is `pts @ R.T` correct for an `(M, 2)` array of row points, and what does `pts @ R` compute instead?
+  options:
+    - Rows are $p^{\mathsf T}$ and $(Rp)^{\mathsf T} = p^{\mathsf T}R^{\mathsf T}$; `pts @ R` rotates by $-\psi$
+    - NumPy stores `R` column-major, so `.T` fixes the order; `pts @ R` raises a shape error
+    - Rows are $p^{\mathsf T}$ and $(Rp)^{\mathsf T} = R^{\mathsf T}p$; `pts @ R` mirrors across the x-axis
+    - "`R.T` scales by $\\cos\\psi$ first; `pts @ R` gives the same result for small angles only"
+  correct: 0
+- source: 7edfdb8e9322
+  question: 200 LiDAR hits land in an occupancy grid, 150 of them in the same cell. After `grid[iy, ix] += 1`, what does that cell contain?
+  options:
+    - "`150`, the number of hits in the cell"
+    - "`200`, the total number of hits"
+    - "`1`; use `np.add.at` to get `150`"
+    - "`0`, since duplicates cancel out"
+  correct: 2
+- source: ab68b087e7ed
+  question: "`left = img[:, :320]; left[:] = 0` and `bright = img[img > 200]; bright[:] = 0`. Which modifies the original image?"
+  options:
+    - "Both: slicing and boolean indexing return views into `img`"
+    - "Only the second: boolean masks are views, basic slices copy"
+    - "Neither: NumPy copies on write for any indexed array"
+    - "Only the first: basic slices are views, boolean indexing copies"
+  correct: 3
+- source: e4ed0832bf8d
+  question: "Distances from 1,000 points to 50 landmarks via broadcasting: what are the intermediate shape and float64 memory, and does it scale to 100,000 × 10,000?"
+  options:
+    - "`(1000, 50)`, 0.4 MB; yes, 100,000 × 10,000 needs only about 8 GB"
+    - "`(1000, 50, 2)`, 0.8 MB; no, 100,000 × 10,000 needs about 16 GB, so chunk or use a KD-tree"
+    - "`(1000, 50, 2)`, 8 MB; no, 100,000 × 10,000 needs about 160 GB"
+    - "`(50, 1000, 2)`, 0.8 MB; yes, NumPy broadcasting never materializes the full array"
+  correct: 1

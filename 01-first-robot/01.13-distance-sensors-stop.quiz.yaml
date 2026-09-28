@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.13-distance-sensors-stop.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 29be576e9df4
+  question: Why does the US-100 work directly with the Pico while an HC-SR04 needs extra components?
+  options:
+    - The US-100 runs from 3.3 V so its Echo is 0–3.3 V; the HC-SR04 needs 5 V and its 5 V Echo exceeds the Pico's limit, needing a divider.
+    - The US-100 uses I2C while the HC-SR04 uses analog output, which needs an external ADC.
+    - The US-100 has a built-in temperature sensor, while the HC-SR04 needs an external one.
+    - The US-100 draws less current, while the HC-SR04 needs its own regulator.
+  correct: 0
+- source: f6251513513a
+  question: The echo pulse lasts 4100 µs. How far is the obstacle at 20 °C, and at 35 °C?
+  options:
+    - About 1406 mm at 20 °C and 1446 mm at 35 °C.
+    - About 703 mm at 20 °C and 684 mm at 35 °C.
+    - About 703 mm at 20 °C and 723 mm at 35 °C.
+    - About 703 mm at both temperatures.
+  correct: 2
+- source: ddde6c0c6976
+  question: The robot drives at 0.4 m/s, the reading can be 100 ms old, and it takes 0.15 s to stop. You want to end 0.25 m from the wall. What threshold do you use?
+  options:
+    - 0.29 m plus a small noise margin
+    - 0.35 m plus a small noise margin
+    - 0.25 m plus a small noise margin
+    - 0.45 m plus a small noise margin
+  correct: 1
+- source: 92798d629ed5
+  question: You point the robot at a floor-to-ceiling window and run `stop_before_obstacle.py` with the VL53L1X. What happens, and what would the US-100 do?
+  options:
+    - The ToF stops correctly; the ultrasonic's sound passes through the glass and the robot hits it.
+    - Both stop correctly, since glass reflects both light and sound.
+    - Both drive into the window, since glass absorbs both light and sound.
+    - The ToF laser mostly passes through, so the robot drives into the window; the ultrasonic sees the glass and stops.
+  correct: 3
+- source: 605cca477160
+  question: Range readings are fine while stationary and go to `None` a second after the motors start. What is your hypothesis?
+  options:
+    - Electrical noise from the motors corrupts the I²C bus or echo timing; test on a stand with and without motor power.
+    - The robot drives out of the sensor's range, so no target is detected.
+    - The motors vibrate the sensor loose from its mount.
+    - The firmware skips sensor reads while the motor control loop is busy.
+  correct: 0
+- source: "020681207498"
+  question: Why does the firmware read the range sensor at 10 Hz while the control loop runs at 100 Hz?
+  options:
+    - The I2C bus can only run at 10 Hz on the Pico.
+    - Reading at 100 Hz would drain the battery faster.
+    - The ultrasonic read blocks up to 30 ms and the VL53L1X updates only every ~100 ms; the control loop must never wait for a sensor.
+    - The control loop needs averaged range readings, so it collects ten per reading.
+  correct: 2
+- source: f2ee3515ede6
+  question: What is the difference between `state.range_m is None` and `state.flags & FLAG_RANGE_ERROR`, and why are both treated as "stop"?
+  options:
+    - None means the sensor failed; the flag means nothing in range; only the flag should stop the robot.
+    - None means no valid measurement this time; the flag means the sensor itself failed; neither says the path is clear.
+    - Both mean the same thing; the flag is kept only for backward compatibility.
+    - None means the obstacle is too close; the flag means it is too far; both need a stop.
+  correct: 1

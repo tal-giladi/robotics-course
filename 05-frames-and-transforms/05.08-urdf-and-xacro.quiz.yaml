@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 05.08-urdf-and-xacro.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 97518cf65572
+  question: What does `<origin xyz="0.10 0 0.10" rpy="0 0 0"/>` inside `camera_joint` mean in the `T_a_b` notation?
+  options:
+    - "${}^{\\text{camera\\_link}}T_{\\text{base\\_link}}$: the pose of base_link in camera_link."
+    - "${}^{\\text{base\\_link}}T_{\\text{camera\\_link}}$: the pose of camera_link in base_link, mapping camera_link points into base_link."
+    - "${}^{\\text{map}}T_{\\text{camera\\_link}}$: the camera's pose in the world."
+    - "${}^{\\text{base\\_link}}T_{\\text{camera\\_optical\\_frame}}$: the optical frame's pose."
+  correct: 1
+- source: 2f3899eb4e89
+  question: Which of `visual`, `collision`, `inertial` can you omit, and what breaks?
+  options:
+    - "All are optional: no visual → invisible; no collision → passes through walls; no inertial → massless, which destabilizes a moved link in Gazebo."
+    - Only `visual` is optional; the others are required by the URDF schema.
+    - All are optional and nothing breaks; they only affect appearance.
+    - None are optional; `check_urdf` rejects a link missing any of them.
+  correct: 0
+- source: 17248174646d
+  question: You change `wheel_radius_m` from 0.045 to 0.050. Which transforms change?
+  options:
+    - Every base_link → sensor transform rises by 5 mm, while base_footprint → base_link stays fixed.
+    - Only the two wheel joints' transforms change, since they carry the radius.
+    - Nothing in TF changes, since the wheel radius only affects odometry scaling.
+    - "`base_footprint → base_link` goes from $z = 0.045$ to $0.050$; base_link → sensor transforms are unchanged."
+  correct: 3
+- source: c75d27d5aa15
+  question: "`xacro` exits 0, but the robot behaves as if a link were missing. Which error does `check_urdf` NOT catch?"
+  options:
+    - A joint whose child link doesn't exist anywhere in the file.
+    - A file whose top-level `<robot>` root element is missing.
+    - A link with two parent joints; only the running TF tree reveals it.
+    - A joint that has no `<parent>` element at all.
+  correct: 2
+- source: 29b8a53cb803
+  question: Why does `robot_state_publisher` need `/joint_states`, when the URDF already contains every joint?
+  options:
+    - To know which joints exist, since the URDF is only loaded on request.
+    - A movable joint's transform depends on its current value $q$, which only the robot, sim or `joint_state_publisher` knows.
+    - To get the timestamps for `/tf_static`.
+    - To validate the URDF against the real hardware.
+  correct: 1
+- source: b6540cae288a
+  question: "`ros2 topic echo /robot_description` prints nothing, though `robot_state_publisher` runs and `/tf_static` looks right. Why?"
+  options:
+    - It's published once as transient local; a default (volatile) echo misses it; use `--qos-durability transient_local --once`.
+    - The description is too large for the echo buffer.
+    - robot_state_publisher publishes it only when RViz requests it.
+    - The topic is only published when `/joint_states` arrives.
+  correct: 0
+- source: e5ad45439c0d
+  question: karmel's `laser` frame is at $z = 0.12$, but its visual cylinder is drawn at $z = -0.01025$ inside the link. Why not put the frame at the puck's centre?
+  options:
+    - Because xacro can't place frames at non-round heights.
+    - Because Gazebo requires the visual origin below the frame.
+    - Because the frame must be where the measurement is (the scan plane); visual origins let the picture be right without moving it.
+    - Because the centre would collide with the chassis in simulation.
+  correct: 2
+- source: f53b072c1b03
+  question: You want one description for Gazebo and the real robot. What makes that possible, and what must stay identical?
+  options:
+    - Two separate URDF files; only the robot name must match.
+    - "`xacro:arg`, `xacro:if`/`unless` and includes for sim-only blocks; the kinematics (link names, joint origins, axes) must be identical."
+    - A launch argument that swaps the meshes; the plugins must be identical.
+    - Environment variables read by robot_state_publisher; the inertias must be identical.
+  correct: 1

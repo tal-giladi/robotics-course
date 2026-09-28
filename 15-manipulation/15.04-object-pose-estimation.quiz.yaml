@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 15.04-object-pose-estimation.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 343731fd89b6
+  question: Why does a top-down parallel-jaw grasp need four numbers rather than a full 6-DoF pose?
+  options:
+    - The camera cannot measure roll and pitch at all, so the grasp must ignore them and hope for the best
+    - The arm has only four joints, so it can only execute four of the six pose parameters
+    - Centre $(x, y, z)$ and yaw are enough, since width is fixed by the gripper's stroke
+    - Approach is fixed and the jaw is symmetric; centre $(x, y)$, closing yaw, width and top height remain
+  correct: 3
+- source: e703fd6e8c28
+  question: Depth noise is $\sigma_Z = 0.005 Z^2$ and the table is at 0.5 m. To detect a 12 mm-thick book, what plane threshold do you choose?
+  options:
+    - "About 5–6 mm: above ~3σ (≈ 4 mm) and well below 12 mm"
+    - "About 1.25 mm: exactly σ, to keep the book as clean as possible"
+    - "About 12 mm: equal to the book's thickness so its edges are kept"
+    - "About 25 mm: 2× the book's thickness to absorb all depth noise"
+  correct: 0
+- source: 2843ce43a337
+  question: The golf ball's true diameter is 43 mm, but the pipeline reports a 36 mm short axis. What happens if the grasp planner uses it?
+  options:
+    - It opens to 36 mm, which is too narrow to fit around the ball, so the jaws land on top and slip off
+    - Nothing, since the planner's 10 mm clearance margin absorbs the 7 mm error completely
+    - It closes to ~36 mm, pads hit the equator and roll the ball away; a single view sees only a cap, so add a shape prior
+    - It grasps normally, but the reported height is off by 7 mm, so it lifts the ball too high
+  correct: 2
+- source: fe9352676878
+  question: What does `wrap_axis_angle` do, and what information is it throwing away?
+  options:
+    - Maps angles into $(-180°, 180°]$; it discards the number of full turns, which PCA measured
+    - Maps angles into $(-90°, 90°]$; it discards axis direction, which PCA never had anyway
+    - Maps angles into $[0°, 90°)$; it discards the object's handedness, which PCA measured
+    - Maps angles into radians; it discards precision beyond 0.1°, which PCA measured
+  correct: 1
+- source: 18c96fda8359
+  question: You lower the camera from a 75° to a 30° view. Which of centre, width and top height degrades most, and by how much on the demo block?
+  options:
+    - "Centre: shifted by 8 mm, as the side face biases the centroid toward the camera"
+    - "Width: 30 mm → 38 mm, as the side face is projected into the footprint"
+    - "Height: 30 mm → 38 mm, as the side face is added to the top surface"
+    - "Width: 30 mm → 22 mm, as foreshortening compresses the footprint"
+  correct: 1
+- source: a4e342def7a1
+  question: Your per-point depth noise doubles, but the centre estimate gets ten times worse. What is happening?
+  options:
+    - Noise has started moving the plane fit and misassigning points, a systematic segmentation error
+    - Averaging amplifies noise as $\sqrt{N}$, so doubling per-point noise multiplies centre error by ten
+    - The depth camera switched range modes, which multiplies all errors by a factor of ten
+    - The centre uses the median, which is ten times more sensitive to noise than the mean
+  correct: 0
+- source: f20399e791c9
+  question: Every object appears 8 mm too far left, consistently, across frames. Where do you look?
+  options:
+    - "At the segmentation threshold: a too-high plane threshold shifts every object to the left"
+    - "At depth noise: average 100 frames and the 8 mm offset will average out"
+    - "At the detector: retrain it, since it has learned to draw boxes offset to the left"
+    - "At hand–eye calibration (or camera frame/intrinsics): a consistent offset is a bias, not noise"
+  correct: 3

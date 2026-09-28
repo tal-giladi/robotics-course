@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.09-uart-i2c-spi.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a01b9108f9d0
+  question: Why does UART need both sides to agree on the baud rate, while I²C and SPI don't?
+  options:
+    - UART sends a clock line that must match; I²C/SPI time bits from a start bit
+    - UART has no clock wire, so the receiver times bits itself; I²C/SPI send a clock line
+    - UART is full duplex, so both directions must share one rate; I²C/SPI are half duplex
+    - UART uses parity bits that depend on the rate; I²C/SPI use checksums instead
+  correct: 1
+- source: 18da2e2819e0
+  question: At 57,600 baud, 8N1, how many bytes per second, and does 50 Hz × 46-byte telemetry fit?
+  options:
+    - 7,200 bytes/s; it fits at about 32 % load
+    - 5,760 bytes/s; it doesn't fit (needs 23,000 bytes/s)
+    - 57,600 bytes/s; it fits at about 4 % load
+    - 5,760 bytes/s; it fits at about 40 % load
+  correct: 3
+- source: 317e8d918366
+  question: What are the default I²C addresses of karmel's VL53L1X and INA219, and what does `scan()` print for them?
+  options:
+    - 0x29 and 0x40; `scan()` prints `[29, 40]`
+    - 0x52 and 0x80; `scan()` prints `[82, 128]`
+    - 0x29 and 0x40; `scan()` prints `[41, 64]`
+    - 0x40 and 0x29; `scan()` prints `[64, 41]`
+  correct: 2
+- source: e74e35802ad6
+  question: Why can many I²C devices share SDA safely, while two SPI devices must not drive MISO at once?
+  options:
+    - I²C is open-drain (only pulls low); SPI is push-pull, so two drivers can short
+    - I²C runs slower, so collisions are harmless; SPI is too fast to recover
+    - I²C devices each have a series resistor; SPI devices have none
+    - I²C uses differential signals; SPI uses single-ended lines
+  correct: 0
+- source: 9567227d5865
+  question: INA219 register 0x02 returns bytes 0x57, 0x30. What bus voltage does it report?
+  options:
+    - 22.32 V
+    - 89.28 V
+    - 2.79 V
+    - 11.16 V
+  correct: 3
+- source: 117726e1a686
+  question: An I²C scan finds 0x40 on the bench, but on the robot the bus sometimes returns EIO when the motors start. Two likely causes?
+  options:
+    - A wrong device address, and a baud-rate mismatch on the bus
+    - The INA219 overheating, and the Pico running out of memory
+    - Motor noise coupling into long wires, and weak pull-ups or ground bounce
+    - A missing chip-select line, and MISO being driven by two devices
+  correct: 2
+- source: 51fe6ab8eff9
+  question: You need to add a 1 kHz IMU and a GPS module to karmel. Which buses, and why?
+  options:
+    - IMU on UART (streams at a fixed baud), GPS on SPI (high steady rate)
+    - IMU on SPI (high steady rate), GPS on UART (streams text at a fixed baud)
+    - Both on I²C, since the existing bus has room for any number of devices
+    - IMU on I²C at 100 kHz (plenty for 1 kHz), GPS on SPI (needs a clock)
+  correct: 1

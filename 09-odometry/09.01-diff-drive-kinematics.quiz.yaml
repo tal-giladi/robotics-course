@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 09.01-diff-drive-kinematics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 831385d64323
+  question: Which is the forward kinematics of a differential drive, and which point does $v$ refer to?
+  options:
+    - $v = v_R + v_L$, $\omega = (v_R - v_L)/(2L)$; $v$ is the left wheel's speed
+    - $v = (v_R + v_L)/2$, $\omega = (v_R - v_L)/L$; $v$ is base_link, between the wheels
+    - $v = (v_R + v_L)/2$, $\omega = (v_L - v_R)/L$; $v$ is the robot's centre of mass
+    - $v = (v_R - v_L)/2$, $\omega = (v_R + v_L)/L$; $v$ is the caster wheel's point
+  correct: 1
+- source: 87a26ec6545d
+  question: karmel ($r = 0.045$ m, $L = 0.2$ m) turns its wheels at left 2 rad/s and right 6 rad/s. What are $v$, $\omega$ and $R$?
+  options:
+    - $v = 0.18$ m/s, $\omega = 0.9$ rad/s, $R = 0.2$ m to the left
+    - $v = 0.36$ m/s, $\omega = 0.9$ rad/s, $R = 0.4$ m to the left
+    - $v = 0.18$ m/s, $\omega = 1.8$ rad/s, $R = 0.1$ m to the left
+    - $v = 0.18$ m/s, $\omega = 0.9$ rad/s, $R = 0.2$ m to the right
+  correct: 0
+- source: 5e31c8170bcd
+  question: The left wheel is blocked and doesn't turn, while the right wheel keeps turning forward. What does the robot do, and where is the ICC?
+  options:
+    - It spins in place; the ICC is at base_link
+    - It pivots clockwise; the ICC is at the right wheel
+    - It drives straight; the ICC is at infinity
+    - It pivots counter-clockwise; the ICC is at the left wheel
+  correct: 3
+- source: 4aa65141dfcb
+  question: Why can't karmel move 10 cm straight to its left, and how does it get there anyway?
+  options:
+    - Its motors are too weak sideways; it pushes harder on one wheel
+    - Its caster blocks sideways motion; it lifts the caster briefly
+    - Its wheels roll only forward (non-holonomic); it turns, drives, turns back
+    - Its encoders cannot measure sideways motion; it uses the IMU instead
+  correct: 2
+- source: 13c2e7fa3f39
+  question: Odometry uses $L = 0.200$ m but the effective wheelbase is 0.190 m. The robot really turns 90°. What does odometry report?
+  options:
+    - 94.7°, over-reporting by about 5%
+    - 90°, since the wheelbase cancels out
+    - 85.5°, under-reporting by 5%
+    - 81°, under-reporting by 10%
+  correct: 2
+- source: 79005085902e
+  question: Wheels (5, 5) rad/s give $v = 0.225$ m/s, $\omega = 0$, but (−5, 5) give $v = 0$, $\omega = 4.5$ rad/s. What is wrong?
+  options:
+    - "Nothing: 4.5 rad/s is the correct spin rate for karmel"
+    - The code divides by $L/2$ instead of $L$; ω should be 2.25
+    - The wheel radius is doubled; $v$ should be 0.1125 m/s
+    - The left wheel's sign is flipped; ω should be 0
+  correct: 1
+- source: fdf0c447cd6d
+  question: What is the determinant of karmel's wheel-to-twist matrix, and why does it matter that it is not zero?
+  options:
+    - "$r^2/L = 0.010125$; the map is invertible: one wheel pair per twist"
+    - $r/L = 0.225$; the robot can move sideways as well as forward
+    - $r^2 L = 0.000405$; the matrix is symmetric, so it is stable
+    - $L/r^2 = 98.8$; the wheels can never saturate together
+  correct: 0

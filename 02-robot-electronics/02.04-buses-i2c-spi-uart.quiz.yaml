@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 02.04-buses-i2c-spi-uart.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 28430318c8d5
+  question: What happens on the wire when an I²C scan hits an address where no device exists?
+  options:
+    - The controller times out waiting for clock stretching and resets the bus.
+    - The controller reads 0xFF as data and marks the address as unused.
+    - Nothing pulls SDA low on the ninth clock, so the controller reads a NAK, sends STOP and moves on.
+    - The pull-ups pull SCL low, which the controller interprets as a bus error.
+  correct: 2
+- source: 4187be81a9e3
+  question: Three breakout boards each have 4.7 kΩ pull-ups on a 40 cm bus. What is the parallel resistance, the sink current at 3.3 V, and is it legal?
+  options:
+    - "About 14.1 kΩ and 0.21 mA: too weak for fast mode."
+    - "About 4.7 kΩ and 0.62 mA: fine, because parallel pull-ups don't combine."
+    - "About 1567 Ω and 3.85 mA, above the 3 mA limit: not legal."
+    - "About 1567 Ω and 1.85 mA, below the 3 mA limit: fine."
+  correct: 3
+- source: b0df85ea7b43
+  question: You move your I²C sensors from a 20 cm harness to 120 cm. What breaks, and what does `i2c_doctor.py` show?
+  options:
+    - Both 100 kHz and 400 kHz fail with many `OSError`s, because devices stop acknowledging.
+    - Nothing breaks, because I²C tolerates up to 2 m at any speed.
+    - 100 kHz fails but 400 kHz still works, showing `OSError`s only.
+    - 400 kHz fails (rise time about 474 ns > 300 ns) while 100 kHz works, showing mostly `wrong data` with few `OSError`s.
+  correct: 3
+- source: 37c552f21861
+  question: Why can a single misbehaving device kill an entire I²C bus, while a misbehaving SPI device usually can't?
+  options:
+    - I²C lines are open-drain and shared, so a device holding SDA low blocks everyone; SPI devices have their own chip select and tri-state MISO.
+    - I²C has no checksum, while SPI checks every byte.
+    - I²C devices share one power pin, while SPI devices are powered separately.
+    - I²C runs slower, so one device's delay stalls the others; SPI is fast enough to skip it.
+  correct: 0
+- source: 83d9299452f8
+  question: "`i2c_doctor.py` shows 200 good with motors off, and `good 143, OSError 5, wrong data 52` with motors at 50%. Which lesson do you go to?"
+  options:
+    - "02.04 again: change the pull-ups and lower the bus speed."
+    - "02.06 (noise, grounding, EMI): the bus is correct alone, and the failures correlate with motor current."
+    - "02.03: the motor driver's current limit is too high."
+    - "02.07: the harness connectors are the wrong type."
+  correct: 1
+- source: 0ed7d6a8c39b
+  question: You need two VL53L1X sensors. Why won't strap pins help, and what must the boot sequence do?
+  options:
+    - It has address pins, but both must be strapped identically; the sequence just scans for them.
+    - It has a fixed address that can't change; you need an I²C multiplexer instead.
+    - Its address is set once in flash; program each sensor separately on the bench.
+    - It has one factory address and no select pins; hold both XSHUT low, release one, give it a new address, then release the other, at every power-up.
+  correct: 3
+- source: 24beead3aa3e
+  question: Your US-100 in UART mode returns `0x00 0x05`, and your code reports "no reading". Is that a bug?
+  options:
+    - "Yes: 5 mm is a valid close obstacle that should trigger a stop."
+    - "No: 5 mm is below the 20 mm minimum range, so it's a non-measurement and `None` is correct."
+    - "Yes: the bytes are swapped, so it's really 1280 mm."
+    - "No: 0x0005 is the sensor's error code for a disconnected transducer."
+  correct: 1
+- source: 2e19e7750afa
+  question: Reading the INA219 and VL53L1X at 400 kHz costs 0.60 ms. Why does raising the bus to 1 MHz not make your 100 Hz loop faster?
+  options:
+    - The Pico's I²C hardware maxes out at 400 kHz and silently ignores 1 MHz.
+    - At 1 MHz the pull-ups draw too much current and the bus resets.
+    - 0.60 ms is only 6% of the period, both devices would be out of spec, and conversion time and clock stretching are the real limits.
+    - 1 MHz makes the transfers slower because of extra ACK bits.
+  correct: 2

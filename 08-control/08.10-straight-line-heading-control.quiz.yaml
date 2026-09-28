@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 08.10-straight-line-heading-control.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 56bf625ea92e
+  question: Which pair correctly converts wheel speeds $(\omega_L, \omega_R)$ to $(v, \omega_z)$?
+  options:
+    - $v = r(\omega_L+\omega_R)/2$, $\omega_z = r(\omega_L-\omega_R)/b$
+    - $v = r(\omega_L+\omega_R)$, $\omega_z = r(\omega_R-\omega_L)/(2b)$
+    - $v = r(\omega_L+\omega_R)/2$, $\omega_z = r(\omega_R-\omega_L)/b$
+    - $v = (\omega_L+\omega_R)/(2r)$, $\omega_z = (\omega_R-\omega_L)/(rb)$
+  correct: 2
+- source: 09d47d6222c4
+  question: Why must the outer loop be slower than the inner one, and by how much?
+  options:
+    - Otherwise the inner loop's lag acts as delay and they oscillate; 3–10× in bandwidth
+    - Because the outer loop's sensor is noisier; about 1.5× in bandwidth is enough
+    - Because the Pi cannot run both at the same rate; exactly 2× in bandwidth
+    - It must actually be faster, so it can correct the inner loop's errors; 3–10×
+  correct: 0
+- source: ddcde97eb80d
+  question: Your wheels differ in radius by 1% ($b = 0.2$ m). How far off the line are you after 5 m with heading controlled from encoders?
+  options:
+    - About 5 cm
+    - About 0.25 m
+    - About 2.5 m
+    - About 0.63 m
+  correct: 3
+- source: 9f1105473fad
+  question: You fit a perfect gyro (no bias, no noise) but keep the encoder heading loop. Which run improves?
+  options:
+    - Both improve, since a better sensor helps every loop on the robot
+    - Only the gyro runs; the encoder loop's error is geometric, not sensory
+    - Only the encoder runs, since the gyro was already perfect enough
+    - Neither improves, since heading loops ignore sensor quality
+  correct: 1
+- source: 9ab7791238f0
+  question: The outer loop's plant is an integrator (yaw rate in, heading out). With P only, what is the closed-loop time constant for $k_p = 4$?
+  options:
+    - 0.25 s
+    - 4 s
+    - 1.0 s
+    - 0.0625 s
+  correct: 0
+- source: c6cc030fd63a
+  question: The heading estimate reads exactly 0.00° all run, and the robot ends 30 cm off the line. What do you check, in order?
+  options:
+    - Gains, then loop rate, then the battery voltage
+    - The loop is running, then the gains, then the sensor
+    - Right quantity sensed, true ground truth, then the loop runs
+    - The map, then the costmap, then the planner
+  correct: 2
+- source: e29b0eb337e9
+  question: Why does a heading loop not bring the robot back onto a line it has already drifted off?
+  options:
+    - Its gain is too low to overcome the offset once it has formed
+    - The integral term forgets the offset after a few seconds
+    - The encoders cannot measure sideways motion at all
+    - Zero heading error only makes the path parallel; offset needs pose
+  correct: 3

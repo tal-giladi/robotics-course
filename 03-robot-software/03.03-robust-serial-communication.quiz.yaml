@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.03-robust-serial-communication.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 90c5b7a84106
+  question: The host reads `b"T 1500 10 -20 62"`, then `b"83 -100 11100 350 9*0B\nA 7 OK*72\nT 15"`. How many messages does the reader return after each read?
+  options:
+    - One after each read; `T 15` is discarded as a partial line.
+    - None after the first (16 bytes buffered); two after the second, with `T 15` kept in the buffer.
+    - One broken message after the first; two after the second.
+    - None after the first; three after the second, including `T 15`.
+  correct: 1
+- source: 582c4c897d18
+  question: Why does `SerialBase.stop()` wait for an acknowledgement but `set_wheel_velocity()` doesn't?
+  options:
+    - A lost `S` leaves the robot driving until the watchdog, so it's worth retries; a lost velocity command is replaced within 100 ms anyway.
+    - "`stop()` runs in a separate thread that is allowed to block; velocity runs in the ISR."
+    - Velocity commands have no sequence number, so they can't be acknowledged.
+    - "`S` is longer, so it is more likely to be corrupted and needs checking."
+  correct: 0
+- source: 7e06db34871d
+  question: Watchdog 300 ms, keep-alive 100 ms, and a USB link that loses 1% of lines independently. How often does the watchdog trip spuriously?
+  options:
+    - About once every 100 s of driving.
+    - About once every 3 hours of driving.
+    - About once every 28 hours of driving (3 consecutive losses, $10^{-6}$ per window).
+    - Never, because three losses in a row are impossible.
+  correct: 2
+- source: a75aff90975b
+  question: You switched to binary COBS frames with CRC-16. After minutes, the firmware stops with `KeyboardInterrupt`. What happened?
+  options:
+    - The CRC-16 check raised an exception that MicroPython reports as an interrupt.
+    - The host sent a stop command that the firmware translated into Ctrl-C.
+    - A COBS frame exceeded 256 bytes and overflowed the USB buffer.
+    - A payload contained byte `0x03`, which MicroPython treats as Ctrl-C; call `micropython.kbd_intr(-1)` at start.
+  correct: 3
+- source: 66af4a145e21
+  question: A telemetry line with a correct checksum says `left_mrad_s = 950000`. What should happen?
+  options:
+    - "Accept it: a correct checksum proves the value is valid."
+    - Request a retransmission, since the checksum must have missed it.
+    - The consumer applies a plausibility check (56× the 17 rad/s maximum), rejects and counts the sample, and keeps the previous estimate.
+    - Reset the Pico, since the firmware must have crashed.
+  correct: 2
+- source: fd07fd598a33
+  question: Why does `SerialBase` forget the drive command in `_handle_disconnect`, rather than in the reconnect code?
+  options:
+    - 'So no path can resend it: clearing it at the moment of failure makes "reconnected ⇒ stopped" true by construction.'
+    - Because the reconnect code runs in a different process that can't access the command.
+    - Because the port must be closed before the command can be cleared.
+    - Because the Pico requests the command again after reconnecting.
+  correct: 0
+- source: 45428a844b05
+  question: After a replug, `SerialBase` reconnects to `/dev/ttyACM0` but `read()` keeps raising `TelemetryTimeoutError`. Which pair of causes is plausible?
+  options:
+    - Wrong baud rate, or a checksum algorithm mismatch.
+    - The Pico came back as `ttyACM1` (a different or stale node), or it enumerated but `main.py` didn't start.
+    - The user lost `dialout` membership, or the USB cable is charge-only.
+    - The watchdog is too short, or the keep-alive thread is disabled.
+  correct: 1

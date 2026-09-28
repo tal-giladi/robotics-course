@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 14.08-arm-urdf-and-ros2-control.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 78696f2f92d8
+  question: What does `[claimed]` mean in `ros2 control list_hardware_interfaces`, and what does its absence tell you?
+  options:
+    - The hardware plugin has connected to that joint; absent means the servo is unpowered or not on the bus
+    - An active controller owns that command interface; absent means no controller drives the joint, so commands go nowhere
+    - The interface has been calibrated; absent means the joint's offsets are missing from the joint map
+    - The joint is in collision in MoveIt; absent means the joint is free to move in the planning scene
+  correct: 1
+- source: bec1d0d3a7dd
+  question: Why does the SO-101's `<ros2_control>` declare only a `position` command interface?
+  options:
+    - ros2_control only supports position interfaces for serial-bus servos, by design of the framework
+    - Velocity and effort require a real-time kernel, which the Raspberry Pi does not run by default
+    - Position is the STS3215's native command; declaring others would let controllers claim interfaces that do nothing
+    - MoveIt can only plan in position space, so other interfaces would be ignored by the planner
+  correct: 2
+- source: ae2c482757cd
+  question: You add `prefix:=left_` for a two-arm setup. What else must change, and what breaks if you forget?
+  options:
+    - Only the URDF's base link name; otherwise both arms spawn on top of each other in RViz
+    - Only the hardware plugin's serial port; otherwise both arms receive the same commands
+    - Nothing else; the controller manager adds the prefix to every configuration automatically
+    - Every joint name in `controllers.yaml`, the SRDF and trajectories; otherwise activation fails with joint not found
+  correct: 3
+- source: 6d27f793343a
+  question: Your joint map has the right offsets but one joint's sign inverted. What do you see?
+  options:
+    - Wrong at the zero pose only, correct elsewhere, since the sign only affects the offset term
+    - Correct at zero, wrong elsewhere; RViz moves the opposite way, and commanded it runs away to its limit
+    - The round-trip test fails immediately, before the joint is ever moved by hand or commanded
+    - Nothing visible in RViz, but the controller refuses to activate because of the mismatch
+  correct: 1
+- source: c61a214001a0
+  question: "With `goal_time: 0.5` and `trajectory: 0.05`, which fires when the arm is blocked by an obstacle mid-move?"
+  options:
+    - "`goal_time`, after 0.5 s, since the blocked move finishes late; it also cuts servo torque"
+    - "`trajectory`, which cuts servo torque to protect the arm once the 0.05 rad error is reached"
+    - "`trajectory` (path tolerance violated), almost immediately; neither is a safety mechanism"
+    - Neither; tolerances only apply to the final position, not to deviations during the move
+  correct: 2
+- source: 3b7adbe62559
+  question: Why can lessons 14.09 and 14.10 be done with no arm on the desk?
+  options:
+    - "`mock_components/GenericSystem` exports the same interfaces, so everything above the plugin is identical"
+    - Gazebo simulates the full servo physics, including latency, load and unit conversion errors
+    - MoveIt plans without any controller, so no hardware or plugin is needed for those lessons
+    - The lessons use recorded bag files, which replay joint states from a real arm session
+  correct: 0
+- source: b5d58213295f
+  question: What is `gripper_frame_link`, and why does changing it change the meaning of every IK target in this module?
+  options:
+    - The gripper's servo link; moving it changes the gripper's motor offset but not the IK targets
+    - The camera's mounting link; moving it changes hand–eye calibration but not the gripper pose
+    - The base of the gripper assembly; moving it changes the arm's reach but not the tool point
+    - An empty link at the tool point between the jaws; all FK/IK targets refer to it, so moving it shifts every pose
+  correct: 3

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.15-teleop-from-laptop.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9380ebc3dce8
+  question: Why does the robot stop when you release `w`, although the program never sends a "stop" on key release?
+  options:
+    - The terminal sends a special key-up code that the loop maps to `stop()`.
+    - Auto-repeat refreshes `last_key_time`; when keys stop arriving, the dead-man calls `base.stop()` after `--deadman` seconds.
+    - The Pico detects that the key is no longer held via the USB HID interface.
+    - SSH closes the session on key release, and the program exits and brakes.
+  correct: 1
+- source: 87bc14b305eb
+  question: Your laptop's Wi-Fi dies while you hold `w`. What stops the robot first?
+  options:
+    - The dead-man on the Pi calls `stop()` about 0.5 s after keys stop arriving.
+    - The Pico's watchdog, 300 ms after the last command.
+    - SSH's `ServerAliveCountMax` expiring and the program getting `SIGHUP`.
+    - The laptop's teleop program detecting the lost connection and sending `S`.
+  correct: 0
+- source: 5b75befda333
+  question: Why are there three timeouts instead of one good one?
+  options:
+    - Each has a different length, so together they give a smooth deceleration.
+    - Two are for teleop and one is for Nav2, which uses the same drive path.
+    - Each covers a failure the others can't see; only the Pico's watchdog survives `kill -9`, a Pi crash or an unplugged cable.
+    - Three timeouts let the system vote on whether a failure really happened.
+  correct: 2
+- source: ecae56648c5d
+  question: You measure a round-trip p50 of 4 ms and a p99 of 300 ms. Is the link usable at 0.3 m/s, and what would you change first?
+  options:
+    - "Unusable: any p99 above 50 ms is unsafe; switch to a USB cable."
+    - "Perfectly fine: only the p50 matters for teleop."
+    - Usable only below 0.1 m/s; lower the loop rate to 5 Hz to match the latency.
+    - Usable but it will feel sticky (9 cm late once in a hundred); first disable Wi-Fi power save on the Pi.
+  correct: 3
+- source: b243d25611e1
+  question: You change the loop to send the command once on key-press and once on key-release. What does the robot do while you hold the key?
+  options:
+    - It drives smoothly, because the Pico holds the last command until release.
+    - It moves for about 300 ms and stops, repeatedly, because nothing refreshes the Pico's watchdog.
+    - It drives smoothly but stops 300 ms late after release.
+    - It doesn't move at all, because the Pico ignores single commands.
+  correct: 1
+- source: 702defdb81a5
+  question: Teleop works perfectly over USB on the desk and is unusable when the robot is in the next room. Where do you look first?
+  options:
+    - "The wireless link: run `link_latency.py` near and far; if p99 and max blow up while p50 stays small, it's Wi-Fi."
+    - "The serial protocol: count checksum errors in `stats.bad_lines`."
+    - "The motor drivers: measure the current limit at longer distances."
+    - "The keyboard: auto-repeat slows down when SSH is used."
+  correct: 0
+- source: e863e4bbb4b8
+  question: Why does `teleop_keyboard.py` use `tty.setcbreak` rather than `tty.setraw`, and why restore the terminal inside a `try`?
+  options:
+    - "`setcbreak` is faster; the `try` hides harmless warnings from the user."
+    - "`setraw` doesn't work over SSH; the `try` retries the restore until it succeeds."
+    - "`setcbreak` keeps `Ctrl-C` working as a stop; the `try` stops a dead terminal's error from skipping cleanup such as stopping the motors."
+    - "`setcbreak` echoes keys for feedback; the `try` logs the terminal state for debugging."
+  correct: 2

@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 10.07-fusing-imu-and-odometry.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 954f4e14b846
+  question: Why does `ekf.yaml` fuse `vx`/`vyaw` from `/odom` rather than `x`/`y`/`yaw`?
+  options:
+    - Pose fields in `/odom` are always zero on karmel
+    - Integrated odometry drifts; its velocities have honest zero-mean errors
+    - robot_localization can only fuse velocities from any source
+    - Velocities have larger covariance, which stabilizes the EKF
+  correct: 1
+- source: 377029b17d62
+  question: "What is `odom0_config`'s `vy: true` doing for a differential-drive robot that cannot move sideways?"
+  options:
+    - "Nothing: `vy` is always zero, so fusing it is a no-op"
+    - It lets the filter estimate wheel slip sideways
+    - It fuses the constraint $v_y = 0$, suppressing lateral drift
+    - It enables holonomic mode for Nav2 path following
+  correct: 2
+- source: 742c07947545
+  question: Odometry yaw rate has σ = 0.08 rad/s, the gyro σ = 0.005 rad/s. What fraction comes from the gyro, and the fused σ?
+  options:
+    - About 99.6 %; fused σ ≈ 0.005 rad/s
+    - About 94 %; fused σ ≈ 0.0047 rad/s
+    - 50 %; fused σ ≈ 0.0425 rad/s
+    - About 6 %; fused σ ≈ 0.075 rad/s
+  correct: 0
+- source: a9fd9e2d010d
+  question: Two nodes publish `odom → base_footprint`. What goes wrong, and how do you detect it?
+  options:
+    - TF rejects the second one with an error in the log
+    - TF averages both, so the pose is slightly off but steady
+    - The TF tree splits into two separate trees in RViz
+    - Lookups alternate between the two; jitter in RViz; check `view_frames`
+  correct: 3
+- source: d1ff7de7ed42
+  question: One driver publishes its covariance as all zeros. What happens, and why does the damage depend on which driver?
+  options:
+    - The filter ignores that sensor, so damage depends on how many others remain
+    - "Infinite confidence: it can't be corrected; harmless for the gyro, bad for odometry"
+    - The filter crashes on a singular matrix, whichever driver it is
+    - The filter uses a default variance, so damage is the same for every driver
+  correct: 1
+- source: afbb68a58e4b
+  question: Your complementary filter has 1.3° heading RMSE at α = 0.55 and 16° at α = 0 and 1. Well tuned?
+  options:
+    - "Yes: a deep minimum shows α is precisely optimized"
+    - "Yes: 1.3° is within typical gyro accuracy"
+    - "No: α should always be 0.98 for a complementary filter"
+    - "No: a deep narrow minimum means two biases cancel by coincidence"
+  correct: 3
+- source: a750f86b5c65
+  question: "When would you use `differential: true`, and when `relative: true`?"
+  options:
+    - "`relative`: subtract the first reading; `differential`: fuse changes when two absolute sources fight"
+    - "`relative`: fuse velocities as poses; `differential`: fuse every gyro rate as an absolute yaw"
+    - "`relative`: only for GPS receivers; `differential`: only for wheel odometry sources"
+    - They mean the same thing and are interchangeable for every sensor in robot_localization
+  correct: 0
+- source: cda61876c028
+  question: You calibrated gyro bias at boot, but the heading drifts after 20 minutes. Most likely cause and fix?
+  options:
+    - The encoders wore down; recalibrate the wheelbase
+    - The magnetometer is off; enable `use_mag`
+    - Bias drifts as the board warms; estimate bias as a filter state
+    - Q is too large; lower the process noise on yaw
+  correct: 2

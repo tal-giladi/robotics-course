@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 00.04-robot-computers.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: cc6656e349e8
+  question: Which pair gives two valid reasons why karmel uses a Pico in addition to the Raspberry Pi 5?
+  options:
+    - More RAM for the navigation stack, and Wi-Fi for talking to the laptop.
+    - Deterministic microsecond timing for PWM and encoder decoding, and failure isolation via a watchdog that stops the motors.
+    - Running ROS 2 natively, and hosting the LLM agent close to the motors.
+    - A faster CPU than the Pi 5, and a built-in GPU for camera processing.
+  correct: 1
+- source: 0cee78147adc
+  question: What is the difference between "real-time" and "fast"?
+  options:
+    - Real-time means responding in under 1 ms; fast means responding in under 10 ms.
+    - Real-time means running on a microcontroller; fast means running on a multi-core computer.
+    - Real-time means the average response time is low; fast means the peak clock speed is high.
+    - Real-time means meeting deadlines predictably (bounded worst case); fast means a low typical response time that can sometimes spike.
+  correct: 3
+- source: 8c632b9a0448
+  question: karmel's wheel spins at 10 rad/s with 2,464 counts per revolution. How many edges per second, and what is the interval between edges?
+  options:
+    - About 3,922 edges/s, 255 µs apart.
+    - About 24,640 edges/s, 41 µs apart.
+    - About 392 edges/s, 2.55 ms apart.
+    - About 1,961 edges/s, 510 µs apart.
+  correct: 0
+- source: 18211df18a6e
+  question: The Pi keeps sending valid `V` commands, but the Pico's main loop is stuck in an infinite loop inside a sensor driver. Does the 300 ms command watchdog stop the motors?
+  options:
+    - "Yes: the watchdog notices that the sensor data stopped updating and stops the motors."
+    - "Yes: the Pi detects the stuck loop from the telemetry and sends an `S` stop command."
+    - "Not necessarily: the watchdog code runs in the stuck loop and PWM keeps the last duty; you need a hardware watchdog."
+    - No, but the PWM hardware times out on its own after 300 ms and cuts the motors.
+  correct: 2
+- source: 8bbb5bad9788
+  question: A speed estimator assumes a 10 ms window, but jitter makes one window 12 ms. What is the error for that sample?
+  options:
+    - 2% too high
+    - 12% too high
+    - 20% too low
+    - 20% too high
+  correct: 3
+- source: 2275de563584
+  question: After adding a Jetson, battery runtime dropped from 2.5 h to 1.2 h and the robot sometimes resets when accelerating. What is the likely cause?
+  options:
+    - The Jetson adds 7–25 W and its current peaks coincide with motor starts, causing voltage dips that reset the computers.
+    - The Jetson's inference slows the Nav2 controller, so the motors accelerate too hard to catch up.
+    - The Jetson floods the serial link, so the Pico's watchdog resets the robot during acceleration.
+    - The Jetson's Wi-Fi interferes with the encoders, which triggers a firmware reset when speed changes.
+  correct: 0
+- source: f3313b4cc4fe
+  question: "Where should each run on karmel: LLM planning, Nav2, encoder decoding, the command watchdog, YOLO at 20 fps?"
+  options:
+    - "LLM: Pi 5; Nav2: Jetson; encoders: Pi 5; watchdog: Pi 5; YOLO: Pico."
+    - "LLM: Jetson; Nav2: laptop; encoders: Pico; watchdog: Pi 5; YOLO: Pi 5."
+    - "LLM: laptop/cloud; Nav2: Pico; encoders: Pi 5; watchdog: laptop; YOLO: Jetson."
+    - "LLM: laptop/cloud; Nav2: Pi 5; encoders: Pico (PIO); watchdog: Pico; YOLO: Jetson."
+  correct: 3

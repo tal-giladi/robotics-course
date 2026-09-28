@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FCV.06-detection-metrics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 39751c063692
+  question: "Boxes (0, 0, 40, 40) and (20, 0, 60, 40): what is the IoU?"
+  options:
+    - "0.5"
+    - "0.25"
+    - "0.667"
+    - "0.333"
+  correct: 3
+- source: 5c416aefe688
+  question: A detector reports 40 boxes on a test set with 50 objects, and 30 of the boxes are correct. What are precision and recall?
+  options:
+    - Precision 0.60, recall 0.75
+    - Precision 0.75, recall 0.80
+    - Precision 0.75, recall 0.60
+    - Precision 0.75, recall 0.75
+  correct: 2
+- source: 34a39f87a776
+  question: Why does a second detection on an already-matched object count as a false positive?
+  options:
+    - Its IoU with the ground truth is always below 0.5 after the first match
+    - Downstream consumers would see two objects; evaluation enforces one-to-one matching
+    - It has a lower confidence, and low-confidence boxes are always false positives
+    - NMS already removed it, so it no longer counts as a detection
+  correct: 1
+- source: 9eb1ed9b28a0
+  question: What is the difference between mAP50 and mAP50:95, and when does a robot care about the second?
+  options:
+    - mAP50:95 averages AP over IoU 0.5–0.95; a robot cares when it uses box geometry like grasp points
+    - mAP50:95 uses 95 % confidence; a robot cares when false positives are costly
+    - mAP50:95 covers 50 to 95 classes; a robot cares when it detects many object types
+    - mAP50:95 averages over image sizes; a robot cares when objects are far away
+  correct: 0
+- source: 1777e793e0a3
+  question: You lower the confidence threshold from 0.5 to 0.2. What is the effect on precision, recall and AP?
+  options:
+    - Precision rises, recall falls, AP rises
+    - Recall rises, precision usually falls, AP falls
+    - Both rise, AP stays the same
+    - Recall rises, precision usually falls, AP doesn't change
+  correct: 3
+- source: 30e089c3aa9d
+  question: "A delivery robot's person detector: a miss may cause a collision, and a false person causes a 2 s pause. How do you choose the threshold?"
+  options:
+    - Maximize F1 on the test set, balancing the two errors equally
+    - Pick a threshold for high precision, since pauses annoy the users
+    - Pick it on robot data to meet a high recall target, backed by non-ML safety
+    - Use 0.5, the standard threshold that mAP50 is always computed at
+  correct: 2

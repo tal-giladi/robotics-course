@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 10.05-kalman-filter-multivariate.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e768aef23b45
+  question: Which set of Kalman filter equations is correct?
+  options:
+    - $\bar P = FPF^\top + Q$; $S = H\bar PH^\top + R$; $K = \bar PH^\top S^{-1}$; $P = (I-KH)\bar P$
+    - $\bar P = FPF^\top - Q$; $S = H\bar PH^\top + R$; $K = S^{-1}H\bar P$; $P = (I+KH)\bar P$
+    - $\bar P = F^\top PF + Q$; $S = H\bar PH^\top - R$; $K = \bar PH^\top S$; $P = KH\bar P$
+    - $\bar P = FP + Q$; $S = \bar P + R$; $K = \bar P S^{-1}$; $P = (I-K)\bar P$ for any $H$
+  correct: 0
+- source: 3ba401137fc6
+  question: $\Delta t = 0.02$ s, σ_a = 1 m/s². What is Q for the constant-velocity model?
+  options:
+    - $\operatorname{diag}(4\times10^{-4}, 4\times10^{-8})$
+    - $\begin{bmatrix} 4\times10^{-8} & 4\times10^{-6} \\ 4\times10^{-6} & 4\times10^{-4} \end{bmatrix}$
+    - $\begin{bmatrix} 2\times10^{-4} & 0 \\ 0 & 2\times10^{-2} \end{bmatrix}$
+    - $\begin{bmatrix} 4\times10^{-4} & 4\times10^{-6} \\ 4\times10^{-6} & 4\times10^{-8} \end{bmatrix}$
+  correct: 1
+- source: 1ef50d0fcb6d
+  question: In the 2-state filter the off-diagonal of $\bar P$ is zero. A position measurement arrives. What happens to the velocity estimate?
+  options:
+    - It is set to the position change divided by Δt
+    - It moves by the full innovation, since $K_v = 1$
+    - "Nothing: $K_v = 0$, so velocity and its variance are unchanged"
+    - Its variance drops, but its value stays the same
+  correct: 2
+- source: 3373e66ecf47
+  question: What are the dimensions of $K$ and $S$ for a pose state $(x, y, \theta)$ and a range–bearing landmark measurement?
+  options:
+    - K is 2×3, S is 3×3
+    - K is 3×3, S is 2×2
+    - K is 2×2, S is 3×2
+    - K is 3×2, S is 2×2
+  correct: 3
+- source: 5d05c4d4ef0b
+  question: Over 50 runs your 2-state filter's average NEES is 9.3. What does that mean, and what are likely causes?
+  options:
+    - Overconfident, errors ~2.2× what P claims; Q or R too small, or a model error
+    - Underconfident, P too large; Q or R too large
+    - Consistent, since NEES should equal the state count squared
+    - Overconfident, but only because 50 runs is too few to judge
+  correct: 0
+- source: 71e327e899f2
+  question: Why can NIS be close to its expected value while NEES shows overconfidence?
+  options:
+    - NIS uses the true state, which hides model errors
+    - NIS can't see errors the sensor and estimate share, like slow filtered-encoder error
+    - NEES is always larger than NIS by a factor of the state dimension
+    - NIS is computed before the update, NEES after it
+  correct: 1
+- source: 197ab4a32ff3
+  question: You measure only velocity (H = [0 1]) for a minute. What happens to the position variance, and what does that tell you?
+  options:
+    - It shrinks, since velocity constrains position
+    - It stays constant after converging
+    - "It grows without bound: position is unobservable from velocity"
+    - It oscillates between two values
+  correct: 2
+- source: 764fd5ecae79
+  question: After replacing `np.linalg.solve` with `P @ H.T / S`, the filter works for the ToF but crashes for a 2D landmark. Why?
+  options:
+    - The 2D landmark needs a larger R to be stable
+    - "`@` is not defined for 3×2 matrices in NumPy"
+    - The landmark's H is not invertible
+    - Element-wise division by a 2×2 S is not multiplying by $S^{-1}$
+  correct: 3

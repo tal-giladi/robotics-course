@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FCT.06-state-space-lqr-mpc.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c6b4d57a79b6
+  question: "karmel's wheel as a state-space model with state [angle, speed]: what are the eigenvalues of A, and what do they mean?"
+  options:
+    - "0 and −12.5 s⁻¹: angle integrates speed with no restoring force, plus the 80 ms motor lag"
+    - "−1 and −12.5 s⁻¹: both states decay, the angle with a 1 s time constant"
+    - "0 and +12.5 s⁻¹: the angle integrates and the speed grows until saturation"
+    - "−12.5 ± 12.5j s⁻¹: an underdamped oscillation between angle and speed"
+  correct: 0
+- source: de1979885358
+  question: In LQR, what happens to the gains when you increase R, and why?
+  options:
+    - They get larger, because R penalizes state error, which demands more effort
+    - They stay the same, because only the ratio of Q entries matters
+    - They get smaller, because R penalizes control effort, so convergence is slower
+    - They get smaller, because R adds damping that slows the plant down
+  correct: 2
+- source: 8775da697f71
+  question: What does "receding horizon" mean, and why apply only the first command?
+  options:
+    - Plan once to the goal and apply commands in order, shortening the horizon each tick
+    - Re-plan every tick from the latest state and apply the first command, correcting errors like feedback
+    - Plan over a shrinking horizon to save compute, applying the whole plan when it is short
+    - Apply the first command only because the later ones are always infeasible
+  correct: 1
+- source: f89b3856cf18
+  question: In MPPI, what happens as temperature → 0 and as temperature → ∞?
+  options:
+    - "→ 0: all samples weighted equally; → ∞: only the best sample counts"
+    - "→ 0: the robot stops moving; → ∞: the robot drives at maximum speed"
+    - "→ 0: sampling noise vanishes; → ∞: the horizon becomes infinite"
+    - "→ 0: greedy, jittery single best sample; → ∞: plain average, indecisive robot"
+  correct: 3
+- source: 0dba3a463a83
+  question: Why does MPPI handle costmaps whose costs jump sharply at obstacle edges, while gradient-based MPC struggles?
+  options:
+    - MPPI smooths the costmap with a Gaussian before planning
+    - MPPI only evaluates sampled trajectories' costs and never needs derivatives
+    - MPPI uses a finer grid, so the edges are no longer sharp
+    - MPPI solves a convex relaxation that ignores obstacle edges
+  correct: 1
+- source: 2f22378e33d5
+  question: After moving Nav2 to a slower computer, the controller runs at 12 Hz instead of 20 Hz and karmel weaves. Which is a parameter-level cause and fix?
+  options:
+    - "`model_dt` no longer matches the real period; set `controller_frequency` and `model_dt` to match"
+    - "`temperature` is too high for the slower computer; lower it until the weaving stops"
+    - The costmap resolution is too fine; double `resolution` so that planning runs faster
+    - "`max_vel_x` is too high for 12 Hz; halve it so the robot turns less at each tick"
+  correct: 0
+- source: 92511d9d744d
+  question: karmel brakes at 1 m/s² from 0.5 m/s. What is the minimum sensible horizon, and does Nav2's default (56 × 0.05 s) meet it?
+  options:
+    - Stopping takes 0.25 s and 0.06 m; the 2.8 s default is far too long
+    - Stopping takes 1 s and 0.5 m; the 2.8 s default barely covers it
+    - Stopping takes 0.5 s and 0.125 m; the 2.8 s default easily covers it
+    - Stopping takes 0.5 s and 0.25 m; the 0.28 s default does not cover it
+  correct: 2

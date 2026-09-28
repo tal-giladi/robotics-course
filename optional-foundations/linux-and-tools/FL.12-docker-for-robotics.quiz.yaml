@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.12-docker-for-robotics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ce0e2d27ee08
+  question: Which kernel mechanism makes `mknod` + `open` of a serial device fail inside a default container, and which error do you see?
+  options:
+    - AppArmor, which blocks `/dev` paths; `Permission denied`
+    - The device cgroup, which allows only whitelisted devices; `Operation not permitted`
+    - The mount namespace, which hides `/dev`; `No such file or directory`
+    - Seccomp, which blocks the `mknod` syscall; `Function not implemented`
+  correct: 1
+- source: eaba495e8424
+  question: Two containers use `--network host`. `ros2 topic list` shows `/chatter`, but `ros2 topic echo /chatter` receives nothing. Why, and what is a fix?
+  options:
+    - Host networking disables multicast, so data never arrives; use a bridge network instead
+    - Both containers use the same DDS participant ID; set different `ROS_DOMAIN_ID` values
+    - Fast DDS uses shared memory, but separate IPC namespaces hide `/dev/shm`; add `--ipc host`
+    - Discovery uses TCP but data uses UDP, which host mode blocks; open the ports with `-p`
+  correct: 2
+- source: bb9fa5e951f3
+  question: Why doesn't `--network host` on Docker Desktop for Windows let the Pi discover your containerized nodes?
+  options:
+    - "\"Host\" means Docker Desktop's Linux VM, not the Windows Wi-Fi interface on the LAN"
+    - Windows Firewall blocks all DDS ports for Docker, and host mode cannot open them up
+    - Docker Desktop ignores `--network host` and silently falls back to bridge networking
+    - The Pi runs arm64 and cannot decode DDS packets sent from amd64 containers
+  correct: 0
+- source: 5cf712442e19
+  question: You replugged the Pico and the container started with `--device /dev/ttyACM0` now fails. Why, and what is the least-privilege setup that survives replugging?
+  options:
+    - The device major number changed; restart the container with `--privileged`
+    - The group changed to `root`; add `--group-add root` alongside `--device /dev/ttyACM0`
+    - The udev rule was lost; mount `/etc/udev` read-only into the container
+    - "`--device` makes the node once at start; use `-v /dev:/dev --device-cgroup-rule='c 166:* rmw' --group-add dialout`"
+  correct: 3
+- source: b1a0bcfef2b3
+  question: Which set lists what `--privileged` grants that `--device /dev/ttyACM0 --group-add dialout` doesn't?
+  options:
+    - Access to all host devices, all Linux capabilities, and disabled seccomp/AppArmor confinement
+    - Host networking, host PID namespace, and write access to the host's `/etc`
+    - Root inside the container, GPU access, and the ability to bind ports below 1024
+    - Access to all host devices, host networking, and a shared `/dev/shm` with the host
+  correct: 0
+- source: 2fa60b2415b6
+  question: Which image do you use on the Raspberry Pi 5 and why not the laptop's `osrf/ros:jazzy-desktop-full`?
+  options:
+    - "`osrf/ros:jazzy-desktop`; the full variant only lacks Gazebo, which the Pi doesn't need"
+    - "`ros:jazzy-ros-core`; the desktop image needs a GPU that the Pi doesn't have"
+    - "`ros:jazzy-ros-base`, which is multi-arch with arm64; desktop-full is amd64-only and carries GUI/sim packages"
+    - "`arm64v8/ubuntu:24.04` with ROS built from source, since no official arm64 ROS image exists"
+  correct: 2
+- source: c2174ef2f19b
+  question: What two things must a container have to open an X11 window, and what is the Docker Desktop-specific difference?
+  options:
+    - An X11 socket and `DISPLAY`; on Docker Desktop mount `/run/desktop/mnt/host/wslg/.X11-unix` with `DISPLAY=:0`
+    - An X11 socket and `DISPLAY`; on Docker Desktop set `DISPLAY` to the Windows host's IP and port 6000
+    - A GPU device and `XAUTHORITY`; on Docker Desktop pass `--gpus all` instead of mounting a socket
+    - "`--privileged` and `DISPLAY`; on Docker Desktop also mount your WSL distro's `/tmp/.X11-unix`"
+  correct: 0

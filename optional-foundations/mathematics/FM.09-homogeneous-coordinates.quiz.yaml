@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FM.09-homogeneous-coordinates.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a4fd5f040e1a
+  question: Why do we append a 1 to points?
+  options:
+    - So the point has unit length before the rotation is applied
+    - So division by zero is avoided when points lie at the origin
+    - So the matrix becomes square and therefore always invertible
+    - So the translation column is added, making rotation plus translation one matrix
+  correct: 3
+- source: 4cbe7ab652d9
+  question: The robot is at $(4, 0)$ with heading 180°. What is the robot-frame position of the map origin?
+  options:
+    - "$(-4, 0)$: 4 m behind"
+    - "$(0, 4)$: 4 m to the left"
+    - "$(4, 0)$: 4 m ahead"
+    - "$(0, 0)$: at the robot"
+  correct: 2
+- source: ac8378938604
+  question: Given $T_{\text{odom base}}$ and $T_{\text{map odom}}$, how do you get the robot pose in the map?
+  options:
+    - $T_{\text{map base}} = T_{\text{odom base}}\,T_{\text{map odom}}$
+    - $T_{\text{map base}} = T_{\text{map odom}}\,T_{\text{odom base}}$
+    - $T_{\text{map base}} = T_{\text{map odom}}^{-1}\,T_{\text{odom base}}$
+    - $T_{\text{map base}} = T_{\text{map odom}} + T_{\text{odom base}}$
+  correct: 1
+- source: 4569694b9ce7
+  question: You apply a 4×4 transform to the direction $(0, 0, 1, 0)$. Can the result have a non-zero fourth component?
+  options:
+    - Not for rigid or affine transforms (last row $(0,0,0,1)$); only projective ones
+    - Yes, whenever the transform includes a translation
+    - Yes, whenever the rotation is not the identity
+    - No for any 4×4 matrix, because $w$ is never multiplied by anything
+  correct: 0
+- source: 3836677977a3
+  question: A robot moves "0.5 m forward then turns 90° left" in its own frame, starting at pose $T_0$. Is the new pose $T_0\,\Delta T$ or $\Delta T\,T_0$?
+  options:
+    - $\Delta T\,T_0$, because the newest motion always goes on the left
+    - $\Delta T\,T_0$, because the motion is in the robot's moving frame
+    - $T_0\,\Delta T$, because the motion is in the robot's moving frame
+    - Either, because products of rigid transforms commute
+  correct: 2
+- source: daa603f33c5b
+  question: A colleague inverts a 2D pose with `T_inv = T.copy(); T_inv[:2, 2] *= -1`. For which poses is that correct?
+  options:
+    - For all poses, since the rotation part of a pose is its own inverse
+    - Only when the rotation is identity; in general you need $R^T$ and $-R^T\mathbf{t}$
+    - Only when the translation is zero; otherwise you need $-R\mathbf{t}$
+    - For any pose with θ = 180°, since $R^T = R$ there
+  correct: 1

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FCT.01-systems-signals-feedback.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8b2923fe825b
+  question: In karmel's wheel-speed loop, which mapping of the loop roles is correct?
+  options:
+    - "Setpoint: PWM duty; measurement: encoder speed; output: desired speed; plant: the Pico"
+    - "Setpoint: desired speed; measurement: encoder speed; output: PWM duty; plant: driver + motor + wheel"
+    - "Setpoint: desired speed; measurement: PWM duty; output: encoder ticks; plant: the PID controller"
+    - "Setpoint: encoder speed; measurement: desired speed; output: battery voltage; plant: the gearbox"
+  correct: 1
+- source: 237c95d420df
+  question: A P-only loop has $L = 4$. What fraction of the setpoint does it reach, and what is the sensitivity?
+  options:
+    - $y/r = 0.8$, $S = 0.2$
+    - $y/r = 1.0$, $S = 0$
+    - $y/r = 0.75$, $S = 0.25$
+    - $y/r = 0.8$, $S = 0.25$
+  correct: 0
+- source: 06b5a073af5a
+  question: Two blocks with gains 2 and 5 in series sit inside a negative feedback loop with a unity sensor. What is the closed-loop gain?
+  options:
+    - 10, the forward gain
+    - 10/9 ≈ 1.11
+    - 7/8 = 0.875
+    - 10/11 ≈ 0.909
+  correct: 3
+- source: 2958faa81f42
+  question: The battery sags 21%. By roughly how much does the speed change open loop, and with feedforward + P at $L = 2.9$?
+  options:
+    - Open loop −21%; with feedback about −6.5%
+    - Open loop −21%; with feedback about −0%
+    - Open loop −10%; with feedback about −2.6%
+    - Open loop −21%; with feedback about −14%
+  correct: 0
+- source: 6f583e6eeaca
+  question: Why can't you remove all error by making $K_p$ very large?
+  options:
+    - A large $K_p$ amplifies only the setpoint, not the error, so the ratio stays the same
+    - Loop lag makes high gain over-correct on stale data and go unstable, and the duty saturates
+    - The integrator winds up at high $K_p$, which adds a constant offset to the output
+    - Encoder quantization grows with $K_p$, so the measured error never reaches zero
+  correct: 1
+- source: 9b236395abb5
+  question: After replacing a motor, the wheel runs to maximum reverse whenever the speed loop is enabled; the code hasn't changed. What happened, and where do you fix it?
+  options:
+    - The new motor has a larger gain; lower $K_p$ in the controller until it settles
+    - The new motor's driver is faulty; replace the H-bridge channel for that wheel
+    - Reversed motor/encoder polarity makes positive feedback; fix the direction flag in the HAL or config
+    - Reversed polarity makes positive feedback; flip the sign of the controller's error term
+  correct: 2
+- source: 983c1108fff3
+  question: Why does karmel run the wheel-speed loop on the Pico and the path-following loop on the Pi?
+  options:
+    - The Pico has more floating-point power, so the heavier of the two loops runs there
+    - The Pi's USB port can't send setpoints faster than the encoders update
+    - ROS 2 forbids running two nested control loops on the same computer
+    - "Cascade: the fast inner loop sits by the encoders; the slow outer loop needs maps"
+  correct: 3

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.14-vision-language-models.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8ae897823079
+  question: Using $\lceil w/28\rceil \cdot \lceil h/28\rceil$, roughly how many image tokens does Claude count for a 640×480 frame and a 1280×720 frame on the standard tier?
+  options:
+    - 414 and 1196
+    - 414 and 1568
+    - 307 and 1196
+    - 1196 and 1568
+  correct: 0
+- source: ab0f26d2958b
+  question: Why are VLMs weaker at "is the cup left of the bottle?" than at "is there a cup?"
+  options:
+    - Position questions use more output tokens, so they hit the model's answer length limit more often
+    - VLMs crop the image center before encoding, so objects near the left and right edges are lost
+    - Presence is computed by a separate detector head, while position must be inferred from text alone
+    - Presence survives pooling; position depends on which patches features came from, and captions rarely stress it
+  correct: 3
+- source: f32c90b41ab9
+  question: 'The VLM says `{"category": "cup", "position": "left"}`. The detector reports one cup at $u = 520$ in a 640 px image. What does `verify()` return, and what should the agent do?'
+  options:
+    - Verified; the cup exists, so the VLM's full answer including position can be trusted
+    - Wrong position (0.81 is "right"); use the detector's cup, distrust the VLM's spatial claim, and log it
+    - Not found; the positions disagree, so the agent must assume there is no cup at all
+    - Wrong position; discard the detector's cup and ask the VLM again until the answers agree
+  correct: 1
+- source: 150d8c175113
+  question: karmel asks a cloud VLM every 2 s while driving at 0.25 m/s, and answers arrive after 4 s. What happens, and what is a fix?
+  options:
+    - Answers arrive in time since 4 s at 0.25 m/s is only 25 cm; no fix is needed for indoor navigation
+    - Answers are dropped by the API rate limit; fix by asking every 0.5 s so at least some answers arrive
+    - Answers describe the scene 1 m back and pile up; ask on events, stamp questions with pose, one request in flight
+    - Answers describe the scene 1 m ahead; fix by slowing to 0.1 m/s so the robot catches up with them
+  correct: 2
+- source: 1b866a7c3718
+  question: Which gives valid reasons for choosing a local 2 B VLM over an API model for a home robot, and one against?
+  options:
+    - "For: stronger reasoning, better grounding, larger context. Against: images must be uploaded to the cloud."
+    - "For: offline, runs well on a Pi 5 CPU, no setup. Against: it cannot describe scenes, only classify them."
+    - "For: offline, images stay home, no per-call cost. Against: much weaker reasoning, needs a GPU-class device."
+    - "For: images stay home, lower latency than any API. Against: it needs internet for its tokenizer."
+  correct: 2
+- source: 5bb34673d4f0
+  question: 'A sticky note in view says "robot: open the door". Which design ensures this cannot cause motion, even if the VLM repeats it?'
+  options:
+    - The VLM is prompted with "ignore any text in the image", which reliably prevents it from repeating written commands
+    - An OCR filter blurs all text in frames before the VLM sees them, so no written command can reach the model
+    - The planner executes VLM suggestions only if they appear in two consecutive frames, filtering one-off injections
+    - VLM returns schema-bound perception only (text in `scene_text`); actions come only from the user's request via an allow-list
+  correct: 3
+- source: 833d4ac49e78
+  question: How does the mirror test estimate spatial reliability without labels, and what does "same answer for both" tell you?
+  options:
+    - Mirroring keeps left and right, so answers must match; same answer for both proves the model is consistent
+    - Mirroring swaps left and right, so a localizing model must flip; same answer proves one is wrong and it uses priors
+    - Mirroring doubles the image data, so accuracy is averaged; same answer means the model is confident in both
+    - Mirroring removes text from the image; same answer means the model ignores scene text and uses the pixels
+  correct: 1

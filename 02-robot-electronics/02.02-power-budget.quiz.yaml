@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 02.02-power-budget.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 7d55f1943814
+  question: A regulator delivers 15 W at 90% efficiency. What current does it draw at 12.0 V and at 9.0 V?
+  options:
+    - 1.25 A and 1.67 A
+    - 1.39 A and 1.85 A
+    - 1.39 A at both voltages
+    - 1.85 A and 1.39 A
+  correct: 1
+- source: 154698d2d3be
+  question: A 6 V motor has 2 Ω winding resistance. Estimate its current at stall and when reversing from full speed on a 6 V supply.
+  options:
+    - 3 A at stall; 0 A when reversing, as back-EMF cancels the supply.
+    - 3 A at stall; 3 A when reversing.
+    - 3 A at stall; about 6 A briefly when reversing, as back-EMF adds to the supply.
+    - 6 A at stall; 12 A briefly when reversing.
+  correct: 2
+- source: c22525815ae8
+  question: Rest voltage 11.0 V, source resistance 0.3 Ω, load step from 0.5 A to 9.5 A. What's the bus voltage during the step?
+  options:
+    - 8.15 V
+    - 8.3 V
+    - 10.85 V
+    - 7.7 V
+  correct: 1
+- source: e4a7a43ebff8
+  question: You add a 4700 µF capacitor to a robot that reboots when its motors start (50 ms spin-up, 6 A extra). How long could the capacitor alone supply 6 A with 3 V droop?
+  options:
+    - About 2.35 ms, under 5% of the event, so it barely helps.
+    - About 23.5 ms, half the event, so it mostly fixes the problem.
+    - About 235 ms, longer than the event, so it fully fixes the problem.
+    - About 0.235 ms, so it makes the reboots worse.
+  correct: 0
+- source: 9cc22949a2b5
+  question: The Pi logs under-voltage, but a multimeter on the regulator output always shows 5.05 V. Where do you look next?
+  options:
+    - "At the battery: the regulator hides the sag by boosting its output."
+    - "At the Pi's firmware: the under-voltage warning is a known false alarm."
+    - "At the regulator's feedback pin: it oscillates at a frequency the meter can't show."
+    - Between regulator and Pi (pigtail, connectors, pins), measured at the Pi's 5 V pins under load; the meter also averages away short dips.
+  correct: 3
+- source: 4645a0c8c5d8
+  question: Why does karmel's worst-case battery current fall from 18.5 A to 7.57 A without changing the motors?
+  options:
+    - The DRV8874's current regulation chops at about 2.95 A per motor, so a stall draws at most that instead of up to 8.4 A.
+    - The buck regulator limits its input current to 7.57 A.
+    - The 10 A fuse caps the current below its rating during stalls.
+    - The firmware's deadband compensation reduces the duty at stall.
+  correct: 0
+- source: c9b73abf86c7
+  question: A robot averages 12 W from a 3S 2.5 Ah Li-ion pack (10.8 V nominal) with 90% usable. How long does it run?
+  options:
+    - About 2.25 h, and in practice it runs slightly longer than that.
+    - About 1.0 h, and in practice it runs slightly longer than that.
+    - About 2.0 h, and in practice less (high current, cold, aged cells, early cutoff during sags).
+    - About 0.19 h, and in practice less because of voltage sag.
+  correct: 2

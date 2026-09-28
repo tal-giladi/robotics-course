@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 20.02-hardware-integration.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5caf65efd1eb
+  question: The 5 V regulator supplies 15.2 W at 90% efficiency. What current does it draw at 12.6 V and at 9.9 V, and why size for the second?
+  options:
+    - 1.21 A and 1.54 A; size for 9.9 V because the fuse derates when cold
+    - 1.34 A and 1.71 A; a switching regulator is constant-power, and an empty pack also sags most
+    - 1.34 A at both; the regulator's output current is fixed, so voltage doesn't matter
+    - 3.04 A and 3.04 A; size for 9.9 V because efficiency drops to 50%
+  correct: 1
+- source: 9835c3ee9a3f
+  question: Why is the e-stop's normally-closed contact wired to the relay coil rather than to the motor supply directly?
+  options:
+    - 1.34 A and 1.71 A; it is constant-power, and an empty pack sags most
+    - The relay is faster than the button, so the motors stop in 1 ms instead of 50 ms
+    - The motor driver needs a logic-level signal, which only the relay can provide
+    - It lets software override the e-stop by energizing the coil during testing
+  correct: 0
+- source: 10e2062291e5
+  question: karmel's CG is 21 mm ahead of the axle and 70 mm up (2.66 kg). You add a 0.30 kg Jetson at x = +20 mm, z = 75 mm. What happens to the tipping acceleration?
+  options:
+    - It improves a lot, to about 3.5 m/s², since extra mass adds traction
+    - It worsens a lot, to about 2.0 m/s², since the Jetson sits above the CG
+    - It becomes about 0.3 m/s², because the Jetson is 10% of the mass
+    - "Almost neutral: about 2.93 m/s² vs 2.97, since mass at the existing CG changes little"
+  correct: 3
+- source: ef9be8451a70
+  question: You replace the 18 AWG motor branch with 24 AWG jumper wire "just for a test". The robot drives at 0.3 m/s, then hits a chair leg. What do you see?
+  options:
+    - Driving is sluggish from the start, since 24 AWG drops several volts at 1 A
+    - Nothing; the wire is only 0.25 m long, so its resistance is negligible
+    - "Almost neutral: about 2.93 m/s² vs 2.97 before"
+    - The fuse blows immediately on the first stall current, protecting the wire
+  correct: 2
+- source: 18a27e88ff66
+  question: Why is a spinning LiDAR on the always-on domain while a stationary arm servo is on the switched one?
+  options:
+    - The LiDAR draws too little current to be worth switching
+    - Behind the e-stop means applies force; the LiDAR can't hurt anyone
+    - The LiDAR's USB power cannot be routed through the relay
+    - The arm servo draws more current, so it must be on the fused branch
+  correct: 1
+- source: d1642635b308
+  question: You measure 0.31 V of drop across the motor branch where the model predicts 0.093 V. Where is the missing 0.22 V?
+  options:
+    - In the connectors, switch, fuse holder and relay contacts; find it with four-point probing
+    - In the wire's temperature rise, which roughly triples copper resistance
+    - In the multimeter's own resistance, which adds to every measurement
+    - In the battery's internal resistance, which the model ignores
+  correct: 0
+- source: c9a2f6152ae1
+  question: Compute draws 15.2 W peak and actuators 109 W peak. Why is runtime dominated by the compute domain anyway?
+  options:
+    - The actuators run from a separate battery that is not counted
+    - The compute domain's regulator is only 50% efficient
+    - The motors regenerate energy while braking, cancelling their draw
+    - "Duty cycle: compute is on 100% of the time, motors far less"
+  correct: 3

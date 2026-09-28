@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FL.01-why-linux.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6cf89c30aebe
+  question: What do the numbers in "Ubuntu 24.04" mean, and what does the `.5` in `24.04.5` add?
+  options:
+    - Version 24, patch 04; `.5` is the fifth kernel version shipped with it
+    - Released April 2024; `.5` marks five years of long-term support
+    - Released April 2024; `.5` is the fifth point release, an updated installer image
+    - Released 2024, week 04; `.5` is the fifth security fix
+  correct: 2
+- source: 5a4b825d1134
+  question: How long does an Ubuntu LTS get standard security maintenance, and how can you extend it for free on a personal robot?
+  options:
+    - About 5 years; Ubuntu Pro (free for personal use) extends it to 10
+    - About 2 years; Ubuntu Pro (free for personal use) extends it to 5
+    - About 10 years; no extension is needed or available
+    - About 5 years; switching to an interim release extends it to 10
+  correct: 0
+- source: 185f8d9d4157
+  question: Which ROS 2 distro has apt binaries for Ubuntu 22.04, 24.04 and 26.04 respectively?
+  options:
+    - Jazzy, Humble, Lyrical
+    - Humble, Lyrical, Jazzy
+    - Iron, Jazzy, Humble
+    - Humble, Jazzy, Lyrical
+  correct: 3
+- source: 4b2ad703d854
+  question: It is September 2026. Lyrical is newer and supported longer than Jazzy. Why does the course choose Jazzy?
+  options:
+    - Lyrical only supports amd64, so it cannot run on the Raspberry Pi or Jetson
+    - Lyrical still lacked parts of the stack as apt binaries (Nav2, TurtleBot 4, micro-ROS, Isaac ROS)
+    - Jazzy is supported longer than Lyrical, so it is the safer long-term choice
+    - Lyrical requires Ubuntu 25.10, which is an interim release
+  correct: 1
+- source: 631f6c8c6583
+  question: "`uname -m` prints `aarch64` and `dpkg --print-architecture` prints `arm64`. Is this machine inconsistent?"
+  options:
+    - Yes; the kernel is 64-bit but the packages are 32-bit ARM
+    - Yes; the machine is running an x86 emulator on ARM
+    - No; `aarch64` is a newer ARM version that runs `arm64` packages
+    - No; they are the kernel's and Debian's names for the same 64-bit ARM
+  correct: 3
+- source: eb5c73bb438e
+  question: "`docker run --rm ubuntu:22.04 uname -r` on a 24.04 host prints the host's kernel version. Why?"
+  options:
+    - The image is misconfigured and falls back to the host's version string
+    - Containers share the host kernel; the image only provides the userland
+    - Docker replaces 22.04 images with 24.04 when the host is newer
+    - "`uname -r` reads from a file that Docker copies from the host"
+  correct: 1
+- source: 5b3397303137
+  question: A teammate wants Ubuntu 25.10 on the robot "for newer drivers". What do you tell them?
+  options:
+    - It's fine, since every Ubuntu release gets the same ROS 2 binaries
+    - It's the newest LTS, so it is the recommended choice for robots
+    - It's an interim release with 9 months of support and no ROS 2 LTS binaries
+    - It's fine, but only if you also install ROS 2 Humble from source
+  correct: 2

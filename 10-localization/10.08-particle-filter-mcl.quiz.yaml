@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 10.08-particle-filter-mcl.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: cf79340d62c5
+  question: What can a particle filter represent that an EKF cannot, and what does the EKF do better?
+  options:
+    - Heading and position together; the EKF handles more landmarks
+    - Multimodal and arbitrary-shaped beliefs; the EKF is far cheaper and deterministic
+    - Gaussian beliefs exactly; the EKF handles multimodal beliefs
+    - Correlations between states; the EKF needs no motion model
+  correct: 1
+- source: 918eb8587178
+  question: $N = 4$, $\mathbf{w} = [0.1, 0.6, 0.2, 0.1]$, $u_0 = 0.5$ (systematic resampling). Which particles are selected?
+  options:
+    - Indices $[0, 1, 2, 3]$
+    - Indices $[1, 1, 2, 3]$
+    - Indices $[1, 1, 2, 2]$
+    - Indices $[1, 1, 1, 2]$
+  correct: 3
+- source: c081d383dac4
+  question: Why is the likelihood-field model so much cheaper than the beam model, and what does it give up?
+  options:
+    - Its distance field is precomputed; it gives up modelling the beam's path
+    - It uses far fewer beams per scan; it gives up accuracy at long range
+    - It runs entirely on the GPU; it gives up determinism between runs
+    - It skips weight normalization; it gives up global localization
+  correct: 0
+- source: 6c23ee28074c
+  question: You switch from 60 beams to all 360. What happens to the filter and why?
+  options:
+    - It improves steadily, since more data always helps
+    - It slows down but stays equally accurate
+    - Correlated beams over-count evidence; $N_{eff}$ collapses and it fails
+    - It becomes multimodal, since beams disagree more
+  correct: 2
+- source: 053b6996f7a9
+  question: Your filter reports $\sigma_x = 1.6$ cm but is 2.1 m from the truth. What happened, and what should you have logged?
+  options:
+    - Too few particles overall; log the particle count at every step
+    - Motion noise set too high; log the odometry covariance each step
+    - Symmetric room, wrong mode chosen; log the second mode's weight
+    - The map is misaligned with the world; log the map's origin
+  correct: 2
+- source: dc5250699ec0
+  question: What is $N_{eff}$, what does $N_{eff} = 1$ mean, and what do you do about it?
+  options:
+    - $1/\sum w_i^2$; one particle holds all weight; raise motion noise, N, or use fewer beams
+    - $\sum w_i$; weights are normalized; nothing needs doing
+    - $N/\sum w_i$; the filter has converged perfectly; lower N
+    - $1/\sum w_i^2$; one particle holds all weight; resample more often
+  correct: 0
+- source: 973c0d5b0e6a
+  question: A robot is picked up and moved 3 m, and the particle filter keeps reporting the old location. Why, and the fix and its cost?
+  options:
+    - Its weights are stale; recompute them every scan, at no real cost
+    - No particles exist there; inject random ones, costing tracking accuracy
+    - The map is wrong there; rebuild it, costing a whole mapping session
+    - The motion model lags; raise its noise, costing extra CPU time
+  correct: 1
+- source: 7f0cd4663df1
+  question: For the same robot and map, more particles for tracking or for global localization, and by what factor?
+  options:
+    - For tracking, about 10–20×
+    - The same for both
+    - For global, about 2×
+    - For global, about 10–20×
+  correct: 3

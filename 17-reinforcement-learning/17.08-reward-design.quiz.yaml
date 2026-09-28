@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 17.08-reward-design.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9d6e686d8707
+  question: Why does `max(0.0, abs(e_prev) - abs(e))` break, while `abs(e_prev) - abs(e)` does not?
+  options:
+    - The `max` version is non-differentiable at zero, so the policy gradient cannot be computed through it
+    - The plain version can go negative, which clips the return; `max` keeps rewards positive and stable
+    - The plain version is a potential difference, so cycles sum to zero; `max` keeps payments and drops charges
+    - The `max` version doubles the reward scale, so the goal bonus becomes negligible in comparison
+  correct: 2
+- source: 8b9f80a13179
+  question: What does the potential-based shaping theorem state and guarantee?
+  options:
+    - Adding $\gamma\Phi(s') - \Phi(s)$ for any $\Phi$ leaves optimal policies unchanged; only learning speed changes
+    - Adding any positive per-step bonus leaves optimal policies unchanged, as long as it is bounded
+    - Adding $\Phi(s)$ to every reward leaves optimal policies unchanged, for any $\Phi$ over states
+    - Adding $\gamma\Phi(s') - \Phi(s)$ guarantees faster learning, but may change the optimal policy
+  correct: 0
+- source: 46d5333bf591
+  question: A 200-step episode of spinning in place scores +62 under `naive_heading`. What does correct go-to-goal score, and why does that matter?
+  options:
+    - About 29.4; the reward specifies spinning, and scripted policies revealed it before any training
+    - About 124; spinning is only half as good, so training will eventually prefer the goal
+    - About 62; both score equally, so the policy is indifferent and picks one at random
+    - About 29.4; spinning scores more, but a larger network will learn to prefer the goal
+  correct: 0
+- source: 5b28253d5956
+  question: You keep `naive_heading` but raise the goal bonus from +10 to +200. What changes?
+  options:
+    - The hack disappears completely, since spinning is now worth far less than the goal
+    - Nothing changes, since the bonus is only paid once and the spins still dominate
+    - "Success rises, but the hack remains: it farms spins on the way, then collects the bonus"
+    - The robot stops spinning but also stops reaching the goal, since returns become unstable
+  correct: 2
+- source: ebee2bac8994
+  question: A reward is purely sparse (+1 on success). What is the failure mode, and which fixes don't reintroduce a hack?
+  options:
+    - The policy hacks the success bonus; add a per-step bonus for heading toward the goal
+    - Returns explode near the goal; clip rewards and add a bonus for reducing distance
+    - No gradient until the first success; add `max(0, progress)` as a dense per-step reward
+    - No gradient until the first success; use potential-based shaping or a curriculum of easy goals
+  correct: 3
+- source: fb25b73faf56
+  question: Why is `spin_rad` in `info` instead of in the reward?
+  options:
+    - It is too noisy to use as a reward, since the gyro drifts over long episodes
+    - It is a diagnostic to detect hacks; optimized, it would be gamed and stop being an independent measure
+    - Gymnasium forbids rewards that depend on accumulated quantities over the episode
+    - It is already included in the reward through the heading term, so adding it would double-count
+  correct: 1
+- source: 34116ffd6071
+  question: A policy with your new reward reaches the goal 100% of the time but oscillates left-right constantly. Where would you look?
+  options:
+    - "The goal bonus: it is too large, so the robot rushes and oscillates; reduce it to +1"
+    - "The discount factor: it is too high, so the robot ignores near-term penalties; lower it"
+    - A per-step term paying for change (not a potential), or no cost on action changes; add a $\Delta a$ penalty
+    - "The observation: heading is given as $e$; switch to $(\\cos e, \\sin e)$ to stop oscillation"
+  correct: 2

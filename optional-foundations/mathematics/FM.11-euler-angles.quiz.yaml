@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FM.11-euler-angles.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 643d768bf3a9
+  question: What single matrix product do URDF `rpy="r p y"` values produce?
+  options:
+    - $R = R_x(r)\,R_y(p)\,R_z(y)$
+    - $R = R_z(y)\,R_y(p)\,R_x(r)$
+    - $R = R_y(p)\,R_x(r)\,R_z(y)$
+    - $R = R_z(r)\,R_y(p)\,R_x(y)$
+  correct: 1
+- source: 798580da30cc
+  question: "`from_euler('xyz', [a, b, c])` and `from_euler('ZYX', [c, b, a])`: same or different?"
+  options:
+    - "The same: extrinsic x-y-z equals intrinsic Z-Y-X with angles reversed"
+    - "Different: upper case and lower case use different rotation directions"
+    - "Different: only `from_euler('ZYX', [a, b, c])` would match"
+    - The same only when all three angles are small
+  correct: 0
+- source: f58d503a0370
+  question: At pitch exactly 90° in the ROS convention, which combination of roll and yaw is still determined?
+  options:
+    - Only the sum $\phi + \psi$
+    - Both roll and yaw individually
+    - Neither; the orientation is fully undefined
+    - Only the difference $\phi - \psi$
+  correct: 3
+- source: 00fc155f6a6c
+  question: A ground robot drives on a 5° slope. Can it suffer gimbal lock in its RPY estimate?
+  options:
+    - Yes; any nonzero pitch introduces some gimbal lock
+    - Yes, but only if roll is also nonzero at the same time
+    - No; gimbal lock needs pitch near ±90°, and 5° is well-conditioned
+    - No, because gimbal lock only affects the yaw of arms
+  correct: 2
+- source: 749d0e5c4dff
+  question: An arm vendor documents tool orientation as "Rx, Ry, Rz". What must you ask before using it?
+  options:
+    - Only whether the values are in degrees or radians, since the order is always x-y-z
+    - Only whether the angles are intrinsic or extrinsic, since units are always radians
+    - Only the sign convention, since Rx, Ry, Rz always means roll, pitch, yaw
+    - Intrinsic or extrinsic, order, degrees or radians, and whether it is Euler angles or axis-angle
+  correct: 3
+- source: 426db41651d3
+  question: A dashboard shows yaw 0.35 rad but `as_euler('XYZ')[2]` gives 0.31 rad for the same message, with nonzero roll and pitch. Which is right?
+  options:
+    - Your code; the dashboard ignores roll and pitch when it computes yaw
+    - Both; the difference is floating-point error from the conversion
+    - The dashboard; intrinsic XYZ is another convention, so use `as_euler('xyz')`
+    - Neither; yaw is undefined whenever roll and pitch are nonzero
+  correct: 2

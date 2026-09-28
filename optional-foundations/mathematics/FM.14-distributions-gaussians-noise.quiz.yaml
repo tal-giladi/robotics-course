@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.14-distributions-gaussians-noise.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f64bd8e4d947
+  question: A reading is $\mathcal{N}(2.00, 0.02^2)$ m. Within which interval do 95% of readings fall?
+  options:
+    - $[1.98, 2.02]$ m
+    - $[1.94, 2.06]$ m
+    - $[1.96, 2.04]$ m
+    - $[1.9996, 2.0004]$ m
+  correct: 2
+- source: f927bd8a2463
+  question: Two independent error sources have σ = 6 mm and σ = 8 mm. What is the total σ?
+  options:
+    - 14 mm
+    - 100 mm
+    - 7 mm
+    - 10 mm
+  correct: 3
+- source: c1d0f4d24230
+  question: A sensor has bias +2 cm and σ = 1 cm. You average 25 readings. What are the bias and σ of the average?
+  options:
+    - Bias +2 cm, σ 0.2 cm
+    - Bias 0.4 cm, σ 0.2 cm
+    - Bias +2 cm, σ 0.04 cm
+    - Bias 0 cm, σ 1 cm
+  correct: 0
+- source: 6a34fe7a3d0e
+  question: Encoder quantization error is uniform on $[-0.5, 0.5]$ ticks. What is its σ, and roughly what distribution does the sum of 50 such errors follow?
+  options:
+    - σ = 0.5 ticks; sum ≈ uniform on $[-25, 25]$ ticks
+    - σ = 0.289 ticks; sum ≈ Gaussian with σ ≈ 2.04 ticks
+    - σ = 0.289 ticks; sum ≈ Gaussian with σ ≈ 14.4 ticks
+    - σ = 1 tick; sum ≈ Gaussian with σ ≈ 7.07 ticks
+  correct: 1
+- source: 3c36a250e871
+  question: A gyro with white noise σ = 0.01 rad/s at 100 Hz gives 0.0032 rad heading σ after 10 s. What after 40 s?
+  options:
+    - 0.0128 rad
+    - 0.0063 rad
+    - 0.0032 rad
+    - 0.0512 rad
+  correct: 1
+- source: 177f287c5ace
+  question: Your simulated range sensor (Gaussian noise σ = 1 cm) never produces the 4.0 m ghost readings the real one does. What is missing from the noise model?
+  options:
+    - A larger σ, around 1 m, so that ghost readings appear naturally
+    - A constant bias of about 3 m added to every reading
+    - A low-pass filter that smooths readings like the real sensor does
+    - "An outlier component: with small probability, return max range or a random value"
+  correct: 3
+- source: 6486b995e124
+  question: Why is the Gaussian a common assumption for robot position error even though individual wheel-slip events are not Gaussian?
+  options:
+    - Wheel slips cancel out on average, leaving only the Gaussian encoder noise
+    - Kalman filters force every error to become Gaussian after one update
+    - Position error sums many small independent errors, so by the CLT it is ≈ Gaussian
+    - Position error is bounded, and every bounded error is approximately Gaussian
+  correct: 2

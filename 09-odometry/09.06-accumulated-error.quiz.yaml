@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 09.06-accumulated-error.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8dd9bfaebcc7
+  question: Why does a heading error matter more than a distance error of "the same size"?
+  options:
+    - Heading sensors are noisier than distance sensors on cheap robots
+    - A distance error compounds each metre; a heading error acts once
+    - A heading error rotates every later metre, so lateral error keeps growing
+    - Heading errors add slip, which distance errors never do
+  correct: 2
+- source: 5942e7fbe5b5
+  question: A robot has a systematic heading bias of 0.5°/m. What is its lateral error after 4 m and 8 m?
+  options:
+    - 3.5 cm and 7.0 cm
+    - 7.0 cm and 14.0 cm
+    - 14.0 cm and 55.8 cm
+    - 7.0 cm and 27.9 cm
+  correct: 3
+- source: b0723483fa21
+  question: With random wheel noise, how do $\sigma_\theta$, $\sigma_{lat}$ and $\sigma_{along}$ scale with distance on a straight run?
+  options:
+    - $\sqrt d$, $d^{1.5}$ and $\sqrt d$
+    - $d$, $d^2$ and $d$
+    - $\sqrt d$, $\sqrt d$ and $\sqrt d$
+    - $d$, $d^{1.5}$ and $\sqrt d$
+  correct: 0
+- source: 8569e9a0ba25
+  question: You double the wheelbase $b$ with everything else unchanged. What happens to $\sigma_\theta$ and $\sigma_{lat}$ after 5 m?
+  options:
+    - Both double
+    - Both halve
+    - $\sigma_\theta$ halves; $\sigma_{lat}$ unchanged
+    - Both drop by $\sqrt 2$
+  correct: 1
+- source: 3366e37bac71
+  question: In $\Sigma' = F\Sigma F^{\mathsf T} + GQG^{\mathsf T}$, which entries of $F$ make position uncertainty grow faster than heading uncertainty?
+  options:
+    - $F_{11}$ and $F_{22}$, the identity terms on $x$ and $y$
+    - $F_{33}$, which multiplies the heading variance each step
+    - $F_{12}$ and $F_{21}$, which couple $x$ and $y$
+    - $F_{13} = -\Delta s\sin\mu$ and $F_{23} = \Delta s\cos\mu$
+  correct: 3
+- source: 74d518b9af7d
+  question: Your EKF trusts odometry far too much on long runs; the odometry pose covariance is a constant diag(0.001, 0.001, …, 0.01). What's wrong?
+  options:
+    - Constant covariance claims a fixed ±3 cm; grow it, or fuse only velocities
+    - The values are too large; shrink them so the EKF trusts the IMU
+    - Covariance must be in degrees, not radians, so it is misread
+    - Diagonal covariance is not allowed; add off-diagonal terms
+  correct: 0
+- source: 14dd3666fe19
+  question: karmel spins 10 full turns in place with $k = 2\cdot10^{-6}$ m and $b = 0.2$ m. What is the heading standard deviation afterward?
+  options:
+    - 0 rad, since the robot never moved
+    - About 0.0025 rad (0.14°)
+    - About 0.025 rad (1.4°)
+    - About 0.25 rad (14°)
+  correct: 2

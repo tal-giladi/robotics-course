@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 14.05-inverse-kinematics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6325486b0a2e
+  question: A planar 2-link arm has $l_1 = 0.116$, $l_2 = 0.135$. How many IK solutions for targets at $r = 0.19$, $r = 0.019$ and $r = 0.30$?
+  options:
+    - Two, one, zero
+    - Two, two, zero
+    - Two, zero, one
+    - One, one, zero
+  correct: 0
+- source: f7a2d3af1451
+  question: Why does the analytic solution use `atan2` in both places rather than `acos` and `asin`?
+  options:
+    - "`atan2` is faster to compute than `acos`/`asin`, which matters inside a 1 kHz control loop"
+    - "`acos`/`asin` return degrees while `atan2` returns radians, which the kinematics code expects"
+    - "`atan2` uses both signs and covers $(-\\pi, \\pi]$; `acos`/`asin` cover half that, collapsing two configurations"
+    - "`atan2` avoids division by zero at the workspace boundary, while `acos`/`asin` return NaN there"
+  correct: 2
+- source: eee187877bb1
+  question: What does $\lambda$ do in $\Delta q = J^T(JJ^T + \lambda^2 I)^{-1} e$, and what does the adaptive loop do with it?
+  options:
+    - It sets the convergence tolerance; double it after each step until the error falls below it
+    - It bounds the step near singularities; quadruple it after an accepted step, halve it after a rejected one
+    - It weights orientation against position error; keep it fixed at 1 so both are treated equally
+    - It bounds the step near singularities; halve it after an accepted step, quadruple it after a rejected one
+  correct: 3
+- source: 9c71abf677e0
+  question: You ask for $(0.35, 0, 0.03)$ with the gripper vertical and IK fails by 9 mm. What is the cheapest change, and the second cheapest?
+  options:
+    - Relax the orientation (pitch 60° works); then move the object 3–4 cm closer
+    - Buy a longer arm; then remount the arm's base 9 mm lower on the table
+    - Increase the IK iteration count; then loosen the position tolerance to 10 mm
+    - Move the object 3–4 cm closer; then raise the IK solver's damping factor
+  correct: 0
+- source: e0574d322078
+  question: IK returns `converged=True` with `q = [0, 85°, -90°, -80°, 0]`; the arm is at all zeros. Anything to worry about?
+  options:
+    - "No: `converged=True` guarantees the solution is reachable and the motion there is collision-free"
+    - "Yes: those angles exceed the SO-101's joint limits, so the servos will refuse the command outright"
+    - "No: all angles are under 90°, so the move is small enough to execute without further checks"
+    - "Yes: the move sweeps a huge arc through unchecked space; warm start from the current pose or use a planner"
+  correct: 3
+- source: 4ab90540d3d7
+  question: Why does solving the SO-101 for position + pitch from 60 random seeds give dozens of answers, while the 2-link arm gives exactly two?
+  options:
+    - The SO-101's IK is numerical and noisy; an analytic solver would also return exactly two answers
+    - "Four equations, five joints: a one-parameter family of solutions; the 2-link arm's set is discrete"
+    - Each SO-101 joint has two solutions, giving $2^5 = 32$ combinations versus $2^1$ for the 2-link arm
+    - The SO-101 has joint limits that split solutions; the 2-link arm is modeled without joint limits
+  correct: 1
+- source: 2ef723e87c88
+  question: You want the arm to never flip its elbow during a Cartesian move. What do you do?
+  options:
+    - Seed each waypoint's IK randomly and pick the solution with the smallest error to the target pose
+    - Increase the IK damping $\lambda$ so the solver takes smaller steps and never leaves the elbow-up basin
+    - Warm start each waypoint from the previous solution and reject large per-joint jumps; a forced flip is a planning problem
+    - Lock the elbow joint during Cartesian moves and let the other four joints track the path
+  correct: 2

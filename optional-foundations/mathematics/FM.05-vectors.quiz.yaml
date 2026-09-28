@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FM.05-vectors.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1c55aa227e86
+  question: '"The robot is at (3, 2) in the map frame" vs "the robot moved (3, 2) since the last update": which is a point and which is a vector?'
+  options:
+    - The first is a point (a location); the second is a vector (a displacement)
+    - The first is a vector (from the origin); the second is a point (the new location)
+    - Both are points, because both are given in map coordinates
+    - Both are vectors, because both have two components
+  correct: 0
+- source: e1f01039abfa
+  question: Compute the unit vector of $(-2, 2, 1)$.
+  options:
+    - $(-0.4, 0.4, 0.2)$
+    - $(-0.222, 0.222, 0.111)$
+    - $(-0.667, 0.667, 0.333)$
+    - $(0.667, 0.667, 0.333)$
+  correct: 2
+- source: 08e049000e75
+  question: A robot at $(1, 1)$ must reach $(4, -3)$ at 0.25 m/s in a straight line. What is its velocity vector, and how long does it take?
+  options:
+    - $(0.75, -1.0)$ m/s, 20 s
+    - $(0.15, -0.2)$ m/s, 20 s
+    - $(0.15, -0.2)$ m/s, 28 s
+    - $(0.2, -0.15)$ m/s, 20 s
+  correct: 1
+- source: d470ac6a8f6f
+  question: "`np.linalg.norm(np.array([[3, 4], [6, 8]]))` returns what, and what did the author probably want?"
+  options:
+    - "`[5., 10.]`, the per-row norms; they wanted `axis=0` giving `[6.7, 8.9]`"
+    - 15.0, the sum of row norms; they wanted `axis=1` giving `[5., 10.]`
+    - "`[6.7, 8.9]`, the per-column norms; they wanted `axis=1` giving `[5., 10.]`"
+    - 11.18, the norm of all four numbers; they wanted `axis=1` giving `[5., 10.]`
+  correct: 3
+- source: 80fe5ae2f589
+  question: A stationary IMU reads $(0.0, 0.0, 4.9)$ m/s². What do you conclude?
+  options:
+    - The sensor is tilted about 60°, which reduces the measured z component
+    - The robot is accelerating downward at 4.9 m/s² and is not really stationary
+    - The reading is normal, because the IMU subtracts half of gravity by default
+    - The norm is half of gravity, so the scale/range setting or calibration is wrong
+  correct: 3
+- source: 01eb3710428a
+  question: A go-to-goal controller produces `nan` velocities the moment the robot arrives. Why, and what's the fix?
+  options:
+    - The goal is behind the robot so atan2 returns nan; wrap the heading error first
+    - The velocity gain overflows at small distances; clamp the gain to a maximum
+    - The distance is zero, so normalizing divides by zero; stop within a tolerance
+    - The pose estimate becomes undefined when stationary; keep the robot moving slowly
+  correct: 2

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.02-installing-ros2.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e10d78244093
+  question: Which ROS 2 package do you install on the Pi and which on the development laptop?
+  options:
+    - "Pi: `ros-jazzy-desktop`; laptop: `ros-jazzy-ros-base`."
+    - "Both: `ros-jazzy-desktop`, so the two machines match exactly."
+    - "Pi: `ros-jazzy-ros-base` (+ `ros-dev-tools`); laptop: `ros-jazzy-desktop` for RViz, rqt and demos."
+    - "Both: `ros-jazzy-ros-base`, and RViz is installed separately with pip."
+  correct: 2
+- source: 84b1ea023d0f
+  question: What does `source /opt/ros/jazzy/setup.bash` change, and why must you do it in every shell?
+  options:
+    - It installs missing ROS packages; it must be repeated because apt clears them on reboot.
+    - It sets environment variables (`PATH`, `PYTHONPATH`, `AMENT_PREFIX_PATH`, …), which belong to a process and its children only.
+    - It starts the ROS 2 daemon; each shell needs its own daemon instance.
+    - It writes the ROS paths into `/etc/environment`, which is read once per shell.
+  correct: 1
+- source: 2a9a51351376
+  question: '`sudo dpkg -i /tmp/ros2-apt-source.deb` says "is not a Debian format archive". What happened?'
+  options:
+    - The version variable was empty (often GitHub API rate limiting), so an error page was downloaded; set the version and download again.
+    - The file is for amd64 and the Pi needs arm64; download the arm64 build.
+    - "`dpkg` needs `--force-all` for packages from GitHub."
+    - The Ubuntu version is too old; upgrade to 24.10 first.
+  correct: 0
+- source: a016fd0ec099
+  question: The laptop runs the listener in Docker Desktop (default bridge network) and the Pi runs the talker, both domain 42. What do you see?
+  options:
+    - Every message, because Docker Desktop forwards all UDP traffic to the LAN by default.
+    - Every message, but only if both sides use `rmw_cyclonedds_cpp` as the RMW.
+    - Only every second message, because the NAT table times out between samples.
+    - "Nothing: the container is NATed inside a VM, so DDS multicast discovery never reaches the LAN."
+  correct: 3
+- source: c373efdf4a53
+  question: "`ros2 topic list` on the laptop shows `/chatter` from the Pi, but `ros2 topic echo /chatter` prints nothing. Which layer is broken?"
+  options:
+    - "Discovery: the topic list is cached from an earlier session."
+    - "Data transport: e.g. a firewall on unicast UDP ports, `--net=host` without `--ipc=host`, or incompatible QoS."
+    - "The message type: `/chatter` uses a type the laptop doesn't have."
+    - "The ROS daemon: it must be restarted after each new publisher."
+  correct: 1
+- source: 9b4e9ad9011c
+  question: Why does Ubuntu 24.04 refuse `pip install numpy`, and what should you do in a ROS project?
+  options:
+    - The system Python is externally managed (PEP 668); use `apt install python3-numpy` or a rosdep key.
+    - numpy isn't available for Python 3.12 yet; use conda to get an older Python version.
+    - pip is disabled by ROS 2 itself; use `--break-system-packages` on the robot.
+    - numpy needs a C compiler; install `build-essential` first and retry the pip install.
+  correct: 0
+- source: f88a43928ff5
+  question: '`ros2 doctor` prints 15 `UserWarning ... has been updated to a new version` lines, then "All 5 checks passed". Is the install broken?'
+  options:
+    - "Yes: each warning is a package that failed to install."
+    - "Yes: the version mismatch will break message compatibility."
+    - "No: newer package versions exist in the repository; `apt update && apt upgrade` clears them."
+    - No, but you must reinstall ROS 2 to clear the warnings.
+  correct: 2

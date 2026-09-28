@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.15-voltage-regulators.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 53adb88394b3
+  question: A linear regulator makes 3.3 V from 12 V at 200 mA. How much heat, and what's its efficiency?
+  options:
+    - 1.74 W and 27.5 %
+    - 0.66 W and 72.5 %
+    - 2.4 W and 27.5 %
+    - 1.74 W and 72.5 %
+  correct: 0
+- source: 166d86f9e85d
+  question: Why is a buck converter's input current smaller than its output current, while a linear regulator's is equal?
+  options:
+    - A buck stores current in its capacitor; a linear regulator has no storage element
+    - A buck converts power ($P_\text{in} = P_\text{out}/\eta$); a linear passes current and burns extra voltage
+    - A buck limits its input current by design; a linear regulator has no current limit
+    - A buck only draws current during switching; a linear regulator draws it continuously
+  correct: 1
+- source: a5c9f9b2b0b4
+  question: A 90 % efficient buck supplies 5 V at 4 A from a 3S pack at 9.6 V. Input current and heat in the buck?
+  options:
+    - 2.08 A and 2.0 W
+    - 4.44 A and 2.2 W
+    - 2.31 A and 2.2 W
+    - 2.31 A and 18 W
+  correct: 2
+- source: 3971e9282c4d
+  question: You replace karmel's 5.5 A regulator with a 3 A one "because the Pi draws 1.5 A". What happens in a CPU-heavy ROS 2 launch with camera and LiDAR?
+  options:
+    - "Nothing: the Pi's average 1.5 A leaves plenty of margin on a 3 A regulator"
+    - The regulator overheats and shuts down permanently until it is replaced
+    - The Pi runs slower but stable, since it lowers its own current to fit 3 A
+    - "Peaks exceed 3 A: the output dips, the Pi throttles, USB may reset, the Pi may reboot"
+  correct: 3
+- source: 4327286a5f62
+  question: What does `throttled=0x10000` mean?
+  options:
+    - Under-voltage has occurred since boot but isn't happening now
+    - Under-voltage is happening right now
+    - The CPU is currently throttled because of temperature
+    - The CPU has been frequency-capped since boot
+  correct: 0
+- source: ae38f8a268a9
+  question: When is a linear LDO the better choice than a buck?
+  options:
+    - Large voltage drop at high current (e.g. 12 V → 5 V at 3 A for the Pi)
+    - Input near output, low current, low noise needed (e.g. 5 V → 3.3 V ADC ref)
+    - Whenever efficiency matters most, since LDOs have no switching losses
+    - When the input can fall below the output, since LDOs can boost as well
+  correct: 1
+- source: 82b8f53206ad
+  question: The Pi reboots only in the last 15 minutes of battery life, never on a fresh pack. The regulator's minimum input is 9 V. Explain.
+  options:
+    - Near empty the pack's voltage rises under load and trips over-voltage protection
+    - The regulator's efficiency falls to zero below 50 % charge, starving the Pi
+    - Near empty (~10 V) motor starts sag the pack below 9 V; the regulator drops out
+    - The Pi's SD card corrupts at low battery and triggers a watchdog reboot
+  correct: 2

@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FCV.05-stereo-epipolar.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: cdd3f98738c7
+  question: A stereo camera has $f = 600$ px and $B = 0.08$ m. What is the disparity of a point 2.4 m away?
+  options:
+    - 2 px
+    - 48 px
+    - 20 px
+    - 115 px
+  correct: 2
+- source: ebbcf8c83919
+  question: If stereo depth error at 1 m is 5 mm, what do you expect at 4 m with the same matching accuracy?
+  options:
+    - About 20 mm
+    - About 10 mm
+    - About 5 mm
+    - About 80 mm
+  correct: 3
+- source: 1fd1efcdacfc
+  question: Why is stereo matching a 1D search after rectification?
+  options:
+    - Rectification removes lens distortion, which is what made the search 2D
+    - Rectification makes epipolar lines horizontal and aligned, so a match is on the same row
+    - The matcher only compares brightness, which varies along one axis
+    - Rectification crops the images to a single row of shared pixels
+  correct: 1
+- source: 4cfce572b908
+  question: Why does an active IR projector improve depth on a white wall but not on a glass door?
+  options:
+    - It adds texture to diffuse surfaces; glass transmits or mirrors the pattern
+    - IR light is absorbed by white paint but passes through glass unchanged
+    - The glass door is usually too far away for the projector's range
+    - The projector only works on flat surfaces, and most glass doors are curved
+  correct: 0
+- source: 6b192b0f395e
+  question: What does $\mathbf{x}_2^{\mathsf T}F\mathbf{x}_1 \ne 0$ tell you about a candidate match?
+  options:
+    - The two points have different brightness, so the match is only uncertain
+    - The cameras are not rectified, so $F$ must be recomputed
+    - The point lies at infinity, so its depth cannot be computed at all
+    - $\mathbf{x}_2$ is off the epipolar line of $\mathbf{x}_1$, so it can't be the same 3D point
+  correct: 3
+- source: bc877473e000
+  question: You double the stereo baseline. What happens to depth error at 3 m and to minimum depth?
+  options:
+    - Error halves; minimum depth halves
+    - Error quarters; minimum depth stays the same
+    - Error halves; minimum depth doubles
+    - Error doubles; minimum depth halves
+  correct: 2

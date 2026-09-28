@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.08-cnns.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1e4f99eb3185
+  question: Why does a 3×3 conv layer from 3 to 64 channels have the same parameter count for a 32×32 and a 1920×1080 image?
+  options:
+    - The image is resized to a fixed size before the convolution
+    - "Weight sharing: the same 64 kernels slide over every position"
+    - Padding makes both images the same size inside the layer
+    - Only the first 32×32 patch is used; the rest is pooled away
+  correct: 1
+- source: bf62ce6a3270
+  question: Output width for input 224, kernel 7, stride 2, padding 3?
+  options:
+    - "109"
+    - "111"
+    - "112"
+    - "224"
+  correct: 2
+- source: 114122e82d83
+  question: What is the output of $K = [[1,0,-1]]$ repeated for 3 rows on a uniform 3×3 patch of value 0.5?
+  options:
+    - "0"
+    - "1.5"
+    - "0.5"
+    - "3.0"
+  correct: 0
+- source: 11520df39e49
+  question: What is the receptive field after two 3×3 stride-1 convolutions, and after three?
+  options:
+    - 6×6 and 9×9
+    - 9×9 and 27×27
+    - 3×3 and 3×3
+    - 5×5 and 7×7
+  correct: 3
+- source: 4d7ee03d2492
+  question: A CNN with a Flatten head is trained only on objects in the left half, then tested on objects in the right half. What happens, and what helps?
+  options:
+    - Accuracy stays high, since convolutions are translation-invariant end to end
+    - Accuracy drops toward chance; adding more Flatten layers restores it
+    - Accuracy drops toward chance; global average pooling before the classifier helps
+    - Accuracy drops slightly; increasing the kernel size to 7×7 fixes it
+  correct: 2
+- source: 3abfe4b4b558
+  question: Your CNN node crashes with "expected input[1, 480, 640, 3] to have 3 channels, but got 480 channels". Fix?
+  options:
+    - Permute HWC to CHW with `tensor.permute(0, 3, 1, 2)`
+    - Resize the frame to 3×480×640 with `F.interpolate`
+    - Convert the frame from BGR to RGB with OpenCV first
+    - Change the first conv layer to accept 480 input channels
+  correct: 0
+- source: 947aec1f945e
+  question: Why is ResNet-18 the image encoder in ACT and Diffusion Policy rather than an MLP on pixels?
+  options:
+    - MLPs cannot process color images, only grayscale inputs
+    - MLPs need the image flattened, which ROS 2 cannot transmit
+    - ResNet-18 is required by the LeRobot license terms
+    - Weight sharing makes it data-efficient and fast, with pretrained features
+  correct: 3

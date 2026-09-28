@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FML.01-what-is-ml.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ab98e6a619ba
+  question: What is the difference between a model's parameters and its features?
+  options:
+    - Features are the numbers training chooses; parameters are the inputs per sample
+    - Features are the model's outputs; parameters are the ground-truth labels
+    - Features are the inputs per sample; parameters are the adjustable numbers training chooses
+    - Features are fixed at design time; parameters change with every new input
+  correct: 2
+- source: 799461288a20
+  question: The learned line is $\hat y = 17.63d - 2.13$. At what duty does it predict zero speed, and what does that represent?
+  options:
+    - $d = 0.121$; the motor deadband, where friction stops it turning
+    - $d = 0.121$; the maximum duty before the driver saturates
+    - $d = 8.28$; the point where the motor stalls under load
+    - $d = -0.121$; the reverse speed where the motor brakes
+  correct: 0
+- source: 655ae8f5aee8
+  question: Where do training and inference usually run for a detector on the course robot, and why the split?
+  options:
+    - Both on the Pi 5, so the model always matches the robot's own camera data
+    - Training on the Pi overnight; inference on a cloud GPU for lower latency
+    - Training on the Jetson; inference on a desktop GPU streaming results over Wi-Fi
+    - Training on a desktop/cloud GPU once; inference on the Pi or Jetson every frame
+  correct: 3
+- source: 2cbac5cc6149
+  question: A model trained on logs from a full battery (12.4–12.6 V) is used when the battery reads 10.2 V. What happens, and what is the fix?
+  options:
+    - It under-predicts speed; retrain on the same data with more epochs
+    - It over-predicts speed; log across the battery range and add voltage as a feature
+    - It predicts correctly, since duty cycle already accounts for the voltage
+    - It over-predicts speed; clip the predictions to the maximum seen in training
+  correct: 1
+- source: 3650cf6edd0d
+  question: Which robot function should you never replace with a learned model, and why?
+  options:
+    - The motor watchdog / emergency stop, which must be simple, verifiable and fail-safe
+    - The path planner, because learned planners cannot handle new maps
+    - The camera driver, because neural networks cannot read raw sensor data
+    - The odometry, because learned models cannot integrate over time
+  correct: 0
+- source: 3ead106b7e5e
+  question: Your model has RMSE 0.32 rad/s and the encoder noise is σ = 0.3 rad/s. Is a much bigger model worth building?
+  options:
+    - Yes, since a bigger model can learn to predict the encoder noise too
+    - Yes, since any RMSE above zero means the model is underfitting
+    - "Not on this data: the error is at the noise floor, so improve measurement or data coverage"
+    - No, because bigger models always overfit on robot data
+  correct: 2

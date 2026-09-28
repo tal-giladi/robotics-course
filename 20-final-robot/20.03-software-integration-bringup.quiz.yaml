@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 20.03-software-integration-bringup.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 98f5005077bc
+  question: A camera driver crashes at $t = 20$ s. It published `DiagnosticStatus` at 1 Hz with a tolerance of 3 periods. When does the robot's state change, and why not at $t = 20$?
+  options:
+    - At $t = 20$ s; the process exit is reported instantly to the monitor
+    - At about $t = 21$ s; one missed message triggers `STALE`
+    - At about $t = 23$ s; a crash is silent, so it waits three periods
+    - At about $t = 50$ s; the monitor polls every 30 s
+  correct: 2
+- source: 00c9773b7be8
+  question: Why is `INIT` checked before `FAULT` but after `ESTOP`?
+  options:
+    - Missing units while booting aren't faults; e-stop power is gone regardless
+    - "`INIT` is the most common state, so checking it early is faster"
+    - "`ESTOP` can only happen after bringup, so order doesn't matter"
+    - "`FAULT` must be checked last so it can override `ESTOP` during tests"
+  correct: 0
+- source: 08f330da8924
+  question: The LiDAR fails. Which parts of the robot still work?
+  options:
+    - Nothing; every unit depends on the LiDAR through tf
+    - Everything except `lidar` itself, so missions run in DEGRADED mode
+    - Nav2 and AMCL using odometry only, but not the arm
+    - Teleop base, odometry, camera and arm; autonomy units never start
+  correct: 3
+- source: c435f97beb17
+  question: You mark the camera `required` instead of `degraded`, and its USB cable works loose during a delivery run. What does the robot do, and what should it have done?
+  options:
+    - FAULT, refusing even return-to-dock; `degraded` would drive home slowly
+    - Goes to DEGRADED and drives home; with `degraded` it would keep delivering
+    - Keeps driving blind at full speed; with `degraded` it would stop in place
+    - Reboots the camera driver automatically in both cases
+  correct: 0
+- source: dcb5b6b77ffa
+  question: "`use_sim_time` is `true` on Nav2 and `false` on your camera driver. What is the symptom?"
+  options:
+    - The camera publishes at half the expected frame rate
+    - tf lookups fail with `ExtrapolationException` and costmaps drop data
+    - Nav2 drives faster in simulation than in real time
+    - Nothing; ROS 2 converts between the clocks automatically
+  correct: 1
+- source: fa00a1a3c77d
+  question: Why should a health monitor never command the robot to stop?
+  options:
+    - It runs on the laptop, which may be disconnected
+    - Stopping requires the e-stop relay, which only the Pico controls
+    - It is too slow for safety and would add a writer; it gates starts
+    - Stop commands from diagnostics are ignored by Nav2 by design
+  correct: 2
+- source: 4ebec0461084
+  question: Bringup takes 16 s and management wants 8. Where do you look first, and what does halving the LiDAR's 4 s spin-up buy?
+  options:
+    - The LiDAR, since it is the slowest hardware; halving it saves 2 s
+    - Every unit equally; halving the LiDAR saves about 1 s
+    - The Pico link first; halving the LiDAR saves 4 s
+    - The critical path (Nav2's 5 s); the LiDAR is off it, so nothing
+  correct: 3

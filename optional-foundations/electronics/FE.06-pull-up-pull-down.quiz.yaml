@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.06-pull-up-pull-down.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 94de7d4365eb
+  question: Why does a pin configured as `Pin.IN` with nothing connected read random values?
+  options:
+    - The internal pull-up is on by default and fights the leakage current
+    - Unconnected pins output a test pattern until they are configured
+    - Nothing defines its voltage, so stray charge and noise wander it through the undefined zone
+    - The ADC samples the pin and rounds noise to 0 or 1
+  correct: 2
+- source: e0b5414db72a
+  question: Pull-up to 3.3 V, button to GND. What does `value()` return when pressed, and what is this called?
+  options:
+    - "1 when pressed: active-high"
+    - "0 when pressed: active-high"
+    - "1 when pressed: active-low"
+    - "0 when pressed: active-low"
+  correct: 3
+- source: 601d1ed94b6e
+  question: Two breakouts with 4.7 kΩ pull-ups share a bus. Total pull-up? Within the 400 kHz limit for 100 pF (≈ 967 Ω to 3.54 kΩ)?
+  options:
+    - 2.35 kΩ, within spec
+    - 9.4 kΩ, above the maximum
+    - 2.35 kΩ, below the minimum
+    - 4.7 kΩ, within spec
+  correct: 0
+- source: 4c1f687e8ea8
+  question: What does "open-drain" mean, and why can many open-drain devices share one wire safely?
+  options:
+    - Outputs drive both high and low, but each device takes turns using a token
+    - Outputs only pull low or release; no device drives high, so they can never short
+    - Outputs only drive high; a pull-down resistor creates the low level
+    - Outputs are current-limited, so a high/low short draws only a safe current
+  correct: 1
+- source: 0e1b16985d1a
+  question: On an RP2350 A2 Pico 2, a button to 3.3 V with `Pin.PULL_DOWN`. You press once and release. What do you read, and what's the fix?
+  options:
+    - Stuck at 0 (the pull-down is too strong); remove the pull-down and let the pin float
+    - Correctly 0 after release; no fix is needed for this wiring
+    - Random values (contact bounce); add a 20 ms software debounce
+    - Stuck at 1 (erratum E9 leakage); add an external pull-down ≤ 8.2 kΩ or rewire active-low
+  correct: 3
+- source: 01df650057d1
+  question: An I²C module powered from 5 V has its SDA line measuring 4.9 V idle on the Pico side. What's wrong?
+  options:
+    - The Pico's internal pull-ups are too strong; disable them in software
+    - Its pull-ups go to 5 V; power it from 3.3 V or use a level shifter
+    - SDA is shorted to the module's VCC; replace the module
+    - 4.9 V is normal idle for I²C; nothing is wrong
+  correct: 1
+- source: 90c5d6023b8d
+  question: Why does an interrupt counter see 23 presses when you pressed 10 times?
+  options:
+    - "Contact bounce: each press and release makes several edges; debounce by time or RC"
+    - "Interrupt latency: slow handlers re-trigger on the same edge several times"
+    - "Floating input: the pin picks up mains hum between presses"
+    - "Double counting: the handler counts both rising and falling edges only"
+  correct: 0

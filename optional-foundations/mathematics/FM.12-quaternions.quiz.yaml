@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.12-quaternions.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3e76ddce68a7
+  question: What rotation does $q = (0, 0, 0, -1)$ represent?
+  options:
+    - A 180° rotation about $z$
+    - The identity (no rotation)
+    - A 360° rotation that flips the frame
+    - An invalid rotation, because $w$ is negative
+  correct: 1
+- source: 4bdb0abadb9e
+  question: What is the quaternion for a robot heading of 60°?
+  options:
+    - $(0, 0, 0.8660, 0.5)$
+    - $(0, 0, 1.047, 1)$
+    - $(0, 0, 0.5, 0.8660)$
+    - $(0.5, 0, 0, 0.8660)$
+  correct: 2
+- source: 0135bd950fbf
+  question: Why is $q_a \otimes q_b \ne q_b \otimes q_a$ in general, and when are they equal?
+  options:
+    - The product contains $\mathbf{v}_a\times\mathbf{v}_b$; equal when the axes are parallel
+    - The product contains $\mathbf{v}_a\cdot\mathbf{v}_b$; equal when the axes are perpendicular
+    - The scalar parts differ in sign; equal when both rotation angles are equal
+    - Quaternion products are never equal when swapped, except for the identity
+  correct: 0
+- source: 77d938a44241
+  question: Two orientation estimates are $(0, 0, 0.7071, 0.7071)$ and $(0, 0, -0.7071, -0.7071)$. What is the error angle?
+  options:
+    - 180°
+    - 90°
+    - 360°
+    - 0°
+  correct: 3
+- source: 70d451264e5d
+  question: An `Imu` message has `orientation_covariance[0] = -1`. What do you do with `orientation`?
+  options:
+    - Use it, but treat its uncertainty as very large
+    - Negate it, since −1 signals an inverted mounting
+    - Use it as is; −1 means the covariance is unknown but the data is good
+    - Ignore it; the driver provides no orientation, so estimate it with a filter
+  correct: 3
+- source: c7dcd1980224
+  question: After switching simulators, robots spawned with no rotation face backward and yaw-90° robots lie on their side. Why?
+  options:
+    - Your code sends degrees but the simulator expects radians
+    - The new simulator uses a left-handed frame, flipping $z$
+    - Your code sends (x, y, z, w) but the simulator reads (w, x, y, z)
+    - Your quaternions are not normalized, so the simulator rescales them
+  correct: 2
+- source: c14be9e77c84
+  question: How many degrees of freedom does a unit quaternion have, and why four numbers?
+  options:
+    - Three; four numbers with a unit-norm constraint avoid 3-number singularities
+    - Four; one each for x, y, z rotation plus one for the angle
+    - Three; the fourth number stores the handedness of the frame
+    - Four; the extra number lets it represent translation too
+  correct: 0

@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FPY.04-typing-dataclasses-packaging.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3cbafa8131b4
+  question: A colleague says `isinstance(x, MotorDriver)` on a `runtime_checkable` `Protocol` guarantees `x.set_duty(0.5)` works. What's wrong?
+  options:
+    - It only checks that attributes with those names exist, not signatures or return types
+    - It always returns `True` for any object, since Protocols are erased at runtime
+    - It requires `x` to inherit from `MotorDriver`, so duck-typed drivers fail the check
+    - It checks signatures but not return types, so only the return value can be wrong
+  correct: 0
+- source: 159c34eb2942
+  question: Why is `@dataclass(frozen=True)` good for startup config, and what is the C# equivalent of `dataclasses.replace(cfg, max_duty=0.3)`?
+  options:
+    - It makes loading faster and uses less memory; C# `cfg.Clone()` then setting `MaxDuty`
+    - It prevents silent mid-run changes and is hashable and thread-safe; C# `cfg with { MaxDuty = 0.3 }`
+    - It lets you change fields only from `__post_init__`; C# `cfg with { MaxDuty = 0.3 }`
+    - It serializes to YAML automatically; C# `new Config(cfg) { MaxDuty = 0.3 }`
+  correct: 1
+- source: a9812408491a
+  question: How many ticks does each karmel wheel travel to rotate in place by 45°? ($L = 0.200$ m, $r = 0.045$ m, 2464 ticks/rev)
+  options:
+    - About 342 ticks, both wheels forward
+    - About 1369 ticks, in opposite directions
+    - About 684 ticks, both wheels in the same direction
+    - About 684 ticks, in opposite directions
+  correct: 3
+- source: 57d5af1bc4e7
+  question: What does `Ticks = NewType("Ticks", int)` cost at runtime, and what does it buy?
+  options:
+    - A small wrapper object per value; it raises `TypeError` at runtime on unit mix-ups
+    - Nothing at runtime; it makes `Ticks` values immutable so they can't be changed
+    - Nothing at runtime; a type checker rejects a plain `int` or `Meters` where `Ticks` is expected
+    - An `isinstance` check per call; it converts floats to ints automatically
+  correct: 2
+- source: 92aa39339959
+  question: Your library declares `dependencies = ["numpy==2.1.0"]`. On the Pi with ROS 2 Jazzy (apt numpy 1.26), what goes wrong, and what should you write?
+  options:
+    - pip shadows the system numpy that `cv_bridge` was built against; use `numpy>=1.26` in the library
+    - pip refuses to install any numpy in the venv; use `numpy==1.26` pinned in the library
+    - Nothing goes wrong, since the venv isolates it; keep the exact pin for reproducibility
+    - apt upgrades the system numpy to 2.1 to match; add `numpy<2` to avoid the upgrade
+  correct: 0
+- source: f01f557fd466
+  question: "Protocol or ABC: every sensor driver should share a `read_with_retry()` implementation that calls an abstract `_read_once()`. Which, and why?"
+  options:
+    - Protocol, because structural typing lets drivers share code without inheritance
+    - ABC, because you are sharing implementation (a template method), which needs inheritance
+    - Protocol, because ABCs cannot declare abstract private methods like `_read_once`
+    - ABC, because Protocols cannot be used with `isinstance` checks at all
+  correct: 1

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 17.06-actor-critic-ppo-sac.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: be9cccb3a0f9
+  question: What does the critic replace, and what does it cost?
+  options:
+    - The reward function, removing the need for shaping; the cost is twice the number of samples
+    - The policy network, making actions deterministic; the cost is losing all exploration
+    - The noisy Monte-Carlo return, cutting variance; the cost is bias while the critic is still wrong
+    - The replay buffer, making training on-policy; the cost is a higher variance gradient
+  correct: 2
+- source: 4605e6facb27
+  question: $\gamma = 0.99$, $\lambda = 0.95$, $\delta = [0.92, 1.90, 3.86, 1.00]$ with the last step terminal. What is $\hat{A}_2$?
+  options:
+    - "4.80"
+    - "3.86"
+    - "4.85"
+    - "6.41"
+  correct: 0
+- source: 837db218f3af
+  question: The ratio for a transition is 1.4, its advantage is +3, $\epsilon = 0.2$. What is PPO's objective for it, and its gradient?
+  options:
+    - 4.2 from the unclipped branch, with positive gradient
+    - 3.6 from the clipped branch, with positive gradient
+    - 2.4 from the lower clip, with negative gradient
+    - 3.6 from the clipped branch, with zero gradient
+  correct: 3
+- source: f606404f3f85
+  question: Why can PPO reuse a batch for 10 epochs while REINFORCE cannot reuse it at all?
+  options:
+    - PPO stores advantages instead of returns, and advantages do not depend on the policy
+    - The ratio $\pi_\theta/\pi_{\theta_\text{old}}$ corrects for stale data, and the clip keeps it trustworthy
+    - PPO uses a replay buffer with prioritized sampling, which REINFORCE lacks
+    - PPO's critic is trained on the batch, which makes the actor's gradient off-policy
+  correct: 1
+- source: cae5881fdc4f
+  question: You train SAC on karmel's go-to-goal task with 8 parallel environments. What happens to wall-clock time and sample efficiency?
+  options:
+    - Sample efficiency 8× better; wall clock improves 8×, since SAC scales linearly with environments
+    - Sample efficiency unchanged; wall clock improves exactly 8×, since the simulator is the bottleneck
+    - Sample efficiency same or slightly worse; wall clock improves far less than 8×, as gradient updates bottleneck
+    - Sample efficiency much worse; wall clock slower, since SAC cannot run parallel environments
+  correct: 2
+- source: 1e3275c9a5a3
+  question: A PPO run's return rises then falls, and the policy's entropy has dropped to almost zero. What are the two most likely fixes?
+  options:
+    - Remove the entropy bonus and raise the learning rate so the policy escapes faster
+    - Increase γ to 0.999 and double the number of parallel environments
+    - Switch the critic to Monte-Carlo returns and disable advantage normalization
+    - Add an entropy bonus (`ent_coef` ~0.005–0.01) and lower the learning rate or clip range
+  correct: 3
+- source: e1695456d25e
+  question: For a real SO-101 arm with a human resetting each episode, why is "PPO with 8 environments" not an option?
+  options:
+    - PPO requires a GPU on the robot, which the SO-101's controller does not have
+    - One robot, and PPO needs hundreds of thousands of samples; use SAC, sim-to-real, or imitation
+    - PPO only supports discrete actions, while the arm needs continuous joint targets
+    - PPO cannot handle episode resets, so it only works in continuing tasks
+  correct: 1

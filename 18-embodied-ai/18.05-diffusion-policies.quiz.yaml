@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 18.05-diffusion-policies.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 0270299ff56a
+  question: Why does MSE regression fail on bimodal demonstrations while a diffusion policy does not?
+  options:
+    - MSE overfits to the more frequent mode; diffusion reweights modes so both are equally likely
+    - MSE predicts the mean, which lies between the modes; diffusion turns noise into samples that each land in one mode
+    - MSE cannot handle multi-dimensional actions; diffusion predicts each joint independently
+    - MSE needs more data per mode; diffusion works because it trains for many more epochs
+  correct: 1
+- source: d45b2bcea5eb
+  question: With $\bar\alpha_k = 0.36$, $A^0 = 1.0$ and $\varepsilon = -0.5$, what is $A^k$?
+  options:
+    - $0.2$
+    - $1.0$
+    - $0.18$
+    - $0.56$
+  correct: 0
+- source: cec5c0f680c4
+  question: What does the denoiser $\varepsilon_\theta$ take as input and output, and what is the training loss?
+  options:
+    - "Input: observation only; output: the clean action chunk; loss: MSE to the demonstrated actions"
+    - "Input: noisy chunk and $k$; output: the observation; loss: reconstruction error of the image"
+    - "Input: noisy chunk $A^k$, level $k$, observation $O$; output: predicted noise; loss: MSE to the true noise"
+    - "Input: noisy chunk and observation; output: the noise level $k$; loss: cross-entropy over levels"
+  correct: 2
+- source: 26a8546f56ea
+  question: Why does Diffusion Policy generate a sequence of actions but execute only part of it?
+  options:
+    - The later actions in the sequence are always too noisy to execute safely
+    - Executing only part saves GPU memory, since the rest of the sequence is never computed
+    - The sequence is averaged with the previous one, and only the overlap is valid
+    - Consistent motion committed to one mode; executing the first $T_a$ then re-planning stays reactive
+  correct: 3
+- source: bdf09325f75e
+  question: A policy was trained with $K = 100$. How many network passes does inference need with DDPM, and with DDIM at 10 steps, and what is the trade-off?
+  options:
+    - 100 vs 10; DDIM is ~10× cheaper but its larger deterministic steps amplify model errors
+    - 10 vs 100; DDPM is cheaper but its random steps can reduce mode balance
+    - 100 vs 10; DDIM is ~10× cheaper with no loss in success, so it is always better
+    - 1 vs 10; DDPM predicts the clean chunk directly, DDIM needs iterative refinement
+  correct: 0
+- source: 40df6d541a71
+  question: "LeRobot v0.6.1 Diffusion Policy at 30 fps with defaults: how long does the arm run open loop per inference, and how many denoiser passes per inference?"
+  options:
+    - About 3.3 s open loop; 10 denoiser passes
+    - About 0.53 s open loop; 100 denoiser passes
+    - About 1.07 s open loop; 1 denoiser pass
+    - About 1.07 s open loop; 100 denoiser passes
+  correct: 3
+- source: 108e83ecd226
+  question: Your demos are very consistent (one grasp strategy) and the policy must run on a Jetson. ACT or Diffusion Policy?
+  options:
+    - Diffusion Policy, because consistent demos let it use fewer denoising steps than ACT
+    - "ACT: consistent demos remove diffusion's main advantage, and ACT needs one ~10 ms forward pass"
+    - Diffusion Policy, because ACT's CVAE needs varied demonstrations to train at all
+    - ACT, because Diffusion Policy cannot be exported to run on ARM processors
+  correct: 1

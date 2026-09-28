@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 16.04-models-on-edge-compute.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 31201990fe05
+  question: What exactly is ONNX, and what is it not?
+  options:
+    - A file format with a versioned operator set (a frozen graph plus weights); not a runtime, optimizer or speed guarantee
+    - A runtime that executes models on any hardware; not a file format, since models stay in PyTorch format
+    - An optimizer that fuses layers and quantizes weights; not a file format or a portable artefact
+    - A GPU driver interface for neural networks; not usable on CPUs without a separate conversion step
+  correct: 0
+- source: a4e3f19ab114
+  question: An exported detector's boxes agree with PyTorch to 0.0001 px on eight images. What has that proved, and what has it not?
+  options:
+    - The robot pipeline is correct end to end; not that the model is fast enough on the robot
+    - The graph computes the same function; not that preprocessing, colour order, resize and thresholds are right
+    - The model generalizes to new images; not that the export preserved all weights
+    - Quantization is lossless; not that the graph has the same structure as the PyTorch model
+  correct: 1
+- source: ce3f81495a99
+  question: "Static INT8: ResNet-50 detector 2.3× faster, −0.004 mAP50; MobileNet detector 1.8× slower, −0.033 mAP50. Why?"
+  options:
+    - Dense convs gain from INT8 and many channels average error; depthwise convs are cheap, so Q/DQ overhead dominates
+    - ResNet-50 was calibrated on more images; MobileNet's calibration set was too small for stable INT8 scales
+    - MobileNet runs on the GPU while ResNet-50 runs on the CPU, where INT8 kernels are much better optimized
+    - ResNet-50 uses ReLU, which quantizes well; MobileNet uses sigmoid, which INT8 cannot represent
+  correct: 0
+- source: ecf499f40fc8
+  question: An activation ranges over [0, 4], but calibration measures [0, 40] because of one outlier image. What is the effect on the normal range?
+  options:
+    - Scale shrinks 10×, so values above 4 overflow; recalibrate with more outlier images
+    - No effect, since INT8 scales are recomputed per inference from the current input
+    - Values above 4 are clipped, while the normal range keeps full precision
+    - Scale grows 10×, so rounding error grows 10× and only 10% of codes are used; clip at a percentile
+  correct: 3
+- source: f91a5ac2f3e4
+  question: You halve input resolution from 320×240 to 160×120. What happens to latency and to detecting a cup 2 m away?
+  options:
+    - Latency ~2× lower; the cup shrinks from ~12 to ~6 px but is still detected
+    - Latency ~4× lower; the cup shrinks from ~12 to ~6 px and disappears
+    - Latency ~4× lower; the cup stays detectable, since detectors are scale-invariant
+    - Latency unchanged; the cup shrinks from ~24 to ~12 px and is harder to detect
+  correct: 1
+- source: cc935c154e98
+  question: Why build the TensorRT engine on the robot rather than shipping it with the image?
+  options:
+    - Engines contain the robot's calibration data, which only exists after the robot is assembled
+    - Engines are too large for a system image, so they must be downloaded on first boot
+    - Engines are tuned for the specific GPU, driver and version; ship ONNX and build on first boot
+    - Engines are licensed per device, so NVIDIA requires them to be built on the target
+  correct: 2
+- source: d8d005acd15a
+  question: A model runs at 128 ms p50 / 150 ms p90 on the laptop; the robot acts on objects 2 m away while turning at 0.5 rad/s. What must you check?
+  options:
+    - Only p99 on the laptop, since the p90 already shows the model is fast enough for the robot
+    - Latency on the robot (3–6× slower), queueing on top, and whether the consumer compensates with the capture stamp
+    - GPU memory on the laptop and the batch size, since latency depends only on batching
+    - The model's mAP on the robot's camera, since accuracy matters more than latency at 2 m
+  correct: 1

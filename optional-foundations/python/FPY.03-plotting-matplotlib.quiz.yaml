@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FPY.03-plotting-matplotlib.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 23d0d4cafa05
+  question: Why prefer `fig, ax = plt.subplots()` and `ax.plot` over `plt.plot` in robot code?
+  options:
+    - "`ax.plot` renders on the GPU, which keeps live plots fast on the Pi"
+    - "`plt.plot` is deprecated in current Matplotlib and prints a warning each call"
+    - "`ax.plot` saves figures automatically, so plots survive a crashed run"
+    - Explicit objects replace hidden global state, so functions can take `ax` and compose safely
+  correct: 3
+- source: 1014fba64e0f
+  question: Telemetry at 50 Hz, 2464 ticks/rev. The speed plot shows values only at …, 9.94, 10.07, 10.20, … rad/s. Noise or something else?
+  options:
+    - "Quantization: one tick per 20 ms is 0.1275 rad/s, so speeds are multiples of it"
+    - Electrical noise from the motor driver's PWM, which a ferrite bead would fix
+    - "Aliasing: the wheel spins faster than 25 Hz, above the Nyquist frequency"
+    - Float rounding in the telemetry format, which stores two decimal places
+  correct: 0
+- source: 750e090dba60
+  question: You plot `np.diff(ticks)`-based speed against `t[1:]`. What error does that introduce, and how large is it at 50 Hz?
+  options:
+    - A full period early, 20 ms, since the diff uses the previous sample
+    - A half-period late shift, 10 ms, since each difference belongs at the midpoint
+    - A half-period early shift, 10 ms, since `np.diff` drops the last sample
+    - No time error, only a factor-of-50 scaling error in the speed values
+  correct: 1
+- source: 05bbebf77ed5
+  question: A step response reaches 6.3 rad/s at 1.12 s after a 10 rad/s step commanded at 1.00 s, and settles at 10 rad/s. Estimate τ.
+  options:
+    - About 1.12 s
+    - About 0.063 s
+    - About 0.12 s
+    - About 0.19 s
+  correct: 2
+- source: c19da13541e1
+  question: Your live plot starts at 20 fps and drops to 2 fps after ten minutes. What are the two most likely causes?
+  options:
+    - A new artist per frame instead of `line.set_data`, and an unbounded data buffer
+    - The serial port buffer filling up, and the GIL blocking the GUI thread
+    - Matplotlib's font cache growing, and the backend switching to software rendering
+    - Too high a DPI setting, and `plt.pause` being slower than `time.sleep`
+  correct: 0
+- source: f8c50ebd3540
+  question: You `imshow` a 200 × 300 occupancy grid with 0.05 m cells, row 0 at the lowest y, map origin (−5, −5) m. Which arguments make the axes correct?
+  options:
+    - '`origin="upper"` and `extent=(-5, 5, -5, 10)`'
+    - '`origin="lower"` and `extent=(-5, 5, -5, 10)`'
+    - '`origin="lower"` and `extent=(-5, 10, -5, 5)`'
+    - '`origin="upper"` and `extent=(-5, 10, -5, 5)`'
+  correct: 2

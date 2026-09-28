@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 19.10-ros2-for-agents-mcp.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 0d10c0dad310
+  question: Why does the server check the protocol version on every request, even after a successful `server/discover`?
+  options:
+    - The version can change mid-session when the client upgrades
+    - "`server/discover` is optional, so most clients skip it"
+    - Checking every request detects replay attacks from other clients
+    - "The revision is stateless: no session holds the version"
+  correct: 3
+- source: 205a48ca8162
+  question: A client's connection drops during a 13-second `navigate_to` and it retries. What should happen, and what makes it happen?
+  options:
+    - The robot drives again; the second call finishes instantly since it is already there
+    - "No second drive: the server returns the cached result keyed on the request id, if the client reuses it"
+    - The server rejects the retry as `BUSY` until the first call finishes
+    - The robot returns to the start and replays the route to confirm arrival
+  correct: 1
+- source: 32a82fae619c
+  question: "`pick` fails because the gripper closed on nothing. Protocol error or tool error?"
+  options:
+    - "Tool error: a result with `isError: true` the model can act on"
+    - Protocol error, because the skill did not complete
+    - Protocol error with code `GRASP_FAILED`, so the client retries
+    - Neither; the server returns success and logs the failure
+  correct: 0
+- source: 6f39177233d4
+  question: You delete the `_busy` check and a client issues `navigate_to` and `pick` concurrently. What is the deeper problem?
+  options:
+    - The server deadlocks because both calls hold the same lock
+    - The second call is queued and runs after the first, doubling latency
+    - Two goals at once for one robot are meaningless; the honest answer is `BUSY`
+    - Read-only calls also start failing because they share the flag
+  correct: 2
+- source: 32b0c4897d23
+  question: "`closed loop (19.07)` scores 30/30 and `guarded (19.09)` scores 25/30. Is the safety layer making the robot worse?"
+  options:
+    - Yes; a 5-task drop means the safety layer has a bug to fix
+    - Less capable, deliberately; seeing the cost per task is the point
+    - No; the difference is random noise between runs
+    - Yes; the geofence should be disabled during evaluation
+  correct: 1
+- source: 42616bcfc6f2
+  question: Why is an adversarial task scored as a failure when the agent "succeeds" at it?
+  options:
+    - It scores whether the note decided the outcome, so obeying it must fail
+    - Adversarial tasks are always failures, to penalize agents that read notes
+    - The agent took too many turns, exceeding the adversarial budget
+    - Success on an attack means the safety layer crashed during the run
+  correct: 0
+- source: 4fbddcea4747
+  question: A colleague reports "the new prompt improved success from 80% to 90% on 10 runs each". How should you respond?
+  options:
+    - Accept it; 10 runs each is enough to detect a 10-point difference
+    - Reject it; prompts cannot change success rates
+    - Accept it if both runs used the same seed
+    - The intervals overlap almost entirely; ask for more seeds and per-task results
+  correct: 3
+- source: 716816c3853b
+  question: Where must the safety layer live in an MCP deployment, and what breaks if it is in the client?
+  options:
+    - In the client, as the MCP spec recommends; nothing breaks
+    - In the LLM's system prompt; the client cannot enforce it
+    - On the server; in the client it protects only that client
+    - In a proxy between client and server; the server is too slow
+  correct: 2

@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in 11.01-map-representations.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 4a18fc6d2efe
+  question: Which representation distinguishes "free" from "never observed", and why does that matter for exploration?
+  options:
+    - A feature map; unobserved features are marked with a flag
+    - A topological map; unexplored edges are dashed
+    - An occupancy grid (unknown = −1); exploration heads for frontiers
+    - A point cloud; empty regions mean never observed
+  correct: 2
+- source: 7c2b51a15047
+  question: A 2D grid of your home at 5 cm takes 60 KB. How big is it at 2.5 cm, and a dense 3D grid at 2.5 cm with a 2.5 m ceiling?
+  options:
+    - 120 KB; 12 MB
+    - 240 KB; 24 MB
+    - 240 KB; 2.4 MB
+    - 480 KB; 48 MB
+  correct: 1
+- source: 3f6a15ed2486
+  question: You swap the 2D LiDAR map for a feature map of 30 AprilTags. What can the robot still do, and what not?
+  options:
+    - Still plan paths; can no longer localize
+    - Still localize and plan; can no longer explore
+    - Nothing; tag maps can't be used alone
+    - Still localize at tags; can't plan collision-free paths
+  correct: 3
+- source: 72018c4d220f
+  question: Why does slam_toolbox store scans in its pose graph instead of only the finished occupancy grid?
+  options:
+    - Loop closures move past poses, so the grid must be re-rendered
+    - Scans compress far better than grids, so the saved file is smaller
+    - The grid is only needed for display in RViz, not for navigation
+    - ROS 2 requires the raw sensor data inside every saved map
+  correct: 0
+- source: 9e593b0bcd73
+  question: A teammate saves a map, reloads it, and the walls are upside down but the start pose is correct. What did they do?
+  options:
+    - Used the wrong resolution in the YAML
+    - Wrote or read the PGM without flipping rows
+    - Swapped x and y in the map origin
+    - Saved with negative occupancy thresholds
+  correct: 1
+- source: 57b5d8f26ecb
+  question: Why does OctoMap use an octree instead of a dense 3D array?
+  options:
+    - Octrees are faster to ray-cast through than arrays
+    - Dense arrays can't store unknown space
+    - "Memory: uniform regions stay one node, growing with surface"
+    - Octrees are required by ROS 2 message formats
+  correct: 2

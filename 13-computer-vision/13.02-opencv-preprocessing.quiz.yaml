@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.02-opencv-preprocessing.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 32985134e4c6
+  question: Which filter would you use for isolated white and black dots (dead pixels, transmission glitches), and why?
+  options:
+    - "A Gaussian filter: it weights the center pixel most, so isolated outliers are removed without blurring edges"
+    - "A box filter: it averages all neighbours equally, which cancels isolated outliers completely"
+    - "A bilateral filter: it ignores pixels with very different values, so it is the only filter that removes dots"
+    - "A median filter: isolated outliers don't change a neighbourhood's median, while linear filters spread them"
+  correct: 3
+- source: 7aaf5743af0a
+  question: Input noise σ = 6. What is the output noise of a 3 × 3 box filter, and of a 9 × 9 box filter?
+  options:
+    - 0.67 and 0.074
+    - 2.0 and 1.15
+    - 2.0 and 0.67
+    - 3.46 and 2.0
+  correct: 2
+- source: 16a1c8ebda95
+  question: Why did Otsu mark 100% of the dim left third as "dark" in the gradient scene?
+  options:
+    - It picks one global threshold; with a strong gradient the best split is dim vs. bright half, so the threshold exceeds every dim pixel
+    - It picks a separate threshold per region, and the dim region's threshold was computed from too few pixels to be reliable
+    - It assumes a unimodal histogram, and the gradient created a single peak that placed every pixel below the mean
+    - It ignores pixels below 128 by design, so any region that dim is always labeled dark regardless of content
+  correct: 0
+- source: 96efd6bfbf5c
+  question: You open a mask with an 11 × 11 kernel and a far ball (disc of radius 5 px) disappears. Why, and what fixes it?
+  options:
+    - Dilation grows the background over the disc; use a larger kernel so the disc survives the closing step
+    - Opening fills holes, merging the disc into the background; use closing instead with the same kernel
+    - The kernel is even-sized, which shifts the disc off the image; use an odd kernel of the same size
+    - Erosion keeps only pixels where the whole kernel fits, which is none; use a 3–5 px kernel or higher resolution
+  correct: 3
+- source: 17a619d3c300
+  question: You apply `cv2.blur(mask, (5, 5))` to a binary mask and then `cv2.findContours`. What goes wrong?
+  options:
+    - The blur removes all foreground pixels below 128, so small blobs vanish before contours are found
+    - "`findContours` rejects non-binary images and raises an error, so no contours are returned"
+    - Intermediate values count as foreground, so blobs grow by the kernel radius and nearby blobs merge
+    - Blob edges become jagged, so every contour's area roughly doubles while blobs stay separate
+  correct: 2
+- source: d6d9317f56ce
+  question: What is the difference between opening and closing, with a robot example?
+  options:
+    - Opening fills small black holes (the highlight in the ball's blob); closing removes small white regions (speckle in a mask).
+    - Opening removes small white regions (speckle in a mask); closing fills small black holes (the highlight in the ball's blob).
+    - Opening sharpens edges before thresholding; closing blurs edges so contours become smoother and rounder.
+    - Opening is dilation followed by erosion; closing is erosion followed by dilation, and both remove speckle equally.
+  correct: 1
+- source: 92aed5315804
+  question: A 640 × 480 pipeline takes 12 ms on the Pi. Roughly how long at 320 × 240, and what is the risk?
+  options:
+    - About 6 ms; colors become less saturated at lower resolution, so HSV thresholds must be widened
+    - About 3 ms; far objects shrink below kernel sizes and thresholds, so recheck minimum detectable distance
+    - About 3 ms; there is no real risk, since detection is scale-invariant for contour-based pipelines
+    - About 1.5 ms; near objects no longer fit in the frame, so the maximum detectable size drops
+  correct: 1

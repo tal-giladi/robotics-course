@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.02-environments-and-pinning.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: b6e111f05b9f
+  question: "`pip install pyserial` on the Pi prints `externally-managed-environment`. Which option works but is a bad idea?"
+  options:
+    - "`sudo apt install python3-serial`."
+    - Installing into a venv created with `--system-site-packages`.
+    - "`pip install --break-system-packages pyserial`."
+    - Adding the rosdep key `python3-serial` to `package.xml` and running `rosdep install`.
+  correct: 2
+- source: f06dcbe08291
+  question: In a venv created with `python3 -m venv ~/v`, `import rclpy` fails with `No module named 'yaml'`. Why?
+  options:
+    - "`rclpy` comes from `PYTHONPATH` (set by sourcing ROS), which the venv doesn't block, but `yaml` is in apt's `dist-packages`, which the venv excludes."
+    - The venv blocks `PYTHONPATH`, so neither `rclpy` nor `yaml` can be found.
+    - "`yaml` was never installed on Ubuntu 24.04; you must pip install it globally."
+    - "`rclpy` requires Python 3.10, and the venv uses Python 3.12."
+  correct: 0
+- source: 814becfb77e4
+  question: "`labs/requirements.txt` has 7 lines but a fresh install brings 20 packages. Which number matters for reproducibility, and what about the other 13?"
+  options:
+    - "The 7: only direct dependencies affect your code, so ignore the rest."
+    - "The 20: for a library leave them as ranges; for a deployed robot compile the closure to exact versions or hashes."
+    - "The 13: pin them in `requirements.txt` with `==` and leave the 7 unpinned."
+    - "The 7: pin them with `==` and the other 13 will follow automatically."
+  correct: 1
+- source: aee2b6d3115c
+  question: You run `pip install -e labs/python`, then edit `geometry.py`. Do you need to re-install? What about after `pip install labs/python`?
+  options:
+    - "Editable: yes, re-install; non-editable: no, it links to your checkout."
+    - Both need a re-install after every edit.
+    - Neither needs a re-install; pip always links to the source.
+    - "Editable: no, the install points at your checkout; non-editable: yes, the files were copied into site-packages."
+  correct: 3
+- source: 8cdc70345fac
+  question: CI is green; the same test fails on the Pi with a numpy error. Which three differences do you check before touching the test?
+  options:
+    - Python minor version, architecture (arm64 vs x86-64 wheels and float rounding), and package versions (apt numpy vs resolved numpy).
+    - Disk space, network speed, and the Pi's CPU temperature.
+    - The Git commit, the editor's line endings, and the terminal's locale.
+    - The number of CPU cores, the swap size, and the SD card brand.
+  correct: 0
+- source: d1c0affbca1d
+  question: Why does `labs/requirements.txt` use `>=` rather than `==`, while the Dockerfile pins a base image tag?
+  options:
+    - "`==` is not supported by `pip` for scientific packages like numpy."
+    - The requirements file must keep working on unknown future machines (a floor); the container exists to be reproducible, so it names an exact image.
+    - Docker ignores version ranges, so it must be pinned; pip resolves ranges faster.
+    - The Dockerfile is only used in CI, where versions never matter.
+  correct: 1
+- source: 383ff7d663d7
+  question: A teammate proposes committing `.venv/` "so everyone has the same packages". What do you say?
+  options:
+    - Yes, as long as it's compressed with Git LFS.
+    - Yes, but only on machines with the same Python minor version.
+    - "No: commit `requirements.txt` with every package pinned by `==` and nothing else."
+    - "No: a venv has absolute paths and platform-specific binaries; commit the inputs (pyproject, lockfile) and let each machine build it."
+  correct: 3

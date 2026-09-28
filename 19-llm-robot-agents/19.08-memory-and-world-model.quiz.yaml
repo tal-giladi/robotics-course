@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 19.08-memory-and-world-model.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1be388c87f51
+  question: The robot saw the keys on the desk 20 minutes ago with confidence 0.9. Keys have an 1800 s half-life and the threshold is 0.35. Is it worth a drive?
+  options:
+    - No; belief is about 0.23, below the threshold
+    - Yes; belief is about 0.57, above 0.35
+    - Yes; belief stays 0.9 until the half-life has passed
+    - No; belief is about 0.36, too close to the threshold
+  correct: 1
+- source: d339d36631ed
+  question: Why is "looked and did not see" weaker evidence than "looked and saw"?
+  options:
+    - Misses are common and hallucinations rare, so a miss only scales the belief
+    - A non-detection is logged with lower priority, so it is overwritten sooner
+    - The detector's confidence for a miss is always 0.5 by design
+    - Sightings are confirmed by the user, while misses are not
+  correct: 0
+- source: 155076354ec7
+  question: You remove the `max(0.0, ...)` clamp on age and the clock steps back an hour during NTP sync. What does the robot do?
+  options:
+    - Beliefs reset to zero, so it searches every room from scratch
+    - Nothing; age is measured in monotonic time
+    - Beliefs grow above 1, so it drives confidently where it hasn't looked
+    - It crashes on a math domain error and restarts
+  correct: 2
+- source: 6e9d4230cd94
+  question: Memory saved 10.3 s on the keys and 31.4 s on the red cup. What does that difference measure?
+  options:
+    - The detector's accuracy on small versus large objects
+    - The distance between the dock and each object's room
+    - The half-life of each object class
+    - How wrong the map's authored prior was for each object
+  correct: 3
+- source: 5d1ea2b1b5e0
+  question: Your robot has 40 objects in memory and the prompt block is capped at eight. What have you built if you raise the cap to 40?
+  options:
+    - A prompt that grows with uptime; make the selection task-dependent instead
+    - A better agent, since the model now sees everything the robot knows
+    - A cheaper agent, since fewer detections are needed per task
+    - Nothing different, because prompt caching absorbs the extra tokens
+  correct: 0
+- source: abf323e10b9a
+  question: The robot picks up the bottle. What should happen to the belief that it is on the counter?
+  options:
+    - Keep it, but lower its confidence to 0.45 like a miss
+    - Keep it until the next detection of the counter
+    - Delete it; on placing, write a new "inferred" belief at 0.95
+    - Move it to the gripper with its original confidence
+  correct: 2
+- source: 7f3605b2be9b
+  question: The user says "the keys are in the study" and the camera saw them in the kitchen ten minutes ago. Which wins?
+  options:
+    - The user, always, because people are the authority
+    - Neither automatically; treat the disagreement as information and go check
+    - The camera; overwrite the user's claim and discard it
+    - The older one, since it has had more time to be confirmed
+  correct: 1
+- source: 9c75edf22d87
+  question: Why is memory updated in a wrapper around the skills gateway rather than in the executive?
+  options:
+    - The gateway runs on the GPU, so updates are faster there
+    - The executive has no direct access to the object detector's output
+    - The model must approve each memory write before it is saved
+    - Every observation passes through the gateway, whichever executive calls
+  correct: 3

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.19-can-bus-concepts.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 5e9a9f27586c
+  question: Why is differential signaling more robust to motor noise than a single-ended UART signal?
+  options:
+    - The two wires carry the signal twice, so the receiver can pick the cleaner copy
+    - Differential lines run at higher voltage, so noise is small by comparison
+    - Noise shifts both twisted wires equally, and the receiver only reads their difference
+    - The twisted pair is shielded, so noise cannot reach either wire at all
+  correct: 2
+- source: 96702c46e8fb
+  question: If one CAN node drives dominant and another recessive, which state wins, and what is its logic value?
+  options:
+    - Dominant wins; dominant is logic 1
+    - Dominant wins; dominant is logic 0
+    - Recessive wins; recessive is logic 1
+    - Neither wins; the bus reports an error
+  correct: 1
+- source: ac65e40ac9ef
+  question: Nodes with IDs 0x3A0 and 0x3A8 start transmitting simultaneously. Which wins, and at which ID bit does the loser back off?
+  options:
+    - 0x3A8 wins; 0x3A0 backs off at bit 3
+    - 0x3A0 wins; 0x3A8 backs off at bit 8
+    - 0x3A8 wins; 0x3A0 backs off at bit 0
+    - 0x3A0 wins; 0x3A8 backs off at bit 3
+  correct: 3
+- source: 33e0a53b7151
+  question: You measure 120 Ω between CAN_H and CAN_L with the bus powered off. What's wrong?
+  options:
+    - Only one terminator is present; a correct bus reads 60 Ω
+    - Nothing; 120 Ω is the correct reading for a terminated bus
+    - Three terminators are present; a correct bus reads 240 Ω
+    - CAN_H and CAN_L are swapped; a correct bus reads 0 Ω
+  correct: 0
+- source: f7f0cc8018a7
+  question: How long does a 124-bit frame take at 500 kbit/s, and how many such frames per second can the bus carry at most?
+  options:
+    - 248 µs; about 4,032 frames/s shared by all nodes
+    - 248 µs; about 4,032 frames/s per node
+    - 2.48 ms; about 403 frames/s shared by all nodes
+    - 31 µs; about 32,258 frames/s shared by all nodes
+  correct: 0
+- source: 0b7f35233cdc
+  question: What happens to a node whose transmit error counter exceeds 255, and why is that good for the robot?
+  options:
+    - It resets its counter and retries immediately, so no messages are ever lost
+    - It raises its priority so its frames win arbitration and get through faster
+    - It switches to listen-only for one frame, then resumes transmitting normally
+    - It goes bus-off and stops transmitting, so a faulty node can't corrupt everyone's traffic
+  correct: 3
+- source: ba7348b262bb
+  question: You connect one terminated USB-CAN adapter to nothing else and send frames with `cansend`. What do the interface statistics show?
+  options:
+    - Frames are sent successfully, since the terminator acknowledges them
+    - The interface goes bus-off immediately after the first frame
+    - ACK errors on every frame; TEC climbs and the interface goes ERROR-PASSIVE
+    - No errors, because a single node doesn't need acknowledgement
+  correct: 2

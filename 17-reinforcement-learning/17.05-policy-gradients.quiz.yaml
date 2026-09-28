@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 17.05-policy-gradients.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 40470f74e631
+  question: Why can't you compute $\nabla_\theta J$ by differentiating the reward with respect to the action?
+  options:
+    - The reward is always a constant per episode, so its derivative with respect to the action is zero
+    - There is no differentiable model of the environment; the log-derivative trick moves the derivative onto $\pi$
+    - Actions are integers in policy-gradient methods, so no derivative with respect to them exists
+    - Differentiating the reward is possible but ten times slower than sampling trajectories
+  correct: 1
+- source: f967999f3129
+  question: Which is the REINFORCE estimator for one episode?
+  options:
+    - $\hat{g} = \sum_t \nabla_\theta \log \pi_\theta(a_t \mid s_t)\,(G_t - b(s_t))$, followed by gradient ascent
+    - $\hat{g} = \sum_t \nabla_\theta \pi_\theta(a_t \mid s_t)\,(r_t - b(s_t))$, followed by gradient descent
+    - $\hat{g} = \sum_t \nabla_\theta Q(s_t, a_t)\,\log \pi_\theta(a_t \mid s_t)$, followed by gradient ascent
+    - $\hat{g} = \sum_t \nabla_\theta \log \pi_\theta(a_t \mid s_t)\,G_0$, followed by gradient descent
+  correct: 0
+- source: 1283ae0dac86
+  question: $\mu = -0.2$ rad/s, $\sigma = 0.25$, sampled $a = 0.3$, advantage $-1.5$. Which way does the mean move, and does σ grow or shrink?
+  options:
+    - The mean moves toward 0.3 (less negative), and σ grows
+    - The mean moves away from 0.3 (more negative), and σ grows
+    - The mean moves away from 0.3 (more negative), and σ shrinks
+    - The mean moves toward 0.3 (less negative), and σ shrinks
+  correct: 2
+- source: fb3823feb3b2
+  question: Why is subtracting a baseline free, and what does it buy?
+  options:
+    - The baseline is learned separately, so it costs no samples; it removes all bias from the estimate
+    - The baseline is constant, so its gradient vanishes; it speeds up each gradient computation
+    - $\mathbb{E}_a[\pi] = 1$, so it cancels in the ratio; it lets the policy reuse old trajectories
+    - $\mathbb{E}_a[\nabla\log\pi] = 0$, so it stays unbiased; it lowers variance and makes failures informative
+  correct: 3
+- source: 9add68aa27a9
+  question: Rewards are 0 everywhere and +1 on success, no baseline, and the policy succeeds once in 200 episodes. What does the learning curve look like?
+  options:
+    - "Steadily rising: each failure pushes the policy away from bad actions, even without a baseline"
+    - "Oscillating wildly: each failure gives a large negative gradient that cancels the success"
+    - Rising quickly at first, then flat, as the single success is replayed many times
+    - "Flat for long stretches: 199 of 200 episodes give zero gradient, and the rare update is very noisy"
+  correct: 3
+- source: 4555c55babca
+  question: Why can't REINFORCE use a replay buffer, while DQN can?
+  options:
+    - Its networks are too small to benefit from replay; DQN's larger networks need more data
+    - Its estimator assumes data from the current policy; DQN's Bellman-optimality target is off-policy
+    - It updates once per episode, so there is nothing to replay; DQN updates every step
+    - Its rewards are sparse, so replay would only repeat failures; DQN's rewards are dense
+  correct: 1
+- source: "51124e391072"
+  question: Your CartPole policy reaches average length 150, then drops to 20 and stays there. What do you check, in order?
+  options:
+    - Entropy/σ collapse, then advantage scaling and learning rate, then resets and seeds
+    - The discount factor, then the network depth, then the replay buffer size
+    - The reward scale, then the target network refresh rate, then ε decay
+    - The GPU memory, then the batch size, then the episode time limit
+  correct: 0

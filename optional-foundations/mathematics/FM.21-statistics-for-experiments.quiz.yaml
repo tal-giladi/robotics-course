@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.21-statistics-for-experiments.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 856ee04b4d91
+  question: When is the median a better summary than the mean for robot trial errors?
+  options:
+    - When the errors are normally distributed with no outliers
+    - When outliers or skew (occasional big failures) hide the typical run
+    - When you need the RMSE or bias of the errors
+    - When rare large errors matter most to the question
+  correct: 1
+- source: a6b40e2a37c3
+  question: Errors $e = (-1, 1, 3)$ cm. What are the bias, σ (1/n) and RMSE?
+  options:
+    - Bias 1.0, σ 2.0, RMSE 1.915
+    - Bias 1.667, σ 1.633, RMSE 3.667
+    - Bias 1.0, σ 1.633, RMSE 2.667
+    - Bias 1.0, σ 1.633, RMSE 1.915
+  correct: 3
+- source: eef346194e97
+  question: Ten trials give sd 0.8 cm. What is the standard error of the mean and the 95% CI half-width?
+  options:
+    - SE 0.253 cm; half-width 0.57 cm
+    - SE 0.08 cm; half-width 0.18 cm
+    - SE 0.253 cm; half-width 0.253 cm
+    - SE 0.8 cm; half-width 1.81 cm
+  correct: 0
+- source: a6b509e31248
+  question: You want the 95% CI half-width of the mean to be 0.1 cm and the sd is about 0.5 cm. Roughly how many trials?
+  options:
+    - About 10
+    - About 25
+    - About 100
+    - About 400
+  correct: 2
+- source: 736377b44840
+  question: An outlier inflates the sample sd. Why does that make the classic z-score test worse at detecting it?
+  options:
+    - The z-score uses the median, which the outlier shifts toward itself
+    - The inflated sd makes every other point look like an outlier instead
+    - The z-score ignores the sd and only uses the range of the data
+    - The z-score divides by the sd the outlier inflated, so its own z shrinks
+  correct: 3
+- source: 217fa3f6e7bf
+  question: Your robot completed 50 navigation runs with 0 collisions. What can you say about its collision rate?
+  options:
+    - It is 0%, since no collisions were observed
+    - With 95% confidence it is below about 0.5% per run
+    - With 95% confidence it is below about 6% per run
+    - Nothing, since zero events give no information
+  correct: 2
+- source: 771eb3b0800d
+  question: Odometry RMSE improved from 3.0 to 2.0 cm, but a colleague can't reproduce it. "Before" ran in the morning on a full battery, "after" in the evening. What went wrong?
+  options:
+    - Too few trials; repeat the same morning/evening schedule with twice as many runs
+    - A confounder (battery, conditions); interleave both in random order and log voltage
+    - The colleague's robot differs; send them your exact robot to reproduce it
+    - RMSE is the wrong metric; report the median error instead to remove the gap
+  correct: 1

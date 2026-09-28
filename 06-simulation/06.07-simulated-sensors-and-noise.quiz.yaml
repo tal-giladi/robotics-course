@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 06.07-simulated-sensors-and-noise.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1bb7af4e3cfb
+  question: What is the difference between `<stddev>` and `<bias_mean>` in a Gazebo noise block, and which one ruins dead reckoning?
+  options:
+    - "`stddev` is a constant offset drawn once per run; `bias_mean` is redrawn each sample; `stddev` ruins it"
+    - "`stddev` is white noise per sample; `bias_mean` is a constant offset per run; the bias ruins it"
+    - Both are redrawn every sample; `bias_mean` just has a larger magnitude, so it ruins dead reckoning
+    - "`stddev` is white noise; `bias_mean` is an offset; white noise ruins it, as it grows linearly"
+  correct: 1
+- source: 63695c025b1a
+  question: A simulated gyro has $\sigma = 2\times10^{-3}$ rad/s at 100 Hz and a bias of $1\times10^{-4}$ rad/s. After how long does the integrated bias error exceed the white-noise error?
+  options:
+    - About 0.4 s
+    - About 20 s
+    - About 400 s
+    - About 4 s
+  correct: 3
+- source: ea833917d99c
+  question: "`/scan` reports 1.58 m straight ahead where the wall is 1.95 m away, but the 90° ray is correct. What is your first hypothesis and how do you confirm it?"
+  options:
+    - The scan plane is pitched so forward rays hit the floor; the still accelerometer's $a_x$ shows it
+    - The LiDAR's range scale factor is wrong; the camera's depth image of the wall confirms it
+    - The wall is transparent in simulation; the GUI's view-collisions toggle confirms it
+    - The scan plane is rolled about $x$; the gyro's $z$ reading at rest confirms it
+  correct: 0
+- source: 7c52b4d90bb7
+  question: A matt black wall, a white wall and a glass sheet are each 1.00 m from a simulated `gpu_lidar` and from a real RPLIDAR C1. What does each report?
+  options:
+    - Both report 1.00 m off all three surfaces, since LiDAR ranging is material-independent
+    - "Simulated: nothing off the glass. Real: 1.00 m off all three, including the glass"
+    - "Simulated: 1.00 m off all three. Real: fine on white, weak on black, mostly nothing on glass"
+    - "Simulated: noisier on the black wall. Real: 1.00 m off glass and nothing off black"
+  correct: 2
+- source: 45b72f6c1d2d
+  question: "`ros2 topic hz /scan` says 1.5 Hz while `<update_rate>` says 10. Is the sensor broken?"
+  options:
+    - "Yes: the `Sensors` system is throttling the LiDAR to protect the render thread"
+    - "Probably not: `hz` counts wall-clock arrivals, and at RTF 0.15 that gives 1.5 Hz"
+    - "Yes: `update_rate` must be raised to about 66.7 to actually get 10 Hz out"
+    - "No: `ros2 topic hz` always under-reports best-effort topics by a factor of 10"
+  correct: 1
+- source: 47b4f9fc9f57
+  question: "Why does the simulated camera report `distortion_model: plumb_bob` with an all-zero `d`, and why is that a problem for testing?"
+  options:
+    - It is an ideal pinhole, so undistortion is a no-op and calibration bugs stay hidden
+    - Gazebo failed to load the calibration, so the camera must be calibrated before use
+    - Zero coefficients mean maximum distortion, so simulated images are strongly warped
+    - "`plumb_bob` ignores `d` entirely; the only problem is that images come out mirrored"
+  correct: 0
+- source: 0130fb39a81a
+  question: You add a second LiDAR; it appears in `gz topic -l` but nothing shows up in ROS 2. What are the two checks, in order?
+  options:
+    - (1) Raise the scan rate, (2) switch the QoS to reliable
+    - (1) Restart Gazebo with `-r`, (2) re-spawn the robot
+    - (1) Check `use_sim_time`, (2) check `/clock` is bridged
+    - (1) A `bridge.yaml` entry, (2) a valid `<gz_frame_id>`
+  correct: 3
+- source: 843a25720b4f
+  question: Which set correctly pairs real-camera effects that the simulated camera lacks with an algorithm each would break?
+  options:
+    - Pinhole projection breaks stereo matching; fixed focal length breaks ArUco; RGB output breaks thresholds
+    - Perfect exposure breaks SLAM; zero latency breaks teleoperation; square pixels break calibration
+    - Auto-exposure breaks colour thresholds; motion blur breaks tracking; distortion breaks pose estimation
+    - Frame drops break AMCL; Bayer patterns break odometry; USB bandwidth limits break the EKF
+  correct: 2

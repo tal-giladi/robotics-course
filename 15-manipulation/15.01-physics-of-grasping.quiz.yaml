@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 15.01-physics-of-grasping.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: "40400958e095"
+  question: A pad has $\mu = 0.45$. What is the friction-cone half-angle, and what does it mean physically?
+  options:
+    - About 24.2°; forces within it of the normal stick, beyond it slip (also the object's sliding ramp angle)
+    - About 65.8°; forces within it of the surface plane stick, beyond it slip toward the normal
+    - About 24.2°; forces within it of the surface plane stick, beyond it lift the object off
+    - About 45.0°; forces within it of the normal stick, since cone angles are independent of $\mu$
+  correct: 0
+- source: cbce3117864a
+  question: The jaw makes 6 N per pad. With $\mu = 0.5$, two pads, safety factor 2 and a 1 m/s² lift, what is the heaviest object you may pick?
+  options:
+    - About 555 g
+    - About 277 g
+    - About 306 g
+    - About 139 g
+  correct: 1
+- source: 6fc43d4cad11
+  question: You double the grip force on a grasp whose $\varepsilon$ is 0. What happens to $\varepsilon$?
+  options:
+    - It becomes positive, since more force widens each friction cone
+    - It doubles, since $\varepsilon$ scales linearly with contact force
+    - It becomes negative, since extra force pushes the object out
+    - "Nothing: it stays 0, since $\\varepsilon$ uses unit wrenches and is scale-free"
+  correct: 3
+- source: e28b6a50a176
+  question: Why does adding a fourth and fifth finger around a disc not improve $\varepsilon$, when the third one did?
+  options:
+    - Three evenly spaced cones already span the wrench space; extra wrenches fall inside the existing hull
+    - Each extra finger adds friction, but also adds an opposing wrench that cancels the gain exactly
+    - $\varepsilon$ is defined for at most three contacts, so extra fingers are simply ignored by the metric
+    - With more fingers the contact forces are split further, so each cone shrinks and $\varepsilon$ stays flat
+  correct: 0
+- source: fa3352e294d8
+  question: A grasp passes `is_antipodal` but the object spins out of the jaws during lift. What's happening, and the cheapest fix?
+  options:
+    - Insufficient friction along the normal; double the grip force until the object stops rotating
+    - The pads are too soft and compress unevenly; switch to harder, smaller pads with a higher $\mu$
+    - Torsion about the contact normal from an off-centre grasp; move the grasp line nearer the centre of mass
+    - The lift is too fast; reduce lift acceleration so the object's inertia cannot overcome friction
+  correct: 2
+- source: d45f714345fc
+  question: An object's gripping faces taper by 25°. What is the minimum pad $\mu$ for force closure in a pinch?
+  options:
+    - $\mu > \sin 25° \approx 0.423$
+    - $\mu > \tan 50° \approx 1.192$
+    - $\mu > \tan 25° \approx 0.466$
+    - $\mu > \cos 25° \approx 0.906$
+  correct: 2
+- source: 4fac11102209
+  question: Two force-closure grasps on the same block score $\varepsilon = 0.25$ and $\varepsilon = 0.04$. Does it matter which you execute?
+  options:
+    - "Yes: the 0.04 grasp tolerates ~6× less disturbance and is less robust to contact position errors"
+    - "No: both have force closure, so both will hold the block equally well under any disturbance"
+    - "Yes: the 0.04 grasp is better, since lower $\\varepsilon$ means less force is needed to hold"
+    - "No: $\\varepsilon$ only matters for grasps with more than two contacts, not a two-finger pinch"
+  correct: 0

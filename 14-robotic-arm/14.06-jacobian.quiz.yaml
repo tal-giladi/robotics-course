@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 14.06-jacobian.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d3daec4e1c0c
+  question: What are the units of a linear Jacobian entry, and what does an entry of 0.135 mean physically?
+  options:
+    - rad/m; moving the tool 1 m along that axis turns that joint by 0.135 rad
+    - m/s; that joint moves the tool 0.135 m per second at any joint speed
+    - m/rad; turning that joint at 1 rad/s moves the tool at 0.135 m/s along that axis
+    - N·m/N; a 1 N force along that axis produces 0.135 N·m at every joint
+  correct: 2
+- source: a500ebc2c80a
+  question: The 2-link arm has manipulability $w = l_1 l_2 |\sin q_2|$. Why does $q_1$ not appear?
+  options:
+    - $q_1$ is the base joint, whose speed limit is so high that it never constrains the tool velocity
+    - $q_1$ cancels out of $\det J$ because $\sin^2 q_1 + \cos^2 q_1 = 1$ multiplies the other terms
+    - $q_1$ appears only in the angular Jacobian, which manipulability deliberately leaves out
+    - $q_1$ rotates the whole arm rigidly, which rotates the velocity ellipse without changing its shape or area
+  correct: 3
+- source: 94ee9bb0ee4e
+  question: You command the 2-link tip straight outward at 5 cm/s with $\lambda = 0$, at $q_2 = 5°$. What joint speed is demanded, and what does the servo do?
+  options:
+    - About 443 °/s; the servo saturates, the joint speed ratio breaks, and the tool jerks off-direction
+    - About 44 °/s; well within the servo's limits, so the tool moves smoothly outward as commanded
+    - About 443 °/s; the servo delivers it briefly, so the motion is fast but stays in the commanded direction
+    - About 4,430 °/s; the servo detects the overload and disables torque until the command is cleared
+  correct: 0
+- source: 46d59697daa1
+  question: Your arm is 1 cm from full extension and must keep moving outward. Which responses are legitimate?
+  options:
+    - Raise the joint speed limit, lower $\lambda$ to zero, or switch to the exact Jacobian inverse
+    - Damp the radial motion, move the base or object, or re-plan from a better-conditioned configuration
+    - Raise the joint speed limit, damp the radial motion, or disable the singularity check temporarily
+    - Switch to a longer gripper, increase the servo voltage, or lower the control loop rate
+  correct: 1
+- source: 14a3a7f7058e
+  question: 5 N pushes straight down on the gripper; the linear Jacobian's third row is $(0, -0.149, -0.181, -0.047, 0)$ m/rad. Which joint feels the most torque?
+  options:
+    - "`elbow_flex`, 0.904 N·m"
+    - "`shoulder_lift`, 0.744 N·m"
+    - "`shoulder_pan`, 0.905 N·m"
+    - "`elbow_flex`, 0.181 N·m"
+  correct: 0
+- source: c22c56be2e73
+  question: Why is damped least squares better, not just safer, than the exact inverse when servos have speed limits?
+  options:
+    - DLS is exact while the inverse is approximate, so DLS always ends closer to the goal than the inverse
+    - The exact answer is unexecutable and saturation mangles its direction; DLS returns the best executable command
+    - DLS runs faster per iteration, so the loop rate rises and the arm tracks the path more precisely
+    - DLS ignores joint speed limits entirely, so it never needs to be clipped by the servo firmware
+  correct: 1
+- source: f3ec1872607a
+  question: The SO-101's `wrist_roll` column has a near-zero top half. What does that imply for a position-only task and the null space?
+  options:
+    - The position Jacobian is singular everywhere, and the null space is empty for all tasks
+    - "`wrist_roll` dominates $\\sigma_{\\min}$, and the null space spans the three wrist joints"
+    - The position Jacobian is effectively 3×4, and `wrist_roll` is nearly a pure null-space direction
+    - The Jacobian is 6×4 for all tasks, and `wrist_roll` must be locked to avoid singularities
+  correct: 2
+- source: bbce88bd730d
+  question: To alarm at "getting close to a singularity", would you threshold on $\det J$, $w$ or $\sigma_{\min}$, and what value?
+  options:
+    - $\det J$ ≥ about 0.010, since the determinant bounds the worst-case joint speed
+    - $w$ ≥ about 0.5, since manipulability has units of m/rad at every pose
+    - $\sigma_{\min}$ ≥ about 0.5 m/rad, from a 5.2 rad/s servo limit and a 5 cm/s task
+    - $\sigma_{\min}$ ≥ about 0.010 m/rad, from a 5.2 rad/s servo limit and a 5 cm/s task
+  correct: 3

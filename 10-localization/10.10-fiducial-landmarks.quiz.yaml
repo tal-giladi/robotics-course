@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 10.10-fiducial-landmarks.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 55e023da0bde
+  question: Why feed range and bearing to the filter rather than the full pose a tag detection gives you?
+  options:
+    - The filter's state has no orientation, so a pose can't be fused
+    - A single tag's orientation is ill-conditioned; translation is far more stable
+    - Range and bearing are cheaper to transmit over ROS 2 topics
+    - Full tag poses are only available from stereo cameras
+  correct: 1
+- source: cb35b0a3504b
+  question: A 10 cm tag, $f_x = 468$ px, detection threshold 30 px. What is the usable range, and how do you double it?
+  options:
+    - About 1.56 m; double the tag size or the resolution
+    - About 15.6 m; halve the tag size or the resolution
+    - About 0.78 m; double the detection threshold
+    - About 1.56 m; halve `decimate` and the exposure
+  correct: 0
+- source: 8f9192232e33
+  question: Range errors are +0.4 mm at 0.5 m, +7 mm at 1 m and +66 mm at 2 m. What kind of error, and how should it enter the filter?
+  options:
+    - Zero-mean noise; set R to the largest value, 66 mm
+    - A constant offset; subtract 24 mm from every range
+    - Random outliers; reject them with a tighter χ² gate
+    - A range-growing bias; use $\sigma_r = ar$ and drop distant tags
+  correct: 3
+- source: cd879ac3d393
+  question: What does a tag id buy you that the simulated landmarks of 10.06 did not?
+  options:
+    - Exact data association, for free
+    - Orientation, for free
+    - Lower range noise, for free
+    - A known covariance, for free
+  correct: 0
+- source: f88a76f88bb0
+  question: The detector's `size` is 0.10 m but the printed tag is 9.8 cm. What happens to localization?
+  options:
+    - Ranges are 2 % short, pulling the pose toward each tag
+    - Bearings are 2 % off, rotating the pose slightly
+    - Ranges are 2 % long, pushing the pose away from each tag
+    - Nothing, since the detector measures the size itself
+  correct: 2
+- source: 268fd8e9263b
+  question: One tag is mapped 40 cm from its real position. With and without a χ² gate, what happens, and which number tells you?
+  options:
+    - "No gate: RMSE rises to ~3 cm, NIS ~8; gated: bad tag rejected; per-tag rejection rate tells you"
+    - "No gate: nothing changes; gated: all tags rejected; the particle count tells you"
+    - "No gate: the filter crashes; gated: RMSE rises to 40 cm; the covariance tells you"
+    - "Both: RMSE unchanged, since one tag can't matter; nothing tells you"
+  correct: 0
+- source: 8595519dbc69
+  question: The tag facing convention in your tag map is wrong by 180°. What is still correct, and how would you notice?
+  options:
+    - "Nothing is correct: every id now decodes as a different tag"
+    - Ranges; you notice odd bearing residuals and docking into walls
+    - Only bearings are correct; every range comes out doubled
+    - Everything is correct, since square tags are symmetric anyway
+  correct: 1
+- source: 49147d25b642
+  question: AMCL on a LiDAR map already works. When would you add tags anyway?
+  options:
+    - Only when the LiDAR has failed completely and cannot scan
+    - Whenever a room is larger than about 5 × 5 m in area
+    - To replace the wheel odometry as the EKF's motion input
+    - Ambiguous geometry, or accuracy the map can't give
+  correct: 3

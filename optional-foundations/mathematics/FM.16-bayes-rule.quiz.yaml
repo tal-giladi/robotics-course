@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.16-bayes-rule.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e65394c954f3
+  question: Name the four terms of Bayes' rule. Which comes from sensor calibration?
+  options:
+    - Prior, likelihood, evidence, posterior; the prior $P(x)$ comes from calibration
+    - Prior, likelihood, evidence, posterior; the posterior $P(x \mid z)$ comes from calibration
+    - Prior, likelihood, evidence, posterior; the likelihood $P(z \mid x)$ comes from calibration
+    - Prior, likelihood, evidence, posterior; the evidence $P(z)$ comes from calibration
+  correct: 2
+- source: df3f1c4e319d
+  question: Prior $P(\text{kitchen}) = 0.2$; $P(\text{hum} \mid \text{kitchen}) = 0.9$, $P(\text{hum} \mid \text{elsewhere}) = 0.1$. What is $P(\text{kitchen} \mid \text{hum})$?
+  options:
+    - "0.900"
+    - "0.180"
+    - "0.818"
+    - "0.692"
+  correct: 3
+- source: 1ae9468b12ae
+  question: In log-odds, what is $l$ for $p = 0.5$, $p = 0.9$ and $p = 0.1$?
+  options:
+    - $0.5$, $2.197$, $0.105$
+    - $0$, $2.197$, $-2.197$
+    - $0$, $0.105$, $-2.303$
+    - $1$, $9$, $1/9$
+  correct: 1
+- source: 12d6bdaca5e9
+  question: Prior $\mathcal{N}(5.0, 0.2^2)$ m, measurement 5.4 m with σ = 0.2 m. Posterior mean and σ?
+  options:
+    - 5.2 m, σ = 0.141 m
+    - 5.2 m, σ = 0.2 m
+    - 5.4 m, σ = 0.1 m
+    - 5.2 m, σ = 0.4 m
+  correct: 0
+- source: 20651a1662f7
+  question: Why do occupancy grids store log-odds instead of probabilities?
+  options:
+    - Log-odds need less memory, since each cell becomes a single byte
+    - Log-odds let each cell store the full distance to the nearest obstacle
+    - Updates become addition, no normalization, stable near 0 and 1, easy clamping
+    - Probabilities cannot represent unknown cells, but log-odds use NaN for them
+  correct: 2
+- source: cbcd48ce5b4a
+  question: A door belief jumps to 0.9999 within one second of looking at a door, though the classifier is only 80% accurate. The camera runs at 30 fps. What's wrong?
+  options:
+    - The classifier's accuracy is actually 99.99%, so the belief is correct
+    - 30 near-identical frames are treated as independent evidence, though their errors are correlated
+    - The prior was set to 0.9999 at startup and the frames never changed it
+    - The camera frame rate is too low; at 60 fps the belief would settle at 0.8
+  correct: 1
+- source: 6c202b1c8f0c
+  question: In the 5-cell hallway example, why is the posterior $[0.12, 0.32, 0.12, 0.32, 0.12]$ and not just "cell 1"?
+  options:
+    - The prior was uniform, so the posterior must stay close to uniform
+    - The robot has not moved yet, so Bayes cannot change the prior at all
+    - Cell 1 is at the edge, so its probability is shared with its neighbors
+    - Two cells have doors and the sensor also sees doors elsewhere 30% of the time
+  correct: 3

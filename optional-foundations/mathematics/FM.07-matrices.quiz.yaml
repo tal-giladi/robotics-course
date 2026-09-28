@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FM.07-matrices.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f85ac499bd64
+  question: What shape is $AB$ if $A$ is $4 \times 3$ and $B$ is $3 \times 2$? Is $BA$ defined?
+  options:
+    - $4 \times 2$; $BA$ is defined and is $3 \times 3$
+    - $3 \times 3$; $BA$ is undefined (inner dims 2 and 4)
+    - $4 \times 2$; $BA$ is undefined (inner dims 2 and 4)
+    - $2 \times 4$; $BA$ is defined and is $4 \times 2$
+  correct: 2
+- source: dc57c0fa7121
+  question: Compute $\begin{pmatrix} 1 & 2 \\ 0 & 1 \end{pmatrix}\begin{pmatrix} 3 \\ 4 \end{pmatrix}$.
+  options:
+    - $(11, 4)$
+    - $(3, 10)$
+    - $(5, 4)$
+    - $(11, 3)$
+  correct: 0
+- source: 8a5fb3bef853
+  question: In karmel's $J$, what does the first column $(0.0225, -0.225)$ mean physically?
+  options:
+    - "Motion from 1 rad/s of both wheels: 0.0225 m/s forward, −0.225 rad/s (turning right)"
+    - "Wheel speeds needed for 1 m/s forward: 0.0225 rad/s left, −0.225 rad/s right"
+    - "Motion from 1 rad/s of the left wheel alone: 0.0225 m/s forward, −0.225 rad/s (turning left)"
+    - "Motion from 1 rad/s of the left wheel alone: 0.0225 m/s forward, −0.225 rad/s (turning right)"
+  correct: 3
+- source: 5b0670db7c6d
+  question: What motion does $J$ produce for $(\omega_L, \omega_R) = (5, -5)$ rad/s? And what does $J^{-1}$ return for the command $(0, 0)$?
+  options:
+    - "$(0.225, 0)$: straight ahead; $J^{-1}$ gives $(0, 0)$"
+    - "$(0, -2.25)$: spinning right in place; $J^{-1}$ gives $(0, 0)$"
+    - "$(0, 2.25)$: spinning left in place; $J^{-1}$ is undefined for zero"
+    - "$(0, -2.25)$: spinning right in place; $J^{-1}$ is undefined for zero"
+  correct: 1
+- source: 95b9de0be575
+  question: Why does $(AB)^T = B^T A^T$ reverse the order? Give the shape argument.
+  options:
+    - "With $A$: $m \\times n$, $B$: $n \\times p$, only $B^T A^T$ is compatible and gives $m \\times p$"
+    - Transposing swaps rows and columns, which swaps the product for square matrices only
+    - "With $A$: $m \\times n$, $B$: $n \\times p$, only $B^T A^T$ is compatible and gives $p \\times m$"
+    - Both orders are compatible; $B^T A^T$ is chosen by convention to keep results symmetric
+  correct: 2
+- source: 51f38dd2d668
+  question: "`v = J @ np.array([[5.0], [5.0]])` returns `[[0.225], [0.]]` and later `v[0] + 1` gives `[1.225]` instead of `1.225`. Why?"
+  options:
+    - The input was a `(2, 1)` column, so `v[0]` is a length-1 array; use 1-D vectors consistently
+    - "`@` returns a list of lists; convert the result with `np.array` before indexing"
+    - "`v[0]` returns the first column, not the first row; use `v[:, 0]` instead"
+    - The addition broadcasts `1` to an array; write `1.0` to get a scalar result
+  correct: 0

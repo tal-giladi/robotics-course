@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.02-wheel-encoders-in-depth.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: bfeae7987506
+  question: With a 1:30 gearbox, 11 PPR Hall encoders (quadrature) and 90 mm wheels, how many ticks per wheel revolution and how many mm per tick?
+  options:
+    - 330 ticks; 0.857 mm per tick
+    - 1320 ticks; 0.4284 mm per tick
+    - 2640 ticks; 0.1071 mm per tick
+    - 1320 ticks; 0.2142 mm per tick
+  correct: 3
+- source: f59d565049a7
+  question: Why does quadrature give 4× the resolution of a single channel, and what extra does it give?
+  options:
+    - Two waves 90° apart give four states per cycle, all edges counted; it also gives direction
+    - The disc has four times more slots when read in quadrature; it also gives absolute position
+    - Each channel is sampled four times faster; it also gives direct detection of wheel slip
+    - Quadrature doubles the voltage and so the edges twice; it also gives temperature compensation
+  correct: 0
+- source: 52c773552a7e
+  question: At 17 rad/s, how long between edges on one wheel, and why does that decide the firmware architecture?
+  options:
+    - About 1.5 ms; plenty of time for MicroPython interrupt handlers to keep up
+    - About 150 µs; IRQ handlers would saturate the CPU and lose edges, hence PIO
+    - About 15 µs; only an external FPGA counter can keep up at that rate
+    - About 150 µs; so the firmware simply polls both pins in the main loop
+  correct: 1
+- source: 408504da134b
+  question: You count ticks in a 5 ms window at 100 Hz. What is the speed resolution, and what happens to a PID tuned on it?
+  options:
+    - ±0.051 rad/s; the PID works perfectly on such a fine signal
+    - ±5.1 rad/s; the PID cannot run at all on such a coarse signal
+    - ±0.510 rad/s; the D term turns quantization into duty chatter
+    - ±0.510 rad/s; only the P term suffers, so the PID settles slowly
+  correct: 2
+- source: d7c4fcc98921
+  question: The robot spins in place 10 times; encoders report 3636°, gyro 3430°. Which is right, and what do you do?
+  options:
+    - The encoders; recalibrate the gyro's scale factor
+    - Neither; average the two readings to get 3533°
+    - The gyro; calibrate the wheelbase and fuse the gyro
+    - The gyro; replace the encoders, which are losing ticks
+  correct: 2
+- source: 021d0c8644b2
+  question: Straight-line odometry is accurate at 0.1 m/s and 1 % short at 0.5 m/s. What are the likely causes and how do you tell them apart?
+  options:
+    - Lost edges or wheel slip; compare IRQ and PIO counts on a stand at that speed
+    - Wrong wheel radius or wrong wheelbase; drive a square and measure the error
+    - Gyro drift or magnetometer error; spin in place and compare the headings
+    - Battery sag or PWM frequency; measure the supply voltage at full speed
+  correct: 0
+- source: e8e70dac8a46
+  question: Why is the "illegal transition" (00 → 11) worth counting in production firmware?
+  options:
+    - It lets the firmware correct the lost edge automatically in the count
+    - It is a free integrity check on a sensor that otherwise has none
+    - It measures wheel slip directly, without needing any other sensor
+    - It is required by the quadrature standard to reset the counter
+  correct: 1
+- source: 0b1dc61ac5bb
+  question: Karmel drives 246 km before its 32-bit counter wraps. Why does the course still teach rollover?
+  options:
+    - Because the counter resets on every reboot, which looks exactly like a rollover
+    - Because the 32-bit counter actually wraps every 3.76 m on karmel's wheels
+    - Because detecting a rollover is how the firmware detects wheel slip
+    - Because other sources are narrower, e.g. 16-bit timers wrap after 3.76 m
+  correct: 3

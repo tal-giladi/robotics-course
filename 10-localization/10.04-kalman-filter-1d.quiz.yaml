@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 10.04-kalman-filter-1d.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: dcc8aa6cb0ad
+  question: Prior $\mathcal{N}(1.00, 0.04)$ m², measurement 1.10 m with R = 0.01. What are K, the posterior mean and posterior σ?
+  options:
+    - K = 0.2; x = 1.02 m; σ = 17.9 cm
+    - K = 0.8; x = 1.08 m; σ = 8.9 cm
+    - K = 0.8; x = 1.08 m; σ = 0.8 cm
+    - K = 0.5; x = 1.05 m; σ = 14.1 cm
+  correct: 1
+- source: dd489931d885
+  question: Q = 1e-4, R = 1e-2. What gain does the filter converge to, its memory, and what if both Q and R are multiplied by 100?
+  options:
+    - K ≈ 0.01, about 100 readings; K grows 100×
+    - K ≈ 0.5, about 2 readings; K is unchanged
+    - K ≈ 0.095, about 10 readings; K is unchanged, P scales 100×
+    - K ≈ 0.095, about 10 readings; K drops 100×
+  correct: 2
+- source: dd36ad172b1a
+  question: Odometry under-reports distance by 5 % and Q = 0. After driving 2 m toward a wall, what does the estimate do, and the innovations?
+  options:
+    - It lags, ending cm too far from the wall; innovations are consistently negative and growing
+    - It tracks perfectly, since the sensor corrects any bias; innovations are zero-mean
+    - It overshoots toward the wall; innovations alternate in sign every step
+    - It diverges to infinity; innovations become NaN after a few steps
+  correct: 0
+- source: a0a378ded6b2
+  question: Why can you compute the whole sequence of P and K before the robot drives, and what does that imply?
+  options:
+    - They depend on the first measurement only; P detects later sensor faults
+    - They are random; P must be averaged over many runs to be useful
+    - They depend on z and u, so precomputing them is only an approximation
+    - They never depend on z or u; P can't detect that data disagree with the model
+  correct: 3
+- source: 48353ed14dda
+  question: The ToF returns no reading for 1 s (20 steps) at Q = 1e-6. What happens to x and P during the gap and at the first reading after it?
+  options:
+    - x follows odometry, P grows by 2e-5; K then exceeds steady state
+    - x freezes at its last value, P stays constant; K is then unchanged
+    - x follows odometry, P shrinks slowly; K is then below steady state
+    - x resets to zero, P resets to P₀; K is then exactly 1
+  correct: 0
+- source: 6a5e1ede6ed8
+  question: Two readings of a wall, 1.00 m and 1.20 m, each R = 0.04, arrive with no motion between them, starting from P₀ = 10⁶. Result?
+  options:
+    - x = 1.20 m, P = 0.04 m²
+    - x = 1.10 m, P = 0.04 m²
+    - x = 1.00 m, P = 0.02 m²
+    - x = 1.10 m, P = 0.02 m²
+  correct: 3
+- source: b168b9c6f45f
+  question: A filter works at 20 Hz; raising the loop to 100 Hz with the same Q and R makes it noisier. Why, and the fix?
+  options:
+    - R is per second; multiply R by 5 at 100 Hz
+    - The sensor is noisier at 100 Hz; add a low-pass filter
+    - Q is per step, so 5× the process noise per second; scale Q with Δt
+    - P₀ is too small at 100 Hz; start from a larger P₀
+  correct: 2
+- source: be677a654afe
+  question: What is the innovation variance S, and what should the average of ν²/S be for a well-tuned filter?
+  options:
+    - S = P̄ − R, the prediction's excess over noise; about 0
+    - S = P̄ + R, the expected innovation variance; about 1
+    - S = R, the sensor's own variance alone; about 2
+    - S = K·P̄, the variance removed by the update; about 0.5
+  correct: 1

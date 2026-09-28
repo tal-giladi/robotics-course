@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 17.01-rl-framing.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3a2257ec7496
+  question: Which list gives the five parts of an MDP with karmel's go-to-goal version of each?
+  options:
+    - States (camera image), actions (motor PWM), transitions (the policy), reward (+1 per step), discount (0.5)
+    - States ($v$, $\omega$), actions (goal pose), transitions (the reward), reward (physics), discount (0.99)
+    - States (goal distance/heading), actions ($v, \omega$), transitions (the critic), reward (−1 per step), learning rate (0.99)
+    - States (goal distance/heading, $v$, $\omega$), actions ($v, \omega$), transitions (physics), reward (progress, ±10), discount (0.99)
+  correct: 3
+- source: acc793818234
+  question: In the corridor with slip 0.2, what is the expected return of "always RIGHT" from cell 3?
+  options:
+    - "8.0"
+    - "9.0"
+    - "7.5"
+    - "8.5"
+  correct: 3
+- source: e529cca49013
+  question: Why is (x, y, θ) alone not a Markov state for a robot with a 0.08 s motor time constant?
+  options:
+    - The pose is measured with noise, and Markov states must be noise-free
+    - The next pose depends on current wheel speeds, which the state lacks; add $v, \omega$
+    - θ wraps around at 2π, which breaks the Markov property; use sin θ and cos θ
+    - The time constant is shorter than the control period, so the state is always stale
+  correct: 1
+- source: 452125985d12
+  question: An environment marks the 20 s time limit as `terminated=True`, and the robot is near the goal at 19.9 s in many episodes. What does the learner believe?
+  options:
+    - Those states have no future value, so near-goal-late is undervalued and targets become inconsistent
+    - Those states are very valuable, since the episode ends successfully at the time limit
+    - Nothing changes, since the learner treats termination and truncation identically
+    - Those states are dangerous, since termination is always interpreted as a collision
+  correct: 0
+- source: 1e5598444f37
+  question: Which pair of robot tasks is a poor fit for RL, with the right alternative?
+  options:
+    - Walking on rough terrain (PID) and dexterous in-hand rotation (A* over grasps)
+    - Holding a wheel speed (deep Q-learning) and path planning in a known map (PPO)
+    - Holding a wheel speed (PID with feedforward) and path planning in a known map (A*/Nav2)
+    - Balancing a unicycle (lookup table) and grasping novel objects (EKF)
+  correct: 2
+- source: 274b127f2646
+  question: What is the difference between the agent's policy and the environment's transition function?
+  options:
+    - The policy $\pi(s' \mid s, a)$ predicts the next state; $P(a \mid s)$ picks the action the world allows
+    - "Both are learned by the agent: the policy from rewards, the transition function from observations"
+    - The policy is fixed by the designer; the transition function is what the agent learns to control
+    - The policy $\pi(a \mid s)$ is learned by the agent; $P(s' \mid s, a)$ belongs to the world and is usually unseen
+  correct: 3
+- source: ba3f0e838c1f
+  question: A teammate's go-to-goal environment feeds the simulator's true pose, slip and battery voltage into the observation. Training works great. Why worry?
+  options:
+    - True values make training too easy, so the policy converges before it has explored enough
+    - The simulator's values are in different units from the real sensors, so the policy must be rescaled
+    - The real robot can't observe them; keep observations sensor-derived with noise, privileged info only for the critic
+    - Privileged inputs slow training down, so removing them will make the policy converge faster
+  correct: 2

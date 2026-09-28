@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.06-imu-in-ros2.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 2e1171a725d3
+  question: A stationary, level IMU publishes `linear_acceleration = (0.02, -0.01, 9.79)`. Is that a fault?
+  options:
+    - "Yes: at rest it should read $(0, 0, 0)$, so gravity must be removed"
+    - "Yes: $z$ should be exactly 9.81, so the scale is miscalibrated"
+    - "No: the field includes gravity, so about +9.81 on $z$ is healthy"
+    - No, but $x$ and $y$ must be zero, so the mount needs re-levelling
+  correct: 2
+- source: f1177bd7fb7b
+  question: Your driver reports the gyro's σ as 0.004 rad/s. What goes into `angular_velocity_covariance`, and where?
+  options:
+    - "`0.004` in elements 0, 4 and 8; all others 0.0"
+    - "`1.6e-5` in elements 0, 4 and 8; all others 0.0"
+    - "`1.6e-5` in all nine elements of the matrix"
+    - "`1.6e-5` in elements 0, 1 and 2; all others 0.0"
+  correct: 1
+- source: 1ec51b00263d
+  question: A chip with no magnetometer publishes `orientation = (0, 0, 0, 1)`. How does a consumer know not to believe it?
+  options:
+    - "`orientation_covariance[0] == -1.0` marks it unreported; without it, the EKF's yaw is pinned"
+    - An identity quaternion always means unreported, so every consumer ignores it automatically
+    - The `frame_id` is left empty when orientation is absent, which filters check before use
+    - A zero covariance marks it unreported, so filters give the quaternion no weight at all
+  correct: 0
+- source: 38f2ca2b342b
+  question: You mount the IMU rotated 90° and fix it by negating two axes inside your heading controller. What breaks, and when?
+  options:
+    - The controller breaks immediately, since negating axes cannot model a rotation
+    - Nothing ever breaks, as long as the negation is documented in the code
+    - TF breaks at once, because the URDF and the controller now disagree
+    - Nothing today; every later topic consumer gets wrong axes. Fix it in the URDF
+  correct: 3
+- source: 4e73e35673b9
+  question: You start `imu_filter_madgwick` with defaults against a driver publishing only `imu/data_raw`. What appears on `/imu/data`?
+  options:
+    - Orientation without yaw, since the filter detects no magnetometer
+    - "Nothing: `use_mag` defaults true, so it waits for `imu/mag` forever"
+    - Full orientation, with yaw drifting slowly from gyro integration
+    - An error and a crash, because the `imu/mag` topic does not exist
+  correct: 1
+- source: 259e90e5eb19
+  question: "`sensor_check.py` says PASS on an IMU whose $y$ axis is inverted. Why can't it tell, and what test can?"
+  options:
+    - A mirrored frame is self-consistent; compare against a known motion, e.g. turn left, $\omega_z > 0$
+    - The check skips the $y$ axis; enable the full-axis mode and run it again
+    - The inversion cancels in $|a|$; compare the magnitude against 9.81 more tightly
+    - The check only tests rates; add a covariance test to catch inverted axes
+  correct: 0
+- source: 3cf48156c0ca
+  question: The IMU's stamp age is 140 ms while the topic runs at a steady 100 Hz. What is wrong, and why doesn't `ros2 topic hz` show it?
+  options:
+    - The IMU's internal clock is slow; `hz` uses the same slow clock
+    - The network adds 140 ms of latency; `hz` subtracts network delay
+    - The QoS queue is too deep; `hz` only counts the newest message
+    - The driver stamps on publish, not at sampling; `hz` ignores stamps
+  correct: 3
+- source: bbc5a33aa9c8
+  question: karmel drives past a fridge with `use_mag` true. What does the fused yaw do, and what should you have configured?
+  options:
+    - Nothing, since Madgwick rejects magnetic disturbances; leave `use_mag` true
+    - It drifts slowly as the gyro bias grows; add a second magnetometer
+    - It swings tens of degrees and back; use `use_mag:=false` and absolute heading from the environment
+    - It locks at north until the fridge is passed; recalibrate the magnetometer
+  correct: 2

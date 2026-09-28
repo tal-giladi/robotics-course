@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 14.04-forward-kinematics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: bb9e3aeb9c97
+  question: Why is FK single-valued while IK is not?
+  options:
+    - FK uses only revolute joints, which are single-valued; IK includes prismatic joints, which have two solutions each
+    - FK is computed numerically and converges to one answer; IK is analytic and returns every root of a polynomial
+    - FK ignores joint limits and so has one answer; IK respects joint limits, which splits each solution in two
+    - FK evaluates a function (one joint vector, one pose); IK solves an equation that can have 0, 1, several or infinitely many solutions
+  correct: 3
+- source: c3459e0e7ce6
+  question: A URDF joint has `xyz = [0.1, 0, 0]`, `rpy = [0, 0, 1.5708]`, `axis = [0, 0, 1]`. Where is the child origin, and about which parent direction does it rotate?
+  options:
+    - At $(0.1, 0, 0)$; about the parent's $x$, since the yaw turns $z$ into $x$
+    - At $(0, 0.1, 0)$; about the parent's $z$, since `rpy` is applied before `xyz`
+    - At $(0.1, 0, 0)$; about the parent's $z$, since a yaw leaves $z$ unchanged
+    - At $(0.1, 0, 0)$; about the parent's $-y$, since the axis is in the child frame
+  correct: 2
+- source: 634c5b182573
+  question: You multiply the chain as $T_5 T_4 T_3 T_2 T_1$. The tool position at $q = 0$ looks plausible. Why, and what breaks?
+  options:
+    - Matrix products commute at $q = 0$, so the pose is correct there; only nonzero joint angles break
+    - The numbers are the same size, but the pose is wrong even at $q = 0$ and joints move the tool in wrong frames
+    - The order doesn't matter for position, only for orientation, so just the gripper's rotation breaks
+    - The reversed chain gives the inverse pose, which is correct in the tool frame; only RViz display breaks
+  correct: 1
+- source: 219e11c266be
+  question: The SO-101 at $q = 0$ has its tool at $(0.3914, 0, 0.2265)$. Predict the tool position at $q = (90°, 0, 0, 0, 0)$.
+  options:
+    - About $(0.0388, -0.3526, 0.2265)$, since the pan axis points along $-z$
+    - About $(0.0388, 0.3526, 0.2265)$, since the pan axis points along $+z$
+    - About $(0, 0.3914, 0.2265)$, since the pan axis passes through the origin
+    - About $(0.0388, -0.3526, 0.0624)$, since panning also lowers the tool
+  correct: 0
+- source: 3e96ecd8e5f9
+  question: FK says the tool is at $x = 0.30$ m; a tape measure says 0.28 m at every pose. Which causes are likely, and how do you tell them apart?
+  options:
+    - Encoder noise or servo backlash; average 100 readings at each pose and compare the standard deviations
+    - A wrong base frame or wrong gravity vector; tilt the base and check whether the error changes sign
+    - Wrong units in the URDF or thermal expansion; measure once cold and once after ten minutes of motion
+    - A joint-zero offset or a wrong link length; compare errors at very different poses, or caliper the axis distances
+  correct: 3
+- source: 83a07027c795
+  question: What does the product-of-exponentials formula need that the chain product does not, and what does it save?
+  options:
+    - Each link's mass and inertia; it saves the need for joint limits and gives the dynamics directly
+    - The DH parameters of every link; it saves memory by storing one matrix per joint instead of two
+    - The zero pose $M$ and base-frame screw axes at $q = 0$; it saves intermediate frames and conventions, and gives Jacobian columns
+    - The joint velocities at $q = 0$; it saves the IK step and gives the tool pose for every joint vector
+  correct: 2
+- source: 00877e18b8ef
+  question: Why does this course check the YAML kinematics against the original URDF XML in a test?
+  options:
+    - ROS 2 cannot load YAML kinematics at run time, so the test ensures the XML is used on the robot
+    - The YAML was hand-transcribed, and one wrong digit silently moves the tool; an independent parser catches it
+    - The URDF uses degrees while the YAML uses radians, and the test converts between them
+    - The test measures how fast each format loads, to pick the faster one for the controller
+  correct: 1

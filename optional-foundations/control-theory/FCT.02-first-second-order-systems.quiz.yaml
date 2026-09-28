@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FCT.02-first-second-order-systems.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e0eb446b2aa0
+  question: A first-order system settles at 6 rad/s. What does it read after 2τ?
+  options:
+    - 3.79 rad/s
+    - 5.19 rad/s
+    - 5.70 rad/s
+    - 4.50 rad/s
+  correct: 1
+- source: f5957bf44c1a
+  question: Why can a first-order system never overshoot?
+  options:
+    - Its rate is proportional to the remaining gap, and it has only one energy storage
+    - Its gain is always below one, so the output can't exceed the input
+    - It has no friction, so nothing pushes it past the target
+    - Its time constant is too short for the output to build momentum
+  correct: 0
+- source: 7c592bffd9f1
+  question: What damping ratio gives about 5% overshoot, and what is the overshoot at ζ = 0.4?
+  options:
+    - ζ ≈ 0.5; about 16% at ζ = 0.4
+    - ζ ≈ 1.0; about 40% at ζ = 0.4
+    - ζ ≈ 0.7; about 25% at ζ = 0.4
+    - ζ ≈ 0.7; about 10% at ζ = 0.4
+  correct: 2
+- source: 62c3fdcce437
+  question: For karmel's wheel-angle P loop ($\tau = 0.08$ s, $K = 19.3$), what $K_p$ gives critical damping (ζ = 1)?
+  options:
+    - About 0.65 duty per rad
+    - About 0.081 duty per rad
+    - About 1.0 duty per rad
+    - About 0.162 duty per rad
+  correct: 3
+- source: bbc9c4508954
+  question: You swap in a motor with half the τ (0.04 s), same K and $K_p = 1$. What happens to ζ and the settling time?
+  options:
+    - ζ rises by √2 (0.40 → 0.57) and settling time roughly halves
+    - ζ halves (0.40 → 0.20) and settling time roughly halves
+    - ζ stays at 0.40 and settling time roughly halves
+    - ζ doubles (0.40 → 0.80) and settling time stays the same
+  correct: 0
+- source: b112804332f1
+  question: A logged wheel "step response" rises to 12 rad/s, dips to 9 and settles at 10. You think the motor is second order. What do you check first?
+  options:
+    - Whether the encoder is counting both edges, doubling the measured speed
+    - Whether it was really open loop; repeat with an open-loop duty step (`M`) and raw speed
+    - Whether the battery sagged during the step, which causes the dip
+    - Whether the gearbox backlash adds a second pole to the motor model
+  correct: 1
+- source: a2946f25057f
+  question: A P speed loop has plant τ = 0.08 s and loop gain 2.9. What time constant does an outer heading loop "see" for it?
+  options:
+    - About 232 ms
+    - About 80 ms
+    - About 20.5 ms
+    - About 27.6 ms
+  correct: 2

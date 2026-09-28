@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in 04.05-packages-and-workspaces.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 14208bc87809
+  question: Which set of files makes a directory a minimal `ament_python` package?
+  options:
+    - "`CMakeLists.txt`, `package.xml` and `<pkg>/__init__.py`."
+    - "`package.xml`, `setup.py`, `setup.cfg`, `resource/<pkg>` and `<pkg>/__init__.py`."
+    - "`pyproject.toml`, `requirements.txt` and `<pkg>/__init__.py`."
+    - "`setup.py`, `colcon.pkg` and `launch/<pkg>.launch.py`."
+  correct: 1
+- source: 8983ddb221f3
+  question: In a `--symlink-install` workspace you edit `battery_monitor.py` and add a new console script in `setup.py`. What must you do?
+  options:
+    - "Nothing: both work immediately thanks to the symlinks."
+    - Rebuild for both, since symlinks only cover data files.
+    - The edit works immediately; the new console script needs `colcon build`, since entry points are generated at build time.
+    - Re-source only; `setup.py` is read at runtime by `ros2 run`.
+  correct: 2
+- source: 8aabc2382132
+  question: Using `AMENT_PREFIX_PATH`, which copy of a package runs if it exists in both the overlay and the underlay?
+  options:
+    - The underlay's, because `/opt/ros/jazzy` is always searched first.
+    - Whichever was built most recently.
+    - "Neither: `ros2 run` fails with a duplicate-package error."
+    - The overlay's, because its prefixes come first on the path and the first match wins.
+  correct: 3
+- source: 8b885bc9a276
+  question: Interface package 90 s; two independent Python packages 10 s each depending on it; a bringup package 3 s depending on both. Wall time with 8 workers?
+  options:
+    - 103 s
+    - 113 s
+    - 93 s
+    - 90 s
+  correct: 0
+- source: "570190e27617"
+  question: On the Pi, `ros2 run karmel_tutorial battery_health` fails with `No module named 'karmel_tutorial_interfaces'`; on the laptop it works. What's the systematic fix?
+  options:
+    - "`pip install karmel_tutorial_interfaces` on the Pi."
+    - Copy the laptop's `install/` folder to the Pi.
+    - Add the interfaces folder to `PYTHONPATH` in `~/.bashrc`.
+    - Put the interface package in the Pi's workspace, declare `<depend>` on it, build with `--packages-up-to`, and re-source.
+  correct: 3
+- source: 036f18e76417
+  question: Why should you never `pip install` a dependency of a package you'll deploy to the robot?
+  options:
+    - It isn't declared or reproducible, and PEP 668 blocks it; declare a rosdep key and use `rosdep install`.
+    - pip packages are always slower than apt packages on ARM.
+    - colcon refuses to build packages that import pip-installed modules.
+    - pip packages can't be imported from ROS 2 nodes.
+  correct: 0

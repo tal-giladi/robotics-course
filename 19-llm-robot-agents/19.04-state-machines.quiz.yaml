@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 19.04-state-machines.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f1f87d762e25
+  question: A state declares outcomes `("done", "failed")` but its `execute` returns `"timeout"`. When do you find out, and why is that right?
+  options:
+    - At build time, when the engine checks the graph; static checks catch every outcome
+    - Never; the engine maps unknown outcomes to `failed`, which is a safe default
+    - At the end of the task, in the summary report, so the run is not interrupted
+    - At run time, immediately, with `InvalidMachine`; guessing a transition would run an undesigned recovery
+  correct: 3
+- source: c915eb2be973
+  question: "`FETCH` has 6 states and 22 transitions; `FIND` has 2 and 6. Without a preemption hook, how many transitions do three global abort conditions add?"
+  options:
+    - 18 edges, a 64% increase
+    - 21 edges, a 75% increase
+    - 3 edges, an 11% increase
+    - 84 edges, a 300% increase
+  correct: 1
+- source: 07029e53ee29
+  question: You set `max_grasp_attempts = 1` and run with `--grasp-p 0.3`. What is the likely final outcome?
+  options:
+    - "`PICK` fails once and returns `failed`; the `grasp_failed → CONFIRM` edge becomes dead code"
+    - "`PICK` returns `grasp_failed`, goes to `CONFIRM`, then retries once more"
+    - The machine loops `PICK → CONFIRM` until `max_transitions` fires
+    - "`PICK` succeeds on average after 3.3 attempts, so the task completes"
+  correct: 0
+- source: 1e1fe94cebe4
+  question: Why does `next_room` set `bb["looks"] = 0`, and what breaks if `pick` reset `bb["grasp_attempts"]` the same way?
+  options:
+    - Looks reset to save memory; resetting grasps would only lose statistics
+    - Looks is per-task; resetting grasps per room would make the robot give up too early
+    - Looks is per-room; grasp attempts are per-task, so resetting them makes the grasp retry cycle never end
+    - Both are per-room; resetting grasps in `pick` would change nothing
+  correct: 2
+- source: 6a9e8a21cee9
+  question: The e-stop is pressed 2 s into a 12.6 s `navigate_to`. What stops the robot first?
+  options:
+    - The firmware watchdog, 300 ms after the e-stop press
+    - "`run_fetch`'s `finally` block calling `base.stop()` after the task ends"
+    - The LLM, on its next turn, calling a stop skill
+    - The `ActionHandle`, within one 20 ms control step
+  correct: 3
+- source: c3ac695f7bb3
+  question: Someone proposes inlining `LOOK` and `NEXT_ROOM` into `FETCH`, dropping the `FIND` sub-machine. What is lost?
+  options:
+    - Only readability; the behaviour and transition count are identical
+    - Testing `FIND` alone, reusing it, and a smaller abort-routing budget
+    - Real-time performance, since sub-machines run in their own thread
+    - The ability to use the e-stop, which is only wired into sub-machines
+  correct: 1
+- source: a9526455c9e3
+  question: A colleague says "state machines are obsolete, Nav2 uses behavior trees". Which response is right?
+  options:
+    - Agree; BTs are strictly more expressive, so FSMs should be migrated
+    - Disagree; Nav2 actually uses an FSM, and BTs are only used in games
+    - BTs handle reactivity better, but FSMs suit phases with named recoveries
+    - Right, except FSMs are still required for anything involving an arm
+  correct: 2

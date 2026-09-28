@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 18.09-foundation-models-world-models.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 104b2cec0130
+  question: What does "robot foundation model" mean in practice in September 2026?
+  options:
+    - A model that runs zero-shot on any new robot without demonstrations from that robot
+    - A large language model that writes robot control code from natural-language task descriptions
+    - A model pre-trained on diverse robot data; fine-tuning on tens to hundreds of target demos beats training from scratch
+    - A simulator-trained model that transfers to hardware using domain randomization alone
+  correct: 2
+- source: 68a7ffff82cc
+  question: Which statement correctly contrasts Open X-Embodiment (OXE) and DROID?
+  options:
+    - "OXE: 22 robots, over 1M trajectories pooled from many datasets; DROID: 76k trajectories, 564 scenes on one Franka setup"
+    - "OXE: one Franka setup, 76k trajectories; DROID: 22 robots, over 1M trajectories pooled from many labs"
+    - "OXE: 22 robots, 76k trajectories; DROID: 564 robots, 1M trajectories in simulation"
+    - OXE and DROID are the same dataset; DROID is OXE converted to LeRobot format
+  correct: 0
+- source: a797b5795346
+  question: Your dataset has 200 episodes of 20 s. How many hours is that, and how many times larger is DROID (350 h)?
+  options:
+    - 11.1 h; DROID is about 32× larger
+    - 1.11 h; DROID is about 315× larger
+    - 0.11 h; DROID is about 3,150× larger
+    - 66.7 h; DROID is about 5× larger
+  correct: 1
+- source: 442f00578915
+  question: You pool an SO-101 dataset (degrees) with a Franka dataset (radians) and normalize with one global mean and std. What does the trained model do badly?
+  options:
+    - It fits the Franka well but under-fits the SO-101, since radians dominate the loss
+    - It fits both equally, because normalization removes the unit difference
+    - It outputs degrees on the Franka, making it spin its joints by 57× the intended angle
+    - It fits the SO-101 and under-fits the Franka, whose normalized errors barely register
+  correct: 3
+- source: 1783c54b8c10
+  question: With dataset sizes 76,000, 22,900 and 150 episodes, what share does the 150-episode dataset get at α = 1 and at α = 0?
+  options:
+    - "α = 1: 33.3%; α = 0: about 0.15%"
+    - "α = 1: about 1.5%; α = 0: 50%"
+    - "α = 1: about 0.15%; α = 0: 33.3%"
+    - "α = 1: about 0.15%; α = 0: 0%"
+  correct: 2
+- source: 435f4d53d601
+  question: Which list gives the three jobs world models do for robots today, with a correct example each?
+  options:
+    - Synthetic data (Cosmos Transfer); policy evaluation (Veo-based eval of Gemini Robotics); planning (V-JEPA 2-AC)
+    - Low-level control (Cosmos Transfer); safety filtering (V-JEPA 2-AC); data labelling (Veo)
+    - Synthetic data (V-JEPA 2-AC); motor control (Veo); SLAM (Cosmos Transfer)
+    - Speech (Veo); navigation (Cosmos Transfer); grasp detection (V-JEPA 2-AC)
+  correct: 0
+- source: d2df6e6ca43f
+  question: Which parts of "find the bottle and put it on the table" stay classical on karmel in 2026, and why must safety never be learned?
+  options:
+    - Only the e-stop; everything else, including navigation, is now done by a VLA
+    - Grasping and object detection; safety is learned only after 1,000 trials
+    - Localization, navigation, often placing, and all safety, which must hold when learning fails
+    - The LLM planner and speech; safety can be learned if trained on enough failure data
+  correct: 2

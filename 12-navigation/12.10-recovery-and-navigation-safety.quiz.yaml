@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 12.10-recovery-and-navigation-safety.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ea2e774f6f7a
+  question: What is the difference between a `stop` polygon and the `approach` action?
+  options:
+    - "`stop` projects the footprint along the command and brakes smoothly; `approach` zeroes the command inside a fixed polygon."
+    - "`stop` works only on the local costmap; `approach` works only on raw LiDAR points in `base_link`."
+    - "`stop` slows the robot to half speed inside a polygon; `approach` stops it completely once time-to-collision hits zero."
+    - "`stop` zeroes the command when points enter a fixed polygon; `approach` projects the footprint and scales speed to keep time-to-collision."
+  correct: 3
+- source: 7b212109b210
+  question: karmel commands 0.25 m/s at a wall 0.30 m away. What comes out of the collision monitor?
+  options:
+    - "0.0 m/s: the wall is inside the stop polygon, so the command is zeroed immediately"
+    - "0.125 m/s: 0.165 m of travel gives ~0.6 s (sim step), and $0.25 \\times 0.6/1.2 = 0.125$"
+    - "0.25 m/s: time to collision is above `time_before_collision`, so the command passes unchanged"
+    - "0.0625 m/s: 0.30 m of travel gives 1.2 s, and $0.25 \\times 0.3/1.2 = 0.0625$"
+  correct: 1
+- source: face26547909
+  question: Your robot fails with error 205 (START_OCCUPIED). What is the most likely cause, and the least likely?
+  options:
+    - "Most likely: it is really touching something. Least likely: localization error or a stale costmap mark."
+    - "Most likely: the goal is inside an obstacle. Least likely: the start pose is wrong in the costmap."
+    - "Most likely: localization puts it inside a wall (or a stale costmap). Least likely: it is really touching something."
+    - "Most likely: the planner plugin crashed. Least likely: the costmap has a stale obstacle on the robot."
+  correct: 2
+- source: 6685d2330ade
+  question: Why does the collision monitor read raw sensor points instead of the local costmap?
+  options:
+    - To be independent of TF, localization and costmap config, so the reflex works when the stack is confused
+    - Because raw points are more precise than costmap cells, so the robot can drive closer to obstacles
+    - Because the local costmap is only updated at 1 Hz, which is too slow for any safety function
+    - Because the costmap is in the `map` frame, and the monitor cannot transform `map` into `base_link`
+  correct: 0
+- source: 02a376853df8
+  question: You add a keepout zone across your hallway while the robot is navigating through it. What happens?
+  options:
+    - The robot ignores the zone until the current goal finishes, because filters apply only to new goals
+    - The robot accelerates out of the zone along the shortest route, because keepout cells repel the controller
+    - Only the global costmap is updated, so the robot finishes the current goal through the hallway
+    - Next replan finds no path (or a detour); the robot stops, recovers, aborts, and may hit START_OCCUPIED next
+  correct: 3
+- source: 3f937bd15058
+  question: Which set lists hazards in a normal flat that none of Nav2's safety layers detect?
+  options:
+    - Walls, closed doors and large furniture, since the LiDAR is mounted above typical furniture height
+    - Things below the scan plane, a down step or staircase, and glass or glossy surfaces the LiDAR sees through
+    - Chairs, people and pets standing still, since the collision monitor only reacts to moving obstacles
+    - Anything within 1 m of the robot, since the LiDAR's minimum range blinds it to nearby objects
+  correct: 1
+- source: fe44806d2463
+  question: karmel's recovery includes `BackUp 0.30 m at 0.15 m/s`. What is the risk, and when would you remove it?
+  options:
+    - About 0.5 s of reversing within the LiDAR's view; remove it only if the robot is faster than 0.5 m/s
+    - No real risk, since the collision monitor covers reverse motion; remove it only to save time
+    - About 2 s of blind reversing; remove it in any flat with carpets, since the wheels will slip
+    - About 2 s of blind reversing (no rear sensor); remove it near stairs, balcony steps or fragile floor items
+  correct: 3
+- source: 19dfe382f6c4
+  question: What actually stops karmel's wheels if the Raspberry Pi freezes mid-goal?
+  options:
+    - The Pico's firmware watchdog, which cuts the motors after 300 ms without a valid command
+    - "`diff_drive_controller`'s `cmd_vel` timeout, which zeroes the wheels after 500 ms"
+    - The collision monitor, which publishes a zero twist when its input topic goes silent
+    - The lifecycle manager's bond, which deactivates the stack and stops the controller
+  correct: 0

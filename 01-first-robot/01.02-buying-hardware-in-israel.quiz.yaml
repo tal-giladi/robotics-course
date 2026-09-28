@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.02-buying-hardware-in-israel.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 09ab26ad1ee0
+  question: Which store is the only official Raspberry Pi Approved Reseller in Israel, and which is Pololu's listed distributor?
+  options:
+    - 4Project for Raspberry Pi; Piitel for Pololu.
+    - Piitel for both Raspberry Pi and Pololu.
+    - 4Project for both Raspberry Pi and Pololu.
+    - Piitel for Raspberry Pi; 4Project for Pololu.
+  correct: 3
+- source: 925f48624565
+  question: The motor page lists 205, 333 and 550 RPM versions at one price. Which do you want, and what do you do before paying?
+  options:
+    - 550 RPM for the highest top speed; ask whether the wheels are included.
+    - 205 RPM (1:56) for torque and encoder resolution; ask in writing which ratio ships and whether the encoder cable is included.
+    - 333 RPM as the best compromise; ask for a datasheet of the gearbox.
+    - 205 RPM for the lowest current draw; ask whether the motor is rated for 12.6 V.
+  correct: 1
+- source: 58f5b4c5d939
+  question: A $70 part ships for $12, and an $80 part ships for $12. What does each cost at ₪3.033 per dollar, with the $75 VAT limit?
+  options:
+    - ₪249 and ₪279
+    - ₪294 and ₪329
+    - ₪249 and ₪329
+    - ₪212 and ₪243
+  correct: 2
+- source: 39125d5762c1
+  question: Why must the switch and fuse holder be rated for DC current, not just "10 A 250 V AC"?
+  options:
+    - A DC arc doesn't self-extinguish at a zero crossing, so AC-only contacts can weld or burn when switching DC.
+    - DC current is always larger than AC current at the same power, so AC ratings are too low.
+    - AC ratings assume a grounded chassis, which a battery robot doesn't have.
+    - DC circuits reverse polarity when the motors brake, which AC parts can't handle.
+  correct: 0
+- source: 8faa0bfc297f
+  question: You buy a DRV8833 dual driver because it's cheap and rated 1.5 A per channel. What goes wrong on karmel?
+  options:
+    - Its PWM frequency is too low, so the motors whine but work fine.
+    - It needs 5 V logic, so the Pico's 3.3 V signals can't drive it.
+    - It has no brake mode, so the robot coasts instead of stopping.
+    - Its 10.8 V motor-supply maximum is below a full 3S pack, and its current rating is far below the motor's 3–4 A stall.
+  correct: 3
+- source: 3e53d7413110
+  question: "Your cells arrive: two have batch code A, two batch code B, and one wrap has a small tear near the positive end. What do you do?"
+  options:
+    - Use the torn cell with tape over the tear, and mix batches freely since they are the same model.
+    - Use two cells from each batch in a 4S pack to balance the differences.
+    - Use the torn cell in the middle position, where it is protected by the others.
+    - Don't use the torn cell; build the pack from three cells of the same batch and contact the store.
+  correct: 3
+- source: 967d564d443d
+  question: Why buy a spare Pico 2 and a spare DRV8874 but not a spare Raspberry Pi 5?
+  options:
+    - The Pi 5 is always out of stock, so a spare is impossible to find.
+    - The Pi 5 has built-in overvoltage protection that makes it impossible to damage.
+    - The cheap Pico and driver are the parts beginners actually destroy; the expensive Pi is protected by the design instead.
+    - The Pico and driver wear out after a few hundred hours, while the Pi does not.
+  correct: 2

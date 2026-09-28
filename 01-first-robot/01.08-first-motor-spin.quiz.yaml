@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.08-first-motor-spin.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: b9c6fd3f24ff
+  question: What does the DRV8874's `PMODE` pin select, when is the choice made, and what goes wrong if it's floating?
+  options:
+    - The PWM frequency; it's read continuously; floating gives a random frequency.
+    - The current limit; it's read at power-up; floating disables current limiting.
+    - The control interface (high = IN/IN); it's latched when `nSLEEP` goes high; floating gives half-bridge mode, which can't reverse.
+    - The sleep mode; it's latched at each PWM edge; floating keeps the driver asleep.
+  correct: 2
+- source: 1ca7a18d7fc6
+  question: Bus 10.8 V, duty 0.6 in drive/brake mode. What do `IN1` and `IN2` read on a multimeter, and what is the average across the motor?
+  options:
+    - "`IN1` 3.3 V, `IN2` about 1.3 V, motor about 6.5 V."
+    - "`IN1` about 2.0 V, `IN2` about 1.3 V, motor about 4.3 V."
+    - "`IN1` 3.3 V, `IN2` about 2.0 V, motor about 6.5 V."
+    - "`IN1` 3.3 V, `IN2` 0 V, motor 10.8 V."
+  correct: 0
+- source: b74efaedd0f0
+  question: Why does karmel use 20 kHz PWM rather than 1 kHz?
+  options:
+    - At 1 kHz the DRV8874's switching losses are much higher, which overheats the driver chip.
+    - The Pico's PWM hardware can't produce frequencies below 10 kHz at its default system clock.
+    - At 1 kHz the motor runs noticeably faster, which makes the velocity control loop harder to tune.
+    - At 1 kHz the period exceeds the motor's electrical time constant, giving large torque ripple, and it is audible.
+  correct: 3
+- source: 720035759b71
+  question: You measure a deadband of 0.15 and set `DUTY_DEADBAND = 0.15`. You then command `set_duty(0.0)`. Does the motor get 15% duty?
+  options:
+    - "Yes: the compensation adds the deadband to every command."
+    - "No: zero maps to zero so a stopped robot doesn't creep; only non-zero duties are stretched onto deadband..1."
+    - Yes, but the motor doesn't move because 15% is inside the deadband.
+    - "No: the compensation subtracts the deadband, so it gets −15% and brakes."
+  correct: 1
+- source: ca6279754510
+  question: Left wheel spins, right does nothing. `VIN` 11.8 V, `SLEEP` and `PMODE` 3.3 V on both carriers, both motors 3 Ω. What do you measure next?
+  options:
+    - The motor current with the meter in series with the right motor.
+    - The battery voltage under load, to rule out a brown-out.
+    - GP6 and GP7 relative to GND while the script commands the right motor.
+    - The resistance between the right carrier's `VIN` and GND.
+  correct: 2
+- source: a9c04cac9140
+  question: Why does the firmware brake rather than coast when the watchdog trips, and when would coasting be better?
+  options:
+    - Braking uses less battery; coasting is better at high speed to avoid skidding.
+    - Braking protects the driver from back-EMF; coasting is better when the battery is low.
+    - Braking stops the robot fast near where it was; coasting is better when pushing by hand, measuring free rotation, or on a slope.
+    - Braking is required by the DRV8874 datasheet; coasting is better indoors.
+  correct: 2
+- source: 7f33f328978e
+  question: You switch to the 333 RPM (1:30) motors. What changes in `config.py`, and does your measured deadband still apply?
+  options:
+    - "`GEAR_RATIO = 30.0` (1320 ticks per wheel rev); the deadband must be re-measured for the new gearbox."
+    - "`GEAR_RATIO = 30.0` (2464 ticks per wheel rev); the deadband stays the same."
+    - Only `MAX_WHEEL_SPEED_RAD_S`; the deadband scales automatically with the ratio.
+    - "`GEAR_RATIO = 56.0` stays; only the deadband must be re-measured."
+  correct: 0

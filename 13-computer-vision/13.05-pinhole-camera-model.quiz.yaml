@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.05-pinhole-camera-model.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c6cd25cb024e
+  question: A camera is 1280 px wide with HFOV 90°. What is $f_x$?
+  options:
+    - 640 px
+    - 1280 px
+    - 905 px
+    - 320 px
+  correct: 0
+- source: af3ac4fde8dd
+  question: Why can't a single pixel give you a 3D point, and how can a robot get the missing number?
+  options:
+    - Pixels store only color, not position; depth comes from the camera's autofocus, the exposure time or the pixel's brightness.
+    - Lens distortion scrambles the ray; depth comes from undistorting the image, then reading $Z$ directly from $K$.
+    - All points on a ray project to one pixel; depth comes from a depth sensor, stereo, known object size or the floor plane.
+    - A pixel covers too large an area; depth comes from upsampling the image until each pixel covers one point.
+  correct: 2
+- source: 263f0d3f8a35
+  question: With karmel's nominal $K$, which pixel does $P_c = (0, 0.145, 2.0)$ project to, and what does it represent for a level camera?
+  options:
+    - "$(320, 273.9)$: the floor point 2 m ahead, below the horizon row 240"
+    - "$(320, 206.1)$: a point 2 m ahead at camera height, above the horizon row 240"
+    - "$(320, 240)$: the horizon, since the point lies on the optical axis"
+    - "$(387.8, 240)$: a point 0.145 m to the right of the robot, 2 m ahead"
+  correct: 0
+- source: 8780f61511bb
+  question: The 7 cm ball's detected radius is 9.0 px ($f = 467.7$). Estimate its depth $Z$ and the uncertainty for ±1 px.
+  options:
+    - $Z \approx 3.64$ m, about ±0.4 m
+    - $Z \approx 1.82$ m, about ±0.02 m
+    - $Z \approx 0.91$ m, about ±0.1 m
+    - $Z \approx 1.82$ m, about ±0.2 m
+  correct: 3
+- source: 79236c52e883
+  question: You detect at 320 × 240 for speed but keep $f_x = 467.7$, $c_x = 320$ (full-resolution $K$). What happens to ground-plane distances?
+  options:
+    - "Nothing: $K$ is resolution-independent, so ground-plane distances stay correct at any image size"
+    - They break; $K$ must scale with the image, since even with the right $c_y$ distances come out 2× too large
+    - They come out 2× too small, because each pixel now covers twice the angle but $f$ assumes half
+    - Only lateral positions break, because $c_x$ is wrong; forward distances depend on $f_y$ alone
+  correct: 1
+- source: 113c612ac9fb
+  question: The camera is pitched 2° down but your code assumes it's level. Ball at 3 m. Roughly what distance does the code report?
+  options:
+    - About 2.9 m, because 2° changes the distance by only a few percent at any range
+    - About 6 m, because the pitch moves the ball's row toward the horizon, doubling the distance
+    - About 3 m, because pitch only affects lateral position, not forward distance on the floor
+    - About 1.6 m, because 2° shifts rows by 16.3 px, nearly all of the 17.7 px between horizon and ball
+  correct: 3
+- source: 30f302b1c17f
+  question: "`cv2.projectPoints(points_world, rvec, tvec, K, None)` gives nonsense. You built `rvec` from `T_world_camera`. What's the fix?"
+  options:
+    - "Invert it: use `T_cw = inv(T_world_camera)` for `rvec` and `tvec`, since `projectPoints` wants world → camera"
+    - Transpose `K`, since `projectPoints` expects the intrinsic matrix in column-major order
+    - Pass zeros for the distortion instead of `None`, since `None` makes OpenCV apply default distortion
+    - Convert `rvec` from degrees to radians, since `cv2.Rodrigues` returns angles in degrees
+  correct: 0

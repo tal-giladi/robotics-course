@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 08.11-rotate-exactly-90.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 381ae816ea56
+  question: A 60° turn with $v_{max} = 1.0$ rad/s and $a_{max} = 2.0$ rad/s². Trapezoidal or triangular, and how long?
+  options:
+    - Triangular; about 1.447 s
+    - Trapezoidal; about 1.047 s
+    - Triangular; about 1.023 s
+    - Trapezoidal; about 1.547 s
+  correct: 3
+- source: 06fcf3a10adc
+  question: The robot is at −175° and you command a turn to +170°. What is the wrapped error, and which way does it turn?
+  options:
+    - "+345°: 345° anticlockwise"
+    - "−15°: 15° clockwise"
+    - "+15°: 15° anticlockwise"
+    - "−5°: 5° clockwise"
+  correct: 1
+- source: bb04361003da
+  question: Why does the encoder heading error scale with the whole turn, while gyro bias adds a fixed amount?
+  options:
+    - Encoder error is a wrong wheelbase divisor; gyro bias integrates over time
+    - Encoder ticks accumulate noise; gyro bias cancels between directions
+    - Encoders slip more on long turns; the gyro saturates on short ones
+    - Encoder error is a time offset; gyro bias is a wrong scale factor
+  correct: 0
+- source: 0d668e991858
+  question: You double $v_{max}$ and keep $a_{max}$. What happens to total time, peak wheel speed, and slip risk?
+  options:
+    - Time halves; peak speed unchanged; slip risk doubles
+    - Time unchanged; peak speed doubles; slip risk doubles
+    - Time drops; peak speed doubles; ramp slip risk unchanged
+    - Time grows; peak speed doubles; slip risk halves
+  correct: 2
+- source: 2253623406d2
+  question: With a perfect model and a perfect sensor, what does the feedback term of a profiled turn contribute?
+  options:
+    - About half of the command, sharing it with feedforward
+    - "Nothing: the feedforward alone follows the profile"
+    - All of it, since feedforward only shapes the profile
+    - A constant offset equal to the gyro's bias
+  correct: 1
+- source: 2e7a2b3e9252
+  question: The turn is accurate in simulation and 5° long on the robot, every time, in both directions. Where do you look first?
+  options:
+    - Gyro bias, since bias makes both directions long
+    - Integral windup, since it overshoots every turn
+    - Wheel slip, since slip is always symmetric
+    - A scale error in the heading source (or a late stop)
+  correct: 3
+- source: 448fda50491f
+  question: Why is "the error is under 1°" a bad test for "the turn is finished"?
+  options:
+    - It is true for one sample as the robot sweeps through at speed
+    - 1° is too tight for any gyro, so the test never passes
+    - The error is in radians, so the 1° threshold is never met
+    - It ignores the encoder heading, which is more accurate
+  correct: 0
+- source: e0fd7c8924eb
+  question: You need ±0.5° instead of ±2°. Which three changes, cheapest first?
+  options:
+    - Raise $k_p$, raise $k_i$, then add a D term
+    - Faster profile, higher $a_{max}$, then a heavier filter
+    - Fresh gyro bias, slow final approach, better sensor or reference
+    - New motors, bigger wheels, then a wider wheelbase
+  correct: 2

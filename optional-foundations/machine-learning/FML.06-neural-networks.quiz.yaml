@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.06-neural-networks.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 94892aa91cac
+  question: What does a single neuron compute?
+  options:
+    - The maximum of its inputs, scaled by a learned weight
+    - A weighted sum of inputs plus a bias, passed through an activation
+    - The product of its inputs, passed through a softmax
+    - The distance from its inputs to a learned centre
+  correct: 1
+- source: 3be562582282
+  question: Why does a deep network with no activation functions have the same expressive power as a linear model?
+  options:
+    - A composition of affine maps is affine, so any depth collapses to one layer
+    - Without activations the gradients vanish, so only the last layer learns
+    - Without activations the weights are tied, so all layers are identical
+    - Deep linear networks can only represent functions through the origin
+  correct: 0
+- source: "735876886655"
+  question: How many parameters does a 3-16-16-2 MLP have?
+  options:
+    - "336"
+    - "352"
+    - "322"
+    - "370"
+  correct: 3
+- source: 8553e71c5f87
+  question: Compute $\mathrm{ReLU}(1.6u - 2.08)$ for $u = 1.0$ and $u = 4.0$.
+  options:
+    - −0.48 and 4.32
+    - 0.48 and 4.32
+    - 0 and 4.32
+    - 0 and 6.40
+  correct: 2
+- source: 54f5969c58ae
+  question: You train a 2-8-1 network with ReLU on the output neuron too, on data including negative wheel speeds. What happens?
+  options:
+    - It predicts negative speeds only after more epochs of training
+    - It never predicts negative speeds, so all reverse samples have large errors
+    - It predicts the absolute value of the speed, losing only the sign
+    - It diverges, since ReLU outputs are unbounded above
+  correct: 1
+- source: 781a0b230e16
+  question: With numerical gradients, a network has 50,000 parameters and one forward pass on the training set takes 2 ms. How long is one gradient step?
+  options:
+    - About 200 s
+    - About 100 ms
+    - About 6 ms
+    - About 2 s
+  correct: 0
+- source: e762b1d2bdfc
+  question: After training, 5 of your 8 hidden neurons output 0 for every training sample. What is this called, and what does it do?
+  options:
+    - Vanishing gradients; the neurons recover once training continues
+    - Sparse activation; it improves generalization at no cost
+    - Overfitting; the neurons memorized the training labels
+    - Dead ReLUs; they get zero gradient, so the network is effectively width 3
+  correct: 3

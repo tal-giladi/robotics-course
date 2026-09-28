@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FP.06-rotational-motion-inertia.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d2ccd5e25e4a
+  question: What are karmel's wheel angular speeds when it rotates in place at 1.0 rad/s?
+  options:
+    - ±1.0 rad/s, in opposite directions
+    - ±2.22 rad/s, in the same direction
+    - ±2.22 rad/s, in opposite directions
+    - ±0.100 rad/s, in opposite directions
+  correct: 2
+- source: 886a7a6d01d1
+  question: Compute $I_{zz}$ of a 0.2 kg box, 0.10 × 0.06 × 0.03 m, about its centre.
+  options:
+    - 2.72×10⁻³ kg·m²
+    - 2.27×10⁻⁴ kg·m²
+    - 1.67×10⁻⁴ kg·m²
+    - 1.51×10⁻³ kg·m²
+  correct: 1
+- source: df8070413a37
+  question: The same box sits with its centre 0.08 m from karmel's yaw axis. What does it add to karmel's yaw inertia?
+  options:
+    - 1.51×10⁻³ kg·m²
+    - 2.27×10⁻⁴ kg·m²
+    - 1.28×10⁻³ kg·m²
+    - 1.83×10⁻⁵ kg·m²
+  correct: 0
+- source: 1d75927490cd
+  question: Why does a 1:56 gearbox make a light rotor matter so much at the wheel?
+  options:
+    - Reflected inertia scales with N, so the rotor counts 56× larger
+    - The gearbox adds its own inertia, which is 56× the rotor's
+    - Reflected inertia scales with 1/N², so the rotor matters less
+    - Reflected inertia scales with N², so the rotor counts 3136× larger
+  correct: 3
+- source: e3795c8d37e2
+  question: A URDF lists a link with `ixx=0.001 iyy=0.001 izz=0.005`. Is this a physical body? What will Gazebo likely do?
+  options:
+    - Yes, it is a flat disc; Gazebo will simulate it correctly
+    - Yes, it is a long rod; Gazebo will simulate it correctly
+    - No, it violates the triangle inequality; the physics may be unstable
+    - No, it has negative mass; Gazebo will refuse to load the URDF
+  correct: 2
+- source: 637ef7047209
+  question: Simulated karmel reaches 2.5 rad/s of yaw almost instantly, but the real one takes ~0.5 s, though chassis inertia is right. What is missing?
+  options:
+    - The motor rotors' reflected inertia through the gearboxes
+    - The wheels' own rotational inertia about their axles
+    - The gravitational torque from the arm's weight
+    - The rolling resistance of the caster on the floor
+  correct: 0
+- source: 7e0b9b65b8dc
+  question: How do you estimate a gearmotor's reflected inertia without a datasheet value?
+  options:
+    - Weigh the motor and assume all mass sits at the rotor's outer radius
+    - Measure the stall current and divide by the gear ratio squared
+    - Spin it by hand and time how long it coasts to a full stop
+    - Measure the free-spinning time constant τ and speed-torque slope b; J ≈ τ·b
+  correct: 3

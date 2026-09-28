@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 00.03-actuators-and-sensors-field-guide.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: b757f6966bb9
+  question: What is the difference between a DC gear motor and a servo, from your code's point of view?
+  options:
+    - A DC motor gets a target angle and holds it; a servo gets a PWM duty and turns continuously.
+    - A DC motor needs no encoder because it reports its own position; a servo needs an external encoder.
+    - A DC motor gets a power level (PWM duty) and your code adds sensing and control; a servo gets a target angle and closes the loop itself.
+    - Both get a PWM duty; the servo just has a stronger gearbox and turns more slowly.
+  correct: 2
+- source: c8e680f39cab
+  question: karmel's encoder gives 2,464 counts per wheel revolution on 90 mm wheels. How far has the wheel rolled after 10,000 counts?
+  options:
+    - 2.29 m
+    - 0.57 m
+    - 4.06 m
+    - 1.15 m
+  correct: 3
+- source: f7cb0daeffa2
+  question: Why does karmel have both a ToF sensor and an ultrasonic sensor facing forward?
+  options:
+    - They use different physics and fail in different situations, so they cover each other's blind spots.
+    - The ultrasonic sensor measures far and the ToF sensor near, so together they extend the total range.
+    - Two identical readings let the code average out noise, doubling the precision.
+    - The ToF sensor works only in daylight and the ultrasonic sensor only in the dark.
+  correct: 0
+- source: 4ee815cd0474
+  question: An IMU's gyro has a 0.2 °/s bias. If you estimate heading only by integrating the gyro, how wrong is the heading after 5 minutes?
+  options:
+    - 1°
+    - 600°
+    - 12°
+    - 60°
+  correct: 3
+- source: dca4fea3ae2e
+  question: You set 50% PWM duty on karmel's motors at 12.6 V, and again near cutoff at 9.9 V. What happens to the wheel speed?
+  options:
+    - It stays the same, because the duty cycle fixes the speed.
+    - It rises by about 20%, because the motor draws more current at low voltage.
+    - It drops to about half, because duty and voltage both halve the power.
+    - It drops by roughly 20%, because the average motor voltage falls from about 6.3 V to 5.0 V.
+  correct: 3
+- source: 1456238485b2
+  question: Odometry says the robot drove 3 m, but it stopped against a doorframe after 1 m with the wheels spinning. Which sensor misled, and which would reveal the problem?
+  options:
+    - The IMU misled; the wheel encoders would reveal it.
+    - The wheel encoders misled (they count rotation, not motion); the IMU or forward range sensor would reveal it.
+    - The forward range sensor misled; the wheel encoders would reveal it.
+    - The motor driver's current sense misled; the wheel encoders would reveal it.
+  correct: 1
+- source: e36864379ad1
+  question: Why is the RPLIDAR C1 considered safe to use at home, and what should you still avoid?
+  options:
+    - It uses infrared LEDs rather than a laser; still avoid using it near mirrors.
+    - It is a Class 3R laser with a shutter; still avoid running it without the cover.
+    - It is a Class 1, eye-safe laser product; still don't stare into the emitter up close or open or modify it.
+    - It turns itself off when it detects a face; still avoid running it in the dark.
+  correct: 2
+- source: 4be7e10c254d
+  question: 'A 3S pack of Samsung 35E 3.5 Ah cells: what are its nominal voltage and energy, and what does "3S" mean?'
+  options:
+    - "Three cells in series: 10.8 V nominal, 3.5 Ah, about 37.8 Wh."
+    - "Three cells in parallel: 3.6 V nominal, 10.5 Ah, about 37.8 Wh."
+    - "Three cells in series: 10.8 V nominal, 10.5 Ah, about 113 Wh."
+    - "Three-stage charging: 12.6 V nominal, 3.5 Ah, about 44.1 Wh."
+  correct: 0

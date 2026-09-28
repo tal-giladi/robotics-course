@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 15.10-mobile-manipulation.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 4daad7ac5bab
+  question: karmel's support polygon has vertices (+0.10, 0) and (0, ±0.10). What is its backward stability margin with no arm, and why is that surprising?
+  options:
+    - "100 mm: the CoM sits at the caster, far from the rear edge of the polygon"
+    - "50 mm: the CoM sits midway between axle and caster, a comfortable margin"
+    - "Zero: the CoM sits on the wheel axle, which is the polygon's rear edge"
+    - "Negative: the bare base already tips backward without the arm mounted"
+  correct: 2
+- source: b8e41376379b
+  question: You move the arm's mount 80 mm backwards, reasoning that mass further back is further from the tipping edge. Does it work?
+  options:
+    - "No: the rear edge is the one that matters, and the folded margin goes from +12 mm to −11 mm"
+    - "Yes: the folded margin grows from +12 mm to +78 mm, since the arm moves away from the caster"
+    - Yes, but only when folded; at full extension the margin drops from +12 mm to −11 mm
+    - "No: the margin is unchanged, since the arm's mass is too small to move the CoM"
+  correct: 0
+- source: f7baa8406401
+  question: Why is the reachable set for the base an annulus rather than a disc?
+  options:
+    - The camera cannot see objects closer than 250 mm, so the planner excludes the inner disc
+    - The arm has a minimum reach too (~250 mm at 20–80° pitch), so parking too close fails like too far
+    - The base's footprint covers the inner disc, so the object would collide with the robot there
+    - Nav2 refuses goals closer than its tolerance, which excludes an inner disc around the object
+  correct: 1
+- source: 340e011ad1f1
+  question: Nav2 reports success with a 50 mm / 10° tolerance at a 300 mm standoff. How far is the object from your pre-computed grasp, and what do you do?
+  options:
+    - 5 mm median, 10 mm p90; execute the pre-computed grasp, since it is within reach budget
+    - 26 mm median, 55 mm p90; re-perceive after docking as the normal path (or visual-servo)
+    - 50 mm exactly; tighten Nav2's tolerance to 5 mm so the grasp can be pre-computed
+    - 26 mm median, 55 mm p90; widen the gripper's stroke to absorb the docking error
+  correct: 1
+- source: 87d0ccc5f9d1
+  question: Of a 50 mm xy error and a 10° yaw error at a 300 mm standoff, which contributes more, and why is the other usually noticed?
+  options:
+    - xy (50 mm vs ~5 mm from yaw); yaw is what Nav2 prints, so people over-weight it
+    - They are equal at any standoff; people notice xy because it is larger in RViz
+    - Yaw (~52 mm, growing with standoff); xy is what Nav2 prints and people see on the map
+    - xy (50 mm vs ~26 mm from yaw); yaw is noticed because the robot visibly turns
+  correct: 2
+- source: 417562748b0b
+  question: The object moves 50 mm sideways. Does the decision "use the arm or re-dock" change?
+  options:
+    - "No: the pan joint absorbs sideways offsets for free, for both reach and stability"
+    - "Yes, fully: the arm cannot pan, so any sideways offset requires re-docking"
+    - "Half of it: stability is unchanged, but manipulability drops sharply off-axis"
+    - "Half of it: manipulability is unchanged by panning, but the stability margin shrinks (~7 mm)"
+  correct: 3
+- source: e654d153d0fb
+  question: What is the correct sequence after `NavigateToPose` reports success?
+  options:
+    - Stop, settle, check tipping margin, re-perceive, re-plan grasp, execute stationary, stow, navigate
+    - Execute the pre-planned grasp immediately, then re-perceive to verify, then stow and navigate
+    - Re-perceive while settling, execute while the base finishes its final correction, then stow
+    - Stow, re-perceive, execute the pre-planned grasp, check tipping margin, then navigate
+  correct: 0
+- source: eac8736d07d6
+  question: You are carrying the block and navigation fails halfway to the bin. What should the robot do?
+  options:
+    - Run Nav2's normal recoveries at once, since the block does not affect navigation
+    - Drop the block where it is, so the arm is free for navigation recovery
+    - Place the block somewhere safe, tell the planning scene, then recover navigation
+    - Stop and wait for a human, since navigation recovery is impossible while holding
+  correct: 2

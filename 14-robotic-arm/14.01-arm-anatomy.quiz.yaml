@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 14.01-arm-anatomy.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 28cf637ee0a6
+  question: An arm has joints revolute, revolute, prismatic, revolute, revolute, revolute. How many DOF, and can it reach an arbitrary pose inside its reach?
+  options:
+    - Five DOF, since prismatic joints don't count; so no arbitrary orientations
+    - Six DOF; yes, any 6-DOF arm reaches every pose inside its reach sphere
+    - Six DOF; in principle yes, but only where the axes give the Jacobian rank 6
+    - Seven DOF, counting the gripper; so it is redundant and reaches every pose
+  correct: 2
+- source: 7238ed9ba606
+  question: Why is a 7-DOF arm called redundant, and what do you buy with the extra joint?
+  options:
+    - One tool pose has a family of joint solutions; you buy obstacle, singularity and joint-limit avoidance
+    - It has a spare joint in case one fails; you buy reliability, since any six joints can do the task
+    - Seven joints exceed the three position DOF; you buy extra reach beyond an equivalent 6-DOF arm
+    - The extra joint duplicates the wrist; you buy a higher payload, since two joints share the load
+  correct: 0
+- source: 03b9d4b9d62d
+  question: The SO-101's tool is at $(0.25, 0.10, 0.05)$ pointing straight down. Can you approach the same point horizontally from the north instead?
+  options:
+    - "Yes: the wrist has enough freedom to approach any point from any horizontal direction"
+    - "Yes: rotate the wrist roll joint by 90°, which changes the approach azimuth freely"
+    - "No: the SO-101 can only approach points from straight above, never horizontally"
+    - "In general no: the horizontal approach direction must equal $-q_1$, which the position fixes; move the base"
+  correct: 3
+- source: 822d0457113b
+  question: "A planar 2-link arm has $l_1 = 0.116$, $l_2 = 0.135$. Which radii are reachable: 0.010, 0.030, 0.250, 0.260 m?"
+  options:
+    - 0.010, 0.030 and 0.250
+    - 0.030 and 0.250 only
+    - All except 0.260
+    - 0.250 and 0.260 only
+  correct: 1
+- source: 7bfdfa7ee1c1
+  question: You double every SO-101 link length but keep the same servos and joint limits. What happens to reach and payload?
+  options:
+    - Reach roughly doubles; payload halves at best, and the heavier arm eats most of what's left
+    - Reach roughly doubles; payload stays the same, since servos are rated by torque, not length
+    - Reach roughly quadruples; payload halves, since torque scales with the square of length
+    - Reach stays the same due to joint limits; payload halves because of the longer levers
+  correct: 0
+- source: a86b1c790ef8
+  question: Your IK returns a joint vector whose FK lands at $z = -0.15$ m. What is wrong, and what should the code do?
+  options:
+    - The IK diverged; retry with a different seed until the solution has a positive z
+    - The FK uses the wrong base frame; add 0.15 m to z and send the corrected pose
+    - The IK is fine (the model has no table); a workspace box check must reject it before the servos move
+    - The joint limits are wrong; widen them so the IK can find a solution above the table
+  correct: 2
+- source: 9fb736506db1
+  question: Why does the course model the tool frame as `gripper_frame_link` rather than "the tip of the fixed finger"?
+  options:
+    - The fixed finger's tip moves when the gripper opens, so it cannot be used as a stable frame
+    - URDF forbids frames at link tips, so the tool frame must be placed at a joint's origin
+    - The fingertip is not visible to the camera, so hand–eye calibration needs a frame between the jaws
+    - A point between the jaws is what you place on the object, and one constant transform lets you redefine it freely
+  correct: 3

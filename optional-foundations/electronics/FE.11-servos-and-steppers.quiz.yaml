@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.11-servos-and-steppers.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 00396418caca
+  question: What is inside a hobby servo, and where is the control loop?
+  options:
+    - DC motor, gearbox, output potentiometer, control board; the loop runs on the board
+    - Stepper motor, gearbox, encoder; the loop runs on the host microcontroller
+    - DC motor, gearbox, encoder; the loop runs on the host and reads the encoder
+    - BLDC motor, gearbox, Hall sensors; the loop runs in the power supply
+  correct: 0
+- source: 341600c151f7
+  question: Why can six bus servos share one data wire, and what breaks if two have the same ID?
+  options:
+    - Each servo has its own time slot on the wire; duplicates just share that slot
+    - Each packet carries an ID and only that servo replies; duplicates collide and give checksum errors
+    - Each servo listens on its own baud rate; duplicate IDs force a baud-rate change
+    - The wire carries six channels multiplexed; duplicate IDs make one servo stop
+  correct: 1
+- source: e9057689aba7
+  question: Compute the checksum for `FF FF 02 04 03 28 01 ??`.
+  options:
+    - "`0x32`"
+    - "`0x31`"
+    - "`0xCE`"
+    - "`0xCD`"
+  correct: 3
+- source: 0da2d4372024
+  question: A powered servo still holds goal position 0 from yesterday. You disabled torque, moved the joint by hand to 90°, then enable torque and write nothing else. What happens?
+  options:
+    - It holds 90°, because enabling torque sets the goal to the current position
+    - It stays limp, because enabling torque needs a new goal before moving
+    - It drives back toward goal 0, often fast; read present position and write it as goal first
+    - It returns an error, because the goal and position disagree by 90°
+  correct: 2
+- source: 6cf914a2c417
+  question: A 5 V 3 A supply powers a 7.4 V SO-101 arm. Moving quickly, the servos reset. Why, and what are fixes?
+  options:
+    - The data wire is too long at speed; shorten it and lower the bus baud rate
+    - Accelerating servos exceed 3 A and brown out; use a bigger supply and lower speed/accel limits
+    - The servos overheat at speed; add heatsinks and cooling pauses
+    - The IDs collide at speed; renumber the servos and add delays between packets
+  correct: 1
+- source: de04dae62d9d
+  question: What is microstepping, and does 1/16 microstepping make positioning 16 times more accurate?
+  options:
+    - Proportional coil currents place the rotor between steps; yes, exactly 16× more accurate
+    - A gearbox inside the driver divides each step by 16; yes, exactly 16× more accurate
+    - Proportional coil currents place the rotor between steps; smoother, but not 16× more accurate
+    - Pulsing at 16× the step rate; smoother, and 16× more holding torque
+  correct: 2
+- source: 35d6693abdb9
+  question: Why is a stepper a poor choice for karmel's wheels?
+  options:
+    - Draws current when stopped, loses steps silently under load, weak at high speed
+    - It cannot run in reverse without a special bipolar driver chip
+    - It needs an encoder to move at all, which adds cost and wiring
+    - It only runs from AC power, so a battery pack cannot drive it
+  correct: 0

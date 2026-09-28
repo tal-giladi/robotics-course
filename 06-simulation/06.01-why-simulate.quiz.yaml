@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 06.01-why-simulate.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d371f444943c
+  question: Which sequence correctly describes the three steps of a simulator's loop?
+  options:
+    - Render the scene on the GPU; detect collisions in the rendered image; move the robot to the nearest collision-free pose
+    - Apply commands through an actuator model to get forces; integrate the state one step, solving contacts; compute sensor readings
+    - Read the previous sensor values; average them over one time step; publish the averaged values back to your software
+    - Compute sensor readings from the current state; set joint positions directly from commands; resolve contacts every tenth step
+  correct: 1
+- source: 6179deb44792
+  question: A real-time factor of 0.25 is reported and your navigation test takes 90 s of simulated time. How long do you wait, and is the result wrong because the simulation was slow?
+  options:
+    - 22.5 wall-clock seconds; the result is wrong because physics ran four times too fast
+    - 360 wall-clock seconds; the result is wrong because the simulation ran slower than real time
+    - 90 wall-clock seconds; the real-time factor only affects how often the GUI redraws
+    - 360 wall-clock seconds; the result is fine if every node uses `use_sim_time:=true`
+  correct: 3
+- source: 0e195a957991
+  question: You want to know whether karmel's LiDAR will see the legs of your dining table. Simulator or real robot?
+  options:
+    - "Both, in that order: simulate the geometry, then measure whether the real material reflects"
+    - "Simulator only: Gazebo models the reflectivity of every material, so the real test adds nothing"
+    - "Real robot only: a simulator cannot say anything useful about scan height or leg thickness"
+    - "Neither: a 2D LiDAR cannot detect table legs, so the question needs a depth camera instead"
+  correct: 0
+- source: 9cbf2c1ceca8
+  question: Why does this course use two simulators instead of just Gazebo?
+  options:
+    - "`robotlab.sim` is the only one that runs the real URDF and controllers; Gazebo is kept for quick 2D checks of filter maths"
+    - "`robotlab.sim` is fast and deterministic for filters, tuning and Monte Carlo runs; Gazebo runs the real URDF, controllers and ROS 2 topics"
+    - "`robotlab.sim` is photorealistic for camera work and perception, while Gazebo only simulates 2D wheel motion and odometry"
+    - The two simulators run side by side on every test so that each averages out the other's physics errors
+  correct: 1
+- source: 209095ac6544
+  question: You set `max_step_size` to 0.05 s in a Gazebo world to make it run faster. What happens?
+  options:
+    - It runs faster with identical physics, since the step size only changes how often state is logged
+    - Gazebo rejects the value at load time and silently falls back to its default 1 ms step
+    - "Contacts become unstable: wheels sink and bodies jitter, possibly at a higher real-time factor"
+    - It runs slower, because every larger step needs many more solver iterations to converge
+  correct: 2
+- source: bb416133dcb1
+  question: A colleague proposes running Isaac Sim on karmel's Jetson Orin Nano for navigation work. What is the right response?
+  options:
+    - "Good idea: the Orin Nano's GPU is the reference platform that Isaac Sim is developed and tested on"
+    - Fine, as long as the robot's LiDAR driver is disabled to free up enough VRAM for the renderer
+    - "Good idea: photorealistic rendering is exactly what tuning a navigation stack needs the most"
+    - "No: Isaac Sim needs an RTX GPU with 16 GB VRAM, and Gazebo suits navigation tuning better"
+  correct: 3
+- source: 0c63a6c5f544
+  question: A tutorial spawns a robot with `ros2 run gazebo_ros spawn_entity.py -topic robot_description`. What is wrong, and what is the modern command?
+  options:
+    - It is for end-of-life Gazebo Classic; use `ros2 run ros_gz_sim create -topic robot_description -name karmel`
+    - Nothing is wrong; in Jazzy it only needs `-name karmel` added to `spawn_entity.py` to work again
+    - It is for Isaac Sim; use `ros2 launch gazebo_ros spawn.launch.py topic:=robot_description` instead
+    - The topic is wrong; use `ros2 run gazebo_ros spawn_entity.py -topic /urdf -name karmel` instead
+  correct: 0

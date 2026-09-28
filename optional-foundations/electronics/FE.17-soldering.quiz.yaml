@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.17-soldering.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3bcf653cf038
+  question: Why do you heat the pad and the pin rather than the solder?
+  options:
+    - Heating the solder directly burns off its flux before it reaches the joint
+    - The iron's tip wears out faster when it touches solder directly
+    - The pad acts as a heatsink, so heating solder would never melt it
+    - Solder only wets metal above its melting point; dripped on cold parts it forms a cold joint
+  correct: 3
+- source: 09e34b703de0
+  question: What does flux do, and why does re-melting an old joint without adding flux often fail?
+  options:
+    - It lowers the solder's melting point; old solder has a higher melting point
+    - It adds lead to the joint for strength; old joints have lost their lead
+    - It removes oxide so solder can wet; the old joint's flux burned off the first time
+    - It insulates the joint from air; old joints have absorbed moisture
+  correct: 2
+- source: f0c6153c68da
+  question: Which description of a good through-hole joint and a defect is correct?
+  options:
+    - "Good: concave shiny cone covering the pad; cold joint: dull grainy ball not blended in"
+    - "Good: round shiny ball covering the pin; cold joint: flat concave cone on the pad"
+    - "Good: dull grainy ball fully covering the pin; bridge: a gap between pin and pad"
+    - "Good: solder on top of the pin only; bridge: solder filling the whole pad"
+  correct: 0
+- source: a556ebf82cfa
+  question: You solder an XT60 with a 30 W unregulated iron with a fine conical tip. What happens?
+  options:
+    - "The iron is too hot: the solder boils and the joint becomes brittle and cracked"
+    - "The tip can't deliver enough heat: pasty cold joints, and the housing softens and pins shift"
+    - The joint is fine but takes an extra few seconds per pin
+    - The fine tip bridges the pins, since the XT60 pins are too close together
+  correct: 1
+- source: 9c74adb70df0
+  question: Which pairing of a soldering hazard with its control is correct?
+  options:
+    - "Lead: a fan blowing the solder fumes toward you to cool them"
+    - "Burns: a wet sponge held in the hand while soldering"
+    - "Flux fumes: ventilation and a fan or extractor pulling them away"
+    - "Flux fumes: washing your hands after the session"
+  correct: 2
+- source: 145bcae7ee7e
+  question: Why shouldn't you solder wires directly onto an 18650 cell?
+  options:
+    - Solder does not stick to the steel can, so the joint always fails at once
+    - The heat damages the internal seal and separator, risking leaks or internal shorts later
+    - The solder adds too much resistance, so the cell cannot deliver current
+    - The cell's protection circuit is in the terminal and melts at soldering heat
+  correct: 1
+- source: 03a58caeb6b4
+  question: The Pico's encoder input counts correctly on the bench, but loses counts when the robot drives over a door threshold. Suspect and confirmation?
+  options:
+    - A wrong PIO clock setting; confirm by lowering the PIO frequency and driving again
+    - Wheel slip on the threshold; confirm by driving over it more slowly
+    - An encoder magnet that is too weak; confirm by swapping in a stronger magnet
+    - An intermittent cold joint or loose connector; confirm with a wiggle test while printing counts
+  correct: 3

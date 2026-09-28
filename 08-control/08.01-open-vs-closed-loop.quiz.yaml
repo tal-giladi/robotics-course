@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 08.01-open-vs-closed-loop.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8ae3243af656
+  question: In the loop "keep the room at 22 °C", which assignment of setpoint, measurement, error and controller output is correct?
+  options:
+    - "Setpoint: heater power; measurement: 22 °C; error: reading − 22; output: thermometer reading"
+    - "Setpoint: 22 °C; measurement: thermometer reading; error: 22 − reading; output: heater power"
+    - "Setpoint: thermometer reading; measurement: heater power; error: 22 − power; output: 22 °C"
+    - "Setpoint: 22 °C; measurement: heater power; error: power − reading; output: thermometer"
+  correct: 1
+- source: "645e44696248"
+  question: The right motor gives 95% of the left's speed at the same duty, $b = 0.2$ m. Roughly how far sideways is the robot after 1 m?
+  options:
+    - About 0.013 m
+    - About 0.05 m
+    - About 0.13 m
+    - About 0.26 m
+  correct: 2
+- source: fbdd2ced4e12
+  question: In the sync loop $u_R = 0.5 + 0.002\,(n_L - n_R)$, with $n_L = 5000$, $n_R = 5040$. What duty does the right motor get, and why?
+  options:
+    - "0.42: the right wheel is ahead, so it is slowed down"
+    - "0.58: the right wheel is behind, so it is sped up"
+    - "0.58: the right wheel is ahead, so it is sped up to match"
+    - "0.50: a 40-tick difference is inside the loop's deadband"
+  correct: 0
+- source: 3ae72ca453dc
+  question: Why does the robot still curve slightly after the tick counts are equalised?
+  options:
+    - The loop gain is too low, so a small steady-state tick error always remains
+    - The encoders miss ticks at speed, so the counts are equal but the rotation is not
+    - The motors have different time constants, so one wheel always lags behind
+    - Wheel radii differ, so equal rotation gives unequal distance, invisible to encoders
+  correct: 3
+- source: 5d8767fe9819
+  question: Your new sync loop makes the right wheel slow down until it stops, even though it started behind. Most likely cause?
+  options:
+    - The gain is too high; halve it in the controller until the wheel keeps turning
+    - A sign error in the error formula or the right encoder's direction; roll it by hand
+    - The right motor is in its deadband; add a minimum duty in the motor driver
+    - The loop runs too slowly; raise its rate in the firmware to at least 100 Hz
+  correct: 1
+- source: 6d8fc1d997c0
+  question: A full battery (12.6 V) gives 8.2 rad/s at duty 0.5. What do you expect at 10.0 V, open loop and with the firmware's velocity loop?
+  options:
+    - Open loop about 10.3 rad/s; closed loop also 10.3 rad/s
+    - Open loop about 6.5 rad/s; closed loop also about 6.5 rad/s
+    - Open loop 8.2 rad/s unchanged; closed loop 8.2 rad/s unchanged
+    - Open loop about 6.5 rad/s; closed loop reaches the setpoint while duty < 1.0
+  correct: 3
+- source: 5bbf2a0fa5b5
+  question: Why do lessons 08.01–08.06 run the loop on the Pi even though the firmware already has one?
+  options:
+    - On the Pi every part can be seen and changed in seconds; the Pico loop is for the final robot
+    - The Pi loop is faster than the Pico's, so it gives better control during the lessons
+    - The Pico's loop is broken until lesson 08.12 fixes its firmware
+    - The Pi loop is required by ros2_control, which cannot talk to the Pico
+  correct: 0

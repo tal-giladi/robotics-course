@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in FC.05-interrupts-timers-pio.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 905cfa37426b
+  question: Roughly how long is it from the electrical edge to the first line of a C interrupt handler on a 150 MHz Cortex-M33?
+  options:
+    - About 2–3 cycles, about 0.02 µs, since the NVIC jumps directly
+    - About 20–25 cycles, about 0.15 µs, including stacking 8 registers
+    - About 150 cycles, about 1 µs, for the OS to schedule the handler
+    - About 20–25 µs, since the handler address is fetched from flash
+  correct: 1
+- source: 2721a79ac0d2
+  question: "Which of these are legal inside a MicroPython hard IRQ: `count += 1`, `t = time.ticks_us()`, `speed = ticks * 0.01`, `buf[i] = 7` on a preallocated `bytearray`, `print(count)`?"
+  options:
+    - Only the `bytearray` write; all the others allocate
+    - All except `print`, since floats live on the stack
+    - "`count += 1`, `ticks_us()` and the `bytearray` write"
+    - "`count += 1`, `ticks_us()` and `print`, not the float"
+  correct: 2
+- source: 4c961a6325fc
+  question: A handler takes 40 µs. What is the highest edge rate it can sustain, and what CPU load do 16,000 edges/s put on it?
+  options:
+    - 25,000 edges/s; 64% load
+    - 40,000 edges/s; 40% load
+    - 25,000 edges/s; 6.4% load
+    - 2,500 edges/s; overloaded
+  correct: 0
+- source: b9f3e77a7657
+  question: The main loop does `count += 1` on the same variable a hard IRQ increments, 1,000 IRQs per second for an hour. What is wrong with the total?
+  options:
+    - Too high, because each IRQ also triggers the main loop's increment
+    - Correct, because Python integer operations are atomic
+    - Too high, because interrupted writes are retried twice
+    - Too low, because an IRQ between the loop's read and store is overwritten
+  correct: 3
+- source: 6daea52029b7
+  question: Why does a PIO program that counts edges use `push(noblock)` rather than a plain `push`?
+  options:
+    - A plain `push` needs a DMA channel, which is not set up for this state machine
+    - A blocking `push` stalls on a full RX FIFO and misses edges; only the newest count matters
+    - "`noblock` doubles the FIFO depth by joining the TX and RX FIFOs into a single one"
+    - A plain `push` raises an IRQ on every value, which overloads the CPU at high rates
+  correct: 1
+- source: 1b812e12661d
+  question: A bumper's interrupt handler sets `hit = True`, the main loop checks it, and the robot stops four times per bump. What is happening, and what is a fix?
+  options:
+    - Contact bounce; debounce in software (accept after ~20 ms stable) or use an RC filter plus Schmitt trigger
+    - The IRQ fires on both edges; configure it for the falling edge only and it fires once
+    - The main loop polls too fast; slow it to 10 Hz so it sees one event
+    - The flag is not atomic; declare `hit` as `volatile` to fix the repeats
+  correct: 0
+- source: 40acc12639a5
+  question: When would you choose a hardware timer over an `asyncio` task for a 100 Hz control loop, and what do you give up?
+  options:
+    - When you need `await` inside the loop; you give up precise timing
+    - When the loop runs above 1 kHz only; you give up nothing at 100 Hz
+    - When the tick must not be delayed; you give up allocation, blocking and `await` in it
+    - When the loop reads the serial port; you give up the ability to use floats
+  correct: 2
+- source: 9ec8ff5b5b7e
+  question: Both PIO blocks are busy and you still need to count a 200 kHz signal. Which is a valid option?
+  options:
+    - Use a MicroPython hard IRQ, since it handles 200 kHz at about 4 % load
+    - Poll the pin from an `asyncio` task at 400 Hz, above the Nyquist rate
+    - Raise the PIO clock divider so one state machine serves both blocks
+    - "Move to a C interrupt handler: 0.2 µs × 200,000 is only about 4 % load"
+  correct: 3

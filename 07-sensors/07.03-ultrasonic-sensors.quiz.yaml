@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.03-ultrasonic-sensors.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 51db29cd8f20
+  question: A US-100 reports an echo pulse of 3 000 µs. How far is the target at 20 °C, and at 35 °C?
+  options:
+    - 1.030 m at 20 °C and 1.056 m at 35 °C
+    - 0.515 m at 20 °C and 0.528 m at 35 °C
+    - 0.515 m at 20 °C and 0.502 m at 35 °C
+    - 0.515 m at both temperatures
+  correct: 1
+- source: 0f0db74cba1f
+  question: Why is the ultrasonic temperature error a gain and not an offset, and why is it worse at long range?
+  options:
+    - Only $c$ in $d = ct/2$ is wrong, so the error is a fixed percentage of distance
+    - The transducer's ring-down time changes with heat, adding a fixed delay
+    - Warm air absorbs sound, so distant echoes arrive late by a constant amount
+    - The firmware's timer drifts with temperature, adding a constant per reading
+  correct: 0
+- source: 5583da77a306
+  question: A flat wall at 1 m is rotated to 25°. What does the ultrasonic report, and what does naive obstacle-avoidance code do?
+  options:
+    - About 1.10 m, the slant distance; the code slows down slightly early
+    - About 0.91 m, the nearest edge; the code stops a little too soon
+    - 1.00 m as before, since the beam is wide; the code behaves normally
+    - Almost certainly nothing; code treating a dropout as clear drives into it
+  correct: 3
+- source: d20399719b8b
+  question: Your robot has a 4.5 m maximum range and you ping at 40 Hz. What goes wrong?
+  options:
+    - "Nothing: 40 Hz is well within the ultrasonic's physical ping limit"
+    - The sensor overheats and its range readings drift steadily longer
+    - Late echoes land in the next window, giving short, false readings
+    - Every reading is doubled, because two echoes are summed together
+  correct: 2
+- source: 036a5ef7f726
+  question: The ultrasonic sees a closed window that the ToF sensor misses completely. Why?
+  options:
+    - Glass is transparent at 940 nm but acoustically hard, so it reflects ultrasound
+    - The ToF's timing budget is too short to resolve a surface as smooth as glass
+    - Glass absorbs ultrasound and re-emits it, which the receiver sees as an echo
+    - The ToF sensor is blinded by daylight coming through the window's glass
+  correct: 0
+- source: 6140d8c4c877
+  question: A robot with two ultrasonic sensors stops randomly in an empty corridor; each sensor is fine alone. What is it, and what is the five-minute test?
+  options:
+    - Electrical noise from the motors; lift the wheels and drive again
+    - Temperature drift in the corridor; add a thermometer and compare
+    - Floor echoes from the beam cone; tilt both sensors up and retest
+    - Crosstalk between sensors; disable one in software and drive again
+  correct: 3
+- source: 7cb61d478501
+  question: Why does the US-100 have a minimum range of about 2 cm, and why can't software fix it?
+  options:
+    - The echo is too loud at short range and saturates the ADC; software clips it
+    - The transducer rings for ~100 µs after sending, burying any earlier echo
+    - The firmware's timer resolution is 120 µs, too coarse for shorter distances
+    - Sound cannot travel less than 2 cm in air before it forms a proper wave
+  correct: 1
+- source: 1be4b00ffd64
+  question: You calibrate in December at 15 °C and drive in August at 33 °C. What is the gain error and the error on a true 2 m?
+  options:
+    - Gain 1.031; a true 2.00 m reads 2.061 m, 6.1 cm long
+    - Gain 0.997; a true 2.00 m reads 1.994 m, 6 mm short
+    - Gain 0.9703; a true 2.00 m reads 1.941 m, 5.9 cm short
+    - No error, because the December calibration removed it
+  correct: 2

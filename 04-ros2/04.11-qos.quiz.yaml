@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.11-qos.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9fe6d2273028
+  question: "Publisher: BEST_EFFORT, TRANSIENT_LOCAL. Subscriber: RELIABLE, VOLATILE. Do they match?"
+  options:
+    - "Yes: both policies are compatible."
+    - "No: durability fails, because transient local offered is more than volatile requested."
+    - "No: both reliability and durability fail."
+    - "No: reliability fails (best effort offered < reliable requested); durability is fine."
+  correct: 3
+- source: fc9e0bcd4dc6
+  question: "Why does `ros2 topic info -v` show `History (Depth): UNKNOWN`?"
+  options:
+    - History and depth are local settings that aren't exchanged during discovery.
+    - The publisher hasn't sent any samples yet.
+    - The daemon cache is stale and needs a restart.
+    - Depth is only known for RELIABLE endpoints.
+  correct: 0
+- source: 3e90d395c7e7
+  question: A camera publishes at 30 Hz and your detector takes 0.2 s per frame. With depth 10, what fraction is processed, and how old is each frame when processing starts?
+  options:
+    - All frames, each about 33 ms old.
+    - About 16.7% (5/s), each about 300 ms old.
+    - About 50% (15/s), each about 100 ms old.
+    - About 16.7% (5/s), each about 33 ms old.
+  correct: 1
+- source: 9b6ffc00a808
+  question: A 200 KB point cloud crosses Wi-Fi with 0.5% frame loss, about 1472 bytes per frame. What fraction of samples arrive with best effort?
+  options:
+    - About 99.5%
+    - About 87%
+    - About half (about 0.51)
+    - About 5%
+  correct: 2
+- source: b6e28c42971c
+  question: "`robot_state_publisher` has run for a minute when you start RViz, subscribing to `/robot_description` as transient local. Does RViz get the URDF? What if the publisher were volatile?"
+  options:
+    - Yes; with a volatile publisher they don't match at all and RViz logs an incompatible-QoS warning.
+    - No, since it was published before RViz started; volatile makes no difference.
+    - Yes in both cases, because RViz re-requests the URDF.
+    - Yes; with a volatile publisher RViz gets it on the next publish.
+  correct: 0
+- source: 5675d243a6fb
+  question: "`ros2 topic echo /scan` prints scans, but your node's scan callback never runs. What is the most likely cause?"
+  options:
+    - The node subscribed to `scan` without the leading slash.
+    - The node's executor isn't spinning its timer callbacks.
+    - The LiDAR publishes best effort while your node subscribed with the reliable default; use `qos_profile_sensor_data`.
+    - The scan messages are too large for the node's queue depth.
+  correct: 2
+- source: ccdc20dc6ea5
+  question: Compare `TRANSIENT_LOCAL` with a Kafka compacted topic. Which is a correct difference?
+  options:
+    - Kafka keeps samples in the producer's memory, while DDS uses a broker.
+    - The history lives in the publisher process's memory and disappears with it, and it keeps the last `depth` samples, not one per key.
+    - TRANSIENT_LOCAL persists samples to disk, while Kafka keeps them in memory.
+    - TRANSIENT_LOCAL supports consumer groups, while Kafka does not.
+  correct: 1

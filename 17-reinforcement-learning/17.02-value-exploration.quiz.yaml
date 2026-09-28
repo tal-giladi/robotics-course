@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 17.02-value-exploration.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: "4061036765e3"
+  question: Compute $G_0$ for rewards $[0, 0, 5]$ with $\gamma = 0.9$.
+  options:
+    - "4.50"
+    - "4.05"
+    - "3.65"
+    - "5.00"
+  correct: 1
+- source: 93ab254409a4
+  question: What is the effective horizon for $\gamma = 0.98$, and how many seconds is it at 20 Hz?
+  options:
+    - 50 steps, 2.5 s
+    - 98 steps, 4.9 s
+    - 50 steps, 1.0 s
+    - 20 steps, 1.0 s
+  correct: 0
+- source: 88ad8de5671d
+  question: What does $Q^\pi(s, a)$ measure, and how does it differ from $V^\pi(s)$?
+  options:
+    - Expected return taking $a$ now then following $\pi$; $V^\pi$ averages $Q^\pi$ over $\pi$'s own actions
+    - Immediate reward for taking $a$ in $s$; $V^\pi$ is the expected return over the whole episode
+    - Expected return taking the best action forever; $V^\pi$ is the return of a random policy
+    - Expected return taking $a$ now then following $\pi$; $V^\pi$ is the maximum of $Q^\pi$ over actions
+  correct: 0
+- source: c4f19138aa77
+  question: A greedy bandit starts at 0. Approach 1 (true 0.70) first fails; approach 0 (0.55) first succeeds. What happens, and why does ε-greedy fix it?
+  options:
+    - Greedy alternates between both until their estimates match; ε-greedy only speeds that up
+    - Greedy switches to approach 1 once approach 0 fails; ε-greedy is unnecessary here
+    - Greedy sticks to approach 1 (it was tried first); ε-greedy moves it to approach 0
+    - Greedy sticks to approach 0 (~0.55 > frozen 0); ε-greedy keeps sampling approach 1 until it overtakes
+  correct: 3
+- source: 0b345a0206da
+  question: Using the incremental mean, the estimate is 0.6 after 4 attempts. The fifth attempt succeeds (r = 1). New estimate?
+  options:
+    - "0.80"
+    - "0.68"
+    - "0.70"
+    - "0.64"
+  correct: 1
+- source: 5a2dfcf6fbe5
+  question: Why do optimistic initial values explore only early on?
+  options:
+    - The optimism decays with a fixed schedule, like ε in ε-greedy, reaching zero after N steps
+    - Optimistic values are reset after each episode, so exploration only happens in the first steps
+    - Trying an action drags its overrated estimate down; once all are realistic, the agent is plain greedy
+    - Optimism raises the learning rate early, which shrinks as estimates converge to the true values
+  correct: 2
+- source: be20e86991d9
+  question: Value estimates near the dock are lower than far away, with −1 per step and +10 at the dock. What do you check first?
+  options:
+    - The learning rate, since a high rate always makes near-goal values lower than far ones
+    - The exploration rate, since ε-greedy visits dock states too rarely to learn their value
+    - "Nothing: values near a goal are always lower, since fewer steps remain to collect reward"
+    - Discount and terminal handling (tiny γ, bootstrapping past the dock, missing bonus); recompute $G$ by hand
+  correct: 3

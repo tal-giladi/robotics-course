@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 05.01-why-frames.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 96eeca4d7763
+  question: What two things define a coordinate frame?
+  options:
+    - A timestamp and a parent frame.
+    - An origin (a point) and a set of perpendicular axes.
+    - A position and a velocity.
+    - A scale factor and a unit of measurement.
+  correct: 1
+- source: 81afadcc0e8a
+  question: The ToF sensor at $(0.125, 0, 0.05)$ in base_link reads 1.20 m straight ahead. Where is the obstacle in base_link?
+  options:
+    - $(1.20, 0, 0)$
+    - $(1.075, 0, 0.05)$
+    - $(1.325, 0, 0.05)$
+    - $(1.325, 0, 0)$
+  correct: 2
+- source: cdb7be8dba35
+  question: karmel is at $(2.0, 1.0)$ in the map facing +y. An object is 1.0 m straight ahead of base_link. Where is it in the map?
+  options:
+    - $(3.0, 1.0)$
+    - $(2.0, 2.0)$
+    - $(1.0, 1.0)$
+    - $(2.0, 0.0)$
+  correct: 1
+- source: dee12fa891ed
+  question: Why does each sensor report data in its own frame rather than in base_link?
+  options:
+    - The sensor doesn't know where it's mounted; the mounting is stored once in the robot description.
+    - base_link isn't available until the robot has localized itself in the map.
+    - Converting to base_link on the sensor would add too much latency to every reading.
+    - ROS 2 forbids drivers from publishing data in any frame other than their own.
+  correct: 0
+- source: d6d5e63abfa2
+  question: The robot turns in place from 0° to 90°. Does the bottle's position change in base_link? In map?
+  options:
+    - Both change, since the robot moved.
+    - Neither changes, since the robot didn't translate.
+    - It changes in map, but not in base_link.
+    - It changes in base_link, but stays the same in map.
+  correct: 3
+- source: 91c5f1840c09
+  question: Points from the camera appear 0.6 m above the robot, floating in the air. What is the most likely cause?
+  options:
+    - The camera's depth scale is wrong by a factor of 10.
+    - Optical-frame data (z forward) is treated as if in a z-up frame; the frame should be `camera_optical_frame`.
+    - The robot's base_link is placed 0.6 m too low.
+    - The TF timestamps are 0.6 s behind the camera data.
+  correct: 1
+- source: 901613af2210
+  question: Why does ROS store a tree of transforms instead of every pair of frames?
+  options:
+    - Trees allow cycles, which let every transform be cross-checked in both directions.
+    - Storing every pair would need a separate DDS topic per pair, which discovery can't handle.
+    - $n$ frames need only $n-1$ edges; all pairs is $O(n^2)$ and inconsistent when one mount changes.
+    - A tree lets each frame have several parents, which gives redundancy if one publisher dies.
+  correct: 2

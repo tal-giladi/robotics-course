@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.14-battery-monitoring.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6a513939963f
+  question: Why does the battery divider use 100 kΩ and 22 kΩ rather than 10k/2.2k or 1M/220k?
+  options:
+    - 10k/2.2k gives the wrong ratio, and 1M/220k lets the pin exceed 3.3 V.
+    - 10k/2.2k overheats the resistors, and 1M/220k is too sensitive to temperature.
+    - Only 100k/22k gives a ratio that maps 12.6 V to exactly 3.3 V.
+    - Same ratio, but 10k/2.2k wastes ten times the current, and 1M/220k is too high-impedance for the ADC to sample accurately.
+  correct: 3
+- source: 6c0cdd65c0ca
+  question: "`read_u16()` returns 42,100 on a 100k/22k divider. What is the pack voltage, and roughly what state of charge?"
+  options:
+    - About 10.80 V (3.60 V/cell), roughly 20%.
+    - About 2.12 V, which means the pack is empty.
+    - About 12.60 V (4.20 V/cell), fully charged.
+    - About 11.76 V (3.92 V/cell), roughly 63% — honestly "more than half".
+  correct: 3
+- source: 57fa06effdaf
+  question: The robot reads 11.2 V standing still and 10.4 V while turning. Is the battery low?
+  options:
+    - "Yes: 10.4 V is close to the cutoff, so it should shut down now."
+    - "Not necessarily: the drop is sag under turning load; the resting 11.2 V (about 35%) describes the charge."
+    - "Yes: a 0.8 V drop shows a failing cell that must be replaced."
+    - "Not necessarily: the ADC reads high while turning, so the true value is above 11.2 V."
+  correct: 1
+- source: 227ad5963b3d
+  question: You set `--confirm 1` and drive an aggressive course. What happens, and what goes wrong with `--confirm 30` at a 5 s interval?
+  options:
+    - "`--confirm 1` never triggers; `--confirm 30` shuts down too early."
+    - "`--confirm 1` works well; `--confirm 30` shuts down on every turn."
+    - "`--confirm 1` quits on the first turn's sag with a half-full pack; `--confirm 30` waits 150 s, so the BMS may cut power first."
+    - Both behave the same, because the monitor averages the readings anyway.
+  correct: 2
+- source: d6e414116433
+  question: Why does `safe_shutdown()` stop the motors before running the shutdown command?
+  options:
+    - The shutdown command fails if the motors are drawing current.
+    - The Pico must be reflashed before the Pi halts, which needs the motors off.
+    - The BMS disconnects the pack if the motors run during shutdown.
+    - Halting the Pi stops feeding the watchdog, so the motors would run on the last command for 300 ms unsupervised.
+  correct: 3
+- source: c7afb94bbe15
+  question: The INA219 with a 0.1 Ω shunt reads up to ±3.2 A, and your motors stall at 3.5 A each. What do you see?
+  options:
+    - The current reading clips at about 3.2 A, so a 7 A stall looks like 3.2 A; the voltage is still correct.
+    - The voltage reading goes wrong, but the current reads correctly up to 7 A.
+    - The INA219 resets and reports zero current until the stall ends.
+    - The reading wraps around and shows a negative current.
+  correct: 0
+- source: f3193495f89e
+  question: Your divider reads 12.6 V with the motors off and 13.4 V when they run. What's happening, and what's the first fix?
+  options:
+    - The motors regenerate and charge the pack; add a diode on the motor supply.
+    - Switching noise couples into the high-impedance divider node; add 100 nF from GP26 to ground and route wires away from the motor leads.
+    - The divider resistors heat up and change value; use 1% metal-film resistors.
+    - The ADC reference rises with motor load; switch to the Pi's ADC instead.
+  correct: 1

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.04-loss-functions.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c3f8f2ece96e
+  question: Which constant minimizes MSE over a set of targets, and which minimizes MAE?
+  options:
+    - "MSE: the median; MAE: the mean"
+    - "MSE: the mean; MAE: the mode"
+    - "MSE: the mean; MAE: the median"
+    - "MSE: the midrange; MAE: the median"
+  correct: 2
+- source: db16edd0dfe4
+  question: Twenty readings at 1.20 m plus three glitches at 8.19 m. Roughly what do an MSE-trained and an MAE-trained constant predict?
+  options:
+    - MSE about 1.20 m; MAE about 2.25 m
+    - MSE about 2.25 m; MAE 1.20 m
+    - Both about 2.25 m
+    - MSE about 4.70 m; MAE 1.20 m
+  correct: 1
+- source: 8dd3c91f646d
+  question: Logits [2.0, 0.5, −1.0], true class index 0. What is the cross-entropy?
+  options:
+    - About 0.786
+    - About 1.74
+    - About 0.105
+    - About 0.241
+  correct: 3
+- source: f77c5a8d6941
+  question: Why is squared error on +1/−1 targets a poor classification loss?
+  options:
+    - It penalizes confident correct predictions, wasting effort on easy examples
+    - It has no gradient for wrong predictions, so the model can't learn from mistakes
+    - It only works for more than two classes, so binary tasks diverge
+    - It saturates for large scores, just like a sigmoid output
+  correct: 0
+- source: a9a8843d4619
+  question: A policy is trained with MSE on demonstrations that avoid a centred obstacle 50 % left (+0.8 rad/s), 50 % right (−0.8 rad/s). What does it command?
+  options:
+    - +0.8 rad/s, since the first demonstrations dominate training
+    - ±0.8 rad/s at random, matching the demonstration distribution
+    - "About 0 rad/s, the mean: it drives straight into the obstacle"
+    - About 0.4 rad/s, a compromise that clips the obstacle's edge
+  correct: 2
+- source: 889c3ed1664e
+  question: Loss becomes `nan` after 300 steps training a grasp classifier that computes `-log(sigmoid(z))`. Most likely cause and fix?
+  options:
+    - The learning rate is too low; raise it so the loss leaves the plateau
+    - The sigmoid saturates, giving log(0); compute the loss from logits with a stable formula
+    - The labels contain values other than 0 and 1; clip them before training
+    - The batch is too small; average the loss over more samples per step
+  correct: 1
+- source: 89d5690901ad
+  question: What probabilistic assumption makes MSE the "right" loss?
+  options:
+    - Additive Laplace noise with constant scale on the target
+    - Uniformly distributed inputs over the training range
+    - Multiplicative log-normal noise that grows with the target
+    - Additive Gaussian noise with constant variance on the target
+  correct: 3

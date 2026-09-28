@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 05.04-homogeneous-transforms.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e85d83fe2f35
+  question: Why can't a 2×2 matrix represent a translation, and how does the homogeneous form fix it?
+  options:
+    - 2×2 matrices can't be inverted; the extra row makes them invertible.
+    - Any matrix maps zero to zero, but a translation moves the origin; appending a constant 1 adds a column that supplies the translation.
+    - 2×2 matrices only hold integers; the extra row allows floats.
+    - A translation needs three numbers; the extra column stores the angle.
+  correct: 1
+- source: 221e521efa9a
+  question: Which 4×4 matrix means "move 0.10 m along x and 0.10 m along z, no rotation"?
+  options:
+    - Identity rotation with last column $(0.10, 0, 0.10, 1)$.
+    - Identity rotation with bottom row $(0.10, 0, 0.10, 1)$.
+    - Identity rotation with last column $(0.10, 0.10, 0, 1)$.
+    - Diagonal $(1.10, 1, 1.10, 1)$ with no last column.
+  correct: 0
+- source: c068b8abf776
+  question: The optical frame's rotation in camera_link has columns $(0,-1,0)$, $(0,0,-1)$, $(1,0,0)$. What do they mean?
+  options:
+    - The optical x points forward, y left, z up.
+    - "camera_link's axes written in the optical frame: x down, y right, z forward."
+    - The optical frame is rotated 90° about z only.
+    - "The optical x, y, z axes in camera_link: x right, y down, z forward."
+  correct: 3
+- source: 29e4d0010ba5
+  question: You transform karmel's velocity $(0.2, 0, 0)$ from base_link to map with $w=1$ while at $(2.0, 1.0, 90°)$. What do you get?
+  options:
+    - $(0, 0.2, 0)$, the correct rotated velocity.
+    - $(0.2, 0, 0)$, unchanged since velocities are frame-invariant.
+    - "$(2.0, 1.2, 0.045)$: a nonsense 2.3 m/s \"velocity\"; with $w=0$ you'd get $(0, 0.2, 0)$."
+    - $(2.2, 1.0, 0)$, the robot's next position.
+  correct: 2
+- source: d17ee1712a80
+  question: Invert $\begin{bmatrix} 0&-1&0&2 \\ 1&0&0&1 \\ 0&0&1&0 \\ 0&0&0&1\end{bmatrix}$. What is the translation of the inverse?
+  options:
+    - $(-2, -1, 0)$
+    - $(-1, 2, 0)$
+    - $(1, -2, 0)$
+    - $(2, 1, 0)$
+  correct: 1
+- source: 8dff69b74fcd
+  question: Your transformed point cloud is a mirror image of the room, and `np.linalg.det(R)` prints `-1.0`. What happened?
+  options:
+    - "The matrix is a reflection: an axis sign was flipped by hand; rebuild it so $x \\times y = z$."
+    - The quaternion was not normalized before conversion.
+    - The translation was applied before the rotation.
+    - The point cloud used $w = 0$ instead of $w = 1$.
+  correct: 0
+- source: e7c791af8f55
+  question: Why is `chain([("map","base_link",A), ("camera_link","camera_optical_frame",B)])` an error rather than a product?
+  options:
+    - The optical frame can't be chained with map at all.
+    - Chains must start at the child frame, not the parent.
+    - The two matrices have different sizes.
+    - "base_link ≠ camera_link: the base_link→camera_link hop is missing, so the product would be plausible but wrong."
+  correct: 3

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.11-drive-and-rotate.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8a07cdab172a
+  question: Why does `drive_open_loop.py` re-send the same duty command every 50 ms instead of sending it once?
+  options:
+    - The Pico forgets the duty after each PWM period and needs it refreshed.
+    - Re-sending averages out serial errors, so the duty is more accurate.
+    - The firmware watchdog stops the motors after 300 ms without a command; re-sending keeps them alive and guarantees a stop if the link dies.
+    - The motor driver needs a new command to update its current limit.
+  correct: 2
+- source: bb6c688611b8
+  question: Your fit is $v = 0.90(d - 0.15)$ m/s. What duty gives 0.30 m/s, and how far does the robot travel in 2.5 s at that duty?
+  options:
+    - Duty 0.483; about 0.75 m
+    - Duty 0.333; about 0.75 m
+    - Duty 0.483; about 1.21 m
+    - Duty 0.420; about 0.68 m
+  correct: 0
+- source: e73c473b6257
+  question: $v_L = 0.30$ m/s, $v_R = 0.26$ m/s, track 0.20 m. What are $v$ and $\omega$, and what is the turning radius?
+  options:
+    - $v = 0.28$ m/s, $\omega = +0.20$ rad/s (left), radius 1.4 m.
+    - $v = 0.56$ m/s, $\omega = -0.20$ rad/s, radius 2.8 m.
+    - $v = 0.28$ m/s, $\omega = -0.04$ rad/s, radius 7.0 m.
+    - $v = 0.28$ m/s, $\omega = -0.20$ rad/s (right), radius 1.4 m.
+  correct: 3
+- source: 5cb99c91d599
+  question: You run the same `forward:3` command with a full battery and again at 10.5 V. What changes, and roughly by how much?
+  options:
+    - "Nothing: the duty cycle fixes the speed regardless of voltage."
+    - The distance drops by about 15–20%, since speed is roughly proportional to the applied voltage.
+    - The distance drops by about 50%, because power scales with voltage squared.
+    - The distance rises slightly, because the motors draw less current at lower voltage.
+  correct: 1
+- source: 9833a818a124
+  question: The robot drives straight with the wheels in the air but curves hard left on the floor. What do you check first?
+  options:
+    - "Mechanical load: a wheel rubbing or binding, then the caster dragging, then weight distribution."
+    - The encoder wiring on the left wheel, then the PWM frequency.
+    - The motor driver current limit, then the battery voltage under load.
+    - The serial checksum errors, then the watchdog timeout.
+  correct: 0
+- source: 8c64fe9975d1
+  question: Why can't a differential-drive robot move directly to its left, and what does it do instead?
+  options:
+    - Its motors can't reverse fast enough; it drives backwards in a loop instead.
+    - Its firmware forbids sideways commands for safety; it asks the planner to reroute.
+    - Its caster blocks sideways motion; it lifts the caster by rotating in place.
+    - Both wheels roll along its x axis (non-holonomic); it must rotate first or drive an arc.
+  correct: 3
+- source: dad102257a89
+  question: Deadband is 0.11 on the left motor and 0.17 on the right. Is the robot broken, and what does it do at duty 0.14?
+  options:
+    - "Broken: the right driver is faulty; at 0.14 neither wheel turns."
+    - Not broken but mismatched; at 0.14 the left wheel turns and the right doesn't, so it pivots around the right wheel.
+    - Not broken; at 0.14 both wheels turn at the same speed.
+    - Not broken; at 0.14 the right wheel turns and the left doesn't, so it pivots around the left wheel.
+  correct: 1

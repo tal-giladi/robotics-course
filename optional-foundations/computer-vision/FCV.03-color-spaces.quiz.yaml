@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FCV.03-color-spaces.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 18f4997bd5aa
+  question: Why does an RGB box threshold fail when the ball moves into shadow, and what changes in HSV?
+  options:
+    - Shadow changes the ball's hue in RGB; in HSV hue is fixed by definition
+    - Shadow adds blue to RGB; in HSV only S changes, so a saturation band still matches
+    - Shadow clips RGB at 0; in HSV the V channel is 16-bit and doesn't clip
+    - Dimming scales all RGB channels; in HSV mainly V drops while H and S stay similar
+  correct: 3
+- source: 60dd16225510
+  question: What OpenCV 8-bit HSV value does pure yellow (R=255, G=255, B=0) have?
+  options:
+    - (60, 255, 255)
+    - (30, 255, 255)
+    - (30, 128, 255)
+    - (120, 255, 255)
+  correct: 1
+- source: c71ccd571aeb
+  question: A white wall has pixels (200, 201, 199). What is its hue, and why must you care?
+  options:
+    - Essentially undefined (saturation ~1 %), so without a saturation floor it can pass a hue test
+    - About 60° (yellow), so it will always match a yellow ball's threshold
+    - 0° (red), so a red ball detector will fire on every white wall
+    - Undefined, so OpenCV returns an error when you threshold it
+  correct: 0
+- source: b75cbf169b7b
+  question: You segment a red ball with H in 0–10. Half of it disappears in some frames. Diagnose and fix.
+  options:
+    - Shadows lower V below the floor; lower the V threshold to 0
+    - Specular highlights saturate; add a V ceiling below 255
+    - Red hue wraps to 170–179; add a second range or rotate hue first
+    - The camera's white balance drifts; lock it in the driver
+  correct: 2
+- source: 28c0630a8011
+  question: When would you prefer Lab (a, b) distance over HSV?
+  options:
+    - Under strongly changing outdoor lighting, since Lab ignores brightness
+    - Under controlled lighting when separating similar shades, since Lab distances are perceptually uniform
+    - When the object is gray or white, since Lab has a defined hue for low saturation
+    - When speed matters, since Lab conversion is faster than HSV
+  correct: 1
+- source: 572b747714b6
+  question: OpenCV gives 8-bit Lab (171, 171, 202). What are L\*, a\*, b\*?
+  options:
+    - L\* 67.1, a\* 43, b\* 74
+    - L\* 171, a\* 43, b\* 74
+    - L\* 67.1, a\* 171, b\* 202
+    - L\* 67.1, a\* −43, b\* −74
+  correct: 0

@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 11.06-slam-toolbox-simulation.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 77df02c61f67
+  question: What does "asynchronous" mean in `online_async`, and what does it cost you?
+  options:
+    - Scans are queued and processed later; it costs memory
+    - Optimization runs on the GPU; it costs determinism
+    - Busy optimizer means dropped scans; it costs lost scans under load
+    - Map and pose are published separately; it costs TF consistency
+  correct: 2
+- source: b7ea48314226
+  question: slam_toolbox publishes `map → odom`, not `map → base_footprint`. Why, and what would the latter break?
+  options:
+    - "REP-105: odometry owns the smooth edge; the latter gives two parents and jumpy control"
+    - "`base_footprint` is not in the URDF, so the transform could not be built"
+    - Publishing `map → base_footprint` would double the TF bandwidth
+    - It is an arbitrary slam_toolbox convention with no consequence
+  correct: 0
+- source: 1a7258743e05
+  question: "Turning in place at 0.8 rad/s with `minimum_travel_heading: 0.3` and `minimum_time_interval: 0.5`, how much rotation between keyframes, and what should worry you?"
+  options:
+    - About 0.3 rad (17.2°); `minimum_travel_distance`
+    - About 0.8 rad (45.8°); `map_update_interval`
+    - About 0.15 rad (8.6°); the map `resolution`
+    - At least 0.4 rad (22.9°); `coarse_search_angle_offset`
+  correct: 3
+- source: d603976d55ad
+  question: You save the map with `map_saver_cli` and delete everything else. Next week you want to extend it. What can you do?
+  options:
+    - Load the `.pgm` into slam_toolbox and continue
+    - "Re-map from scratch: the image has no poses or scans"
+    - Convert the `.pgm` back into a pose graph
+    - Load the `.yaml` in localization mode and extend
+  correct: 1
+- source: 3b26bd86dac1
+  question: "`compare_maps.py` says the map explored 34 m² of a 27 m² apartment. Is that good news?"
+  options:
+    - "Yes: more coverage means a more complete map"
+    - "Yes: the extra area is the apartment's balcony"
+    - "No: rays were cast from wrong poses outside the building"
+    - "No: the map resolution is set too coarse"
+  correct: 2
+- source: 88c5c0c97993
+  question: You change `map_update_interval` from 2.0 to 20.0. What changes and what does not?
+  options:
+    - Only `/map` rendering slows; graph, matching and `map → odom` are unchanged
+    - Scan matching runs 10× less often, so the pose drifts more
+    - Loop closures are delayed by 20 s, so the map folds
+    - Nothing changes, since the parameter is ignored in async mode
+  correct: 0
+- source: 15f4711a570e
+  question: Two maps of the same apartment score 59 % and 75 % wall accuracy with identical config. What could differ?
+  options:
+    - Map resolution, LiDAR model, and ROS distribution
+    - The random seed only, since the config is identical
+    - Solver plugin, loss function, and preconditioner
+    - Driving and turn speed, route revisits, and machine load
+  correct: 3
+- source: 97cfb628fe48
+  question: What two things must you check about `/scan` before believing anything slam_toolbox tells you?
+  options:
+    - Its range_max and its angle_increment
+    - Its rate in the clock everyone uses, and exactly one publisher
+    - Its QoS depth and its frame's colour in RViz
+    - Its message size and its compression format
+  correct: 1

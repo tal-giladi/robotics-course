@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 08.07-pid-mathematics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 52eeb12a2393
+  question: Which is the discrete positional PI update, with the integral stored in output units?
+  options:
+    - "`integral += error * dt` then `u = clamp(kp * error + ki * integral)`"
+    - "`integral += ki * error * dt` then `u = clamp(kp * error + integral)`"
+    - "`u += kp * (error - prev_error) + ki * error * dt` then `u = clamp(u)`"
+    - "`integral = ki * error / dt` then `u = clamp(kp * integral + error)`"
+  correct: 1
+- source: f240e17b4a9d
+  question: $K = 19.12$, $\tau = 0.08$ s. What gains put the closed-loop poles at $\zeta = 1$, $\omega_n = 20$ rad/s?
+  options:
+    - $k_p = 0.115$, $k_i = 1.67$
+    - $k_p = 0.167$, $k_i = 1.15$
+    - $k_p = 0.084$, $k_i = 20.9$
+    - $k_p = 2.2$, $k_i = 32$
+  correct: 0
+- source: 0a5deb4b214d
+  question: The loop runs at 50 Hz, the speed filter adds 15 ms, and Wi-Fi adds 30 ms. What is θ, and the smallest $\tau_{cl}$ for 45° phase margin?
+  options:
+    - θ = 45 ms; $\tau_{cl} \ge 45$ ms
+    - θ = 55 ms; $\tau_{cl} \ge 35$ ms
+    - θ = 65 ms; $\tau_{cl} \ge 83$ ms
+    - θ = 55 ms; $\tau_{cl} \ge 70$ ms
+  correct: 3
+- source: 443b858f829d
+  question: You move a well-tuned 100 Hz loop to 25 Hz without changing gains. What happens to overshoot, steady-state error and duty chatter?
+  options:
+    - Overshoot drops; steady error grows; chatter grows
+    - Overshoot unchanged; steady error grows; chatter unchanged
+    - Overshoot grows a lot; steady error stays zero; chatter drops
+    - Overshoot grows; steady error grows; chatter grows
+  correct: 2
+- source: b6eccd69b667
+  question: Why does a setpoint-based settling time report `inf` for a P-only loop, and is that a bug?
+  options:
+    - The loop oscillates forever; yes, P loops should always settle
+    - P leaves steady error, so it never nears the setpoint; not a bug
+    - The metric divides by the integral gain, zero here; yes, a bug
+    - The response is too noisy to detect settling; not a bug
+  correct: 1
+- source: bce82c3cd408
+  question: A velocity-form PID drives the motor to full duty after one corrupted telemetry frame and stays there. Why, and what would the positional form do?
+  options:
+    - It accumulates Δu, so one huge step persists; positional recomputes u, perturbing one period
+    - Its derivative saturates on the bad frame; the positional form would saturate the same way
+    - The frame reset its gains to defaults; the positional form stores gains more safely
+    - Its integral overflowed; the positional form has no integral, so it cannot overflow
+  correct: 0
+- source: fe3d8cb58842
+  question: What is the one physical change that improves a delay-limited loop that no amount of tuning can achieve?
+  options:
+    - A bigger battery, so the motor gain $K$ rises
+    - Heavier wheels, so the plant responds more slowly
+    - A higher-resolution PWM, so duty steps are finer
+    - "Reducing θ: run the loop closer to the motor, faster"
+  correct: 3
+- source: 67511ed55a73
+  question: Lambda tuning cancels the plant pole with the controller zero. When is that a bad idea?
+  options:
+    - "When τ is uncertain or drifts: the leftover pole leaves a long tail"
+    - When the loop runs faster than 50 Hz, since the zero becomes unstable
+    - When the motor has a deadband, since cancellation needs linearity
+    - When there is no feedforward, since lambda tuning requires one
+  correct: 0

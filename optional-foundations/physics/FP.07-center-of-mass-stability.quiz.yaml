@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FP.07-center-of-mass-stability.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 05a82f3f6e36
+  question: "Three parts: 1.0 kg at x = −0.05, 0.5 kg at x = +0.10, 0.25 kg at x = +0.20. Where is the CoM in x?"
+  options:
+    - +0.0833 m
+    - +0.05 m
+    - −0.0286 m
+    - +0.0286 m
+  correct: 3
+- source: 843fed957d29
+  question: Karmel's support polygon is a triangle (wheels at (0, ±0.10), caster at (+0.10, 0)). Which edge matters for backward tipping?
+  options:
+    - The line through the caster parallel to the axle at x = +0.10
+    - The axle line through the wheel contacts at x = 0
+    - The two 45° edges from each wheel to the caster
+    - A line 0.10 m behind the axle at x = −0.10
+  correct: 1
+- source: 906a476c8a63
+  question: A robot's CoM sits 30 mm behind its front tipping edge at a height of 0.12 m. At what braking deceleration does it tip?
+  options:
+    - 39.2 m/s²
+    - 0.25 m/s²
+    - 2.45 m/s²
+    - 3.60 m/s²
+  correct: 2
+- source: 1ea6c37be823
+  question: "You raise the arm's payload from 0.28 m to 0.40 m above the shoulder at the same x. Which changes: static margin, braking limit, or both?"
+  options:
+    - Only the braking limit
+    - Only the static margin
+    - Both
+    - Neither
+  correct: 0
+- source: "570180079421"
+  question: Why is an emergency stop potentially the most dangerous moment for a mobile manipulator?
+  options:
+    - It cuts power to the arm, which then drops its payload onto the robot's base
+    - It gives the largest deceleration, shifting the ZMP forward most; an unramped stop can tip it
+    - It disables the wheel motors, so the robot rolls freely down any slope
+    - It resets the controller, which forgets the arm's pose and moves it unpredictably
+  correct: 1
+- source: 5f717454d991
+  question: Karmel (arm at −0.06 m, arm up, 100 g) is stable on the floor but rears up driving up the balcony threshold ramp. Why?
+  options:
+    - Uphill shifts the plumb line forward toward the caster; it tips forward above ≈ 5.9°
+    - The ramp lowers the CoM height, which reduces the rear margin to zero at any slope
+    - Uphill shifts the plumb line back toward the axle; the 11.1 mm margin tips above ≈ 5.9°
+    - The motors lose torque on ramps, so the robot rolls back and tips over
+  correct: 2
+- source: 3d2eba268843
+  question: Which is a valid fix for karmel's backward tipping that adds no mass, with its drawback?
+  options:
+    - Mount the arm forward (+0.06 m); it spends front margin with heavy payloads
+    - Mount the arm further back (−0.10 m); it spends front margin with heavy payloads
+    - Raise the arm's shoulder higher; it makes the robot slower to turn
+    - Remove the caster; the robot then rests on its chassis when stopped
+  correct: 0

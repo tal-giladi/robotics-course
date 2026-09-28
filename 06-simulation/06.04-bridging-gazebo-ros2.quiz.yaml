@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 06.04-bridging-gazebo-ros2.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: fce9fa2896bb
+  question: Why can't ROS 2 nodes subscribe to Gazebo topics directly?
+  options:
+    - They can, as long as both sides use the same `ROS_DOMAIN_ID` and the same DDS vendor
+    - Gazebo topics are encrypted by default, and only `parameter_bridge` holds the session key
+    - Gazebo stamps messages with simulated time, which ROS 2 subscribers reject as out of date
+    - They are different middlewares with no shared discovery, serialisation or types, so a bridge must convert
+  correct: 3
+- source: 589f4e0c6fdf
+  question: What exactly does `use_sim_time:=true` change in a node?
+  options:
+    - Only the stamps on published messages; its timers still run on the OS clock
+    - "Its clock follows `/clock`: `now()`, timer periods, stamps and `tf2` lookup times"
+    - It makes Gazebo run at a real-time factor of exactly 1.0 for that node
+    - It makes the node subscribe to Gazebo topics directly, bypassing the bridge
+  correct: 1
+- source: 019f6b1afeab
+  question: The simulation runs at RTF 0.25. A wall-clock node and a sim-time node both start at $t = 0$. After 20 wall seconds, how far apart are their ideas of "now"?
+  options:
+    - 15 s apart, and the gap grows by 0.75 s per wall second
+    - 5 s apart, and the gap then stays constant from there on
+    - 60 s apart, because simulated time runs four times faster
+    - 15 s apart, but the next `/clock` message corrects the gap
+  correct: 0
+- source: 25434141a287
+  question: You bridge `/scan` but forget `/clock`, and run slam_toolbox with `use_sim_time:=true`. What happens?
+  options:
+    - slam_toolbox falls back to the wall clock and builds the map as normal
+    - slam_toolbox builds a map, but every scan is stamped far in the future
+    - "Nothing: its clock stays at zero, timers never fire, and it looks hung"
+    - slam_toolbox exits immediately with a missing-topic error for `/clock`
+  correct: 2
+- source: 1a40d00f31fe
+  question: "`ros2 topic info /scan --verbose` shows one publisher and one subscriber of the same type, but `ros2 topic hz /scan` at the subscriber shows nothing. What is your next check?"
+  options:
+    - The message type version, since Jazzy renamed `LaserScan` fields
+    - "QoS: a best-effort publisher cannot satisfy a reliable subscriber"
+    - "`ROS_DOMAIN_ID`, since the subscriber must be on another domain"
+    - The URDF, since a missing `<visual>` on the laser stops the scan
+  correct: 1
+- source: 267cf263c865
+  question: Why does karmel's bridge not include `/cmd_vel`?
+  options:
+    - "`/cmd_vel` is bridged automatically whenever `ros_gz_sim create` spawns a robot"
+    - Gazebo cannot accept velocity commands; the robot is moved by setting its pose
+    - "`/cmd_vel` travels over a separate simulated serial link to a virtual Pico"
+    - The controllers run inside Gazebo and subscribe to the ROS `/cmd_vel` directly
+  correct: 3
+- source: 69bfe75ef697
+  question: You need to transform a LiDAR scan taken at simulated time 42.10 into `map`. At what time do you look up the transform?
+  options:
+    - At `now`, so that the points appear where the robot currently is
+    - At `latest`, since it is the most accurate transform available
+    - At the scan's own stamp, 42.10, with a timeout
+    - At time zero, since `map` is a fixed frame that never moves
+  correct: 2

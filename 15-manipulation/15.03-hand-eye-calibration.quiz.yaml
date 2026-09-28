@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 15.03-hand-eye-calibration.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3696c461de8c
+  question: In an eye-in-hand rig, what exactly is $X$, and why can't you measure it with a ruler?
+  options:
+    - $T_{\text{gripper,cam}}$; the optical centre is an unmarked point in the lens, and orientation must be right to a fraction of a degree
+    - $T_{\text{base,cam}}$; the camera is too far from the base to measure, and the arm's links block a straight ruler line
+    - $T_{\text{cam,board}}$; the board moves with every pose, so a single ruler measurement goes stale immediately
+    - $T_{\text{gripper,cam}}$; the housing is curved, so any ruler reading is off by the lens radius of a few millimetres
+  correct: 0
+- source: 75556d308d2f
+  question: Why must $\|\log R_A\| = \|\log R_B\|$ for every pose pair, and what do you do with a pair where they differ by 5°?
+  options:
+    - They are equal only on average over all pairs; keep the pair, since least squares absorbs 5°
+    - The camera and gripper rotate at the same rate; slow the arm down and re-record the pair
+    - $R_A$ and $R_B$ are conjugate through a rigid $X$, so angles match; drop the bad pose before solving
+    - $R_A = R_B$ exactly for any rig; a 5° mismatch means $X$ must be re-initialized from scratch
+  correct: 2
+- source: eaffdd9f76ad
+  question: You collect 3 poses and the solver returns an answer with a small residual. Trust it?
+  options:
+    - "Yes: a small residual proves the calibration is consistent, and 3 poses fully determine $X$"
+    - "No: 3 poses give ~28.6 mm error versus 1.7 mm at 8, and the residual barely separates good from marginal"
+    - "Yes: 3 poses give 3 pairs, which is exactly the minimum, so the answer is exact"
+    - "No: 3 poses always make the solver diverge, so a small residual means a software bug"
+  correct: 1
+- source: accc9904a3a3
+  question: Every calibration pose has the camera level and only pans about the arm's vertical axis. What happens?
+  options:
+    - It fails loudly with a singular-matrix error, since all rotation axes are parallel
+    - It converges silently, small residual, ~60 mm error along the shared rotation axis
+    - It converges with a large residual, clearly flagging the degenerate pose set
+    - It converges correctly, since panning gives the widest possible spread of views
+  correct: 1
+- source: 2acf229324c0
+  question: You improve your arm's FK by a factor of three and your calibration barely improves. Where should the effort have gone?
+  options:
+    - "Into more poses: 50 poses would have averaged out the remaining FK error completely"
+    - "Into FK again: a factor of ten is needed before the improvement becomes visible"
+    - "Into the solver: switching from Tsai to Park's method removes most of the remaining error"
+    - "Into vision: PnP noise dominates, so a bigger board, sub-pixel corners and flat lighting win"
+  correct: 3
+- source: 6aa06e6d9199
+  question: What is the one check on a real robot that the residual cannot replace, and why?
+  options:
+    - Re-run the solver with a different method; if both agree, the calibration matches reality
+    - Check the residual on held-out poses; if it is small, the calibration describes reality
+    - Touch a known point via $X$ and measure the miss; the residual only checks self-consistency
+    - Compare $X$ to the CAD model; if they agree within 1 mm, the calibration is correct
+  correct: 2
+- source: 7473646a71f0
+  question: You mount the camera on a tripod instead of the wrist. What changes in the code?
+  options:
+    - Target on the gripper, $X = T_{\text{base,cam}}$, and $A_{ij} = g_j g_i^{-1}$ instead of $g_j^{-1} g_i$
+    - Target on the gripper, $X = T_{\text{gripper,cam}}$, and $B_{ij}$ is inverted while $A$ is unchanged
+    - "Nothing: the same code works, since eye-to-hand is only a different physical setup"
+    - Target stays on the table, $X = T_{\text{base,cam}}$, and twice as many poses are required
+  correct: 0

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 11.04-scan-matching-icp.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a9471432b362
+  question: Why is the optimal translation $t = \bar q - R\bar p$, and what does it mean geometrically?
+  options:
+    - It minimizes rotation error; it aligns the first point of each scan
+    - Setting $\partial/\partial t = 0$; after rotating, put source centroid on target's
+    - It is a convention; it moves the target onto the source scan's origin
+    - It comes from the SVD; it aligns the principal axes of both scans
+  correct: 1
+- source: 6218f98dd9c8
+  question: $H = \begin{pmatrix}2 & 1\\ -1 & 2\end{pmatrix}$ for centered 2D pairs. What rotation does Kabsch give?
+  options:
+    - About 63.4°
+    - About 45.0°
+    - About −26.6°
+    - About 26.6°
+  correct: 3
+- source: c1a0ebd6e6e2
+  question: You start ICP 90° off in a nearly square room. What happens, and would a tighter gate help?
+  options:
+    - It converges to the 90°-rotated fit; a tighter gate makes it worse
+    - It converges correctly, since walls are distinct; no gate change needed
+    - It diverges to infinity; a tighter gate fixes it
+    - It oscillates between 0° and 90°; a tighter gate picks 0°
+  correct: 0
+- source: 1cf7c5ea1406
+  question: Why does a KD-tree matter for ICP on a Raspberry Pi, in numbers?
+  options:
+    - It cuts work about 2×, from 2M to 1M distances a second
+    - It cuts memory about 40×, from 130 KB to 3 KB per scan
+    - It cuts work about 40×, from ~39M to ~1M comparisons a second
+    - It cuts iterations from 30 to 1, since matches are exact
+  correct: 2
+- source: 76f8447fcc53
+  question: What distinguishes point-to-point from point-to-line ICP, and why does point-to-line do better on LiDAR scans?
+  options:
+    - Point-to-line uses only normal distances, ignoring along-wall sampling offsets
+    - Point-to-line uses twice as many points, averaging out noise
+    - Point-to-line skips rotation, which is the noisy part of ICP
+    - Point-to-line needs no initial guess, so it avoids local minima
+  correct: 0
+- source: 2f23f90d85fa
+  question: In a 10 m hallway SLAM says 6 m, odometry 9.8 m, and the matcher reports high confidence. Explain, and fix.
+  options:
+    - Odometry over-counts from slip; trust SLAM
+    - The LiDAR's range is too short; get a longer one
+    - Loop closure pulled it back; disable loop closure
+    - Degenerate along the axis; give that direction large variance
+  correct: 3
+- source: cf710486b5e1
+  question: Which slam_toolbox parameters play the roles of your ICP's convergence basin and `match_is_reliable`?
+  options:
+    - "Basin: `resolution`; reliable: `minimum_travel_distance`"
+    - "Basin: `correlation_search_space_dimension`; reliable: `link_match_minimum_response_fine`"
+    - "Basin: `loop_search_maximum_distance`; reliable: `do_loop_closing`"
+    - "Basin: `max_laser_range`; reliable: `scan_buffer_size`"
+  correct: 1

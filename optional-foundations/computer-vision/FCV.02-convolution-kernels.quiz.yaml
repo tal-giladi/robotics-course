@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FCV.02-convolution-kernels.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c6bcf35a4d2b
+  question: What do a blur kernel's weights sum to, and a derivative kernel's? Why?
+  options:
+    - Blur 0, derivative 1, so flat regions stay flat and edges stay bright
+    - Both 1, so every filter preserves the image's average brightness
+    - Blur 1, so flat regions keep their brightness; derivative 0, so flat regions give 0
+    - Blur 9, derivative 0, so the blur must be divided by the kernel size afterward
+  correct: 2
+- source: b076de9090d8
+  question: A 3×3 neighbourhood is all 40 except one 255 (a hot pixel). What do a 3×3 box filter and a 3×3 median give?
+  options:
+    - Box 40; median 63.9
+    - Box 63.9; median 40
+    - Box 147.5; median 40
+    - Box 63.9; median 63.9
+  correct: 1
+- source: 40b7fd9f18e0
+  question: You apply `cv2.Sobel(img_u8, cv2.CV_8U, 1, 0)` to a white line on a black floor. What do you see and why?
+  options:
+    - Only the left edge; the right edge's negative gradients are clipped to 0 in uint8
+    - Both edges equally bright, since Sobel returns the absolute gradient
+    - Only the right edge; the left edge's positive gradients overflow and wrap to 0
+    - Nothing at all, since vertical Sobel ignores vertical lines
+  correct: 0
+- source: 7ef2d36dad0f
+  question: Noise σ = 12. What is the noise after a 5×5 box filter, and after a 7×7 box filter?
+  options:
+    - 0.48 and 0.24
+    - 6.0 and 4.0
+    - 5.37 and 4.54
+    - 2.4 and 1.71
+  correct: 3
+- source: c507e861b13e
+  question: Why is a 31×31 Gaussian blur cheap despite 961 weights?
+  options:
+    - OpenCV runs it on the GPU, which does 961 multiplications at once
+    - "It is separable: a 31-tap filter along x then y is 62 multiplications per pixel"
+    - Most Gaussian weights round to zero, so only about 50 are used
+    - OpenCV downsamples the image by 31 before filtering it
+  correct: 1
+- source: 20d19959f564
+  question: A CNN's first layer learned a 3×3 filter close to Sobel x. What does its feature map highlight?
+  options:
+    - Horizontal edges, with the sign indicating edge thickness
+    - Bright blobs, regardless of their orientation
+    - Vertical edges, with the sign indicating dark-to-bright or bright-to-dark
+    - Color changes between red and green regions only
+  correct: 2

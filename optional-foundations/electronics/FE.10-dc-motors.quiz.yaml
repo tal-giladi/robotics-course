@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.10-dc-motors.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e76c3160ef54
+  question: Why does a DC motor draw far more current when stalled than when spinning freely?
+  options:
+    - No back-EMF at stall, so $I = V/R$, limited only by winding resistance
+    - The winding resistance drops sharply when the rotor stops turning
+    - The motor driver boosts voltage at stall to try to restart the motor
+    - Friction in the gearbox converts into extra electrical load at stall
+  correct: 0
+- source: ac66bad87068
+  question: A 12 V motor has a 2.4 Ω winding. On a 3S pack at 12.6 V, what is its stall current and the heat in the winding?
+  options:
+    - 5.0 A and about 60 W
+    - 5.25 A and about 12.6 W
+    - 5.25 A and about 66 W
+    - 30.2 A and about 381 W
+  correct: 2
+- source: fb573cc45700
+  question: A motor spins at 9,000 RPM at no load into a 1:30 gearbox with 70 % efficiency; motor-side torque is 0.02 N·m. Output speed and torque?
+  options:
+    - 300 RPM and 0.60 N·m
+    - 210 RPM and 0.42 N·m
+    - 270,000 RPM and 0.00067 N·m
+    - 300 RPM and 0.42 N·m
+  correct: 3
+- source: 3bed781849d4
+  question: You connect a 12 V brushed motor to a 12 V battery, then swap the wires. What happens? And with a three-wire BLDC motor?
+  options:
+    - Brushed reverses; BLDC also reverses, since both use a commutator
+    - Brushed reverses; BLDC doesn't spin on DC and needs a phase-sequencing controller
+    - Brushed doesn't spin on DC; BLDC reverses, since it has no brushes
+    - Both keep spinning the same way, since direction is set by the magnets
+  correct: 1
+- source: 1a6c47ab9190
+  question: What does "Kv = 800" mean, and what is the motor's torque constant in SI units?
+  options:
+    - About 800 volts per RPM at stall; $k_t \approx 0.0119$ N·m/A
+    - About 800 RPM per volt at no load; $k_t \approx 0.0119$ N·m/A
+    - About 800 RPM per volt at no load; $k_t \approx 0.075$ N·m/A
+    - About 800 RPM per amp at no load; $k_t \approx 1.25$ N·m/A
+  correct: 1
+- source: 1a40e43c9fd5
+  question: The robot drives fine on a full battery, but in the last 20 minutes it can't climb the doorway threshold. Why?
+  options:
+    - The motors warm up, and hot windings have more back-EMF, which adds torque
+    - The encoders lose counts at low voltage, so the speed loop gives up
+    - Stall torque ∝ $V/R$; at 9–10 V it has ~25 % less torque, and sag lowers it further
+    - The gearbox loses lubrication over time, adding friction at the end of a run
+  correct: 2
+- source: c26d1c1e8e65
+  question: Why does karmel use brushed gear motors instead of brushless motors?
+  options:
+    - Brushed motors are more efficient and last longer than brushless ones at small sizes
+    - Brushless motors cannot be reversed, which a differential-drive robot requires
+    - Brushed motors have no back-EMF, so their speed is easier to control
+    - Simple cheap H-bridge PWM, the gearbox gives torque, encoder built in; BLDC needs a complex controller
+  correct: 3

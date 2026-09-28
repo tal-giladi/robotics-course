@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 08.06-derivative-control.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 3e4d3ca08289
+  question: Why are "D on the error" and "D on the measurement" identical when the setpoint is constant?
+  options:
+    - Because $de/dt = dr/dt - dy/dt = -dy/dt$ when $dr/dt = 0$
+    - Because the derivative filter removes the setpoint term
+    - Because $de/dt = dy/dt$ whenever the error is small
+    - Because D is multiplied by zero when the setpoint is constant
+  correct: 0
+- source: 736c798ab326
+  question: $k_d = 0.004$, $\Delta t = 0.02$ s, the setpoint jumps by 5 rad/s. How big is the kick with D on the error?
+  options:
+    - 0.02 duty, barely noticeable
+    - 0.0004 duty, negligible
+    - 1.0 duty, full scale for one sample
+    - 0.25 duty, for five samples
+  correct: 2
+- source: a731c3ed5ce9
+  question: Measurement noise σ = 0.2 rad/s, 50 Hz, $k_d = 0.003$. What is the standard deviation of unfiltered D?
+  options:
+    - About 0.0006 duty
+    - About 0.030 duty
+    - About 0.42 duty
+    - About 0.042 duty
+  correct: 3
+- source: 5e4d5bb8067e
+  question: You move the loop from 50 Hz to 500 Hz on the same encoder, same $k_d$, no filter. What happens to the D noise?
+  options:
+    - It drops 10×, since more samples average the noise out
+    - It grows about 10×, and the speed estimate itself gets noisier
+    - It stays the same, since $k_d$ is unchanged
+    - It grows about √10×, since noise adds in quadrature
+  correct: 1
+- source: 81c508c4f4e9
+  question: A derivative filter has $\tau_d = 30$ ms on a 10 ms loop. What is α, and roughly how much lag does it add to D?
+  options:
+    - α = 0.25; about 30 ms of lag
+    - α = 0.33; about 10 ms of lag
+    - α = 0.75; about 3 ms of lag
+    - α = 0.25; about 120 ms of lag
+  correct: 0
+- source: aa0a560221be
+  question: After adding D, the step response oscillates more than PI did. Which three checks, in order?
+  options:
+    - Raise $k_i$, lower $k_p$, then raise the loop rate
+    - Remove the filter, double $k_d$, then check the encoder
+    - D's sign, then the size of $k_d$, then the filter lag
+    - Battery voltage, then wheel radius, then the deadband
+  correct: 2
+- source: 103f537ef15c
+  question: Why does the course's firmware run the wheel-speed loop with `VELOCITY_KD = 0.0`?
+  options:
+    - The Pico lacks the floating-point speed needed for a D term
+    - D would cause integral windup in the velocity loop
+    - The speed loop is critically damped only without D
+    - "First-order plant, fast loop: PI + feedforward suffice; D is mostly noise"
+  correct: 3

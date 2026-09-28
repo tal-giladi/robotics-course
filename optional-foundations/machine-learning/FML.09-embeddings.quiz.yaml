@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.09-embeddings.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: fd319880d276
+  question: Which is a correct definition of an embedding?
+  options:
+    - A compressed file format for storing camera frames on the robot
+    - A learned vector representation where distance reflects task-relevant similarity
+    - A lookup table from class labels to integer IDs for training
+    - A fixed hash of the input that is identical for identical inputs
+  correct: 1
+- source: 97eb91c5a583
+  question: Compute $\cos(a, b)$ for $a = (1, 0)$ and $b = (1, 1)$.
+  options:
+    - "1.0"
+    - "0.5"
+    - "1.414"
+    - "0.707"
+  correct: 3
+- source: 93577512ac05
+  question: What are the positives and negatives in CLIP's training, and what is the loss?
+  options:
+    - "Positive: an image and its caption; negatives: other captions in the batch; symmetric InfoNCE"
+    - "Positive: two crops of one image; negatives: random noise images; triplet margin loss"
+    - "Positive: an image and its class label; negatives: other labels; plain cross-entropy"
+    - "Positive: an image and its caption; negatives: none; MSE between the two embeddings"
+  correct: 0
+- source: 490f90f9bf87
+  question: With random embeddings and batch size 128, what InfoNCE loss do you expect?
+  options:
+    - About 0, since random vectors are orthogonal
+    - About 128, one per candidate
+    - About $\ln 128 \approx 4.85$
+    - About $\log_2 128 = 7$
+  correct: 2
+- source: 8b43c41ac0f0
+  question: You lower the temperature τ from 0.1 to 0.01. What happens, and what risk appears?
+  options:
+    - Logits scale ×0.1, so training becomes smoother but noticeably slower
+    - Logits scale ×10, so small differences decide; training can become unstable
+    - Nothing changes, since cosine similarity is invariant to the logit scale
+    - Logits scale ×10, so all negatives are ignored and the loss drops to 0
+  correct: 1
+- source: 6e36446b24eb
+  question: Your semantic memory answers "where are my keys?" with a kitchen pose at similarity 0.21. What should the agent say?
+  options:
+    - Report the kitchen pose, since it is the best match found
+    - Report the kitchen pose with a note that it is 21 % likely
+    - "Say it doesn't know: 0.21 is far below any sensible match threshold"
+    - Lower the threshold to 0.2 and report the kitchen pose
+  correct: 2
+- source: "648187260291"
+  question: After upgrading the CLIP model, all memory queries return nonsense. Why?
+  options:
+    - The new model uses a different image resolution, so crops must be resized
+    - The stored vectors need re-normalizing to unit length after the upgrade
+    - The query text must be re-tokenized with the old model's tokenizer
+    - Stored vectors are in the old model's space; re-embed the stored images with the new one
+  correct: 3

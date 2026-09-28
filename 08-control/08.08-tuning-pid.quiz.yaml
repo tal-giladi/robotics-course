@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 08.08-tuning-pid.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: c9706a6db70a
+  question: Why does every tuning procedure start with an open-loop step?
+  options:
+    - It measures the plant alone ($K$, τ, θ), not plant plus controller
+    - It is the only test that cannot damage the motor or gearbox
+    - It finds the ultimate gain $K_u$ without needing any oscillation
+    - It warms up the motor so later closed-loop tests are repeatable
+  correct: 0
+- source: fb3e41f3adc9
+  question: A fit gives $\theta/\tau = 0.8$. What does that change about your plan?
+  options:
+    - "Nothing: it is lag-dominated, so use aggressive gains and D"
+    - "It is delay-dominated: gentle gains, no D, and first remove delay"
+    - It means the fit failed; repeat the step with a larger amplitude
+    - Use Ziegler–Nichols open-loop gains, which suit this ratio best
+  correct: 1
+- source: 288a6d8b9eff
+  question: $K_u = 0.6$, $T_u = 100$ ms. What are the ZN closed-loop PI gains in both forms?
+  options:
+    - $k_p = 0.36$, $T_i = 50$ ms, $k_i = 7.2$
+    - $k_p = 0.27$, $T_i = 120$ ms, $k_i = 2.25$
+    - $k_p = 0.27$, $T_i = 83$ ms, $k_i = 3.25$
+    - $k_p = 0.30$, $T_i = 83$ ms, $k_i = 0.025$
+  correct: 2
+- source: 9ddc6b8134c9
+  question: Two controllers have the same IAE but very different ITAE. What does the one with the larger ITAE look like?
+  options:
+    - A fast rise with no overshoot at all
+    - A slow rise but no tail afterwards
+    - A constant offset from the very start
+    - "Late error: overshoot and a long tail or ringing"
+  correct: 3
+- source: 7a27dfb725f8
+  question: You run the relay experiment with $d$ ten times smaller. What happens to the estimate of $K_u$?
+  options:
+    - It is unchanged, since $K_u$ depends only on the ratio $d/a$
+    - It comes out far too small, since noise dominates the amplitude
+    - It comes out ten times too large, since $a$ shrinks faster than $d$
+    - It becomes more accurate, since the plant stays more linear
+  correct: 1
+- source: 288254bd6611
+  question: Gains that were perfect yesterday overshoot today. Which four checks, in order of cost?
+  options:
+    - Re-run auto-tune, replace motors, reflash firmware, rewire
+    - Lower $k_p$, lower $k_i$, add D, add a filter
+    - Battery voltage, loop timing, mechanical change, measurement path
+    - Wi-Fi strength, CPU temperature, disk space, ROS version
+  correct: 2
+- source: f763b23aa479
+  question: Why does the relay method ship in commercial auto-tuners, rather than "raise $k_p$ until it oscillates"?
+  options:
+    - "It is bounded: the command stays within $u_0 \\pm d$, so nothing runs away"
+    - It gives exact optimal gains, while raising $k_p$ gives only estimates
+    - It needs no sensor, so it works on plants without feedback
+    - It is required by the IEC standard for industrial controllers
+  correct: 0
+- source: bbcd973091c7
+  question: You tuned in simulation with a search and the result oscillates on the robot. Most likely difference, and cheapest fix?
+  options:
+    - The real motor gain is lower; double $k_p$ and $k_i$
+    - The encoder is noisier; add a heavy derivative filter
+    - The simulator's friction is off; re-measure the wheels
+    - Larger real dead time; halve $k_p$ and $k_i$, then verify
+  correct: 3

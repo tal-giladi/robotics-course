@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 06.09-same-code-sim-and-real.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: fb912b2ecb92
+  question: Where do karmel's simulated and real stacks differ, and which can be made identical?
+  options:
+    - Plant, hardware component, sensor sources; all but the plant can match from outside
+    - URDF, controllers and Nav2 configuration; all three can be made identical
+    - Plant, controllers and launch files; only the plant can be made identical
+    - Only the sensors differ, and adding simulated noise makes them identical
+  correct: 0
+- source: 23cba0a9b8b7
+  question: Why is a wheel radius that differs between the URDF and `controllers.yaml` invisible to the robot?
+  options:
+    - The controller reads the radius from the URDF at startup, so the YAML is ignored
+    - The encoders compensate for any radius mismatch automatically as they count
+    - Nothing on board compares either number with the world; only an external check can
+    - The IMU detects the mismatch but only logs a warning that nobody reads
+  correct: 2
+- source: f13387afd122
+  question: You run a script with `use_sim_time:=true` on the real robot. What happens?
+  options:
+    - It runs normally, since `use_sim_time` is ignored when no simulator exists
+    - It crashes with an error saying that no simulator is currently running
+    - It runs, but every timestamp it publishes is offset by the boot time
+    - "It blocks: nobody publishes `/clock`, so its clock and timers stay at 0"
+  correct: 3
+- source: ac5db3a76785
+  question: "You replay a real-robot bag and run SLAM against it. Should the SLAM node have `use_sim_time: true`?"
+  options:
+    - "No: the bag came from a real robot, so wall-clock time is correct"
+    - Yes, if the bag plays with `--clock`, making the player the clock
+    - "No: bag playback always rewrites stamps to the current wall time"
+    - Yes, but only if Gazebo is also running to publish the `/clock`
+  correct: 1
+- source: 66807a95801a
+  question: '`sim_real_parity.py` fails with "the hardware plugin is the SAME in both builds". What has gone wrong?'
+  options:
+    - The `use_sim` xacro switch has stopped switching, so the real robot would load the Gazebo plugin
+    - Both hardware plugins were compiled from the same source file, which is expected and harmless
+    - The controllers YAML is shared between both builds, which ros2_control does not allow
+    - The Pico firmware reports the same version string as Gazebo, which confuses the check
+  correct: 0
+- source: ed1ca1e743c1
+  question: The controller is told a 0.0450 m wheel radius but the real wheel is 0.0447 m. After a commanded 10.00 m drive, what does `/odom` say and how far did the robot travel?
+  options:
+    - "`/odom` says 9.933 m; the robot travelled 10.00 m"
+    - "`/odom` says 10.00 m; the robot travelled 10.067 m"
+    - "`/odom` says 10.00 m; the robot travelled 9.933 m"
+    - "`/odom` says 9.933 m; the robot travelled 9.933 m"
+  correct: 2
+- source: b290fe02daa4
+  question: Why does `robot.launch.py` start `robot_state_publisher` for the real robot but leave it to `sim.launch.py` in simulation?
+  options:
+    - Simulation does not need a `robot_state_publisher` at all, as Gazebo publishes TF
+    - Only one `robot_state_publisher` may run per ROS domain, so the sim one must win
+    - The real robot's firmware publishes TF, so `robot.launch.py` only starts a fallback
+    - The xacro is rendered with different args, and the sim description is what gets spawned
+  correct: 3
+- source: 5df369da7aa3
+  question: A teammate adds `sim:=false` support to `navigation.launch.py`. Why should you object?
+  options:
+    - Launch files in Jazzy cannot take boolean arguments, so the flag would be silently ignored
+    - Navigation sits above the seam; needing `sim` there means a difference leaked up from below
+    - Nav2 must always run with `use_sim_time:=true`, so a `sim:=false` mode can never work
+    - It would launch a second copy of every Nav2 node, doubling the CPU load on the robot
+  correct: 1

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 05.05-rotations-in-3d.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8a73ea802ef3
+  question: In the ROS rpy convention, how is the rotation written, and how is it read?
+  options:
+    - "$R = R_x(\\text{roll})R_y(\\text{pitch})R_z(\\text{yaw})$: yaw, pitch, roll about fixed axes."
+    - "$R = R_z(\\text{yaw})R_y(\\text{pitch})R_x(\\text{roll})$: roll, pitch, yaw about fixed axes, or yaw, pitch, roll about moving axes."
+    - "$R = R_y(\\text{pitch})R_z(\\text{yaw})R_x(\\text{roll})$: pitch first, then yaw and roll about fixed axes."
+    - "$R = R_z(\\text{yaw})R_y(\\text{pitch})R_x(\\text{roll})$: yaw, pitch, roll about fixed axes only."
+  correct: 1
+- source: 5f951f8f7076
+  question: karmel drives up a ramp, nose up by 8°. What is its pitch in REP-103?
+  options:
+    - +8°, since nose up is positive
+    - −8°, since positive pitch is nose down
+    - +82°, measured from vertical
+    - 0°, since pitch is measured relative to the ramp
+  correct: 1
+- source: 965b5f69b883
+  question: What is the quaternion (x, y, z, w) for yaw −45°?
+  options:
+    - $(0, 0, -0.7071, 0.7071)$
+    - $(0, 0, 0.3827, 0.9239)$
+    - $(0, 0, -0.3827, 0.9239)$
+    - $(-0.3827, 0, 0, 0.9239)$
+  correct: 2
+- source: 2a910cb5df97
+  question: A message arrives with orientation (0, 0, 0, 0). What does `Rotation.from_quat` do, and what should your code do?
+  options:
+    - It returns the identity rotation; accept it as "no rotation".
+    - It returns NaNs; replace them with zeros.
+    - It normalizes to (0, 0, 0, 1); log a warning and continue.
+    - It raises `ValueError`; reject or log it, since the publisher forgot to set w = 1.
+  correct: 3
+- source: 6f17959d02ea
+  question: Why can't you recover roll and yaw separately at pitch = 90°?
+  options:
+    - After pitching 90°, the roll axis lines up with the original yaw axis, so only their combination is determined (gimbal lock).
+    - At 90° the rotation matrix becomes singular and can't be inverted.
+    - Quaternions can't represent a 90° pitch exactly.
+    - At 90° the pitch angle itself becomes ambiguous by 180°.
+  correct: 0
+- source: 3f4db33b4133
+  question: '`Rotation.from_euler("xyz", [0, 0, 90]).as_quat()` returns `[0, 0, 0.8509, 0.5253]` instead of `[0, 0, 0.7071, 0.7071]`. Why?'
+  options:
+    - The order should be `"zyx"` for yaw-only rotations.
+    - The angles were read as radians; add `degrees=True` or pass `math.radians(90)`.
+    - scipy returns (w, x, y, z), so the order is swapped.
+    - The quaternion needs normalizing after conversion.
+  correct: 1
+- source: 1f6336e10657
+  question: You have `q_map_base` and `q_base_imu`. Which product gives the IMU's orientation in map?
+  options:
+    - "`q_map_imu = q_base_imu * q_map_base`"
+    - "`q_map_imu = q_map_base * q_base_imu`"
+    - "`q_map_imu = q_map_base + q_base_imu`"
+    - "`q_map_imu = inverse(q_base_imu) * q_map_base`"
+  correct: 1

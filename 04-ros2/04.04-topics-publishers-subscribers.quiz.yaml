@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in 04.04-topics-publishers-subscribers.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9839b98b1433
+  question: What does the `10` in `create_publisher(Float32, 'battery/voltage', 10)` mean, and what happens when the subscriber is slower than the publisher?
+  options:
+    - A 10 Hz rate limit; the publisher slows down to match the subscriber.
+    - A 10 s timeout; messages older than that are discarded by DDS.
+    - KEEP_LAST depth 10; when the queue is full the oldest are dropped, and the publisher is not slowed down.
+    - A buffer of 10 bytes; larger messages are split into fragments.
+  correct: 2
+- source: 9356006bd595
+  question: The sim starts at 12.6 V and drains at 0.08 V/s. When does the monitor warn at 10.5 V, and how does a naive `v > 10.5` recovery behave with σ = 0.03 V noise?
+  options:
+    - After 26.25 s; the naive check flaps almost immediately, while hysteresis at 10.7 V needs a 6.7σ excursion.
+    - After 26.25 s; the naive check never recovers, because noise can't exceed 10.5 V.
+    - After 157.5 s; the naive check recovers once, cleanly.
+    - After 2.1 s; the naive check flaps, and hysteresis makes it worse.
+  correct: 0
+- source: 9ffe2a2aebc5
+  question: You kill `battery_sim` with `kill -9`. What does `battery_monitor` log, and after how long?
+  options:
+    - Nothing, ever, since no message means no callback.
+    - A shutdown event immediately, because DDS reports the lost publisher.
+    - An `ERROR` every second from the moment of the kill.
+    - One `ERROR ... No battery data for 3.x s`, between 3 and 4 s after the last message, from its 1 Hz watchdog.
+  correct: 3
+- source: 1bb738320652
+  question: Why don't the subscription callback and the watchdog timer callback need a lock around `self._last_rx`?
+  options:
+    - Python's GIL makes every attribute update atomic, so locks are never needed.
+    - The default single-threaded executor runs the node's callbacks one at a time, so they never run concurrently.
+    - The timer callback only reads the value, and reads are always safe.
+    - rclpy copies `self` for each callback, so they don't share state.
+  correct: 1
+- source: 4287ce6cdf77
+  question: "`ros2 topic list -t` shows `/battery/voltage [std_msgs/msg/Float32, std_msgs/msg/Float64]`. What does that mean, and how do you find the offender?"
+  options:
+    - Two endpoints use different types; the Float32 monitor can't see Float64 data; `ros2 topic info -v` names the offending node.
+    - The topic carries both types, and ROS 2 converts between them automatically.
+    - The monitor was built twice; rebuild with `colcon build --packages-select`.
+    - It's a daemon cache glitch; `ros2 daemon stop` fixes it.
+  correct: 0
+- source: 319e584e7f83
+  question: A node crashes with `Assertion 'PyFloat_Check(field)' failed` and no Python traceback. What is the fastest way to find the bad line?
+  options:
+    - Attach `gdb` to the Python process and read the C stack.
+    - Add `print()` statements before every publish call.
+    - Rerun with `ROS_PYTHON_CHECK_FIELDS=1`, which raises an `AssertionError` with a traceback at the bad assignment.
+    - Switch the RMW to Cyclone DDS, which reports the field name.
+  correct: 2

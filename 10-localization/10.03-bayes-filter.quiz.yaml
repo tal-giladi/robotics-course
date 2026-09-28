@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 10.03-bayes-filter.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8af537f9aae5
+  question: What do the predict and update steps do to a belief, and which one conserves total probability without normalization?
+  options:
+    - Predict multiplies by the likelihood; update shifts and blurs; update conserves it
+    - Predict shifts and blurs by motion; update multiplies by the likelihood; predict conserves it
+    - Both shift the belief; neither conserves probability, so both normalize
+    - Predict sharpens; update blurs by sensor noise; update conserves it
+  correct: 1
+- source: 1ad59918ad29
+  question: Belief $[0.5, 0.5, 0, 0]$ on a 4-cell circle, move 1 with kernel $[0.2, 0.6, 0.2]$. What is the predicted belief?
+  options:
+    - $[0.1, 0.4, 0.4, 0.1]$
+    - $[0, 0.5, 0.5, 0]$
+    - $[0.3, 0.4, 0.3, 0]$
+    - $[0.1, 0.3, 0.5, 0.1]$
+  correct: 0
+- source: 1be408fd42ed
+  question: A detector has $p_{hit} = 0.9$, $p_{false} = 0.1$. By what factor does one "door" reading change the door/wall belief ratio? One "wall" reading?
+  options:
+    - "Door: 0.9×; wall: 0.1×"
+    - "Door: 9× toward doors; wall: 1×"
+    - "Door: 9× toward doors; wall: 9× toward walls"
+    - "Door: 1.8× toward doors; wall: 1.8× toward walls"
+  correct: 2
+- source: c60cb21871f2
+  question: A robot localized at 0.95 in one cell drives 30 cells through a featureless section (all readings "wall"), kernel `[0.05, 0.9, 0.05]`. What happens?
+  options:
+    - The belief stays at 0.95, since "wall" readings confirm it
+    - The belief becomes uniform over the whole map
+    - The belief sharpens further with every "wall" reading
+    - Readings carry no information; the peak blurs to about 0.24 (σ ≈ 1.7 cells)
+  correct: 3
+- source: 06969d49e9d2
+  question: Why does a pure Bayes filter fail to recover from a kidnapping, and what does mixing in $\varepsilon/n$ cost?
+  options:
+    - "Other cells are ~0 and can't recover; cost: never fully confident, possible false alarms"
+    - "Its motion kernel is too narrow; cost: slower convergence after every single move"
+    - "Readings are ignored once it converges; cost: higher CPU usage on every step"
+    - "Its sums overflow numerically; cost: it can no longer localize globally at all"
+  correct: 0
+- source: 8aa3403bfb35
+  question: Your filter passes unit tests but in the simulator is confidently off by exactly one cell, always in the direction of travel. Most likely cause?
+  options:
+    - The sensor model has $p_{hit}$ and $p_{false}$ swapped
+    - "An off-by-one in timing: predicting once more or less than the log implies"
+    - The kernel is too wide, so the belief spreads too far forward
+    - Normalization is skipped, so probabilities drift upward
+  correct: 1
+- source: 64e4c3c7f74b
+  question: Why do 2D and 3D robots rarely use grid Bayes filters, although grids handle global localization perfectly?
+  options:
+    - Grids cannot represent heading, only position
+    - Grids cannot recover from a kidnapping without particles
+    - Grids need a Gaussian sensor model, which LiDARs lack
+    - Cells grow exponentially with dimensions (864,000 for a flat)
+  correct: 3

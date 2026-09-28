@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.01-why-middleware.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6af54e8f1363
+  question: Which Kafka component has no equivalent in a default ROS 2 (DDS) system, and what is one consequence?
+  options:
+    - The broker; nothing is persisted, so a late subscriber misses earlier messages unless TRANSIENT_LOCAL is used.
+    - The topic; ROS 2 sends all data on one shared channel.
+    - The producer; ROS 2 nodes can only subscribe, never publish.
+    - The schema registry; ROS 2 messages are untyped.
+  correct: 0
+- source: d03c310c1df9
+  question: What are the discovery multicast port and the data unicast port for participant 1 in `ROS_DOMAIN_ID=7`?
+  options:
+    - 7407 and 7420
+    - 9150 and 9161
+    - 9150 and 9163
+    - 9157 and 9170
+  correct: 2
+- source: 0e21691885ed
+  question: Why is "drive 1 m" an action and not a service, although both are request → result?
+  options:
+    - Services can't carry floating-point arguments.
+    - It takes seconds, the caller wants feedback, and it must be cancellable; a service has none of those.
+    - Actions are faster than services because they skip discovery.
+    - Services only work between nodes on the same machine.
+  correct: 1
+- source: 687e994f5113
+  question: "`RELIABLE` QoS is set on both sides. The subscriber restarts. Does it receive messages published while it was down?"
+  options:
+    - "Yes: RELIABLE stores every message until all subscribers acknowledge it."
+    - Yes, but only if the publisher's history depth is at least 100.
+    - No, unless the subscriber uses BEST_EFFORT when it reconnects.
+    - "No: RELIABLE only retransmits to currently matched readers; TRANSIENT_LOCAL would give up to *depth* recent samples."
+  correct: 3
+- source: f0fc6a8dfaae
+  question: What is the RMW, and what does `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` change?
+  options:
+    - The middleware abstraction interface; the process loads Cyclone DDS instead of the default Fast DDS, with no code changes.
+    - The ROS message wrapper; messages are serialized as JSON instead of CDR.
+    - The robot model workspace; the URDF is loaded from the Cyclone package.
+    - The runtime memory watcher; it enables shared-memory transport only.
+  correct: 0
+- source: 511b77bbe981
+  question: The listener on the laptop receives nothing from the Pi. `ros2 multicast` works both ways and `ROS_DOMAIN_ID` is 42 on both. What do you check first?
+  options:
+    - Reinstall ROS 2 on both machines with the same package set.
+    - "`ros2 topic list` on the laptop: if the topic appears, discovery works and you move on to type/QoS, RMW and firewalls."
+    - Change `ROS_DOMAIN_ID` to 0 on both sides.
+    - Replace the Wi-Fi router with an Ethernet switch.
+  correct: 1
+- source: 2a57e5991af2
+  question: Why does a 640×480 raw image over lossy Wi-Fi with BEST_EFFORT lose far more frames than the packet loss rate?
+  options:
+    - BEST_EFFORT retransmits each frame until it times out, starving later frames.
+    - The image is compressed, and one bad packet corrupts the codec state.
+    - "The ~0.9 MB sample spans hundreds of fragments and is dropped if any one is missing: $(1-\\text{loss})^{\\text{fragments}}$."
+    - Wi-Fi gives lower priority to multicast image data.
+  correct: 2

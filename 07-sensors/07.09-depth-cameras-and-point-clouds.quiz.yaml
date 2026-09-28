@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.09-depth-cameras-and-point-clouds.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a6a50b3618fe
+  question: A stereo camera has $f = 425$ px and $B = 50$ mm, matching to 0.1 px. What is its depth error at 1 m and 4 m, and what does the ratio tell you?
+  options:
+    - 4.7 mm and 18.8 mm; error grows linearly, fine for room mapping
+    - 4.7 mm and 75.3 mm; error is quadratic, so use it at close range
+    - 0.47 mm and 7.5 mm; error is quadratic but negligible everywhere
+    - 4.7 mm at both ranges; stereo error is constant with distance
+  correct: 1
+- source: 880211c36dff
+  question: Your robot must not hit a glass door. Which depth technology should you buy?
+  options:
+    - Active stereo, since its IR projector adds texture onto the glass
+    - Time-of-flight, since it measures the path directly off the glass
+    - Structured light, since its pattern reflects cleanly off smooth glass
+    - "None of them: add an ultrasonic sensor, since sound reflects off glass"
+  correct: 3
+- source: 378885baee39
+  question: A `PointCloud2` has `height = 240`, `width = 424`, `point_step = 16`. How many bytes is `data`, and what does `height > 1` buy you?
+  options:
+    - 1,628,160 bytes; it is organised, so neighbours are known for free
+    - 101,760 bytes; it is organised, so it can be compressed losslessly
+    - 1,628,160 bytes; it is stereo, holding a left and a right image
+    - 6,784 bytes; it has several rows, so it can be split across threads
+  correct: 0
+- source: 3c2e77554155
+  question: A node converts `16UC1` depth to metres but forgets to mask zeros. What do you see in RViz, and what does Nav2 do?
+  options:
+    - Holes where invalid pixels were; Nav2 plans straight through them
+    - Points at maximum range; Nav2 ignores them as out of range
+    - A blob of points at the camera's centre; Nav2 thinks it's trapped
+    - Nothing changes, since zero depth is filtered by the costmap
+  correct: 2
+- source: 1987c83b8b85
+  question: Why "publish the depth image, not the point cloud", and what does the receiver need to rebuild the cloud?
+  options:
+    - The cloud is 8× the bytes for no extra information; it needs `CameraInfo` and the encoding
+    - The cloud loses precision in transit; it needs the TF tree and the camera's serial number
+    - The image is lossy but smaller; it needs a calibration YAML and the original RGB frame
+    - Depth images are required by Nav2; it needs the point step and the field names
+  correct: 0
+- source: 2751e6018eae
+  question: "`is_dense = true` but the cloud contains NaNs. What breaks, and how would you have noticed?"
+  options:
+    - RViz refuses to display it; the display shows an error message
+    - "Nothing: `is_dense` is informational and consumers always check"
+    - Serialization fails; the publisher logs an error at every message
+    - PCL skips validity checks and returns NaNs or crashes; a NaN count vs the flag
+  correct: 3
+- source: d046733cab4e
+  question: A blank white wall is a hole in your depth image indoors and fine outdoors. Which technology, and what is happening?
+  options:
+    - "ToF: sunlight boosts the return signal off the white wall outdoors"
+    - "Stereo with the IR projector off: indoors the blank wall has no texture"
+    - "Structured light: the white wall saturates the IR pattern indoors"
+    - "Stereo: indoor lighting flickers at 50 Hz and breaks the matching"
+  correct: 1
+- source: 25f98c9e54cc
+  question: karmel has no depth camera. Can it report the position of a red mug on a table, on the map?
+  options:
+    - "No: without depth there is no way to estimate range from one camera"
+    - Only by moving to triangulate, since a single frame gives no range at all
+    - "Yes, roughly: intersect the pixel's bearing ray with a known plane"
+    - "Yes, exactly: the mug's apparent size gives range to the millimetre"
+  correct: 2

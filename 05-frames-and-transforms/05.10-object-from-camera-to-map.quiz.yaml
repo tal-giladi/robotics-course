@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 05.10-object-from-camera-to-map.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a505fcdbbe93
+  question: A detector publishes `PointStamped` in `camera_optical_frame` with `point = (0.05, -0.02, 0.60)`. What do those numbers mean physically?
+  options:
+    - 0.05 m ahead, 0.02 m to the right, 0.60 m above the lens.
+    - 0.60 m in front of the lens, 0.05 m to the right of the axis, 0.02 m above it.
+    - 0.60 m in front of the lens, 0.05 m to the left of the axis, 0.02 m below it.
+    - 0.05 m in front of the lens, 0.02 m below, 0.60 m to the right.
+  correct: 1
+- source: dd64fd7b2fe1
+  question: Why does the bottle's `map` z come out as 0.165 m when it is 0.12 m above `base_link`?
+  options:
+    - The camera's optical frame adds 0.045 m of lens offset.
+    - The map frame's origin is 0.045 m below the floor.
+    - TF rounds heights up to the nearest wheel radius.
+    - "`base_link` is at axle height, one wheel radius (0.045 m) above the ground: 0.120 + 0.045."
+  correct: 3
+- source: b9bbbe050f54
+  question: The robot turns in place at 1.0 rad/s; a detection 2.0 m away is transformed with `Time()` while the pipeline is 100 ms behind. How far off is the result?
+  options:
+    - About 0.20 m, tangential, in the direction the robot is turning.
+    - About 0.10 m, along the line of sight.
+    - About 0.02 m, negligible for turning in place.
+    - About 2.0 m, since the whole detection is rotated 1 rad.
+  correct: 0
+- source: f289239cb224
+  question: '`lookup_transform("map", "camera_optical_frame", stamp)` raises `ExtrapolationException … into the future` on the first try but succeeds 20 ms later. Is the system broken?'
+  options:
+    - "Yes: the camera clock is ahead of the Pi's clock."
+    - "Yes: TF should extrapolate a few ms automatically."
+    - "No: the detection is newer than the latest odometry; keep it and retry. Switching to `Time()` would be the real bug."
+    - No, but you should switch to `Time()` to avoid the exception.
+  correct: 2
+- source: 37fe33abc6d7
+  question: You want the robot to drive to a bottle it saw 4 seconds ago. Which frame do you store the detection in?
+  options:
+    - "`map` (or `odom` for a short approach); a stored `base_link` coordinate is only valid at the instant it was computed."
+    - "`base_link`, because the controller works in base_link."
+    - "`camera_optical_frame`, because that's where it was measured."
+    - "`base_footprint`, because it's on the ground plane."
+  correct: 0
+- source: bea7fb0da29a
+  question: The bottle's `base_link` position is exactly right, but its `map` position is 30 cm off and jumps every few seconds. Where is the fault?
+  options:
+    - In the camera's optical-frame rotation.
+    - "In the localizer: the static chain is correct, so `map → odom` is wrong."
+    - In `do_transform_point`, which ignores the stamp.
+    - In the URDF's camera_joint origin.
+  correct: 1
+- source: 633719acf085
+  question: What does `do_transform_point(msg, t)` put in the returned message's header?
+  options:
+    - The input message's header, unchanged.
+    - An empty header, which the caller must fill in.
+    - The current time and the source frame.
+    - "The transform's header: target `frame_id` and the transform's stamp, so the result is self-describing."
+  correct: 3
+- source: e31eb78243ab
+  question: A detector runs at 5 Hz with 250 ms inference latency. What must it and the consumer do for correct geometry?
+  options:
+    - Stamp results with the time inference finished; the consumer uses `Time()`.
+    - Stamp results with the image's `header.stamp`; the consumer looks up the transform at that stamp, retrying briefly.
+    - Subtract 250 ms from the current time; the consumer extrapolates.
+    - Skip stamping; the consumer uses the newest transform available.
+  correct: 1

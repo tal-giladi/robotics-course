@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 12.08-nav2-on-the-real-robot.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: da03b92bc11b
+  question: karmel's inflated inscribed radius is 11.5 cm. What is the narrowest doorway it can plan through, and the narrowest you should actually ask it to?
+  options:
+    - Plans through anything over 23 cm; in practice about 45 cm is the floor and 60 cm is comfortable
+    - Plans through anything over 11.5 cm; in practice about 23 cm is the floor and 30 cm is comfortable
+    - Plans through anything over 23 cm; in practice 25 cm is fine, since localization error is tiny indoors
+    - Plans through anything over 46 cm; in practice about 90 cm is the floor and 1.2 m is comfortable
+  correct: 0
+- source: fc2399babfc2
+  question: At 0.25 m/s, which is larger for karmel — the blind distance or the braking distance — and what does that imply?
+  options:
+    - Braking distance (8.8 vs 3.9 cm); stronger brakes buy more safety than a faster sensor or costmap
+    - Blind distance (8.8 vs 3.9 cm); faster sensing or costmap updates buy more safety than stronger brakes
+    - They are equal (about 6 cm each), so latency and brakes matter equally for the local costmap size
+    - Blind distance (8.8 vs 3.9 cm); so the local costmap can be made smaller than the braking distance
+  correct: 1
+- source: b211c3d6cb19
+  question: Your AMCL pose jitters by σ = 7 cm standing still. Which answer gives correct parameter consequences and the real fix?
+  options:
+    - "`xy_goal_tolerance` ≈ 0.07 m and a shorter lookahead; really fix it by adding more AMCL particles"
+    - "`xy_goal_tolerance` ≈ 0.14 m and a shorter lookahead; really fix it by lowering the controller rate"
+    - "`xy_goal_tolerance` ≈ 0.28 m and a longer lookahead; really fix the map, environment or LiDAR placement"
+    - No parameter changes needed; really fix it by raising `desired_linear_vel` so jitter averages out
+  correct: 2
+- source: 1b2a77c18965
+  question: Why should the global costmap's `obstacle_max_range` be shorter than the local one's?
+  options:
+    - The global costmap updates faster than the local one, so long-range marks overload its update loop.
+    - The local costmap needs long range to plan whole routes, while the global one only sees nearby obstacles.
+    - Global marks in `odom` carry wheel drift; the local costmap is in `map`, so AMCL corrects its marks.
+    - Global marks in `map` carry localization error and persist, closing doorways; local `odom` marks are rebuilt quickly.
+  correct: 3
+- source: 8f70be07c0b8
+  question: You double `desired_linear_vel` from 0.25 to 0.5 m/s and change nothing else. Which set of consequences is right?
+  options:
+    - Stopping distance 12.7 → 25.4 cm, 25 cm between replans, corner cut unchanged at 12 cm
+    - Stopping distance 12.7 → 50.8 cm, 50 cm between replans, corner cut about 12 → 6 cm
+    - Stopping distance unchanged, 50 cm between replans, corner cut about 12 → 23 cm
+    - Stopping distance 12.7 → 33.1 cm, 50 cm between replans, corner cut about 12 → 23 cm
+  correct: 3
+- source: f375700ec590
+  question: What stops karmel's wheels if the Pi loses power mid-goal? And if your Python process is killed?
+  options:
+    - "Power loss: the Pico's 300 ms watchdog. Killed script: Nav2 keeps driving until a timeout, collision monitor or watchdog acts."
+    - "Power loss: Nav2's controller sends a final zero. Killed script: the robot stops at once, since the script owns the goal."
+    - "Power loss: nothing, the motors keep their last command. Killed script: the Pico watchdog stops the motors after 300 ms."
+    - "Power loss: the collision monitor. Killed script: `lifecycle_manager` detects it and deactivates the whole stack."
+  correct: 0
+- source: fc3daba0987a
+  question: The controller logs "Control loop missed its desired rate" ten times a minute on the Pi. What do you change last?
+  options:
+    - The camera; first lower `controller_frequency` and AMCL particles, then turn the camera off if it still misses
+    - "`controller_frequency`; first measure CPU, throttling and supply, then cut work (camera, particles, costmap, controller)"
+    - The power supply; first lower `controller_frequency`, then switch MPPI for RPP and shrink the local costmap
+    - The local costmap size; first lower `controller_frequency`, then measure CPU per thread to confirm the fix
+  correct: 1
+- source: e2157e3fb438
+  question: Why does this lesson insist on a written diff rather than an edited file?
+  options:
+    - Nav2 only reloads parameters that appear in a diff file, so direct edits are silently ignored.
+    - A diff is smaller to store on the Pi's SD card than a full copy of the parameter file.
+    - Every change must trace to a measurement and be revertible one at a time when the robot gets worse.
+    - Edited YAML files lose their comments, which Nav2 needs to parse nested costmap blocks.
+  correct: 2

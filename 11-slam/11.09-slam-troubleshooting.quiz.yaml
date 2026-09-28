@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 11.09-slam-troubleshooting.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: a91034928559
+  question: A map defect moves with the robot. What class of problem is it, and what does that rule out?
+  options:
+    - A loop-closure problem; rules out scan faults
+    - A scan problem; rules out pose, drift, matching and loops
+    - A drift problem; rules out sensor faults
+    - A map-saving problem; rules out everything live
+  correct: 1
+- source: 0efce5dd05c9
+  question: Your heading is off by 3°. A wall 6 m away is displaced by how much?
+  options:
+    - About 3 cm, under one 5 cm cell
+    - About 18 cm, about 4 cells
+    - About 31 cm, about 6 cells
+    - About 60 cm, about 12 cells
+  correct: 2
+- source: 6b3d7711135b
+  question: Why is replaying a bag at `--rate 3` a bad way to compare two slam_toolbox configurations?
+  options:
+    - Async mode drops more scans, so you measure CPU load, not the parameter
+    - Faster replay changes the scan timestamps, breaking TF
+    - The bag's `/clock` cannot be replayed faster than real time
+    - Loop closures are disabled above rate 1 by design
+  correct: 0
+- source: 13ffdbac0ad1
+  question: "`check_slam_inputs.py` reports the laser TF at (0, 0, 0.165) m, yaw 0°, and passes. What failure can this not detect?"
+  options:
+    - A LiDAR mounted upside down
+    - A LiDAR yawed 90° on its mount
+    - A LiDAR publishing in the wrong frame
+    - A robot that is not level (pitched or rolled chassis)
+  correct: 3
+- source: 7e36c8ccd588
+  question: You set `max_laser_range` to half the room's size. What happens to the map, and to loop closure?
+  options:
+    - Nothing, since slam_toolbox ignores that parameter
+    - Only geometry near the path is mapped; loop closure suffers most
+    - The map becomes sharper, and loop closure improves
+    - The map doubles in size, and loop closure is unchanged
+  correct: 1
+- source: 9b40a85f97f0
+  question: One map has 40 % more occupied cells and claims 30 % more floor than the building has. Which is worse, and why?
+  options:
+    - Neither; extra cells are just noise
+    - The other one, since it has fewer walls
+    - Both equally, since both are the same size
+    - "That one: free space outside means wrong poses"
+  correct: 3
+- source: e059dee13b36
+  question: You suspect a false loop closure. What do you measure, and what do you look at?
+  options:
+    - Total χ² only; then rerun the bag with loop closing off
+    - The map's explored area; then the whole TF tree
+    - Per-edge $e^\top\Omega e$, sorted; then the worst edge's scans
+    - The scan rate; then the LiDAR driver's QoS profile
+  correct: 2
+- source: 377cf4860c42
+  question: Which single number in `compare_maps.py`'s output would you look at first, and why?
+  options:
+    - "Explored area vs real floor: more is proof of a pose failure"
+    - Wall accuracy, since it has the finest tolerance
+    - Occupied cell count, since it shows doubled walls
+    - Map resolution, since everything depends on it
+  correct: 0

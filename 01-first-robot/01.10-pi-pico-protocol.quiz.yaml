@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.10-pi-pico-protocol.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8d4fce79bf2e
+  question: Why does the firmware send no reply at all to a line whose checksum fails, rather than an error acknowledgement?
+  options:
+    - Sending an error reply would overload the serial link during noisy periods.
+    - The firmware can't compute a checksum for its own reply after a failure.
+    - The sequence number in a corrupted line can't be trusted, so a reply might acknowledge a different command; silence is unambiguous.
+    - The host ignores error replies anyway, so sending them wastes bandwidth.
+  correct: 2
+- source: f669e8ef1e6d
+  question: Why are `M` and `V` fire-and-forget, while `S`, `R` and `P` are waited for and retried?
+  options:
+    - "`M`/`V` are idempotent and sent continuously, so the next one repairs a loss; `S`/`R`/`P` are one-shot and their loss is permanent."
+    - "`M`/`V` are short enough to never be corrupted; `S`/`R`/`P` are long lines that often fail."
+    - "`M`/`V` are handled by PIO hardware; `S`/`R`/`P` are handled in Python and may be slow."
+    - "`M`/`V` are sent over a faster channel; `S`/`R`/`P` share the telemetry channel."
+  correct: 0
+- source: 55203a94f9d9
+  question: You set `watchdog_ms` to 50 and your control loop runs at 20 Hz. What happens, and what is the right fix?
+  options:
+    - "Nothing: 50 ms exactly matches the 20 Hz period, so it works perfectly."
+    - The robot drives too fast; lower the control rate to 10 Hz.
+    - The watchdog never trips; set it to 1 s so it can detect disconnections.
+    - Any jitter trips the watchdog between commands and the motors stutter; use several periods, e.g. 300 ms.
+  correct: 3
+- source: 15e696f2f321
+  question: Compute the XOR checksum of `R 43` (`R`=0x52, space=0x20, `4`=0x34, `3`=0x33). What is the full line?
+  options:
+    - "`R 43*72\\n`"
+    - "`R 43*46\\n`"
+    - "`R 43*75\\n`"
+    - "`R 43*D9\\n`"
+  correct: 2
+- source: bd0177daac91
+  question: The robot drives at 0.4 m/s when you pull the USB cable between the Pi and the Pico (which is powered by that cable). What happens?
+  options:
+    - The watchdog trips after 300 ms and brakes, stopping within about 12 cm.
+    - The Pico loses power, the driver's pull-downs take the inputs low, and the motors coast to a stop over perhaps a metre.
+    - The robot keeps driving at 0.4 m/s until the host reconnects and sends `S`.
+    - The Pico switches to battery power and continues the last command for 300 ms, then coasts.
+  correct: 1
+- source: 87635fa5c1b5
+  question: Telemetry arrives normally and `stats.acks_ok` climbs, but `stats.bad_lines` climbs steadily at about 2 per second. What is the most likely cause?
+  options:
+    - Electrical noise on the USB cable corrupts random lines.
+    - The baud rate is slightly wrong, so some lines are misframed.
+    - The host's reader thread is too slow and drops half of each line.
+    - Something writes non-protocol text to the port, typically a leftover `print()` or a periodic error message in the firmware.
+  correct: 3
+- source: 262ef07eab93
+  question: You want to add a front-bumper switch to the telemetry. What is the compatible way to do it?
+  options:
+    - Append a ninth field to the `T` line; old hosts ignore extra fields.
+    - Reuse the battery field when the bumper is pressed, with a negative value.
+    - Send the bumper state as a `print()` line between telemetry lines.
+    - Use a spare flag bit (bit 4) in the existing `flags` field; old hosts ignore unknown bits.
+  correct: 3

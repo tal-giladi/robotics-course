@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in FC.07-real-time-concepts.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f5ba40d702fa
+  question: A loop has mean period 20.0 ms, std dev 0.4 ms, p99 21 ms and one 350 ms stall per hour. Is it suitable for telemetry, and for the wheel PID?
+  options:
+    - Both yes, since the mean and p99 are within 5 % of the target
+    - Telemetry yes; wheel PID no, since the stall exceeds the 300 ms watchdog
+    - Telemetry no, since stale odometry is unsafe; wheel PID yes
+    - Both no, since the standard deviation is above the 1 % limit
+  correct: 1
+- source: 46af8ff4f635
+  question: Three tasks (10 ms, 2.0 ms), (25 ms, 4.0 ms), (50 ms, 12 ms). What is $U$, the rate-monotonic bound, and the verdict?
+  options:
+    - "$U = 0.60$, bound 0.780: guaranteed schedulable"
+    - "$U = 0.60$, bound 0.693: guaranteed schedulable"
+    - "$U = 0.36$, bound 0.780: guaranteed schedulable"
+    - "$U = 0.60$, bound 0.500: not schedulable"
+  correct: 0
+- source: ec101e022861
+  question: karmel drives at 0.6 m/s and the Pi's program is killed (300 ms watchdog, 10 ms step, braking at 2 m/s²). Where does it stop?
+  options:
+    - About 0.18 m after the kill
+    - About 0.09 m after the kill
+    - About 0.36 m after the kill
+    - About 0.28 m after the kill
+  correct: 3
+- source: 843c38ad66ac
+  question: Why does `CommandWatchdog.check()` return `True` only once?
+  options:
+    - Braking is an edge action; repeating it would flood the log and hide the moment that matters
+    - The second `True` would reset the Pico, since two trips in a row signal a hang
+    - Returning `True` again would re-enable the motors after the brake is applied
+    - The watchdog can only trip once per boot, after which it must be re-armed by a reset
+  correct: 0
+- source: 2aa2f6858c80
+  question: A MicroPython control loop spikes 12 ms about once a second, always on the telemetry iteration. Which pair of hypotheses fits?
+  options:
+    - The PWM timer overflows once a second, or the encoder IRQ fires too often
+    - The loop's float math is slow, or the second core is stealing cycles
+    - Formatting allocates and triggers GC, or the USB write blocks because the host isn't reading
+    - Flash wear levelling runs periodically, or the voltage regulator throttles the CPU
+  correct: 2
+- source: 0be630ebbb4f
+  question: What is priority inversion, and what is the non-mutex version you will actually meet on a Pico?
+  options:
+    - A low-priority task preempts a high-priority one; on a Pico, two IRQs set to the same priority
+    - A high task waits on a low one that a medium task preempts; on a Pico, any unbounded op in a bounded job
+    - A task's priority is lowered after a deadline miss; on a Pico, the hardware watchdog's reset
+    - Two tasks deadlock on each other's mutex; on a Pico, both cores waiting on the FIFO
+  correct: 1
+- source: 85d0fe22f0f4
+  question: Command watchdog 300 ms, hardware watchdog 2,000 ms. The firmware enters an infinite loop in the control step. What happens?
+  options:
+    - The command watchdog brakes at 300 ms; the hardware watchdog never fires
+    - Both fire at 300 ms, since the hardware watchdog shares the command watchdog's timer
+    - Nothing ever stops the motors, since both watchdogs depend on the control loop
+    - The command watchdog never fires; at 2,000 ms the hardware watchdog resets and motors coast
+  correct: 3
+- source: 25384b6351c6
+  question: Your task set has $U = 0.82$ with four tasks. Is it schedulable?
+  options:
+    - Yes, since $U \le 1$ guarantees schedulability for any task set
+    - No, since it fails the $n=4$ bound of 0.757
+    - "Maybe: the sufficient test fails, so do response-time analysis per task"
+    - Yes, since the bound for large $n$ is 0.693 and it applies per task
+  correct: 2

@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.07-2d-lidar.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ef98a33affdc
+  question: "`angle_min = -π`, `angle_increment = 0.01745`, 360 ranges. Which index is straight ahead, and which is the robot's left?"
+  options:
+    - Ahead is index 0; left is index 90
+    - Ahead is index 180; left is index 90
+    - Ahead is index 180; left is index 270
+    - Ahead is index 0; left is index 270
+  correct: 2
+- source: a8f5c42a6db0
+  question: A beam hits nothing. What should `ranges[i]` contain, what do some drivers put there, and what does the wrong value do?
+  options:
+    - "`inf`; some write `0.0`, a point at the sensor, so the costmap traps the robot"
+    - "`0.0`; some write `inf`, which the costmap treats as a lethal obstacle"
+    - "`range_max`; some write `nan`, which crashes the costmap layer"
+    - "`-1`; some write `0.0`, which makes Nav2 ignore that beam entirely"
+  correct: 0
+- source: 729df16bbc3e
+  question: karmel scans at 10 Hz while turning at 1.5 rad/s. How much does a point at 4 m smear within one scan, and what does it do to SLAM?
+  options:
+    - 0.06 m; negligible, scan matching absorbs it
+    - 6.0 m; the scan is discarded by slam_toolbox
+    - 0.15 m; walls look slightly thicker in the map
+    - 0.60 m; curved walls and doubled features
+  correct: 3
+- source: 9db5cc4a4ec4
+  question: You point a 360-beam LiDAR at a 4 cm chair leg from 2 m. What do you see?
+  options:
+    - About two beams on it, a solid, steady obstacle
+    - "Zero or one beam: it flickers as the robot moves"
+    - Nothing ever, as LiDARs cannot see under 5 cm
+    - Around ten beams, since beams widen with range
+  correct: 1
+- source: b2b98e7297c8
+  question: "`/scan` publishes at 10 Hz but RViz's LaserScan display stays empty and logs nothing. Most likely cause?"
+  options:
+    - The fixed frame is wrong, so RViz drops every point
+    - The scan's `range_max` is below every measured range
+    - "QoS: driver is BEST_EFFORT, RViz defaults to Reliable"
+    - The driver publishes on the wrong `ROS_DOMAIN_ID`
+  correct: 2
+- source: aef4990ee5f8
+  question: Your unit's range error is 3 cm at 1 m and 13 cm at 6 m. What technology is it, and what does that mean for mapping?
+  options:
+    - "Triangulation (error ~ range²): far walls fuzzy; map in short legs"
+    - "dToF (error constant): far walls sharp; map in one long pass"
+    - "dToF (error ~ range): all walls equally fuzzy; lower resolution"
+    - "Triangulation (error constant): near walls fuzzy; map from afar"
+  correct: 0
+- source: f39760abb73b
+  question: Why does `sector_min` return `inf` rather than `0.0` for an empty sector?
+  options:
+    - "`0.0` would overflow the float in the scan message and corrupt the data"
+    - "`inf` is required by the `LaserScan` spec for every sector function"
+    - "`inf` makes the safety stop fire sooner, which is always safer"
+    - "`inf` is the truth; `0.0` would fire a safety stop in every clear corridor"
+  correct: 3
+- source: 44e359f4d45d
+  question: "`robot_state_publisher` and an extra static_transform_publisher both publish `base_link → laser`. What happens?"
+  options:
+    - tf2 averages the two, which is harmless if they agree
+    - "Conflicting data: `TF_REPEATED_DATA` warnings, scan jumps"
+    - The second publisher is rejected, so nothing changes
+    - The laser frame becomes a child of two different parents
+  correct: 1

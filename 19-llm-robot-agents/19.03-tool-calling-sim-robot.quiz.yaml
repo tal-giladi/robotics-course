@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 19.03-tool-calling-sim-robot.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 1f8ea693267e
+  question: The model makes three tool calls in one turn. One fails. What goes back, and in how many messages?
+  options:
+    - Three user messages, one `tool_result` each; the failed one is omitted
+    - One user message with two `tool_result` blocks; the failed call is dropped
+    - "One user message, three `tool_result` blocks; the failed one has `is_error: true`"
+    - One assistant message restating the calls, followed by the two successful results
+  correct: 2
+- source: 58d03bacab20
+  question: Why does the loop pass the model's own tool-call id as `call_id` to the gateway?
+  options:
+    - "It is an idempotency key: a retry gets the stored result instead of moving again"
+    - The gateway uses it to authenticate the model provider before executing a skill
+    - It orders the tool results so the model can match them to its calls
+    - It lets the gateway bill each skill call to the correct API key
+  correct: 0
+- source: 2c300d939222
+  question: A fetch task takes 14 turns. Roughly what share of input tokens are tool definitions plus system prompt, and what do you do?
+  options:
+    - About 5%; nothing, it is negligible
+    - About 48%; shorten the tool descriptions each turn
+    - About 90%; send the tool list only on the first turn
+    - About 48%; prompt caching with a deterministic prefix
+  correct: 3
+- source: 4e09118bae93
+  question: You set `max_consecutive_errors = 1`. What breaks?
+  options:
+    - Nothing; it only makes the agent stop faster on real failures
+    - "Normal operation: the run ends at the first informative failure"
+    - Only the e-stop path, which now fires on every tool error
+    - Prompt caching, since the error count is part of the prefix
+  correct: 1
+- source: b21e36375863
+  question: '"Find the water bottle and put it on the table." The apartment has a kitchen table, coffee table, counter, desk, sofa and bed. What should happen, and where is it decided?'
+  options:
+    - Pick the kitchen table as the most common meaning; decided by the planner's default
+    - Try each table in turn until the user approves; decided by the executive
+    - Ask which surface after `list_places`; decided by the system prompt and the planner's single-match rule
+    - Refuse the task as unsafe; decided by the allowlist
+  correct: 2
+- source: df2fd684af3e
+  question: Why keep a provider-neutral message type and a separate adapter instead of importing the SDK directly?
+  options:
+    - Mainly so the loop can be tested offline, with no key or cost
+    - Mainly to switch providers at run time when one API is down
+    - Because the SDK's message types cannot carry tool results
+    - To reduce token usage by stripping SDK metadata from messages
+  correct: 0
+- source: 4b14d38fb365
+  question: "`--gullible` ends with outcome `completed` and the bottle on the bed. Which budget would have caught it?"
+  options:
+    - The turn budget, since the injection added extra turns
+    - The consecutive-error budget, since one call must have failed
+    - The wall-clock budget, since moving to the bed takes too long
+    - None; budgets bound how much it does, not what it does
+  correct: 3
+- source: ac2dfec4c6de
+  question: Your agent runs on a robot whose network drops for tens of seconds. Which two changes to the loop are right?
+  options:
+    - End-to-end retries (safe via `call_id`), plus a model timeout with a defined stop/hold/dock action
+    - Raise the model's timeout to 10 minutes, and let the robot keep executing the last command
+    - Run a smaller LLM on the robot for motor control, and drop idempotency keys
+    - Disable retries to avoid duplicate motion, and let the firmware watchdog handle outages
+  correct: 0

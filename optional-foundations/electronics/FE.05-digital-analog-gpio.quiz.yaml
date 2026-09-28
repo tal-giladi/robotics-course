@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.05-digital-analog-gpio.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 34e10801496e
+  question: What makes a signal "digital" rather than "analog", and why is that robust against noise?
+  options:
+    - Digital signals are sampled at a fixed rate, so noise between samples is ignored
+    - Information is in which range the voltage falls into; noise below the margin doesn't change it
+    - Digital signals use higher voltages, so noise is small by comparison
+    - Digital signals are always differential, so noise cancels between the wires
+  correct: 1
+- source: a68f9e404d38
+  question: What are $V_{IH,min}$ and $V_{IL,max}$ for the RP2350 at 3.3 V, and what happens at 1.4 V?
+  options:
+    - 2.0 V and 0.8 V; 1.4 V is undefined and may read 0 or 1
+    - 2.0 V and 0.8 V; 1.4 V always reads as 0
+    - 1.65 V and 1.65 V; 1.4 V always reads as 0
+    - 3.3 V and 0 V; 1.4 V reads as 1 due to hysteresis
+  correct: 0
+- source: 4312367873c7
+  question: A pin drives a 680 Ω resistor and a red LED (2.0 V). How much current, and is it within the default drive?
+  options:
+    - ≈ 4.9 mA, above 4 mA
+    - ≈ 2.9 mA, within 4 mA
+    - ≈ 1.9 mA, within 4 mA
+    - ≈ 19 mA, above 4 mA
+  correct: 2
+- source: e3281e384d4b
+  question: You connect an HC-SR04 powered at 5 V directly to GP26 as a digital input, with the Pico powered. What's the risk?
+  options:
+    - GP26 is an ADC pin, so it cannot be used as a digital input at all
+    - The echo is too short for GP26, so pulses are missed but nothing is damaged
+    - GP26 is 5 V tolerant, so it is safe; only the reading is inverted
+    - GP26 isn't 5 V tolerant; current flows through its diode into 3.3 V and may damage it
+  correct: 3
+- source: f9d1026c57d8
+  question: "Why does karmel read encoders with PIO rather than a `while True: pin.value()` loop?"
+  options:
+    - PIO filters noise from the encoder signal, while a Python loop reads every glitch
+    - The encoder outputs analog signals that only PIO can convert to counts
+    - A Python loop can't sample thousands of edges per second and misses them; PIO counts in hardware
+    - A Python loop blocks USB, so the Pico would disconnect from the Pi
+  correct: 2
+- source: 748cb5ae4379
+  question: A sensor's data line reads correctly on the bench but flips randomly on the robot when motors run. Two likely causes?
+  options:
+    - Noise coupling from motor wiring and ground bounce from shared motor current
+    - A wrong baud rate and a missing pull-up resistor on the line
+    - An overheated sensor and a low battery voltage
+    - A software race condition and a buffer overflow in the driver
+  correct: 0
+- source: 1677e4b7a7ca
+  question: What is hysteresis in a digital input for?
+  options:
+    - A delay after each edge that blocks all further edges for a fixed time
+    - Separate rising/falling thresholds so a noisy signal near threshold switches once
+    - A higher threshold that rejects any signal below 2.0 V
+    - A memory of the last value that holds it when the input floats
+  correct: 1

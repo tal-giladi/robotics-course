@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.07-pwm.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ccc0868edeab
+  question: What two parameters define a PWM signal, and which one sets the average voltage?
+  options:
+    - Frequency and duty cycle; duty cycle sets the average
+    - Frequency and duty cycle; frequency sets the average
+    - Amplitude and frequency; amplitude sets the average
+    - Period and phase; phase sets the average
+  correct: 0
+- source: 744d604d8141
+  question: Why is switching (PWM) more efficient than producing an intermediate voltage linearly?
+  options:
+    - The switch runs at high frequency, which transfers energy more efficiently
+    - The switch is fully on or fully off, so $V \cdot I$ in it is small in both states
+    - The switch stores excess energy in the motor and returns it to the battery
+    - The switch only draws power during transitions, never while on or off
+  correct: 1
+- source: aecb2f8e891c
+  question: "`M 3 -500 250`: using drive/coast mapping, what are left IN1/IN2 and right IN1/IN2 in `duty_u16`?"
+  options:
+    - Left 32,768 / 0; right 0 / 16,384
+    - Left 0 / 32,768; right 0 / 16,384
+    - Left 0 / 500; right 250 / 0
+    - Left 0 / 32,768; right 16,384 / 0
+  correct: 3
+- source: c281c61e7e9a
+  question: You set `PWM(Pin(2), freq=20_000)` and later `PWM(Pin(3), freq=1000)`. What frequency does GP2 now output?
+  options:
+    - 20 kHz, because each pin has its own frequency
+    - 21 kHz, because slice frequencies add
+    - 1 kHz, because GP2 and GP3 share a slice
+    - 0 Hz, because the second call disables GP2
+  correct: 2
+- source: 5ebb54b36207
+  question: Using $D(1-D)T/\tau$, estimate the speed ripple at 500 Hz, $D$ = 0.5, $\tau$ = 0.08 s.
+  options:
+    - 2.5 % peak-to-peak
+    - 0.625 % peak-to-peak
+    - 0.3125 % peak-to-peak
+    - 6.25 % peak-to-peak
+  correct: 1
+- source: 9a1ad3763e35
+  question: At 25 % duty the robot drives fine on a full battery but barely moves at 10 V. Why, and what's the fix?
+  options:
+    - PWM frequency drops with battery voltage; set a fixed frequency in the firmware
+    - The motor driver shuts down below 10 V; replace it with a lower-voltage part
+    - Low battery raises motor resistance; increase the duty to 100 % at startup
+    - Average voltage = duty × battery (3.15 V → 2.5 V, near deadband); use closed-loop speed control
+  correct: 3
+- source: b8bd4ecb5654
+  question: How is a servo signal different from motor PWM?
+  options:
+    - A servo reads the pulse width (≈1–2 ms at ~50 Hz) as a position; motors use the average duty
+    - A servo reads the average duty as a position; motors read the pulse width as a speed
+    - A servo needs kHz frequencies, while motor PWM runs at about 50 Hz
+    - A servo signal is analog, while motor PWM is a digital pulse train
+  correct: 0

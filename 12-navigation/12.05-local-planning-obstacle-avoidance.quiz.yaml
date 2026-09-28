@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 12.05-local-planning-obstacle-avoidance.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 04a177d96219
+  question: Which derivation of the pure pursuit curvature $\kappa = 2y_r/L^2$ is correct?
+  options:
+    - "Arc is a circle centered at $(R, 0)$: $x^2 + y^2 = 2xR$; at the carrot $L^2 = 2x_r R$, so $\\kappa = 2y_r/L^2$."
+    - "Arc is a circle centered at $(0, R)$: $x^2 + y^2 = 2yR$; at the carrot $L^2 = 2y_r R$, so $\\kappa = 1/R = 2y_r/L^2$."
+    - "Arc is a circle centered at $(0, R)$: $x^2 + y^2 = R^2$; at the carrot $L = y_r R$, so $\\kappa = 2y_r/L^2$."
+    - Heading error $\alpha$ satisfies $\sin\alpha = y_r/L$; curvature is $\kappa = \alpha/L$, which equals $2y_r/L^2$.
+  correct: 1
+- source: 431870b0ee28
+  question: The carrot is at $(0.4, 0.0)$ in `base_link`. What does pure pursuit command? And at $(0.0, 0.4)$?
+  options:
+    - $\kappa = 5$ m⁻¹; then $\kappa = 0$ (straight), since the carrot lies on the robot's axis
+    - $\kappa = 0$ (straight); then $\kappa = 2.5$ m⁻¹, an arc of radius 0.4 m
+    - $\kappa = 0$ (straight); then $\kappa = 5$ m⁻¹, though a real controller rotates in place at a 90° bearing
+    - $\kappa = 0$ (straight); then $\kappa = 0.8$ m⁻¹, an arc of radius 1.25 m
+  correct: 2
+- source: 0bb148d09928
+  question: With karmel's RPP settings, what speed does it command on an arc of radius 0.2 m, far from obstacles and the goal?
+  options:
+    - 0.10 m/s
+    - 0.25 m/s
+    - 0.08 m/s
+    - 0.04 m/s
+  correct: 0
+- source: e0cc27df8d26
+  question: karmel at $v = 0.05$, $\omega = 0$, $a_v = 0.6$, $a_\omega = 2.0$, $\Delta t = 0.1$. What is the dynamic window?
+  options:
+    - $V_d = [-0.01, 0.11]$, $\Omega_d = [-2.0, 2.0]$
+    - $V_d = [0.0, 0.65]$, $\Omega_d = [-0.2, 0.2]$
+    - $V_d = [0.04, 0.06]$, $\Omega_d = [-0.02, 0.02]$
+    - $V_d = [0.0, 0.11]$, $\Omega_d = [-0.2, 0.2]$
+  correct: 3
+- source: 7d8d1c623317
+  question: "MPPI with `temperature` → 0: what does the update become, and why is that bad?"
+  options:
+    - All samples get equal weight, so the update ignores costs and drifts toward the mean noise
+    - All weight goes to the single cheapest sample, so commands jump to noisy sequences and become jerky
+    - The update freezes at the previous sequence, so the robot stops reacting to new obstacles
+    - All weight goes to the most expensive sample, so the robot steers toward obstacles
+  correct: 1
+- source: e56a8a086c59
+  question: Why can MPPI use a cost like "+1000 if the trajectory collides", while a gradient-based MPC can't easily?
+  options:
+    - MPPI linearizes the cost around the previous solution, which smooths out any step functions
+    - MPPI clips every cost to a maximum of 1000, so large steps cannot destabilize its optimizer
+    - MPPI solves the problem exactly with dynamic programming, which is unaffected by discontinuities
+    - MPPI only evaluates and weights sampled costs, never differentiates them, so steps are fine
+  correct: 3
+- source: 3dc523a9013e
+  question: With RPP, karmel stops 60 cm before a chair on the path and waits until the behavior tree aborts. Is RPP broken?
+  options:
+    - Yes; RPP should steer around obstacles, so raise its lookahead distance until it passes the chair.
+    - No; RPP is waiting for the chair to move. Increase the behavior tree timeout so it waits longer.
+    - No; RPP stops on projected collision but doesn't steer around. Put the chair in the global costmap or use MPPI/DWB.
+    - Yes; RPP's collision check is broken. Disable it so the robot proceeds and relies on the bumper.
+  correct: 2
+- source: dbd0a4b7a1af
+  question: Which pairing of Nav2 controller plugin and key parameters is correct?
+  options:
+    - "`nav2_mppi_controller::MPPIController`: `batch_size`, `temperature`"
+    - "`dwb_core::DWBLocalPlanner`: `lookahead_dist`, `desired_linear_vel`"
+    - "`nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController`: `batch_size`, `model_dt`"
+    - "`nav2_mppi_controller::MPPIController`: `vx_samples`, `sim_time`"
+  correct: 0

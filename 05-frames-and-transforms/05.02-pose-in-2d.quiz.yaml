@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 05.02-pose-in-2d.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 97a26d46c764
+  question: What are the three numbers of a 2D pose, their units, and which direction is positive for the angle?
+  options:
+    - $x$, $y$ in metres; $\theta$ in degrees, clockwise positive, in $[0, 360)$.
+    - $x$, $y$ in metres; $\theta$ in radians from +x, counter-clockwise positive, wrapped to $(-\pi, \pi]$.
+    - $x$, $y$ in centimetres; $\theta$ in radians from +y, clockwise positive.
+    - $x$, $y$ in metres; $\theta$ in radians from +x, clockwise positive, in $[0, 2\pi)$.
+  correct: 1
+- source: 24ea6b059f99
+  question: Wrap −200° and 380° into $(-180°, 180°]$.
+  options:
+    - −200° → −20°; 380° → 20°
+    - −200° → 160°; 380° → −20°
+    - −200° → 160°; 380° → 20°
+    - −200° → 200°; 380° → 20°
+  correct: 2
+- source: 2b89d3e3b416
+  question: The robot at $(0, 0, 0°)$ sees a target at $(-2, -0.1)$. What is the heading error?
+  options:
+    - "About −177.14°: turn right 177.14°."
+    - "About +182.86°: turn left 182.86°."
+    - "About +2.86°: turn left 2.86°."
+    - "About −2.86°: turn right 2.86°."
+  correct: 0
+- source: "6070689e2296"
+  question: Two scan matchers report headings 1° and 359°. What does the naive average say, and what is the right answer?
+  options:
+    - Naive 0°; right answer 180°.
+    - Naive 180°; right answer 180°.
+    - Naive 358°; right answer 0°.
+    - Naive 180°; the circular mean is 0°.
+  correct: 3
+- source: 1044f7b28f91
+  question: Why does `wrap_angle` return $+\pi$ for both $\pi$ and $-\pi$?
+  options:
+    - Because $-\pi$ can't be represented exactly in floating point.
+    - So one heading has exactly one representation in $(-\pi, \pi]$, and equal headings compare equal.
+    - Because atan2 never returns negative values.
+    - So that turning left is always preferred over turning right.
+  correct: 1
+- source: 630db4b76217
+  question: Odometry heading reads 6285.4 rad. The controller wraps its error and works, but `if abs(theta - wall_heading) < 0.2` never fires. Why?
+  options:
+    - 6285.4 rad is 1000 turns plus 2.2 rad; the check compares unwrapped values, so wrap θ every step and every difference.
+    - The value overflowed a float, so comparisons are meaningless.
+    - The wall heading is in degrees while θ is in radians.
+    - The tolerance 0.2 is too small for a heading that large.
+  correct: 0
+- source: cbed538689da
+  question: A target is at $(-1.0, 1.0)$ in base_link. What is the heading error, and why don't you need to wrap?
+  options:
+    - −135°; atan2 in base_link is always negative behind the robot.
+    - 45°; the robot's heading in base_link is 45° by convention.
+    - "135°: the robot's heading in base_link is 0, and atan2 already returns $(-\\pi, \\pi]$."
+    - 135°, but you do need to wrap because it exceeds 90°.
+  correct: 2

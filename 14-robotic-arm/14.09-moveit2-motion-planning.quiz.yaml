@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 14.09-moveit2-motion-planning.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6814426b6ce2
+  question: What does the SRDF add that the URDF cannot express, and which entry most often causes total planning failure?
+  options:
+    - Link meshes, joint limits, inertias and transmissions; wrong joint limits break every plan
+    - Controllers, action names and hardware plugins; a wrong action name breaks every plan
+    - Groups, end effectors, named poses and planner choice; a missing named pose breaks every plan
+    - Groups, end effectors, named poses, virtual joints, disabled collision pairs; missing disabled pairs break everything
+  correct: 3
+- source: 3807876ca206
+  question: "Joint ranges sum to 19.61 rad and the largest linear-Jacobian column is 0.44 m/rad. What does `longest_valid_segment_fraction: 0.005` mean in mm?"
+  options:
+    - About 43 mm between collision checks, so thinner obstacles can be passed through
+    - About 4.3 mm between collision checks, fine for centimetre-scale objects
+    - About 98 mm between collision checks, so the setting is far too coarse
+    - About 2.2 mm between collision checks, so planning becomes very slow
+  correct: 0
+- source: "953293e15102"
+  question: A pose goal fails. How do you tell whether IK or planning failed, and what is the first fix for each?
+  options:
+    - "`PLANNING_FAILED` vs `NO_IK_SOLUTION`; raise attempts for IK, relax orientation for planning"
+    - "`NO_IK_SOLUTION` vs `PLANNING_FAILED`/timeout; relax orientation for IK, raise attempts for planning"
+    - "Watch RViz: no ghost arm means planning failed; raise the IK timeout for both cases"
+    - "Check the controller state: inactive means IK failed; restart the controller for both cases"
+  correct: 1
+- source: db5a77b7b6c9
+  question: Why does attaching a grasped object change planning, and what happens if you forget to detach it?
+  options:
+    - It is removed from the scene entirely; undetached, the planner drives the gripper through it on the next plan
+    - It is frozen in place in the world; undetached, the arm cannot move until the planning scene is reset
+    - It becomes part of the robot, avoided against the world; undetached, an invisible box rides along and plans fail
+    - It doubles the collision checks per state; undetached, planning slows down but still succeeds
+  correct: 2
+- source: fb1dac256806
+  question: You plan the same goal five times with RRTConnect in a scene with one obstacle. What do you expect, and how do you get the same path each time?
+  options:
+    - Five identical paths, since RRTConnect is deterministic for a fixed scene and goal
+    - Five paths that get shorter each time, since RRTConnect reuses its previous tree
+    - Five different paths of similar length; use a deterministic planner like Pilz PTP/LIN or a fixed seed
+    - Five different paths; raise `num_planning_attempts` so the planner always returns the same one
+  correct: 2
+- source: 3c1fb6f1901b
+  question: MoveIt plans, RViz animates, execute returns success, the arm doesn't move. Which two causes, and how do you tell them apart?
+  options:
+    - IK failed silently (`ros2 topic echo /joint_states`), or the planner timed out (`ros2 param get`)
+    - YAML names the wrong action/joints (`ros2 action list`), or the controller is inactive (`ros2 control list_controllers`)
+    - The SRDF lacks disabled pairs (`ros2 node list`), or the URDF has wrong limits (`check_urdf`)
+    - The servos are unpowered (`ros2 topic hz`), or RViz is in simulation mode (`ros2 param list`)
+  correct: 1
+- source: 9f19acadd1c5
+  question: Why is padding usually a better first response than a finer collision-check resolution?
+  options:
+    - Padding detects thin obstacles that resolution misses, while resolution only compensates model error
+    - Finer resolution is not supported by OMPL planners, so padding is the only option available
+    - Padding makes planning deterministic, while finer resolution adds randomness to each plan
+    - Padding inflates geometry once at no run-time cost; finer resolution adds checks to every query
+  correct: 3
+- source: 7676192ecc5c
+  question: What does "the plan is collision-free" actually guarantee?
+  options:
+    - Checked states were free against the scene at planning time, at the configured resolution and padding
+    - The arm will not touch anything during execution, including objects that move after planning
+    - Every point along the path is free of collision, regardless of the configured resolution
+    - The real arm matches the model within the padding, so execution cannot collide with the scene
+  correct: 0

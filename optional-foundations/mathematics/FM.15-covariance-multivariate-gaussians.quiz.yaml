@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.15-covariance-multivariate-gaussians.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d0644473f9e1
+  question: $\Sigma = \begin{bmatrix} 0.25 & -0.1 \\ -0.1 & 0.16 \end{bmatrix}$. What are σ_x, σ_y and ρ?
+  options:
+    - σ_x = 0.5, σ_y = 0.4, ρ = −0.5
+    - σ_x = 0.25, σ_y = 0.16, ρ = −0.1
+    - σ_x = 0.5, σ_y = 0.4, ρ = −0.1
+    - σ_x = 0.0625, σ_y = 0.0256, ρ = −2.5
+  correct: 0
+- source: 05577dcfcaa9
+  question: Why must a covariance matrix be symmetric and positive semi-definite?
+  options:
+    - It must be invertible for the Kalman filter, and only PSD matrices are invertible
+    - cov(X, Y) = cov(Y, X), and $\mathbf{v}^\top\Sigma\mathbf{v}$ is a variance, which can't be negative
+    - Its diagonal holds standard deviations, which are symmetric about zero
+    - Correlations must lie in $[0, 1]$, which forces all entries to be positive
+  correct: 1
+- source: 1aa87f012903
+  question: A robot drives 3 m with heading σ = 1° (0.01745 rad) and negligible distance error. Roughly what is the sideways σ at the end?
+  options:
+    - About 0.5 cm
+    - About 52 cm
+    - About 5 cm
+    - About 3 cm
+  correct: 2
+- source: 431f7c375267
+  question: Two observations are both 5 cm from the estimated position. The Mahalanobis gate accepts one and rejects the other. How?
+  options:
+    - It weights by time, so the newer of the two observations is accepted first
+    - It uses squared distance, which rounds the two 5 cm values differently
+    - It rejects any observation that arrives while another is being processed
+    - "It divides by the uncertainty in each direction: 5 cm may be 1.4σ one way and 5σ another"
+  correct: 3
+- source: a3f3d5774a59
+  question: In a `geometry_msgs/PoseWithCovariance`, which array indices hold var x, cov(x, yaw) and var yaw?
+  options:
+    - "`[0]`, `[2]` (and `[6]`), `[8]`"
+    - "`[0]`, `[3]` (and `[18]`), `[21]`"
+    - "`[0]`, `[5]` (and `[30]`), `[35]`"
+    - "`[1]`, `[6]` (and `[31]`), `[36]`"
+  correct: 2
+- source: d3eab48cf69d
+  question: You rotate a covariance $\operatorname{diag}(a, a)$ (a circle) by 30°. What do you get?
+  options:
+    - $\operatorname{diag}(a, a)$ again
+    - An ellipse tilted by 30°
+    - An ellipse tilted by 60°
+    - $\operatorname{diag}(a\cos 30°, a\sin 30°)$
+  correct: 0
+- source: 354c3682103f
+  question: Your EKF's position ellipse is tiny while the robot is clearly lost after a sharp slipping turn; the Monte Carlo cloud is banana-shaped. Underlying issue?
+  options:
+    - The Monte Carlo cloud is wrong, since a correct distribution must be an ellipse
+    - The EKF's measurement noise is too large, so it ignores the sensor data
+    - Wheel slip only affects velocity, so it should not change the position ellipse
+    - Linearizing around the mean underestimates the curved spread, so the filter is overconfident
+  correct: 3

@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 01.12-encoder-distance-and-square.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 108b4e86937c
+  question: One encoder tick is how many millimetres on karmel?
+  options:
+    - About 0.459 mm (282.7 mm circumference / 616 ticks)
+    - About 0.057 mm (141.4 mm circumference / 2464 ticks)
+    - About 0.230 mm (282.7 mm circumference / 1232 ticks)
+    - About 0.115 mm (282.7 mm circumference / 2464 ticks)
+  correct: 3
+- source: 072eacc5a489
+  question: Why does the wheel radius not appear in $\Delta\theta = (d_R - d_L)/b$?
+  options:
+    - Because the radius cancels out between the left and right wheel terms.
+    - Because the radius only matters for straight driving, not for turning.
+    - Because $d_R$ and $d_L$ are already distances in metres; the radius was used to convert ticks into them.
+    - Because the formula assumes both wheels have a radius of exactly 1.
+  correct: 2
+- source: 8d6e55b00a21
+  question: You command a 90° turn and the robot turns 86.5° every time, in both directions. What constant is wrong, and what is its corrected value?
+  options:
+    - The track width is too small; correct it to about 0.208 m.
+    - The track width is too large; correct it to about 0.192 m.
+    - The wheel radius is too small; correct it to about 46.8 mm.
+    - The ticks per revolution are too high; correct them to about 2371.
+  correct: 0
+- source: aacdf13d6f03
+  question: You drive a 1 m square with a wheel radius 2% too large in the config. Where does the robot end up, and what does its odometry say?
+  options:
+    - It ends about 8.8 cm away and 7.2° off, and odometry reports the same error.
+    - It ends exactly at the start, because the errors of the four sides cancel.
+    - It ends about 8.8 cm away and 7.2° off, yet odometry reports a near-perfect square.
+    - It ends about 2 cm away with no heading error, and odometry reports a near-perfect square.
+  correct: 2
+- source: c6381e7e6175
+  question: "Your heading errors: −5.2°, −4.9°, −5.4°, −4.6°, −5.1°. Your friend's: −1°, +4°, −6°, +2°, −3°. Whose robot is easier to fix, and how?"
+  options:
+    - "Your friend's: the average is near zero, so only a small offset is needed."
+    - "Yours: the errors are random, so a heading sensor fixes them."
+    - "Both equally: average the five runs and subtract the mean from each."
+    - "Yours: the tight cluster is systematic, so calibrating the track width removes most of it."
+  correct: 3
+- source: d8d3c54a7d54
+  question: Why does `move()` slow down over the last 10 cm instead of driving at full speed and then braking?
+  options:
+    - Braking at full speed trips the motor driver's current limit.
+    - The encoders lose ticks at full speed, so the last 10 cm need slower counting.
+    - The watchdog needs time to confirm the stop command before arrival.
+    - The motors and mass take 0.1–0.2 s to stop; arriving slowly keeps the overshoot tiny.
+  correct: 3
+- source: 4a0ccc1aa520
+  question: The square is beautiful at 0.15 m/s and terrible at 0.4 m/s. What are the two most likely reasons?
+  options:
+    - Slip during fast turns in place, and overshoot because the fixed 10 cm ramp can't bleed off the higher speed.
+    - Encoder ticks lost at high speed, and the battery sagging during the run.
+    - Serial commands delayed at high speed, and the watchdog tripping mid-segment.
+    - The track width changing with speed, and the caster lifting off the floor.
+  correct: 0
+- source: c0cc30ed1b45
+  question: Why run the square clockwise and counter-clockwise?
+  options:
+    - To average out battery sag, which affects one direction more than the other.
+    - To check that both motor drivers can reverse properly.
+    - To separate a wrong track width (same error in both directions) from unequal wheel diameters (sign flips with direction).
+    - To detect encoder wiring faults, which only show up in one direction.
+  correct: 2

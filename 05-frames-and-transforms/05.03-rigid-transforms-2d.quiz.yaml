@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 05.03-rigid-transforms-2d.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f4729dde293a
+  question: What does `T_odom_base_link` mean, in both of its readings?
+  options:
+    - The pose of odom in base_link, and the map from odom coordinates into base_link.
+    - The pose of base_link expressed in odom, and the transform mapping point coordinates from base_link into odom.
+    - The velocity of base_link in odom, and the time since odometry started.
+    - The pose of base_link in map, and the transform from odom into map.
+  correct: 1
+- source: b42645171bf5
+  question: "Fill in the blank: `T_map_laser = T_map_odom @ ____ @ T_base_link_laser`."
+  options:
+    - "`T_base_link_odom`"
+    - "`T_laser_base_link`"
+    - "`T_odom_map`"
+    - "`T_odom_base_link`"
+  correct: 3
+- source: 9517c23b0393
+  question: Invert the 2D transform $(0, 2, 90°)$.
+  options:
+    - $(-2, 0, -90°)$
+    - $(0, -2, -90°)$
+    - $(2, 0, -90°)$
+    - $(-2, 0, 90°)$
+  correct: 0
+- source: e550c9c262ad
+  question: Why are the columns of $R(\theta)$ the child frame's axes?
+  options:
+    - Because rotation matrices are symmetric, so rows and columns are the same.
+    - Because the determinant of $R$ is 1.
+    - Applying $R$ to the child's unit axes $(1,0)$ and $(0,1)$ gives the columns, i.e. those axes expressed in the parent.
+    - Because the parent's axes are always the identity.
+  correct: 2
+- source: ffa1cb5989f1
+  question: karmel at $(0, 0, 0°)$ executes $\Delta = (1, 0, 90°)$ twice by right-multiplication. Where is it?
+  options:
+    - $(2, 0, 180°)$
+    - $(1, 1, 180°)$
+    - $(1, 1, 90°)$
+    - $(0, 1, 180°)$
+  correct: 1
+- source: 9e8206ba7efe
+  question: A colleague computes a landmark's map position as `T_base_link_map @ p_base_link`. Results look plausible near the origin and wrong elsewhere. What is wrong?
+  options:
+    - "The cancel rule fails: they used the inverse; it should be `T_map_base_link @ p_base_link`."
+    - The point should be in homogeneous form with $w = 0$.
+    - The multiplication order should be `p_base_link @ T_base_link_map`.
+    - The transform must be normalized before use.
+  correct: 0
+- source: 690de001d36e
+  question: Is ${}^{a}T_{b}\,{}^{b}T_{c} = {}^{b}T_{c}\,{}^{a}T_{b}$ in 2D?
+  options:
+    - "Yes: 2D rotations commute, so the products are equal."
+    - Yes, as long as both transforms use the same rotation angle.
+    - "No: e.g. $(1,0,0°)$ then $(0,0,90°)$ gives $(1,0,90°)$, the other order $(0,1,90°)$."
+    - No, because the rotations don't commute in 2D.
+  correct: 2

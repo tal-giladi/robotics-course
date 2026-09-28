@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 02.07-wiring-harness.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: d9e061dbd734
+  question: Why does a 30 cm run need 60 cm of resistance in your voltage-drop calculation?
+  options:
+    - Current flows out along one conductor and back along the other, so the loop is twice the physical run.
+    - Wire resistance doubles at operating temperature, so 2× is a safety factor.
+    - Crimps and connectors add resistance equal to the wire's own length.
+    - The motor's back-EMF doubles the effective current in the wire.
+  correct: 0
+- source: 28badf388646
+  question: karmel's battery run needs only AWG 22 to meet its voltage-drop budget. Why does the script choose AWG 20?
+  options:
+    - AWG 22 contacts don't fit the XT60 connector.
+    - AWG 22 drops too much voltage at the 8 A peak current.
+    - AWG 22 is too stiff for the chassis routing.
+    - Fuse coordination (AWG 22's ~7 A rating is below the 10 A fuse) and ampacity with margin (8 × 1.25 = 10 A).
+  correct: 3
+- source: f1caf147a71e
+  question: What is the resistance of 25 cm of AWG 20 (33.2 mΩ/m, both conductors), the drop at 3 A, and what constrains that run?
+  options:
+    - 8.3 mΩ and 25 mV; the drop constrains it.
+    - 16.6 mΩ and 50 mV; heating/ampacity and the fuse constrain it, not the drop.
+    - 16.6 mΩ and 50 mV; the drop constrains it, as it exceeds 3%.
+    - 33.2 mΩ and 100 mV; the drop constrains it.
+  correct: 1
+- source: 94566719a4f8
+  question: You solder a crimp "to make it more reliable", then run the robot for a week. What happens and where?
+  options:
+    - The solder melts from motor current and the joint falls apart inside the barrel.
+    - "Nothing: soldered crimps are strictly more reliable."
+    - Solder wicks up the strands and bending concentrates where it stops; the copper cracks there, often invisibly, causing intermittents.
+    - The flux corrodes the contact face, so the connector stops mating.
+  correct: 2
+- source: 3ccdef694e02
+  question: Your JST XH connector carries 3.0 A with AWG 24 contacts. What is wrong, and what will you observe?
+  options:
+    - JST's 3 A rating assumes AWG 22; AWG 24 raises resistance, so the connector runs warm, degrades and becomes intermittent.
+    - AWG 24 is too thick for XH contacts, so the housing cracks.
+    - "Nothing: JST XH is rated 3 A for any wire gauge."
+    - AWG 24 lowers the current, so the motors run slower but safely.
+  correct: 0
+- source: 26c680632374
+  question: One wheel stops intermittently on the floor and never on a stand. Where do you look, and what is the cheapest test?
+  options:
+    - The firmware's PID gains; log the controller output on the floor.
+    - A mechanical contact failure; on a stand, tap or wiggle each connector in the motor's chain while watching for the glitch.
+    - The encoder resolution; count ticks on the floor versus the stand.
+    - The battery; measure its voltage under floor load.
+  correct: 1
+- source: 8b53f10377a9
+  question: Why must every connector be anchored within about 25 mm, rather than just "somewhere along the cable"?
+  options:
+    - Short anchors keep the cable tidy so it doesn't catch on furniture.
+    - The anchor must be close to share the connector's ground path.
+    - Regulations require anchors within 25 mm on battery-powered devices.
+    - The termination is the stiffest point where bending concentrates; a close anchor moves flexing into free cable.
+  correct: 3
+- source: cc05ccabd5e8
+  question: You need to carry 6 A on a run and only have JST XH connectors (3 A per way). What do you do?
+  options:
+    - Use one XH way; it will survive short peaks at 200%.
+    - Use one XH way with thicker AWG 18 wire to carry the extra current.
+    - Use an XT30, or split the current across several parallel XH ways (e.g. three with AWG 22), and pull-test every crimp.
+    - Use one XH way and add a heat-shrink sleeve to cool it.
+  correct: 2

@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.08-testing-robot-software.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 2b650cfa48a4
+  question: Why does a robotics test pyramid have the same shape as a web one but for a different reason?
+  options:
+    - Robotics tests are slow at the top because of database and network I/O, just like web tests.
+    - Upper levels involve physics and a human (batteries, floors, stands) and aren't repeatable, so the pressure to push tests down is stronger.
+    - Robotics has no unit tests, so the pyramid is inverted in practice.
+    - Robotics tests are faster at the top because simulators run faster than real time.
+  correct: 1
+- source: 6de3de673bab
+  question: Your control logic calls `base.read()` in the middle of its decision. Which refactor enables exhaustive and boundary tests?
+  options:
+    - Extract a pure function or state machine that takes values and returns a decision, leaving a thin shell that reads and acts.
+    - Replace `base.read()` with a global variable updated by a background thread.
+    - Mock `base.read()` with `unittest.mock` in every test.
+    - Move the decision into the firmware so it can be tested on hardware.
+  correct: 0
+- source: 5e1b3b77248b
+  question: A test asserts simulated wheels reach exactly 5.0 rad/s after a command. It fails at 4.87. Bug or bad test?
+  options:
+    - "Bug: the simulator's motor model has the wrong gain."
+    - "Bug: the encoder quantization is dropping ticks."
+    - "Bad test: the simulator's first-order motor, deadband and quantized encoders mean it approaches asymptotically; use a derived tolerance."
+    - "Bad test: the simulator randomizes the setpoint, so any value is acceptable."
+  correct: 2
+- source: 7b37888a4c04
+  question: You add `scan()` to a simulation test's loop to debug something, and three other tests start failing. Why?
+  options:
+    - "`scan()` changes the robot's pose, which the other tests depend on."
+    - "`scan()` is slow and makes the other tests time out."
+    - "`scan()` modifies the shared config file that other tests read."
+    - Each sensor call consumes numbers from the seeded random generator, shifting later noise in tests that share the simulator.
+  correct: 3
+- source: 48535aa33701
+  question: Which rung finds a checksum that accepts a corrupt line, and why not a higher one?
+  options:
+    - "Rung 0: `protocol.decode` is a pure function of bytes, so fast unit tests cover it."
+    - "Rung 1: it needs a fake base with a watchdog."
+    - "Rung 3: it needs the realistic simulator preset."
+    - "Rung 5: only the real robot produces corrupt lines."
+  correct: 0
+- source: 2df512e1934b
+  question: What does `FailingBatteryBase` buy you that a `unittest.mock.Mock` would not?
+  options:
+    - It runs faster than a Mock because it has no introspection overhead.
+    - It is a real `DifferentialBase` that works at every rung and produces coherent states, while a Mock returns Mocks for everything else.
+    - It records every call, which a Mock cannot do.
+    - It can raise exceptions, which a Mock cannot.
+  correct: 1
+- source: 9ab262016a96
+  question: You're asked to add a nightly CI job running hardware tests on an office robot. What must be true first?
+  options:
+    - The tests must pass in simulation at least 100 times in a row before touching the robot.
+    - The robot must be connected by Ethernet rather than Wi-Fi, so the CI runner never loses it.
+    - Physical safety (stand or pen, reachable e-stop, supervised charging) plus bounded tests, guaranteed stops, recorded runs and failure alerts.
+    - The CI runner must be a Raspberry Pi identical to the robot's, so timing results match.
+  correct: 2

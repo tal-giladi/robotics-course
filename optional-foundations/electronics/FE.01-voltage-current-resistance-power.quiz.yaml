@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.01-voltage-current-resistance-power.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ffe813e946da
+  question: Is voltage measured across or through a component? And current?
+  options:
+    - Voltage through (meter in the loop); current across (two points)
+    - Both across, with probes on both sides of the component
+    - Voltage across (two points); current through (meter in the loop)
+    - Both through, with the meter inserted into the loop
+  correct: 2
+- source: 35f5ef0de9a7
+  question: The Pi 5 uses 7.65 W at 5.1 V. What current does it draw?
+  options:
+    - 1.5 A
+    - 39 A
+    - 0.67 A
+    - 2.6 A
+  correct: 0
+- source: 62e216b4a990
+  question: A robot uses 20 W on average. Its battery is 10.8 V, 3.5 Ah. Ignoring losses and reserve, how long does it run?
+  options:
+    - About 0.18 h
+    - About 1.89 h
+    - About 5.7 h
+    - About 0.54 h
+  correct: 1
+- source: 5521ccb21d7e
+  question: Why does a short circuit on a 12.6 V Li-ion pack cause a fire risk, while touching both terminals with dry fingers is harmless?
+  options:
+    - Skin is milliohms but blocks DC; a wire conducts DC, so only the wire carries current
+    - The pack limits current to milliamps for skin, but not for metal conductors
+    - 12.6 V is too low to push current anywhere; the fire comes from a chemical reaction
+    - Skin is thousands of ohms (mA); a wire is milliohms (~100 A), dissipating $I^2R$ heat
+  correct: 3
+- source: c13852560101
+  question: You replace a 1 kΩ LED resistor with a 100 kΩ one. What happens to current and brightness?
+  options:
+    - Current rises ~100× (1.3 mA → 130 mA); the LED burns out
+    - Current stays at 1.3 mA; only the resistor gets hotter
+    - Current drops ~10× (1.3 mA → 0.13 mA); the LED is half as bright
+    - Current drops ~100× (1.3 mA → 0.013 mA); the LED is essentially off
+  correct: 3
+- source: bf7c7f5acedb
+  question: A sensor works on your desk powered from the Pico, but reads nothing on the robot. VCC goes to 3.3 V and signal to a GPIO. What wire is most likely missing?
+  options:
+    - "GND: without a return path there is no current and no shared reference"
+    - "A pull-up resistor: without it the signal line always floats high"
+    - "A second VCC wire: one wire cannot carry enough current for the sensor"
+    - "A shield wire: robot motors induce noise that swamps the signal"
+  correct: 0
+- source: c49979a4587c
+  question: "Which needs thicker wires: 60 W at 12 V, or 60 W at 5 V?"
+  options:
+    - 12 V, because the higher voltage needs thicker insulation
+    - 5 V, because it draws 12 A vs 5 A and heating grows with $I^2R$
+    - Both the same, because the power is the same
+    - 12 V, because it draws 12 A vs 5 A
+  correct: 1

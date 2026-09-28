@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 17.09-rl-sim-to-real.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: db1e8c63a5d3
+  question: Why is command latency more dangerous to a learned policy than a 10% motor-gain error?
+  options:
+    - Gain error is rare on real motors, while latency is always present and grows with battery drain
+    - Gain error is static and feedback corrects it; latency changes the loop's structure, causing oscillation (0.98 → 0.12)
+    - Latency adds noise to observations, while gain error only scales rewards, which the policy ignores
+    - Gain error is randomized during training, while latency cannot be simulated at all
+  correct: 1
+- source: f7a05c7fc393
+  question: What does system identification buy you if you are going to randomize anyway?
+  options:
+    - "Nothing: wide randomization covers every robot, so measuring parameters is wasted effort"
+    - A single exact model, so randomization can be turned off once sysid is done
+    - Faster training only, since narrower ranges converge sooner but generalize worse
+    - Where to centre the ranges and how wide; measured-and-narrow beats blind-and-wide on robustness and peak
+  correct: 3
+- source: b13654ae9976
+  question: In the sysid spin test, why must gyro yaw be unwrapped rather than compared as an angle?
+  options:
+    - The spin is nearly a full turn (5.777 rad); the wrapped −0.506 rad would put the wheelbase off by $2\pi$
+    - The gyro reports degrees, and unwrapping converts them to radians for the wheelbase formula
+    - Unwrapping removes gyro drift, which otherwise dominates over a single full turn
+    - The wheels slip at the start of the spin, and unwrapping discards the slipping samples
+  correct: 0
+- source: 56eab8e35fda
+  question: You train with `action_delay_steps` fixed at 2 (200 ms) instead of sampled 0–4. What happens on a robot with 100 ms latency?
+  options:
+    - "Better than the randomized policy: less latency than trained is always easier for the policy"
+    - "Worse than the randomized policy: it learned to anticipate exactly 200 ms, which is wrong at 100 ms"
+    - "Identical: any fixed delay above the real one gives the same robustness as randomization"
+    - "Unstable: the policy only works at exactly 200 ms and diverges at any other latency"
+  correct: 1
+- source: b63072a0cd4b
+  question: Why are rules 5 and 8 (velocity and acceleration clamping) excluded from the violation budget?
+  options:
+    - They fire in normal operation, so counting them would latch the e-stop during healthy driving
+    - They are enforced in firmware, so the shield never sees them fire in the first place
+    - They are the most important rules, so they trigger an immediate stop instead of counting
+    - They only apply in simulation, since the real robot has no velocity or acceleration limits
+  correct: 0
+- source: 05fcddb777e9
+  question: When the shield decides to stop, why does the loop keep sending wheel commands at 50 Hz rather than sending nothing?
+  options:
+    - The motor driver needs a constant PWM signal, or it defaults to full speed after silence
+    - ROS 2 drops a topic after 1 s of silence, so commands must continue to keep it alive
+    - The policy needs its own outputs as observations, so the loop must keep running to feed them
+    - Silence trips the 300 ms watchdog, an uncontrolled stop that looks like a crash; an explicit zero is a decision
+  correct: 3
+- source: ccf32b7e4e99
+  question: "A GPU simulator trains 1,000× faster. Which problem does it solve: reward hacking, the sim-to-real gap, sample inefficiency, carpet contact modelling?"
+  options:
+    - Sample inefficiency and the sim-to-real gap
+    - Reward hacking and sample inefficiency
+    - Only sample inefficiency, by making samples cheap
+    - All four, given enough training time
+  correct: 2
+- source: 42d06b3b4c03
+  question: What does the hand-written controller do in the robustness table that the learned policies do not?
+  options:
+    - "Degrades gracefully: 1.00 success on every test robot, just slower, since it has no training distribution"
+    - Reaches the goal fastest on every test robot, since it uses the exact robot model
+    - Fails on every randomized robot, since it was tuned only for the nominal parameters
+    - Matches the learned policies exactly, since both were tuned on the same simulator
+  correct: 0

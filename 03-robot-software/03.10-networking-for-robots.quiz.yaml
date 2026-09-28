@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.10-networking-for-robots.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 26f77d27bef7
+  question: Your Wi-Fi link measures mean 3 ms, p99 60 ms, max 340 ms. karmel drives at 0.4 m/s under teleop. Is "3 ms" good enough?
+  options:
+    - "Yes: the mean is what the control loop experiences on average."
+    - "No: the max is what matters; 340 ms is 14 cm on stale data and trips the watchdog, so it suits goals and telemetry, not closing a loop."
+    - "No: the p99 of 60 ms means the robot stops every second."
+    - "Yes: anything under 300 ms is below the watchdog, so it's safe for control."
+  correct: 1
+- source: 623a0770a2e5
+  question: "Two uncorrected crystals at ±25 ppm: how far apart can the clocks be after 8 hours, and what position error at 0.5 m/s?"
+  options:
+    - 0.72 s and 36 cm
+    - 0.20 s and 10 cm
+    - 14.4 s and 7.2 m
+    - 1.44 s and 72 cm
+  correct: 3
+- source: 207ed91672f6
+  question: You add 200 ms of latency to karmel's obstacle-stop loop. What changes at 0.5 m/s?
+  options:
+    - The loop rate halves, and the robot oscillates in front of obstacles.
+    - The robot stops 10 cm closer to the obstacle; nothing else changes.
+    - The robot stops 1 m closer, because latency compounds each cycle.
+    - Nothing, as long as the loop rate is unchanged.
+  correct: 1
+- source: eb160d898760
+  question: "`ping karmel.local` works, but `ros2 topic list` on the laptop shows nothing from the robot. Which set of causes is right?"
+  options:
+    - Different `ROS_DOMAIN_ID`, `ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST` on one side, or the network blocking multicast.
+    - Wrong SSH key, a wrong hostname in `/etc/hosts`, or an expired DHCP lease.
+    - The robot's CPU is overloaded, the laptop's disk is full, or RViz is closed.
+    - A QoS mismatch on `/scan`, a missing TF frame, or a wrong URDF.
+  correct: 0
+- source: 0d945c84e5f2
+  question: Why does karmel's emergency stop live in the Pico's firmware rather than in a well-tested Python function on the Pi?
+  options:
+    - Python can't send stop commands fast enough to the motor drivers.
+    - The Pico has a hardware e-stop button that Python can't read.
+    - Everything above the Pico can be partitioned away; the stop must be on the side of the failure that keeps working.
+    - Firmware code is formally verified, while Python code is not.
+  correct: 2
+- source: 34a5b617d934
+  question: A teammate wants to expose the Foxglove bridge on `0.0.0.0:8765` "so anyone on the team can look". What do you recommend?
+  options:
+    - Keep it bound to localhost and use an SSH tunnel per viewer, controlled by the SSH keys you already manage.
+    - Expose it but change the port to a non-standard number.
+    - Expose it only while the robot is stationary.
+    - Expose it and rely on the Wi-Fi password to keep outsiders out.
+  correct: 0
+- source: d03bbfd924da
+  question: During a 2 s Wi-Fi blackout, your teleop client keeps showing the last known position and battery voltage. What should it do?
+  options:
+    - Keep showing the last values, since they're the best estimate available.
+    - Clear the display completely until the link recovers.
+    - Extrapolate the position from the last velocity.
+    - 'Track sample age and visibly degrade past a threshold (grey out, show "no telemetry for 1.4 s"): stale must look different from fresh.'
+  correct: 3

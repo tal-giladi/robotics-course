@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FM.13-probability-basics.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 20071b674ad1
+  question: What is the difference between an event and a random variable? Pick the correct robot example.
+  options:
+    - 'Event: "measured range in meters" (has a probability); random variable: "the bump switch is pressed" (has a distribution)'
+    - 'Both are the same thing: "the bump switch is pressed" is an event and also a random variable in meters'
+    - 'Event: "number of wheel slips" (has a distribution); random variable: "the bump switch is pressed" (has a mean)'
+    - 'Event: "the bump switch is pressed" (has a probability); random variable: "measured range in meters" (has a distribution)'
+  correct: 3
+- source: 35f6086dbf4d
+  question: A LiDAR scan has 360 beams, each with an independent 0.1% chance of a spurious return. What is the probability that a scan contains at least one?
+  options:
+    - About 0.36
+    - About 0.30
+    - About 0.001
+    - About 0.70
+  correct: 1
+- source: 29202e3dd090
+  question: $P(\text{slip} \mid \text{wet}) = 0.4$, $P(\text{wet}) = 0.05$, $P(\text{slip} \mid \text{dry}) = 0.02$. What is $P(\text{slip})$?
+  options:
+    - "0.020"
+    - "0.420"
+    - "0.039"
+    - "0.021"
+  correct: 2
+- source: b3924478bcc9
+  question: With the same numbers ($P(\text{slip} \mid \text{wet}) = 0.4$, $P(\text{wet}) = 0.05$, $P(\text{slip} \mid \text{dry}) = 0.02$), what is $P(\text{wet} \mid \text{slip})$?
+  options:
+    - "0.513"
+    - "0.400"
+    - "0.050"
+    - "0.020"
+  correct: 0
+- source: 2b619afd68aa
+  question: You run the false-echo simulation ($p = 0.02$) with $n = 50$ readings, ten times with different seeds. What do the estimates look like?
+  options:
+    - They all land within ±0.001 of 0.02, since 50 readings is plenty
+    - They are all exactly 0.02, since the seed does not affect the rate
+    - They jump a lot (error ≈ 0.02, as big as $p$); many are 0.00, some 0.04 or 0.06
+    - They are biased high, clustering around 0.10 because of the small sample
+  correct: 2
+- source: 184ff4ab142c
+  question: 'Two side-by-side ultrasonic sensors each have 5% false echoes. The analysis says "both false: 0.25%" but testing shows 3%. Likely explanation?'
+  options:
+    - The 5% rate was measured wrong; it is really about 17% per sensor
+    - The failures are not independent (crosstalk, shared surfaces); measure the joint rate
+    - "The analysis should have added the rates: 5% + 5% ≈ 3% after rounding"
+    - Random chance; 3% vs 0.25% is within normal test variation
+  correct: 1
+- source: 82d3905d397b
+  question: Why does a Bayes filter need the law of total probability?
+  options:
+    - To normalize the posterior so the probabilities over all cells sum to one
+    - To combine two independent sensors by multiplying their likelihoods
+    - To convert a Gaussian sensor model into a discrete grid of cells
+    - "To predict after moving: sum over prior cells of P(was there) × P(motion took it here)"
+  correct: 3

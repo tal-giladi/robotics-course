@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 01.03-workbench-and-tools.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: ac3c129100cd
+  question: Which probe sockets measure the pack voltage, and what single mistake turns that measurement into a short circuit?
+  options:
+    - Black in COM, red in VΩ, DC volts; leaving the red lead in the A/mA socket (or dial on a current range) shorts the pack.
+    - Black in VΩ, red in COM, DC volts; swapping the leads shorts the pack through the meter.
+    - Black in COM, red in A/mA, DC volts; setting the dial to the 200 mV range shorts the pack.
+    - Black in COM, red in VΩ, AC volts; touching both probes to the same terminal shorts the pack.
+  correct: 0
+- source: 7c2a97d22441
+  question: What does "OL" mean in continuity mode, and when is it the reading you want?
+  options:
+    - "Overload: the meter's fuse blew; you want it never."
+    - "Open lead: a probe is unplugged; you want it only during the self-test."
+    - Over limit, i.e. no connection; you want it between neighbouring pins that must not be connected.
+    - Ohms low, i.e. a good connection; you want it across every solder joint.
+  correct: 2
+- source: 63ce12f56041
+  question: An XT60 cup plus short 18 AWG lead needs about 141 J to reach soldering temperature. How long at 30 W net heat flow, and why does a 30 W unregulated iron fail?
+  options:
+    - About 0.2 s; the unregulated iron overheats the joint and burns the flux.
+    - About 47 s; the unregulated iron is simply too slow to be practical.
+    - About 4.7 s; the unregulated iron is fine but needs a larger tip.
+    - About 4.7 s; the unregulated iron's tip cools on contact and delivers only a few watts net, giving tens of seconds and a cold joint.
+  correct: 3
+- source: d89a48e0fe9e
+  question: You measure a cell with the red probe on its negative end and the black probe on the positive cap. What does the meter show, and is anything damaged?
+  options:
+    - About −3.6 V; nothing is damaged, the sign just shows reversed probes.
+    - About 0 V; the meter's input protection blocks reversed voltage.
+    - About +3.6 V; the meter corrects the polarity automatically.
+    - OL; the meter's fuse blows and must be replaced.
+  correct: 0
+- source: ca64aafff163
+  question: Why do the DRV8874 carriers get headers only on the logic pins in karmel's build?
+  options:
+    - Motor-power pins need a separate ground plane that headers can't provide.
+    - Motor-power pins are too closely spaced for standard 2.54 mm headers.
+    - Logic pins carry milliamps for the breadboard; motor-power pins carry up to about 2.9 A, too much for breadboard contacts, so they get soldered wires.
+    - Logic pins must be removable for reprogramming, while motor pins never change.
+  correct: 2
+- source: 09a402ea1155
+  question: After soldering the INA219, continuity between VCC and GND beeps briefly, then climbs to several kΩ and then OL. Short circuit or not?
+  options:
+    - "A short: any beep at all between VCC and GND means a solder bridge."
+    - A short that burned itself open when the meter's test current flowed.
+    - "Not a short: the decoupling capacitor charges from the meter's test current, so the reading rises."
+    - Not a short, but the INA219 is damaged and leaks current.
+  correct: 2
+- source: 0c468f0f7764
+  question: What does a good through-hole joint look like, and what most likely causes a round ball sitting on the pad?
+  options:
+    - A large dome covering the pin; the ball means too little solder was used.
+    - A small, shiny, concave cone from pad to pin; a ball means the pad or pin wasn't hot enough to wet.
+    - A dull grey flat blob; a ball means the iron was too hot and burned the flux.
+    - A thin film with the pin visible; a ball means too much flux was applied.
+  correct: 1

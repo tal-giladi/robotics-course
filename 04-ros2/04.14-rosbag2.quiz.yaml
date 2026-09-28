@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 04.14-rosbag2.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 21e6e85ae206
+  question: What's inside a rosbag2 directory, and what breaks if you copy only the `.mcap` file?
+  options:
+    - Only the `.mcap` file; nothing breaks.
+    - Storage files plus `metadata.yaml`; without the metadata `ros2 bag` can't open it until `ros2 bag reindex`.
+    - Storage files plus a SQLite index; without it the MCAP data is unreadable by any tool.
+    - A `.mcap` file plus the URDF; without the URDF playback fails.
+  correct: 1
+- source: 5a92a0628768
+  question: You play a bag containing `/battery/voltage` and `/battery/health` while your new `battery_health` node runs. What goes wrong, and what's the right command?
+  options:
+    - Nothing; the bag's health messages are ignored by default.
+    - The node crashes on duplicate topics; use `--remap` on the node.
+    - Old and new results interleave on `/battery/health`; play only the input with `--topics /battery/voltage`.
+    - The bag plays too fast; use `--rate 0.5`.
+  correct: 2
+- source: 8d98778fc0fa
+  question: "A 640×480 raw RGB camera at 15 Hz and a LiDAR at 10 Hz (≈ 2.9 KB per scan): how big is a 5-minute bag?"
+  options:
+    - About 420 MB
+    - About 1.4 GB
+    - About 42 GB
+    - About 4.2 GB
+  correct: 3
+- source: 39bb2e4d9dd1
+  question: You replay a bag at `--rate 2` into a node with a 3 s "no data" watchdog, without sim time. The bag has a 5 s gap. Is it reported?
+  options:
+    - "No: at 2× the gap lasts 2.5 s of wall time; with `--clock` and `use_sim_time` it would be."
+    - "Yes: the watchdog measures 5 s regardless of rate."
+    - Yes, twice, because the gap is replayed at double speed.
+    - No, because the watchdog is disabled during playback.
+  correct: 0
+- source: dc8c8f12eb24
+  question: Why does `bag_replay_check` take a "snapshot" from the first recorded `BatteryHealth` instead of starting the filter empty?
+  options:
+    - The filter can't start empty because of a division by zero.
+    - The recording starts mid-run, so the node's state depends on earlier samples; snapshot + replay makes the comparison exact.
+    - The first message contains the node's parameters, which the check needs.
+    - MCAP files always begin with a snapshot message by specification.
+  correct: 1
+- source: 69e8d3a35887
+  question: During playback with `--clock` and `use_sim_time:=true`, a node logs a duration of 1.79 billion seconds. What happened?
+  options:
+    - The bag's timestamps are in nanoseconds but read as seconds.
+    - The clock topic overflowed a 32-bit integer.
+    - The node read its clock before the first `/clock` message (time 0) and later subtracted it from bag time.
+    - The bag was recorded with a wrong system date.
+  correct: 2
+- source: 1995e3eb0b91
+  question: What's the default storage format for `ros2 bag record` in Jazzy, and how do you choose the other one?
+  options:
+    - sqlite3; use `-s mcap`.
+    - MCAP; use `-s sqlite3`.
+    - MCAP; use `--format db3`.
+    - sqlite3; use `--storage-preset mcap`.
+  correct: 1

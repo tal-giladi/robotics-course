@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 17.03-q-learning-gridworld.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 05243b675968
+  question: Which is the correct Q-learning update?
+  options:
+    - $Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma Q(s',a') - Q(s,a)]$ with $a'$ the action taken
+    - $Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma \max_{a'} Q(s',a') - Q(s,a)]$
+    - $Q(s,a) \leftarrow Q(s,a) + \gamma[r + \alpha \max_{a'} Q(s',a') - Q(s,a)]$
+    - $Q(s,a) \leftarrow r + \gamma \max_{a'} Q(s',a') - \alpha Q(s,a)$
+  correct: 1
+- source: b9723e5f3f93
+  question: $Q(s,a) = 1.0$, $r = -1$, $\max_{a'} Q(s', a') = 4.0$, $\gamma = 0.9$, $\alpha = 0.25$. New $Q(s,a)$?
+  options:
+    - "1.4"
+    - "2.6"
+    - "1.65"
+    - "0.4"
+  correct: 0
+- source: 5495015bb1b0
+  question: Why is Q-learning called off-policy, and why is that useful for a robot?
+  options:
+    - It learns a policy without ever executing it, so the robot never needs to move during training
+    - It switches policies every episode, so the robot explores several strategies in parallel
+    - Its target uses the greedy max, not the action taken, so it can learn from exploring, teleop or logged data
+    - Its target uses the action actually taken, so it matches exactly what the robot did
+  correct: 2
+- source: 519222d63d2d
+  question: You train on the slippery grid with α = 0.9 for 50 000 episodes. Will the greedy policy be reliable?
+  options:
+    - "Yes: 50 000 episodes average out any noise, whatever the step size"
+    - "Yes: a high α converges faster, and the slip noise only affects the first episodes"
+    - "Not reliably: α = 0.9 is too small, so Q-values never reach the true values"
+    - "Not reliably: each update copies the latest noisy target, so risky actions flip"
+  correct: 3
+- source: aaab989828d2
+  question: Episodes are cut at 100 steps. At step 100 the robot is in cell 7, not terminal. What target does the last update use?
+  options:
+    - $r$ alone, since the episode has ended
+    - $0$, since truncated transitions are discarded
+    - $r + \gamma \max_{a'} Q(7, a')$, since truncation still bootstraps
+    - $r + \gamma \max_{a'} Q(0, a')$, from the reset state
+  correct: 2
+- source: 26d70fa17a81
+  question: Why do rarely visited cells' learned values differ from optimal even when the greedy path is perfect?
+  options:
+    - Tabular methods only improve visited entries; off-route cells lag but don't affect route decisions
+    - The discount factor shrinks values far from the goal to zero, regardless of visits
+    - Rarely visited cells share values with neighbours, so they average in wrong estimates
+    - Exploration overwrites their values with random numbers each time they are visited
+  correct: 0
+- source: 0212b761428e
+  question: The agent reaches the charger in training, but `greedy_policy(Q)` shows arrows into walls in about half the cells, including on the route. What do you check?
+  options:
+    - The learning rate, the discount factor, and the number of training episodes
+    - The argmax axis, the action-index mapping in rendering vs env, and whether Q was reset after training
+    - The reward for hitting walls, the slip probability, and the exploration schedule
+    - The grid size, the charger position, and the episode time limit
+  correct: 1

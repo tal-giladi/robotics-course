@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 20.05-testing-strategy.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 07e9d3e112e5
+  question: A build is faster than the shipping build, with identical clearance, no collision, and 1.79 m of `blind_distance_m`. Should it ship?
+  options:
+    - Yes; every outcome metric is at least as good
+    - Yes, after raising the clearance threshold to cover blind driving
+    - No; it drove 1.79 m with no sensor data and got lucky; the monitor must fail closed
+    - No, but only because it is faster than the speed limit allows
+  correct: 2
+- source: 079e0e59cb4b
+  question: Why does `S6-blocked` pass with `reached = False`, and which result would make it fail?
+  options:
+    - It must stop safely; it fails if it arrives, collides or stops by luck
+    - "`reached` is ignored for all scenarios; it fails only on a collision"
+    - It passes because the time limit expired; it fails if it stops too early
+    - It passes because the goal is optional; it fails only if clearance drops below 0.1 m
+  correct: 0
+- source: ed16e9b2f0ed
+  question: The 2D suite runs eight scenarios in 2.8 s. Which three bug classes can it structurally not find?
+  options:
+    - Planner logic, goal checking and geofence rules
+    - Dynamics, middleware timing and sensor reality
+    - Collision checking, clearance and time limits
+    - Invariant violations, regressions and lucky stops
+  correct: 1
+- source: 8a5ca4bb6fd0
+  question: You raise the speed limit from 0.3 to 0.5 m/s. The suite stays 8/8. What have you learned?
+  options:
+    - The change is safe, since all scenarios passed
+    - The suite is broken, since a speed change must fail something
+    - The e-stop distance is unchanged, because it is time-based
+    - Only that no scenario measures what speed affects
+  correct: 3
+- source: 48586057502a
+  question: Why is "run it three times, pass if any run passes" a bad policy for a scenario whose result varies between seeds?
+  options:
+    - It triples CI time; one run is enough
+    - It measures the best case; take the worst seed as verdict
+    - It is fine; stochastic failures are simulator artefacts
+    - It should be "pass if two of three pass", a majority vote
+  correct: 1
+- source: 741823dc3407
+  question: What does a `WORSE` line in the regression report mean if the scenario still passes?
+  options:
+    - The scenario is flaky and should be removed from the suite
+    - The change must be reverted before it can be merged
+    - A metric got notably worse within its limit; it needs a reason
+    - The report compared against the wrong baseline build
+  correct: 2
+- source: 8e6603c45263
+  question: Your field test found a failure and you have a bag of it. What can the bag not tell you?
+  options:
+    - Whether the fixed robot would behave differently; the loop is open
+    - What the real sensor noise looked like during the failure
+    - Where the obstacle was when the scan dropped
+    - Whether perception produces sane output on the real inputs
+  correct: 0

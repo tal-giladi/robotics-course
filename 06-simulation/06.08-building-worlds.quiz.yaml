@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 06.08-building-worlds.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 073fbdbcd3c3
+  question: Which five systems must every karmel world load?
+  options:
+    - "`Physics`, `UserCommands`, `SceneBroadcaster`, `Sensors`, `Imu`"
+    - "`Physics`, `Rendering`, `Clock`, `Sensors`, `Bridge`"
+    - "`Physics`, `UserCommands`, `DiffDrive`, `Lidar`, `Camera`"
+    - "`SceneBroadcaster`, `Contact`, `Sensors`, `Magnetometer`, `Imu`"
+  correct: 0
+- source: 0dde7fda9390
+  question: The apartment is 6.0 × 5.0 m with 0.1 m walls and a 0.3 m margin, at 0.05 m/cell. What are the map's width, height and origin?
+  options:
+    - 120 × 100 cells, origin $(-3.0, -2.5)$
+    - 134 × 114 cells, origin $(3.350, 2.850)$
+    - 128 × 108 cells, origin $(-3.200, -2.700)$
+    - 134 × 114 cells, origin $(-3.350, -2.850)$
+  correct: 3
+- source: 6f29aed2676d
+  question: Why is the dining table modelled as a top plus four legs instead of one solid box?
+  options:
+    - A solid box has too many triangles for the renderer and slows the whole physics engine down
+    - Like the real table, the 2D LiDAR sees only four legs, not a solid obstacle
+    - Gazebo cannot render or collide boxes larger than 1 m on any side without a mesh
+    - Four separate legs let the table be moved with `UserCommands` during a run
+  correct: 1
+- source: dbf8878b97a0
+  question: You build a 10 × 1.4 m empty corridor and run SLAM in it. What happens, and what does `world_check.py` say in advance?
+  options:
+    - The map is perfect; `world_check.py` reports no issues, since long walls are always good features
+    - The map is rotated 90°; `world_check.py` reports the corridor is too narrow for the robot to turn
+    - The map stretches or folds along the corridor; `world_check.py` flags most free area as ambiguous
+    - The map shows only noise; `world_check.py` reports that nothing is at the 0.165 m scan plane
+  correct: 2
+- source: 6e1a729db534
+  question: A downloaded Fuel model drops your real-time factor from 0.9 to 0.2. What do you look at first?
+  options:
+    - "The collision geometry: a full visual mesh as `<collision>` costs mesh queries every step"
+    - The model's mass and inertia, since heavy objects need more solver iterations per step
+    - The texture resolution, since large textures are the main cost of the physics solver
+    - The world's `max_step_size`, which the included model silently overrode to 0.1 ms
+  correct: 0
+- source: 39998a9edf81
+  question: Why does the ground-truth map's frame coincide with the Gazebo world frame?
+  options:
+    - Because RViz can only display occupancy maps whose frame equals the simulator's world frame
+    - "So a robot spawned at Gazebo $(x, y)$ is at map $(x, y)$: spawn args set AMCL's pose and maps compare directly"
+    - Because slam_toolbox requires the map origin to sit exactly at $(0, 0)$ in every world
+    - So that TF can skip the `odom` frame entirely whenever the robot runs in simulation
+  correct: 1
+- source: ff3f60c999a1
+  question: Your new world loads and the robot spawns, but every `/scan` ray is `inf`. Which two hypotheses are right?
+  options:
+    - The wheel friction is zero so the robot cannot move, or the robot is beached on another collision
+    - "`use_sim_time` is false on the scan node, or the bridge has a reliability QoS mismatch"
+    - The map resolution is too coarse for the scan, or the map origin is on the wrong corner
+    - Nothing is at the 0.165 m scan plane, or the `Sensors` system or rendering is missing
+  correct: 3
+- source: 81017d34a9f5
+  question: What is the argument for generating a world from Python data rather than writing SDF by hand?
+  options:
+    - Python-generated worlds load and step faster in Gazebo than equivalent hand-written SDF files
+    - SDF is deprecated in Gazebo Harmonic, and generated Python worlds are the only supported format
+    - One source of truth emits the world and the ground-truth map, reproducibly, with shared boilerplate
+    - Python lets the world layout change randomly on every run, which makes SLAM results more robust
+  correct: 2

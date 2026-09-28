@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FML.07-backprop-pytorch.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 88dc2ca5a5da
+  question: What does the forward pass need to store for the backward pass, and why?
+  options:
+    - Only the final loss value, since backprop recomputes everything from it
+    - Only the weights, since local derivatives depend only on parameters
+    - The gradients of every layer, since backprop reads them in reverse
+    - Intermediate values ($z$, $h$, layer inputs), since local derivatives depend on them
+  correct: 3
+- source: 01d600f7eac6
+  question: For $\hat y = w_2 h + b_2$ with $h = 0.5$, $w_2 = 3$ and $\partial L/\partial\hat y = -3$, what are $\partial L/\partial w_2$ and $\partial L/\partial h$?
+  options:
+    - $-9$ and $-1.5$
+    - $-1.5$ and $-9$
+    - $1.5$ and $9$
+    - $-1.5$ and $-3$
+  correct: 1
+- source: 28628767c5a5
+  question: What are the four lines inside every PyTorch training step, in order?
+  options:
+    - "`zero_grad()`, compute loss, `loss.backward()`, `optimizer.step()`"
+    - Compute loss, `optimizer.step()`, `loss.backward()`, `zero_grad()`
+    - "`loss.backward()`, `zero_grad()`, compute loss, `optimizer.step()`"
+    - Compute loss, `zero_grad()`, `optimizer.step()`, `loss.backward()`
+  correct: 0
+- source: f65140e37327
+  question: A gradient check shows relative error 3e-10 for the output layer and 0.4 for the hidden layer. Where is the bug?
+  options:
+    - In the loss function, since it feeds every layer's gradient
+    - In the output layer's weights, since the error propagates backward
+    - "Between output and hidden weights: likely the ReLU mask or propagation through $W_2$"
+    - In the finite-difference step size, which is too large for hidden layers
+  correct: 2
+- source: c9720384ae7b
+  question: Why does backprop scale to millions of parameters when finite differences don't?
+  options:
+    - Backprop approximates gradients with random samples instead of exact values
+    - Finite differences need two passes per parameter; backprop gets all gradients in one backward pass
+    - Backprop only updates the last layer, so its cost doesn't grow with depth
+    - Finite differences need double precision, which GPUs run much more slowly
+  correct: 1
+- source: 64b2a23be4e7
+  question: Your robot node loads `feedforward.pt` but predicts duty ≈ 0.02 for every input, though training looked good. What do you check first?
+  options:
+    - Input units/order and that the stored mean/std buffers actually loaded
+    - The GPU driver version and whether CUDA is available on the robot
+    - The learning rate and number of epochs used in the training script
+    - The PyTorch version, since `.pt` files are not portable across releases
+  correct: 0
+- source: "8813757e3045"
+  question: What do `model.eval()` and `torch.no_grad()` each do?
+  options:
+    - "`eval()` freezes the weights; `no_grad()` turns off dropout and batch norm"
+    - Both do the same thing; `no_grad()` is the newer name for `eval()`
+    - "`eval()` stops autograd recording; `no_grad()` switches dropout and batch norm"
+    - "`eval()` sets inference behavior (dropout, batch norm); `no_grad()` stops autograd recording"
+  correct: 3

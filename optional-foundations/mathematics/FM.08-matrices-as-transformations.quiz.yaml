@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in FM.08-matrices-as-transformations.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: aeaa3c444850
+  question: A matrix has columns $(0, 2)$ and $(-2, 0)$. Describe the transformation in words.
+  options:
+    - Rotate by −90° and scale by 2 (determinant 4)
+    - Rotate by +90° and scale by 2 (determinant 4)
+    - Rotate by +90° and scale by 4 (determinant 2)
+    - Reflect across the diagonal and scale by 2 (determinant −4)
+  correct: 1
+- source: 7e1258f50a26
+  question: Why can't a 2×2 matrix represent "move 1 m forward"?
+  options:
+    - A 2×2 matrix can only store rotations, not scaling or shear
+    - Translation requires a determinant of 0, which cannot be inverted
+    - Forward motion needs three coordinates, and 2×2 has only two
+    - A matrix always maps zero to zero, but translation moves the origin
+  correct: 3
+- source: 627409f2cbaa
+  question: What does $\det M = 0$ mean for a sensor calibration matrix?
+  options:
+    - "Columns are dependent: different true inputs give the same output, so it's broken"
+    - The calibration is the identity, so it leaves the readings unchanged
+    - The matrix flips handedness, so readings are mirrored but recoverable
+    - The sensor has zero offset, which is the ideal calibrated state
+  correct: 0
+- source: 26487d7d8956
+  question: You rotate by $R$ then by $R^T$. What is the result, and why?
+  options:
+    - A rotation by $2\theta$, because the transpose repeats the rotation
+    - A reflection, because transposing flips the determinant sign
+    - The identity, because $R^TR = I$ for orthonormal $R$
+    - Rotation by $\theta$ again, because $R^T = R$ for all rotations
+  correct: 2
+- source: 725e0b987427
+  question: The optical frame has z forward, x right, y down. What is `base_link`'s $+z$ (up) in optical coordinates?
+  options:
+    - $(0, 1, 0)$
+    - $(0, 0, 1)$
+    - $(0, -1, 0)$
+    - $(-1, 0, 0)$
+  correct: 2
+- source: 5a599a984a7d
+  question: "`R = np.array([axis_x, axis_y, axis_z])` works for a 180° mounting but not a 90° one. Why?"
+  options:
+    - It stacks the axes as columns, giving $R$; for 90° a sign flip is needed. Use `np.row_stack`
+    - It loses precision at 90°, where sin and cos are exactly 0 or 1. Use float64 throughout
+    - It fails at 90° because the matrix determinant becomes −1. Normalize the axes first
+    - It stacks the axes as rows, giving $R^T$; for 180° $R = R^T$ so it hides. Use `np.column_stack`
+  correct: 3

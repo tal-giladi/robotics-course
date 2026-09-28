@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 13.04-features-and-matching.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 0f4e7cfa52b4
+  question: In terms of the eigenvalues of $M$, why is a corner a better feature than a point on an edge?
+  options:
+    - At a corner both eigenvalues are small, so noise has little effect; on an edge both are large and noise dominates.
+    - At a corner one eigenvalue is large, fixing position in 1D; on an edge both are large, which makes it ambiguous.
+    - At a corner both eigenvalues are large, fixing position in 2D; on an edge only one is, so position along it is undetermined.
+    - At a corner the eigenvalues are equal, so it is rotation invariant; on an edge they differ, so rotation breaks matching.
+  correct: 2
+- source: 9f8faeb39fab
+  question: What is the Hamming distance between the bytes `0b10110010` and `0b10011011`?
+  options:
+    - "2"
+    - "4"
+    - "5"
+    - "3"
+  correct: 3
+- source: b3fa39cf47fb
+  question: Best candidate distance 30, second best 35. Does the match pass a 0.75 ratio test, and what does that suggest?
+  options:
+    - No (0.857 > 0.75); two near-equal candidates suggest repeated structure like tiles or text
+    - Yes (0.857 > 0.75); a high ratio means the best match is clearly better than the second
+    - No (0.857 > 0.75); it suggests the image is blurred, so no features could be detected
+    - Yes (1.167 > 0.75); the second-best distance is larger, so the best match is unique
+  correct: 0
+- source: 15d4c3b58fc6
+  question: How many RANSAC iterations are needed for a homography with 30% inliers and 99% confidence?
+  options:
+    - About 49
+    - About 567
+    - About 1,700
+    - About 57
+  correct: 1
+- source: c57717051763
+  question: You match ORB features between frames while karmel drives 1 m down a corridor, and fit a homography. What goes wrong?
+  options:
+    - "Motion blur: ORB finds no features during forward motion, so RANSAC returns no homography at all"
+    - "Scale change: ORB is not scale-invariant, so all matches fail beyond 10 cm of forward motion"
+    - "Parallax: near and far walls move differently, so one H fits only one depth layer; use the essential matrix or depth"
+    - "Nothing: forward translation in a corridor is exactly described by a homography with K"
+  correct: 2
+- source: 44db6a471a36
+  question: In the checkerboard experiment RANSAC returned a homography with 21 inliers. Which checks would flag it as wrong?
+  options:
+    - High reprojection error on inliers, too few iterations run, and the ratio test threshold set above 0.75
+    - Low inlier ratio (21/120 = 18%), implied rotation inconsistent with odometry/IMU, inliers forming a small regular grid
+    - Inlier ratio above 90%, a determinant of exactly 1, and inliers spread evenly across the whole image
+    - Fewer than 4 inliers, a singular matrix, and the homography mapping the image outside its own bounds
+  correct: 1
+- source: 2c148140eb86
+  question: Why is the ratio test placed before RANSAC rather than after?
+  options:
+    - It needs the homography from RANSAC's first iteration to compute the distance ratio
+    - It is cheaper after RANSAC, but placing it first avoids a known bug in `cv2.findHomography`
+    - It removes geometrically inconsistent matches that RANSAC would otherwise keep as inliers
+    - It raises RANSAC's inlier fraction $w$, and required iterations fall steeply with $w^4$
+  correct: 3

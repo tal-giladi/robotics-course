@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 16.02-robot-data.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 62a8b3c6c531
+  question: Why is a random frame-level train/validation split misleading for robot camera data?
+  options:
+    - Consecutive frames are near-duplicates, so validation sees near-twins of training images and overestimates
+    - Random splits put more frames in validation than training, which makes training too short
+    - Random splits ignore class balance, so validation always has too few bottles to evaluate
+    - Consecutive frames differ too much in lighting, so validation underestimates performance
+  correct: 0
+- source: ab737daceafc
+  question: Which information should every recording session carry, and why?
+  options:
+    - "Battery level, CPU temperature, Wi-Fi strength, disk space: to explain dropped frames"
+    - "Model version, score threshold, IoU threshold, image size: to reproduce evaluation numbers"
+    - "GPS position, date, weather, time zone: to align sessions from different robots"
+    - "Session id, room, lighting/conditions, operator/camera settings: to split, slice, find failures and reproduce"
+  correct: 3
+- source: 7543e4c97ecc
+  question: A session has 900 frames with neighbouring correlation 0.95. What is the effective sample size?
+  options:
+    - About 45
+    - About 855
+    - About 23
+    - About 180
+  correct: 2
+- source: 8b5be5a8c90d
+  question: You lower `--min-change` from 1.0 to 0.2. Which sessions change most, and what frames get added?
+  options:
+    - Fast-moving sessions; mostly blurred frames that were previously rejected as too different
+    - Sessions with parked, slow or dim noisy periods; mostly near-copies where noise exceeds 0.2
+    - All sessions equally; a uniform 5× more frames spread across every scene
+    - Bright daytime sessions; mostly new views of objects that had been skipped
+  correct: 1
+- source: 8e23a3cf7127
+  question: Your dataset has 2,000 bottle boxes and 150 cup boxes. What do you do first, and what do you avoid?
+  options:
+    - Record targeted sessions with more cups; avoid simply duplicating the 150 cup images many times
+    - Duplicate the 150 cup images 13× to match bottles; avoid recording new sessions that shift the data
+    - Drop 1,850 bottle boxes to balance the classes; avoid weighted sampling, which biases the loss
+    - Train on bottles only, then add cups later; avoid mixing both classes in one training run
+  correct: 0
+- source: cb96f7098a27
+  question: Last month's checkpoint scored 0.91 mAP on "the test set"; today it scores 0.78. Nobody retrained. What do you check first?
+  options:
+    - Whether the GPU driver changed, since driver updates alter floating-point results
+    - "Whether it's the same dataset version: compare the checkpoint's dataset id to `dataset_card.json`"
+    - Whether the model file is corrupted, by recomputing its hash against last month's
+    - Whether the room's lighting changed, since the test images are recorded live
+  correct: 1
+- source: 30774b238643
+  question: Which are valid privacy measures for a dataset recorded at home, with a real limitation of face blurring?
+  options:
+    - Encrypt the rosbags, rename the files, compress images; blurring removes all identifying information
+    - Record only at night, lower resolution, convert to grayscale; blurring is too slow for 10 Hz
+    - Upload to a cloud labeler, delete locals, share publicly; blurring hides room contents too
+    - Exclude bedrooms/bathrooms, blur faces, keep data local; blurring misses profile, small or occluded faces
+  correct: 3

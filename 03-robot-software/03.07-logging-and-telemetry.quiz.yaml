@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 03.07-logging-and-telemetry.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 90506d248692
+  question: Your telemetry CSV has both `host_time_s` and `t_s`. Which do you divide tick differences by, and what is the other for?
+  options:
+    - "`host_time_s` for speed; `t_s` for aligning with other devices."
+    - "`t_s` (the Pico's clock) for speed; `host_time_s` for lining up with data from other machines after clock sync."
+    - Either one, since they differ by a constant offset.
+    - "`host_time_s` for speed; `t_s` only for detecting Pico resets."
+  correct: 1
+- source: 239c36ed7dcc
+  question: karmel logs telemetry at 50 Hz, 57 bytes per row, for 8 hours. How much disk? And a 640×480 JPEG stream at 10 fps (~50 kB each)?
+  options:
+    - About 8.2 MB and 1.44 GB
+    - About 82 MB and 144 GB
+    - About 820 MB and 1.44 GB
+    - About 82 MB and 14.4 GB
+  correct: 3
+- source: f68966ee0233
+  question: You add `f.flush(); os.fsync(f.fileno())` after each CSV row in a 50 Hz loop on the Pi. What happens?
+  options:
+    - Nothing noticeable; fsync is fast on modern SD cards.
+    - The log file becomes corrupted because of partial writes.
+    - Each row costs an SD commit (10–50 ms+), the loop becomes irregular, and the watchdog eventually stops the robot mid-run.
+    - The loop runs faster because the buffer never fills.
+  correct: 2
+- source: eefea91209b9
+  question: Why JSON Lines rather than one JSON array for an event log?
+  options:
+    - Append-only writes, crash-safety (a half line is one bad line) and constant-memory streaming, plus `grep` and `tail -f`.
+    - JSON Lines files are smaller because they skip quotes around keys.
+    - JSON Lines supports binary data that JSON arrays can't hold.
+    - Python's `json` module can only parse one object at a time.
+  correct: 0
+- source: e46b99a7d6b1
+  question: A run's summary says 48.6 Hz with one 0.22 s gap, and the PID looks badly tuned in the plot. What do you do first?
+  options:
+    - Lower the PID gains until the plot looks smooth.
+    - Resample the log to 50 Hz to fill the gap before tuning.
+    - Increase the watchdog timeout so the gap can't stop the motors.
+    - Find and fix the cause of the gap (blocking call, slow sink, link), re-run, and tune against a clean log.
+  correct: 3
+- source: afc5e118d6cd
+  question: Which split between telemetry CSV, event log and metadata is right?
+  options:
+    - "Telemetry: battery voltage, front range; events: watchdog tripped, goal reached; metadata: git commit; pose recomputed from logged ticks."
+    - "Telemetry: git commit, battery voltage; events: front range, pose; metadata: goal reached."
+    - "Telemetry: everything; the event log is only for errors."
+    - "Events: battery voltage, front range; telemetry: watchdog tripped; metadata: pose."
+  correct: 0
+- source: d9ee382b783d
+  question: Across 200 runs you want to know how often the watchdog tripped and what the robot was commanding then. What must your logging have gotten right?
+  options:
+    - A single giant log file for all runs, with plain-text messages that are easy to read by eye.
+    - Machine-readable events, commanded values in each telemetry row, and a stable run identity linking events, telemetry, code and config.
+    - Screenshots of the telemetry plots saved after each run, named by date and time.
+    - Log compression and rotation, so that all 200 runs fit on the robot's SD card together.
+  correct: 1

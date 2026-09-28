@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 02.10-can-bus-and-smart-actuators.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 0c9e65a81e1d
+  question: Why does a differential bus tolerate 40 m where I²C struggles at 1 m?
+  options:
+    - Differential buses use thicker wire with lower resistance per metre.
+    - Differential buses run at lower bit rates, so edges have more time to settle.
+    - I²C compares against local ground with slow RC edges; a differential receiver sees only the difference, so common noise cancels and both edges are driven.
+    - Differential buses add error correction that I²C lacks.
+  correct: 2
+- source: 38eb0e1415dc
+  question: "One sync-write + sync-read cycle for six servos at 1 Mbit/s: what is the wire time, and why is the rate 205 Hz rather than about 1100 Hz?"
+  options:
+    - About 0.88 ms on the wire; two transactions each pay 2 ms of USB-serial latency, so the cycle is 4.88 ms.
+    - About 4.88 ms on the wire; the servos' processing adds nothing.
+    - About 0.88 ms on the wire; bit stuffing adds 22%, so the cycle is 4.88 ms.
+    - About 0.44 ms on the wire; each servo's return delay adds 0.74 ms.
+  correct: 0
+- source: 6177ac62a5d5
+  question: A classic CAN frame with 8 payload bytes is 135 bits worst case. What would it be without bit stuffing?
+  options:
+    - 98 bits, so stuffing is a 38% overhead
+    - 135 bits, since stuffing is optional
+    - 111 bits, so stuffing is a 22% worst-case overhead
+    - 64 bits, the payload alone
+  correct: 2
+- source: 2c71d51b29fa
+  question: You put twelve joints' command and status frames on one 1 Mbit/s classic CAN bus at 500 Hz. What happens?
+  options:
+    - It works at 81% load, with a small margin left over.
+    - "The bus is at 162% load: high-priority frames still get through, low-priority ones are delayed indefinitely."
+    - All frames are delayed equally, so every joint runs at about 300 Hz.
+    - The bus shuts down with error frames until the rate is lowered.
+  correct: 1
+- source: d16574d8b0e6
+  question: Your CAN bus reads 120 Ω across CAN_H and CAN_L with the power off. Is that right?
+  options:
+    - "No: a correct bus reads 60 Ω (two 120 Ω terminators in parallel); 120 Ω means one is missing."
+    - "Yes: a correctly terminated bus reads exactly 120 Ω."
+    - "No: a correct bus reads 240 Ω (two terminators in series)."
+    - Yes, as long as the cable is shorter than 1 m.
+  correct: 0
+- source: a076a1ac45f4
+  question: Why is `Return_Delay_Time` a worse problem on a six-servo bus than a low baud rate?
+  options:
+    - It is paid once per cycle and cannot be changed in EEPROM.
+    - It resets the servos each time, adding a reboot delay.
+    - It forces the bus to half-duplex, halving the throughput.
+    - "It is paid per servo reply: 2 ms × 6 = 12 ms per cycle, versus 6.8 ms extra from dropping to 115200 baud."
+  correct: 3
+- source: 759799480af8
+  question: Which reasons argue against putting CAN on karmel?
+  options:
+    - Everything is within 20 cm, the RP2350 has no CAN controller, and there's nothing to arbitrate with one controller.
+    - CAN is too slow for 50 Hz telemetry, and it can't carry encoder counts.
+    - CAN requires a 24 V supply, and it can't coexist with USB.
+    - CAN isn't supported by ROS 2, and it needs a Linux kernel on each node.
+  correct: 0
+- source: f8dad1a09aad
+  question: Why does packing twelve 8-byte commands into one 64-byte CAN FD frame help more than doubling the data rate?
+  options:
+    - The packed frame skips the CRC, saving bits.
+    - Each frame's fixed overhead is sent at the nominal rate and doesn't shrink with the data rate; one frame pays it once instead of twelve times.
+    - A larger payload lets the bus switch to a higher nominal rate.
+    - Doubling the data rate increases bit stuffing, which cancels the gain.
+  correct: 1

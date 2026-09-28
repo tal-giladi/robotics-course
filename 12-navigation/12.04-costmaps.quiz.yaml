@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in 12.04-costmaps.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: e0fbb72797a6
+  question: What do costmap values 253, 254 and 255 mean, and which does a planner never enter?
+  options:
+    - 253 lethal, 254 inscribed, 255 unknown; planners never enter 254, and unknown is always entered
+    - 253 unknown, 254 lethal, 255 inscribed; planners never enter 255, and unknown depends on `allow_unknown`
+    - 253 inscribed, 254 lethal, 255 unknown; planners only avoid 254, since 253 is merely high-cost
+    - 253 inscribed, 254 lethal, 255 unknown; planners never enter ≥ 253, and unknown depends on `allow_unknown`
+  correct: 3
+- source: 75f5d002c30c
+  question: Compute the inscribed and circumscribed radii of a 0.40 × 0.30 m footprint centered on `base_link`, with 0.02 m padding.
+  options:
+    - $r_{\text{in}} = 0.15$ m, $r_{\text{circ}} = 0.250$ m
+    - $r_{\text{in}} = 0.17$ m, $r_{\text{circ}} = 0.278$ m
+    - $r_{\text{in}} = 0.22$ m, $r_{\text{circ}} = 0.278$ m
+    - $r_{\text{in}} = 0.17$ m, $r_{\text{circ}} = 0.390$ m
+  correct: 1
+- source: ef62d3df1e30
+  question: With $r_{\text{in}} = 0.2$ m and $k = 4$, what is the inflation cost at 0.5 m, and where does the cost reach 100?
+  options:
+    - Cost 34 at 0.5 m; cost 100 at about 0.431 m
+    - Cost 75 at 0.5 m; cost 100 at about 0.231 m
+    - Cost 75 at 0.5 m; cost 100 at about 0.431 m
+    - Cost 170 at 0.5 m; cost 100 at about 0.63 m
+  correct: 2
+- source: 7a8488d5a12e
+  question: You halve `cost_scaling_factor` and leave `inflation_radius` at 0.35 m. What happens to paths through a 0.9 m hallway?
+  options:
+    - Costs near walls fall, and the hallway center gets a small cost, so the planner now prefers hugging a wall.
+    - The band now extends to 0.70 m, so the whole hallway gets a gradient and paths move to the center.
+    - Nothing changes at all, because `cost_scaling_factor` only affects the global costmap, not the local one.
+    - Costs near walls rise, but the center (0.45 m from walls) stays 0, so paths only improve if you also raise `inflation_radius`.
+  correct: 3
+- source: 2eb2e3f9c86b
+  question: Why doesn't an unknown cell 0.3 m from a wall get the inflated cost 99?
+  options:
+    - Unknown cells are always treated as lethal, so inflation is skipped for them to save computation time.
+    - Inflation only spreads into cells the LiDAR has cleared, and 0.3 m is below its minimum range.
+    - Inflation only overwrites unknown cells with ≥ 253; writing 99 would mark unexplored space as observed and plannable.
+    - Unknown cells get 99 only in the global costmap; the local costmap keeps them at 255 by design.
+  correct: 2
+- source: 9c8e772234af
+  question: A person walked past; ten seconds later the local costmap still shows lethal cells where they were. Which set lists plausible causes?
+  options:
+    - "`clearing: false`, `raytrace_max_range` shorter than marking range, or the cells are outside the LiDAR's view"
+    - "`inflation_radius` too large, `cost_scaling_factor` too small, or the footprint padding is set too high"
+    - "`allow_unknown: true`, the planner's tolerance too loose, or the global costmap updating too slowly"
+    - "`marking: false`, `obstacle_max_range` too long, or the controller frequency set too high"
+  correct: 0
+- source: 4b29f65072a6
+  question: What does the circumscribed-radius cost (184 for karmel with $k = 5$) let a controller skip?
+  options:
+    - The full footprint check for cells above 184, since collision there is already certain
+    - The full footprint check for cells below 184, since no heading can collide there
+    - Replanning for cells below 184, since the global path is guaranteed valid there
+    - Inflation for cells below 184, since they are always farther than the inflation radius
+  correct: 1

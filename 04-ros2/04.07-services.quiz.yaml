@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in 04.07-services.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: f9bbdac503b7
+  question: Which three things does a gRPC unary call give you that a ROS 2 service doesn't?
+  options:
+    - Typed requests, typed responses and discovery.
+    - Status codes, deadlines and connection-level failure detection.
+    - Multicast, shared memory and zero-copy transport.
+    - Feedback, cancellation and a result stream.
+  correct: 1
+- source: fcbce44076e2
+  question: Why does `client.call()` in a timer callback deadlock with `rclpy.spin(node)`?
+  options:
+    - The service server is on the same node, and nodes can't call themselves.
+    - "`call()` holds the GIL, so the server can't run its handler."
+    - "`call()` blocks the executor's only thread waiting for a response that only that same thread could process."
+    - The timer fires again before the response arrives, cancelling the request.
+  correct: 2
+- source: 26f3583049f0
+  question: Voltage arrives at 20 Hz (queue depth 10) and a safety timer runs at 50 Hz. A service handler blocks for 0.8 s. How many timer activations are missed, and how many voltage messages dropped?
+  options:
+    - 40 timer activations; about 6 messages dropped
+    - 16 timer activations; about 10 messages dropped
+    - 40 timer activations; 16 messages dropped
+    - 4 timer activations; none dropped
+  correct: 0
+- source: cf30bcab2426
+  question: The client times out after 5 s and the operator retries "lower threshold by 0.1 V". The server was just slow. Starting at 11.0 V, what is the final threshold?
+  options:
+    - 10.9 V, because the timeout cancelled the first request.
+    - 11.0 V, because both requests were rejected as duplicates.
+    - 10.9 V, because the server ignores repeated identical requests.
+    - "10.8 V: both requests are processed, since a timeout doesn't cancel the first."
+  correct: 3
+- source: ddebfac25aa8
+  question: '`ros2 service list` shows the service and the type matches, yet the client says "not available after 5 s". What do you check first?'
+  options:
+    - The exact resolved name from the client's perspective (namespace/remapping).
+    - The server's CPU temperature.
+    - The service's QoS depth.
+    - Whether the service type was built in Release mode.
+  correct: 0
+- source: 1a719514938f
+  question: "Service, parameter, topic or action: (a) reset odometry, (b) PID gain kp = 1.2, (c) rotate 90° in place, (d) current wheel speeds?"
+  options:
+    - (a) topic, (b) service, (c) action, (d) parameter
+    - (a) service, (b) parameter, (c) action, (d) topic
+    - (a) action, (b) parameter, (c) service, (d) topic
+    - (a) service, (b) topic, (c) action, (d) parameter
+  correct: 1

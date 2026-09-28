@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.10-sensor-data-in-ros2.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 15c9bb02c6fc
+  question: A topic runs at exactly 100.00 Hz with 0.0 ms jitter, and `sensor_check.py` reports a stamp age of 1.79e12 ms. What is wrong?
+  options:
+    - The sensor is extremely slow and buffers data for weeks
+    - "Two clocks: sim-time stamps checked against the wall clock"
+    - The driver stamps in nanoseconds but declares milliseconds
+    - The QoS history depth is too large and replays old data
+  correct: 1
+- source: 24e21ea6e3a9
+  question: You pair a 10 Hz scan with a 100 Hz IMU. What slop do you use, and what does it cost at 1 rad/s?
+  options:
+    - About 5 ms; nearly all scans pair with zero heading error
+    - About 100 ms; mean error about 3° of heading at 1 rad/s
+    - About 50 ms; mean pairing error about 0.31° of heading
+    - About 2 ms; all scans pair with a mean error of 0.07°
+  correct: 2
+- source: 2a55f204473d
+  question: A publisher offers BEST_EFFORT; your subscriber requests RELIABLE. What happens, and how do you find out in 30 seconds?
+  options:
+    - Nothing is ever delivered; `ros2 topic info -v` shows both QoS profiles
+    - Messages arrive but some are dropped; `ros2 topic hz` shows the loss
+    - The publisher upgrades to RELIABLE; `ros2 node info` confirms it
+    - Messages arrive late; `ros2 topic delay` shows the added latency
+  correct: 0
+- source: 9874d117690d
+  question: You `ros2 bag play` a bag recorded yesterday and run your normal stack. What does Nav2 do?
+  options:
+    - Plans normally, since bag playback rewrites stamps to the present
+    - Plans on yesterday's map, ignoring every current sensor message
+    - Crashes, since bag messages lack a valid `header.frame_id`
+    - Discards all data as too old and refuses to plan; use `--clock`
+  correct: 3
+- source: 1fbe96252c37
+  question: Why is a 1.63 MB `PointCloud2` dropped at 5 Hz while a 0.20 MB depth image from the same node arrives at 15 Hz?
+  options:
+    - Over BEST_EFFORT UDP, losing any fragment loses the whole large message
+    - Point clouds get lower DDS priority than images on every network
+    - The cloud needs TF for every point, which throttles its publish rate
+    - RViz subscribes to clouds at 5 Hz by default, which caps delivery
+  correct: 0
+- source: cabd57f549b0
+  question: What does an all-zero covariance mean, and what does `[-1, 0, 0, …]` mean?
+  options:
+    - All zeros is perfect certainty; `-1` marks an estimate with infinite variance
+    - All zeros is "not reported"; `-1` means the covariance is unknown
+    - All zeros is "unknown"; `[-1, …]` (REP-145) means "not reported at all"
+    - Both mean the same thing; `-1` is just the older ROS 1 convention
+  correct: 2
+- source: a7c591d89763
+  question: Your LiDAR and camera agree when the robot is still and drift apart as you speed up. Calibration or timing?
+  options:
+    - "Calibration: the extrinsic transform is off by a few degrees"
+    - "Timing: an error that scales with motion is a delay, not geometry"
+    - "Calibration: the camera intrinsics change as the robot vibrates"
+    - "Neither: it is motion blur, which only a faster shutter fixes"
+  correct: 1
+- source: f2eaf6a3768f
+  question: "`ros2 topic hz /imu` reports 98 Hz and your controller keeps hiccuping. What do you look at next?"
+  options:
+    - The average rate over a longer window, to confirm the 98 Hz figure
+    - The IMU's covariance values, to check they are not all zeros
+    - The QoS depth, to make sure it is set to at least 100 messages
+    - "The worst gap: one 200 ms stall per second still averages ~98 Hz"
+  correct: 3

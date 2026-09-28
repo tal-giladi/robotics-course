@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in 09.03-dead-reckoning-integration.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 2480264cdd46
+  question: Which is the midpoint (RK2) update for $x$ and $y$?
+  options:
+    - $x \mathrel{+}= \Delta s\cos\theta$, $y \mathrel{+}= \Delta s\sin\theta$, then $\theta \mathrel{+}= \Delta\theta$
+    - $x \mathrel{+}= \Delta s\cos(\theta + \Delta\theta)$, $y \mathrel{+}= \Delta s\sin(\theta + \Delta\theta)$, then $\theta \mathrel{+}= \Delta\theta$
+    - $x \mathrel{+}= \Delta s\cos(\theta + \Delta\theta/2)$, $y \mathrel{+}= \Delta s\sin(\theta + \Delta\theta/2)$, then $\theta \mathrel{+}= \Delta\theta$
+    - $x \mathrel{+}= \Delta s\sin(\theta + \Delta\theta/2)$, $y \mathrel{+}= \Delta s\cos(\theta + \Delta\theta/2)$, then $\theta \mathrel{+}= \Delta\theta$
+  correct: 2
+- source: 6af5f4bcf57b
+  question: Why does halving the time step halve Euler's error over a fixed trajectory, when each step's error is $\propto \Delta t^2$?
+  options:
+    - Round-off error grows as the steps shrink, cancelling half the gain
+    - $T/\Delta t$ steps of $\Delta t^2$ error each sum to $\propto T\,\Delta t$
+    - Euler's per-step error is actually $\propto \Delta t$, not $\Delta t^2$
+    - Errors of successive steps cancel in pairs, halving the total
+  correct: 1
+- source: 41232d99aeb1
+  question: A robot drives $\Delta s = 0.2$ m with $\Delta\theta = 1.0$ rad in one sample. How much shorter is the exact displacement than the midpoint one?
+  options:
+    - About 8.2 mm shorter (0.1918 m)
+    - About 0.8 mm shorter (0.1992 m)
+    - About 24 mm shorter (0.176 m)
+    - "Not shorter: both are exactly 0.2 m"
+  correct: 0
+- source: 54b124e6c787
+  question: You switch karmel's odometry from Euler to the exact arc and drive a 3 m straight corridor and back. How much does the end-point error change?
+  options:
+    - It halves, since the exact arc is second order
+    - It drops to zero, since the exact arc has no error
+    - It grows, since the exact arc amplifies slip
+    - "Almost not at all: on straights all methods agree"
+  correct: 3
+- source: ea103b01705c
+  question: Why is the exact arc not exact on a real robot at 5 Hz?
+  options:
+    - It uses floating-point trigonometry, which is approximate
+    - It assumes constant wheel speeds within each 0.2 s sample
+    - It ignores the wheelbase, which changes during turns
+    - It needs a gyro to be exact, which karmel lacks at 5 Hz
+  correct: 1
+- source: ac15090e6290
+  question: "`exact_step` is correct for turns but returns `(nan, nan, 0.0)` when driving straight. What is the bug and fix?"
+  options:
+    - "`atan2(0, 0)` is undefined when straight; add a small offset to θ first"
+    - The wheel speeds overflow when equal; clamp them before each step
+    - $R = v/\omega$ divides by zero; branch to a straight move when $\omega \approx 0$
+    - "`cos(0)` is taken in degrees; convert θ to radians before the step"
+  correct: 2

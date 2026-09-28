@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 07.11-sensor-troubleshooting.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 9c86bb8bbbec
+  question: "`/scan` publishes at 10 Hz and RViz shows nothing, with no error anywhere. Which layers, and what is your first command?"
+  options:
+    - Layers 1–2 (hardware); first check the USB cable with `lsusb`
+    - Layer 3 (driver); first restart the LiDAR driver node
+    - Layers 4–5; first `ros2 topic info -v /scan` to compare QoS
+    - Layers 4–5; first `ros2 topic hz /scan` to confirm the rate
+  correct: 2
+- source: d83939312dff
+  question: Your 360-beam LiDAR "misses" a 3 cm chair leg at 2.5 m. Fault or physics?
+  options:
+    - "Physics: beams are 4.4 cm apart there, wider than the leg"
+    - "Fault: a 1° LiDAR resolves 3 cm at any range up to 6 m"
+    - "Physics: the leg is below the LiDAR's minimum range"
+    - "Fault: the driver is dropping every other beam in the scan"
+  correct: 0
+- source: daeb44b813b5
+  question: Why bisect at the message layer rather than start at the device?
+  options:
+    - Hardware checks need a multimeter, which is rarely at hand
+    - The message layer is where most sensor bugs are found in practice
+    - Device-level checks can damage the sensor if done while running
+    - '"Is data arriving?" splits the five layers in half in one command'
+  correct: 3
+- source: 28c7ba096548
+  question: "`sensor_check.py` passes every check and your SLAM map is mirrored. What now?"
+  options:
+    - Retune slam_toolbox; a mirrored map is a scan-matching failure
+    - "Test known geometry: an object 1 m left should be near index 270"
+    - Replace the LiDAR; a mirrored scan means the motor spins backward
+    - Re-run `sensor_check.py` with stricter rate and jitter thresholds
+  correct: 1
+- source: bceb9d0b3551
+  question: A sensor works on the bench and fails on the robot. Which three layer-2 causes (with tests) are right?
+  options:
+    - QoS mismatch, wrong frame, missing `use_sim_time`; test with `ros2 topic info`
+    - Wrong driver version, wrong baud rate, wrong udev rule; reinstall each
+    - USB current limit, motor EMI, vibration or a poor cable; test each in isolation
+    - Firmware bugs, calibration drift, lens dirt; re-flash, recalibrate, clean
+  correct: 2
+- source: 36cc5ff4bf18
+  question: Rate 29.4 Hz, worst gap 310 ms, stamp age p95 180 ms. How many bugs, and what are they?
+  options:
+    - "One: the network is congested, causing both the gap and the age"
+    - "None: those numbers are normal for a USB camera on a Pi"
+    - "One: the driver stamps on publish, which explains both symptoms"
+    - "Two: something blocking causes the gap; the age is latency"
+  correct: 3
+- source: 23ab75c2a22d
+  question: What makes `left-handed` and `sigma-not-var` harder to find than `zero-stamp`?
+  options:
+    - They are self-consistent and plausible; only a physical comparison finds them
+    - They only occur on real hardware, never in simulation or recorded bags
+    - They cause crashes in consumers rather than warnings, which hides them
+    - They only appear after the sensor warms up for several minutes
+  correct: 0
+- source: 22a2af0289f6
+  question: Your fix worked yesterday and the robot is broken again after a reboot. What kind of fix did you make?
+  options:
+    - "A wrong one: the real bug was intermittent and happened to hide"
+    - A non-persistent one, like `chmod` or a runtime `param set`
+    - "A hardware one: a connector that loosened again overnight"
+    - "A version one: an automatic update overwrote the driver"
+  correct: 1

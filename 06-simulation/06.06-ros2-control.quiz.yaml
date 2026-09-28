@@ -1,0 +1,67 @@
+# Multiple-choice version of the quiz in 06.06-ros2-control.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 2999656c9907
+  question: What is the difference between a state interface and a command interface, and what rule does the resource manager enforce?
+  options:
+    - State interfaces are read-only and shared; a command interface has at most one active claimant
+    - Both can be shared freely; the resource manager averages conflicting commands from controllers
+    - State interfaces are claimed by one controller only; command interfaces are shared by all
+    - A command interface may be claimed by several controllers, and the last one to write wins
+  correct: 0
+- source: 576dd13aec00
+  question: "`wheel_separation` 0.200 m, `wheel_radius` 0.045 m. Command $v = 0.3$ m/s, $\\omega = -1.0$ rad/s. What are the wheel speeds?"
+  options:
+    - Left 4.444 rad/s, right 8.889 rad/s; both under 17 rad/s
+    - Left 11.11 rad/s, right 2.222 rad/s; both under 17 rad/s
+    - Left 8.889 rad/s, right 4.444 rad/s; both under 17 rad/s
+    - Left 8.889 rad/s, right −4.444 rad/s; both under 17 rad/s
+  correct: 2
+- source: c40c4027d564
+  question: "`/odom` publishes at 10 Hz even though `publish_rate: 50.0` is set. Where does the 10 come from?"
+  options:
+    - The Gazebo physics step, which is fixed at 10 Hz for every world
+    - "`controller_manager: update_rate`, which caps how often it is called"
+    - The bridge's default rate limit, applied to every `/odom` message
+    - The RViz display rate, which throttles any topic it subscribes to
+  correct: 1
+- source: b53b27bee8d8
+  question: "You set `update_rate: 2` on the real robot with `watchdog_ms: 300` on the Pico. What happens on the robot, and in Gazebo?"
+  options:
+    - "Both behave the same: the robot drives smoothly, just with a slower control loop"
+    - The robot stops completely; Gazebo also stops, because its watchdog trips too
+    - The robot drives normally; Gazebo judders because it emulates a 300 ms watchdog
+    - The robot judders in 300 ms bursts; Gazebo, with no watchdog, drives almost normally
+  correct: 3
+- source: 10b5f3bd6b78
+  question: Both controllers are active, `/joint_states` publishes, you send `TwistStamped` at 20 Hz, and the wheels do not turn. Which hypothesis order is right?
+  options:
+    - (1) Stale stamps from `use_sim_time` (check the log), (2) wrong topic, (3) friction
+    - (1) Rebuild the hardware plugin, (2) reinstall ros2_control, (3) check the log
+    - (1) Friction, (2) wheel inertia, (3) `use_sim_time`, since physics comes first
+    - (1) QoS on `/joint_states`, (2) missing `/clock` bridge, (3) wrong wheel radius
+  correct: 0
+- source: d12ae4b56636
+  question: Why does `KarmelSystem::read()` return `ERROR` when telemetry is older than 500 ms, instead of reusing the last value?
+  options:
+    - Reusing a previous value is not permitted by the ros2_control hardware API
+    - Frozen positions make odometry think the robot stopped; `ERROR` stops it safely
+    - Returning `ERROR` makes the controller request fresh data again immediately
+    - The last value is cleared from memory after 500 ms to save RAM on the Pi
+  correct: 1
+- source: ee277d5f50c5
+  question: "`list_hardware_components` shows `0 Hz` and an empty plugin name in simulation, but `50 Hz` and `karmel_hardware/KarmelSystem` on the robot. Is the simulation broken?"
+  options:
+    - "Yes: the hardware plugin failed to load, so the controllers are running open-loop"
+    - "Yes: the update rate must also be set explicitly in the Gazebo world file"
+    - "No: `gz_ros2_control` just skips those fields; interfaces and claims are correct"
+    - "No: simulation always runs controllers at 0 Hz until the first command arrives"
+  correct: 2
+- source: 3be9bf1de2a3
+  question: Why is karmel's hardware component written in C++ when the rest of its ROS 2 code is Python?
+  options:
+    - ros2_control does not support hardware components written in Python at all
+    - The Pico firmware can only exchange serial frames with code written in C++
+    - C++ is required to parse the URDF and the `<ros2_control>` tag at startup
+    - It has a hard deadline feeding a watchdog and must not allocate, block or GC
+  correct: 3

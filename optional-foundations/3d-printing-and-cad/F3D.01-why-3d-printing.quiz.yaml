@@ -1,0 +1,51 @@
+# Multiple-choice version of the quiz in F3D.01-why-3d-printing.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 6a2e772dd2ae
+  question: Which karmel part is a poor candidate for 3D printing, and why?
+  options:
+    - The VL53L1X bracket, since sensor mounts need metal for accuracy
+    - The camera mount, since printed parts vibrate too much
+    - The Pi/Pico tray, since PLA can't hold screws
+    - The 250 × 200 mm chassis deck, since it warps and is too big for small printers
+  correct: 3
+- source: 4f3ac230d850
+  question: "A 12 g PETG camera mount at ₪120/kg: what is the material cost?"
+  options:
+    - ₪14.40
+    - ₪0.14
+    - ₪1.44
+    - ₪12.00
+  correct: 2
+- source: 0233cf2a2604
+  question: A printer costs ₪1,550. A service charges ₪60 per print, and a print costs ₪2 at home. How many prints until the printer pays off?
+  options:
+    - About 26
+    - About 27
+    - About 25
+    - About 775
+  correct: 1
+- source: 6327e05f7100
+  question: Why does a design that needs three revisions change the decision much more than a cheaper filament does?
+  options:
+    - Revisions multiply the service cost while adding almost nothing at home; filament is a tiny share
+    - Revisions wear out the printer faster, which cheap filament cannot offset
+    - Cheaper filament prints slower, so it cancels any savings on revisions
+    - Services charge a fixed fee per design, so revisions are free there
+  correct: 0
+- source: b92fcd4c1d20
+  question: Why is the SO-101 arm the point where a printer usually starts paying off?
+  options:
+    - It needs parts larger than any print service can produce
+    - Its many printed parts break and get modified, and each reprint costs only filament at home
+    - Print services refuse to print robot arm parts for liability reasons
+    - Its servos only fit parts printed on the same printer model
+  correct: 1
+- source: 68a1857ab6dc
+  question: A friend found an A1 mini for ₪750 on a marketplace listing. What should they ask before buying?
+  options:
+    - Whether it prints PLA and whether its slicer software is free to download
+    - Whether it supports Wi-Fi and whether it has a camera built in
+    - Whether it is an official or region-locked grey import, and if it has local warranty
+    - Whether it was calibrated recently and how many hours the fans have run
+  correct: 2

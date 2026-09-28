@@ -1,0 +1,59 @@
+# Multiple-choice version of the quiz in FE.18-capacitors-diodes.md (question N = question N there).
+# The lesson's model answer is shown as the explanation. `source` fingerprints the original
+# question + answer; if the lesson changes, the site flags the question for review.
+- source: 8585075d7f0b
+  question: What does a 100 nF capacitor next to a chip's supply pin do?
+  options:
+    - Stores energy to keep the chip running for several seconds after power loss
+    - Blocks DC from the regulator so only clean AC reaches the chip
+    - Supplies fast current bursts locally so the chip's supply doesn't dip (decoupling)
+    - Raises the supply voltage slightly to compensate for wire resistance
+  correct: 2
+- source: 0d2f4930ef97
+  question: A 3 A current step lasts 20 µs. How much does a 220 µF capacitor droop if it supplies it alone?
+  options:
+    - About 0.27 V
+    - About 2.7 V
+    - About 0.027 V
+    - About 0.66 V
+  correct: 0
+- source: 732117c824e8
+  question: Why does switching off a relay coil create a high voltage spike?
+  options:
+    - Capacitance in the coil releases its stored charge all at once when switched off
+    - Inductance resists current change ($V = L\,dI/dt$); a sudden stop makes a huge $dI/dt$
+    - The coil's resistance rises sharply when current stops, raising the voltage
+    - The switch contacts generate the spike as they arc apart, not the coil
+  correct: 1
+- source: 8429dc99f1fc
+  question: Where does a flyback diode go across a coil switched by a low-side MOSFET, and why doesn't it conduct normally?
+  options:
+    - Across the coil, anode to +12 V; normally forward-biased, it limits the coil current
+    - Across the MOSFET, cathode to drain; normally reverse-biased, it conducts when the gate turns on
+    - In series with the coil, cathode to drain; it blocks reverse current from the battery
+    - Across the coil, cathode to +12 V; normally reverse-biased, it conducts when the drain swings above +12 V
+  correct: 3
+- source: dc6f0d1b4ab5
+  question: You use a 1N5819 Schottky in series with karmel's 10 A fused battery line for reverse-polarity protection; the robot draws 5 A peaks. What goes wrong?
+  options:
+    - It conducts backward at 5 A, so it gives no protection at all
+    - It drops only 0.1 V at 5 A, which is fine; nothing goes wrong
+    - "It is a 1 A diode: at 5 A it dissipates ~3 W, overheats and fails"
+    - It blows the 10 A fuse, because Schottky diodes short at high current
+  correct: 2
+- source: 179af0ff1df2
+  question: Do the DRV8874 carriers on karmel need external flyback diodes across the motors?
+  options:
+    - Yes; without them every motor stop would destroy the driver's MOSFETs
+    - Yes, but only on the left motor, which shares its ground with the encoders
+    - No, because DC gear motors have no inductance worth protecting against
+    - No; MOSFET body diodes and the driver's recirculation give a safe path, plus a bulk cap
+  correct: 3
+- source: 4b5dc0f9bae1
+  question: What is the time constant and cutoff of a 10 k resistor with a 1 µF capacitor, and would it filter 20 kHz PWM noise from a slow sensor signal?
+  options:
+    - 10 ms and 15.9 Hz; yes
+    - 10 ms and 100 Hz; no
+    - 10 µs and 15.9 kHz; no
+    - 1 ms and 159 Hz; yes
+  correct: 0
