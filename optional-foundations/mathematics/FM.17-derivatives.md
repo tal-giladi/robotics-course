@@ -476,6 +476,10 @@ $$x = l_1\cos q_1 + l_2\cos(q_1+q_2), \qquad y = l_1\sin q_1 + l_2\sin(q_1+q_2)$
 
 so the tip is at $(0.10392,\ 0.16)$ m.
 
+**Try it.** Move the shoulder and the elbow and watch the elbow, the tip and the Jacobian numbers update.
+
+<iframe src="optional-foundations/mathematics/widgets/fm17-arm.html?exp=0" title="2-link arm, Move the shoulder and the elbow and watch the elbow, the tip and the Jacobian numbers update." style="width:100%;height:520px;border:0" loading="lazy"></iframe>
+
 **Experiment 1: turn only the shoulder.** Increase $q_1$ by 0.01 rad (about 0.57°), keep $q_2$, and recompute the tip with the same formulas:
 
 ```text
@@ -487,6 +491,10 @@ divide by the 0.01 rad nudge:  ∂x/∂q1 ≈ -0.16 m/rad,  ∂y/∂q1 ≈ +0.10
 
 The unit m/rad means "metres of tip movement per radian of joint rotation". Why left and up: turning the shoulder swings the whole arm, rigidly, around the origin. The tip moves along a circle around the shoulder, perpendicular to the line from the shoulder to the tip. That line is $\sqrt{0.10392^2 + 0.16^2} = 0.19$ m long, so 0.01 rad moves the tip $0.19 \times 0.01 = 1.9$ mm (arc length $s = r\theta$, [FM.02](FM.02-angles-and-radians.md)), split into 1.6 mm left and 1.0 mm up. The exact values are $-0.16$ and $+0.10392$: the tip's coordinates $(x, y) = (0.10392, 0.16)$ turned into $(-y, x)$, which is the shoulder-to-tip arrow rotated 90° to the left.
 
+**Try it.** Experiment 1 animated: nudge only the shoulder by any amount and compare the real tip move with the Jacobian prediction.
+
+<iframe src="optional-foundations/mathematics/widgets/fm17-arm.html?exp=1" title="2-link arm, Experiment 1 animated: nudge only the shoulder by any amount and compare the real tip move with the Jacobian prediction." style="width:100%;height:520px;border:0" loading="lazy"></iframe>
+
 **Experiment 2: turn only the elbow.** Predict first: now only link 2 swings, around the elbow, and link 2 points straight up. The tip moves perpendicular to link 2, so straight left:
 
 ```text
@@ -497,6 +505,10 @@ divide by the 0.01 rad nudge:  ∂x/∂q2 ≈ -0.10 m/rad,  ∂y/∂q2 ≈ 0
 ```
 
 The circle's radius is now only link 2 (0.10 m), so the same 0.01 rad moves the tip just 1 mm. The tiny $\Delta y$ comes from the curve of the circle; it shrinks much faster than the nudge, and the exact derivative is 0.
+
+**Try it.** Experiment 2 animated: nudge only the elbow.
+
+<iframe src="optional-foundations/mathematics/widgets/fm17-arm.html?exp=2" title="2-link arm, Experiment 2 animated: nudge only the elbow." style="width:100%;height:520px;border:0" loading="lazy"></iframe>
 
 **Build the Jacobian column by column.** Each column is what *one joint* does to the tip; the first row is the effect on $x$, the second on $y$:
 

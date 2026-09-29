@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2-link arm Jacobian</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1f2933; --muted: #6b7280; --grid: #eef0f3; --axis: #c7ccd4;
+    --link1: #c2410c; --link2: #2563eb; --ghost: #b8bec8; --actual: #16a34a; --pred: #9333ea;
+    --panel: #f7f8fa; --border: #e3e6eb;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 14px/1.45 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 14px; padding: 10px; }
+  svg { flex: 1 1 360px; min-width: 280px; max-width: 520px; background: var(--bg);
+        border: 1px solid var(--border); border-radius: 8px; }
+  .side { flex: 1 1 300px; min-width: 260px; }
+  .ctl { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+  .ctl label { display: block; font-weight: 600; margin-bottom: 4px; }
+  .ctl input[type=range] { width: 100%; }
+  .row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  button { font: inherit; padding: 4px 10px; border: 1px solid var(--border); border-radius: 6px;
+           background: #fff; cursor: pointer; }
+  button:hover { border-color: var(--link1); }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  td { padding: 3px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  td:first-child { color: var(--muted); }
+  td.num { text-align: right; font-family: Consolas, "SF Mono", monospace; white-space: nowrap; }
+  .hi td { background: #fff7ed; }
+  .note { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  .key span { display: inline-block; margin-right: 10px; font-size: 12.5px; }
+  .sw { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg id="view" viewBox="-0.20 -0.235 0.40 0.29" aria-label="Arm drawing"></svg>
+  <div class="side">
+    <div class="ctl" id="controls"></div>
+    <table id="nums"></table>
+    <div class="note" id="note"></div>
+  </div>
+</div>
+<script>
+(function () {
+  var L1 = 0.12, L2 = 0.10, Q1 = Math.PI / 6, Q2 = Math.PI / 3;
+  var mode = (new URLSearchParams(location.search).get('exp') || '0');
+  var svg = document.getElementById('view');
+  var NS = 'http://www.w3.org/2000/svg';
+  var deg = function (r) { return r * 180 / Math.PI; };
+  var f = function (v, n) { n = n === undefined ? 5 : n; var s = v.toFixed(n); return (v >= 0 ? '+' : '') + s; };
+  var fp = function (v, n) { return v.toFixed(n === undefined ? 5 : n); };
+
+  function fk(q1, q2) {
+    var e = [L1 * Math.cos(q1), L1 * Math.sin(q1)];
+    return { elbow: e, tip: [e[0] + L2 * Math.cos(q1 + q2), e[1] + L2 * Math.sin(q1 + q2)] };
+  }
+  function jac(q1, q2) {
+    var s1 = Math.sin(q1), c1 = Math.cos(q1), s12 = Math.sin(q1 + q2), c12 = Math.cos(q1 + q2);
+    return [[-L1 * s1 - L2 * s12, -L2 * s12], [L1 * c1 + L2 * c12, L2 * c12]];
+  }
+
+  // ---- drawing helpers (y is flipped: the SVG uses y down, the arm uses y up) ----
+  function el(name, attrs, parent) {
+    var n = document.createElementNS(NS, name);
+    for (var k in attrs) { n.setAttribute(k, attrs[k]); }
+    (parent || svg).appendChild(n);
+    return n;
+  }
+  function P(p) { return [p[0], -p[1]]; }
+  function line(a, b, attrs) { a = P(a); b = P(b);
+    return el('line', Object.assign({ x1: a[0], y1: a[1], x2: b[0], y2: b[1] }, attrs)); }
+  function dot(p, r, fill) { p = P(p); return el('circle', { cx: p[0], cy: p[1], r: r, fill: fill }); }
+  function text(p, s, attrs) { p = P(p);
+    var t = el('text', Object.assign({ x: p[0], y: p[1], 'font-size': 0.0105, fill: '#1f2933' }, attrs));
+    t.textContent = s; return t; }
+  function arrow(a, b, color) {
+    var dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy);
+    if (len < 1e-5) { return; }
+    line(a, b, { stroke: color, 'stroke-width': 0.0028, 'stroke-linecap': 'round' });
+    var h = Math.min(0.009, len * 0.5), ux = dx / len, uy = dy / len;
+    var l = [b[0] - h * ux + h * 0.5 * uy, b[1] - h * uy - h * 0.5 * ux];
+    var r = [b[0] - h * ux - h * 0.5 * uy, b[1] - h * uy + h * 0.5 * ux];
+    var pb = P(b), pl = P(l), pr = P(r);
+    el('polygon', { points: [pb, pl, pr].map(function (p) { return p.join(','); }).join(' '), fill: color });
+  }
+  function arc(c, r, a0, a1, attrs) {
+    var n = 60, pts = [];
+    for (var i = 0; i <= n; i++) { var a = a0 + (a1 - a0) * i / n; pts.push(P([c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)]).join(',')); }
+    el('polyline', Object.assign({ points: pts.join(' '), fill: 'none' }, attrs));
+  }
+  function grid() {
+    for (var x = -0.2; x <= 0.2001; x += 0.05) {
+      line([x, -0.05], [x, 0.235], { stroke: '#eef0f3', 'stroke-width': 0.001 });
+      if (Math.abs(x) > 1e-9) text([x - 0.006, -0.018], (x * 100).toFixed(0) + ' cm', { 'font-size': 0.008, fill: '#9aa1ab' });
+    }
+    for (var y = -0.05; y <= 0.2351; y += 0.05) {
+      line([-0.2, y], [0.2, y], { stroke: '#eef0f3', 'stroke-width': 0.001 });
+      if (Math.abs(y) > 1e-9) text([-0.197, y + 0.002], (y * 100).toFixed(0) + ' cm', { 'font-size': 0.008, fill: '#9aa1ab' });
+    }
+    line([-0.2, 0], [0.2, 0], { stroke: '#c7ccd4', 'stroke-width': 0.0012 });
+    line([0, -0.05], [0, 0.235], { stroke: '#c7ccd4', 'stroke-width': 0.0012 });
+    text([0.186, 0.004], 'x', { fill: '#9aa1ab' });
+    text([0.004, 0.225], 'y', { fill: '#9aa1ab' });
+  }
+  function drawArm(k, ghost) {
+    var w = ghost ? 0.004 : 0.007;
+    line([0, 0], k.elbow, { stroke: ghost ? '#b8bec8' : '#c2410c', 'stroke-width': w, 'stroke-linecap': 'round',
+                            'stroke-dasharray': ghost ? '0.006 0.005' : 'none' });
+    line(k.elbow, k.tip, { stroke: ghost ? '#b8bec8' : '#2563eb', 'stroke-width': w, 'stroke-linecap': 'round',
+                           'stroke-dasharray': ghost ? '0.006 0.005' : 'none' });
+    dot([0, 0], 0.006, ghost ? '#b8bec8' : '#1f2933');
+    dot(k.elbow, ghost ? 0.004 : 0.005, ghost ? '#b8bec8' : '#1f2933');
+    dot(k.tip, ghost ? 0.004 : 0.006, ghost ? '#b8bec8' : '#16a34a');
+  }
+
+  // ---- state ----
+  var st = { q1: Q1, q2: Q2, dq: 0.01, playing: false, t: 0 };
+  var controls = document.getElementById('controls');
+  var nums = document.getElementById('nums');
+  var note = document.getElementById('note');
+
+  if (mode === '0') {
+    controls.innerHTML =
+      '<label>Shoulder q1: <span id="q1v"></span></label><input id="q1" type="range" min="-30" max="150" step="0.5" value="30">' +
+      '<label style="margin-top:8px">Elbow q2 (relative to link 1): <span id="q2v"></span></label><input id="q2" type="range" min="-150" max="150" step="0.5" value="60">' +
+      '<div class="row"><button id="play">▶ Wave the arm</button><button id="reset">Back to 30°, 60°</button></div>';
+    note.textContent = 'Drag the sliders. The tip position is forward kinematics: walk along link 1, then along link 2. ' +
+      'The Jacobian numbers change with every pose: they are local.';
+  } else {
+    var which = mode === '1' ? 'shoulder q1' : 'elbow q2';
+    controls.innerHTML =
+      '<label>Nudge the ' + which + ' by Δq = <span id="dqv"></span></label>' +
+      '<input id="dq" type="range" min="-0.6" max="0.6" step="0.005" value="0.01">' +
+      '<div class="row"><button id="play">▶ Animate</button><button data-dq="0.5">0.5 rad</button>' +
+      '<button data-dq="0.1">0.1 rad</button><button data-dq="0.01">0.01 rad (the lesson)</button></div>' +
+      '<div class="key" style="margin-top:8px">' +
+      '<span><i class="sw" style="background:#b8bec8"></i>before</span>' +
+      '<span><i class="sw" style="background:#16a34a"></i>real tip move</span>' +
+      '<span><i class="sw" style="background:#9333ea"></i>Jacobian prediction</span></div>';
+    note.innerHTML = mode === '1'
+      ? 'Turning the shoulder swings the <b>whole arm rigidly</b> around the origin, so the tip moves on a circle of radius 0.19 m around the shoulder. ' +
+        'Make Δq big to see the circle, then small (0.01): the ratio Δx/Δq settles at the exact derivative −0.16, and the purple straight-line prediction meets the green real move.'
+      : 'Turning the elbow swings <b>only link 2</b> around the elbow, so the tip moves on a smaller circle (radius 0.10 m). Link 2 points straight up, so the tip starts moving straight left: ' +
+        'Δy/Δq goes to 0 as Δq gets small, and Δx/Δq settles at −0.10.';
+  }
+
+  function render() {
+    while (svg.firstChild) { svg.removeChild(svg.firstChild); }
+    grid();
+    var rows = [];
+    if (mode === '0') {
+      var k = fk(st.q1, st.q2), J = jac(st.q1, st.q2);
+      arc([0, 0], 0.035, 0, st.q1, { stroke: '#c2410c', 'stroke-width': 0.0012 });
+      text([0.042 * Math.cos(st.q1 / 2), 0.042 * Math.sin(st.q1 / 2)], 'q1', { fill: '#c2410c' });
+      drawArm(k, false);
+      text([k.tip[0] + 0.008, k.tip[1] + 0.004], 'tip', { fill: '#16a34a' });
+      text([k.elbow[0] + 0.008, k.elbow[1] - 0.006], 'elbow', {});
+      document.getElementById('q1v').textContent = deg(st.q1).toFixed(1) + '° = ' + fp(st.q1, 3) + ' rad';
+      document.getElementById('q2v').textContent = deg(st.q2).toFixed(1) + '° = ' + fp(st.q2, 3) + ' rad';
+      rows = [
+        ['link 2 points at q1 + q2', deg(st.q1 + st.q2).toFixed(1) + '°'],
+        ['elbow = (l1·cos q1, l1·sin q1)', '(' + fp(k.elbow[0]) + ', ' + fp(k.elbow[1]) + ')'],
+        ['tip = elbow + (l2·cos(q1+q2), l2·sin(q1+q2))', '(' + fp(k.tip[0]) + ', ' + fp(k.tip[1]) + ')'],
+        ['∂x/∂q1 , ∂y/∂q1 (shoulder column)', f(J[0][0], 4) + ' , ' + f(J[1][0], 4)],
+        ['∂x/∂q2 , ∂y/∂q2 (elbow column)', f(J[0][1], 4) + ' , ' + f(J[1][1], 4)]
+      ];
+    } else {
+      var dq = st.dq, joint = mode === '1' ? 0 : 1;
+      var k0 = fk(Q1, Q2), k1 = joint === 0 ? fk(Q1 + dq, Q2) : fk(Q1, Q2 + dq), J0 = jac(Q1, Q2);
+      var col = [J0[0][joint], J0[1][joint]];
+      var c = joint === 0 ? [0, 0] : k0.elbow;
+      var r = Math.hypot(k0.tip[0] - c[0], k0.tip[1] - c[1]);
+      var a0 = Math.atan2(k0.tip[1] - c[1], k0.tip[0] - c[0]);
+      arc(c, r, a0 - 0.7, a0 + 0.7, { stroke: '#d6dae0', 'stroke-width': 0.0012, 'stroke-dasharray': '0.004 0.004' });
+      arc(c, r, a0, a0 + dq, { stroke: '#16a34a', 'stroke-width': 0.0018 });
+      drawArm(k0, true);
+      drawArm(k1, false);
+      var dx = k1.tip[0] - k0.tip[0], dy = k1.tip[1] - k0.tip[1];
+      var pred = [k0.tip[0] + col[0] * dq, k0.tip[1] + col[1] * dq];
+      arrow(k0.tip, pred, '#9333ea');
+      arrow(k0.tip, k1.tip, '#16a34a');
+      document.getElementById('dqv').textContent = f(dq, 3) + ' rad (' + f(deg(dq), 1) + '°)';
+      var small = Math.abs(dq) < 1e-9;
+      var qn = joint === 0 ? 'q1' : 'q2';
+      rows = [
+        ['before: tip', '(' + fp(k0.tip[0]) + ', ' + fp(k0.tip[1]) + ')'],
+        ['after: tip', '(' + fp(k1.tip[0]) + ', ' + fp(k1.tip[1]) + ')'],
+        ['real change Δx , Δy', f(dx) + ' , ' + f(dy)],
+        ['Δx/Δ' + qn + ' , Δy/Δ' + qn + ' (m/rad)', small ? '—' : f(dx / dq, 4) + ' , ' + f(dy / dq, 4), true],
+        ['exact ∂x/∂' + qn + ' , ∂y/∂' + qn + ' (Jacobian column ' + (joint + 1) + ')', f(col[0], 4) + ' , ' + f(col[1], 4), true],
+        ['Jacobian prediction: column × Δq', f(col[0] * dq) + ' , ' + f(col[1] * dq)],
+        ['prediction error', (Math.hypot(col[0] * dq - dx, col[1] * dq - dy) * 1000).toFixed(3) + ' mm']
+      ];
+    }
+    nums.innerHTML = rows.map(function (r) {
+      return '<tr' + (r[2] ? ' class="hi"' : '') + '><td>' + r[0] + '</td><td class="num">' + r[1] + '</td></tr>';
+    }).join('');
+  }
+
+  // ---- wiring ----
+  function bind(id, fn) { var n = document.getElementById(id); if (n) { n.addEventListener('input', fn); } return n; }
+  var play = document.getElementById('play');
+  if (mode === '0') {
+    var s1 = bind('q1', function () { st.q1 = +s1.value * Math.PI / 180; stop(); render(); });
+    var s2 = bind('q2', function () { st.q2 = +s2.value * Math.PI / 180; stop(); render(); });
+    document.getElementById('reset').onclick = function () { stop(); st.q1 = Q1; st.q2 = Q2; s1.value = 30; s2.value = 60; render(); };
+  } else {
+    var sd = bind('dq', function () { st.dq = +sd.value; stop(); render(); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-dq]'), function (b) {
+      b.onclick = function () { stop(); st.dq = +b.getAttribute('data-dq'); sd.value = st.dq; render(); };
+    });
+  }
+  var raf = null, t0 = 0;
+  function stop() { st.playing = false; play.textContent = mode === '0' ? '▶ Wave the arm' : '▶ Animate'; if (raf) { cancelAnimationFrame(raf); raf = null; } }
+  function tick(ts) {
+    if (!t0) { t0 = ts; }
+    var t = (ts - t0) / 1000;
+    if (mode === '0') {
+      st.q1 = Q1 + 0.5 * Math.sin(t * 0.9); st.q2 = Q2 + 0.8 * Math.sin(t * 1.3);
+      s1.value = deg(st.q1); s2.value = deg(st.q2);
+    } else {
+      st.dq = 0.55 * Math.sin(t * 0.8); sd.value = st.dq;
+    }
+    render();
+    raf = requestAnimationFrame(tick);
+  }
+  play.onclick = function () {
+    if (st.playing) { stop(); return; }
+    st.playing = true; t0 = 0; play.textContent = '⏸ Pause'; raf = requestAnimationFrame(tick);
+  };
+  render();
+})();
+</script>
+</body>
+</html>
