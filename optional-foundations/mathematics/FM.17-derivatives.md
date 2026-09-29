@@ -220,11 +220,11 @@ $$\Delta\mathbf{f} \approx J \cdot \Delta\mathbf{x}$$
 
 *The situation.* The robot has an **estimated pose** $(x, y, \theta) = (0.5, 0.2, 0)$: "I think I am here, facing along $+x$." Its map says a landmark (a pole) is at $(2.0, 1.0)$. From the estimated pose and the map the robot **predicts what its sensor should measure**: "the landmark should be 1.7 m away and 28° to my left." But the estimated pose may be slightly wrong, and then the prediction is slightly wrong too. **The Jacobian tells us approximately how much the predicted measurement changes for a small error in the pose.** That is what the Kalman filter needs ([10.06](../../10-localization/10.06-extended-kalman-filter.md)): it compares the prediction with what the sensor really reports and uses the Jacobian to turn that mismatch into a pose correction. Throughout, the direction is *pose error → measurement prediction error*; the Jacobian never computes a new robot position.
 
-*The numbers.* The landmark is $\Delta x = 2.0 - 0.5 = 1.5$ m ahead and $\Delta y = 1.0 - 0.2 = 0.8$ m to the left. Let $q = \Delta x^2 + \Delta y^2 = 2.25 + 0.64 = 2.89$ (a shorthand for the number under the square root, which will come back in the derivatives). The range is the straight-line distance, $d = \sqrt{q} = 1.7$ m.
+*The numbers.* The landmark is $v = l_x - x = 2.0 - 0.5 = 1.5$ m ahead and $u = l_y - y = 1.0 - 0.2 = 0.8$ m to the left. These two gaps are fixed numbers of this pose. (We do **not** call them $\Delta x$ and $\Delta y$: in this example $\Delta x$, $\Delta y$, $\Delta\theta$ always mean the small pose error you choose.) Let $q = v^2 + u^2 = 2.25 + 0.64 = 2.89$ (a shorthand for the number under the square root, which will come back in the derivatives). The range is the straight-line distance, $d = \sqrt{q} = 1.7$ m.
 
 The **bearing** $\beta$ is the angle between the robot's forward direction and the direction to the landmark (positive = left):
 
-$$\beta = \operatorname{atan2}(\Delta y, \Delta x) - \theta = 0.4900 \text{ rad} \approx 28°$$
+$$\beta = \operatorname{atan2}(u, v) - \theta = \operatorname{atan2}(0.8,\ 1.5) - 0 = 0.4900 \text{ rad} \approx 28°$$
 
 The "$-\theta$" is there because the robot measures from its own nose: if it turned left by 10°, the landmark would appear 10° less to the left.
 
@@ -250,7 +250,7 @@ after:  β = atan2(0.80, 1.49) ≈ 0.4927 rad
 change: Δβ ≈ +0.0028 rad   →   ∂β/∂x ≈ 0.0028 / 0.01 ≈ +0.28 rad/m
 ```
 
-The intuition: as you drive toward a pole beside the road, it swings outward to the side, so the bearing increases. The exact value is $\partial\beta/\partial x = \Delta y / q = 0.27682$. This number is **not a universal constant**: it depends on where the landmark is relative to the robot right now.
+The intuition: as you drive toward a pole beside the road, it swings outward to the side, so the bearing increases. The exact value is $\partial\beta/\partial x = u / q = 0.8 / 2.89 = 0.27682$. This number is **not a universal constant**: it depends on where the landmark is relative to the robot right now.
 
 **The same for y.** Start again with forward = 1.50 m and sideways = 0.80 m. Move the robot 1 cm toward $+y$ (left), toward the landmark's sideways position ($\Delta y = +0.01$ m). The remaining sideways gap becomes $0.80 - 0.01 = 0.79$ m and the forward gap stays 1.50 m:
 
@@ -260,7 +260,7 @@ after:  β = atan2(0.79, 1.50) ≈ 0.4848 rad
 change: Δβ ≈ -0.0052 rad   →   ∂β/∂y ≈ -0.0052 / 0.01 ≈ -0.52 rad/m
 ```
 
-The exact value is $\partial\beta/\partial y = -\Delta x/q = -0.51903$. The minus sign: the robot moved left, toward the landmark's sideways position, so the landmark is now less far to the left and the bearing decreases.
+The exact value is $\partial\beta/\partial y = -v/q = -1.5 / 2.89 = -0.51903$. The minus sign: the robot moved left, toward the landmark's sideways position, so the landmark is now less far to the left and the bearing decreases.
 
 **Why the y effect is bigger than the x effect here.** A sideways step directly changes the sideways component of the landmark's position, which is the "opposite" side of the triangle and strongly affects the angle. A forward step changes the forward ("adjacent") component, which affects the angle differently. In this particular geometry, with the landmark 1.5 m ahead but only 0.8 m to the side, a small sideways step changes the bearing more than a same-size forward step. This is **not** a general rule: with different landmark positions the two numbers change, and 0.52 is not always larger than 0.28.
 
@@ -272,7 +272,7 @@ $$\Delta\beta \approx 0.28 \cdot \Delta x - 0.52 \cdot \Delta y - 1 \cdot \Delta
 
 Moving forward ($+x$) increases the bearing, moving left ($+y$) decreases it, and turning left ($+\theta$) decreases it.
 
-**The range row.** Using the chain rule on $d = \sqrt{(l_x - x)^2 + (l_y - y)^2}$: $\partial d/\partial x = -\Delta x/d = -0.88235$, $\partial d/\partial y = -\Delta y/d = -0.47059$, $\partial d/\partial\theta = 0$. Read it as
+**The range row.** Using the chain rule on $d = \sqrt{(l_x - x)^2 + (l_y - y)^2}$: $\partial d/\partial x = -v/d = -1.5/1.7 = -0.88235$, $\partial d/\partial y = -u/d = -0.8/1.7 = -0.47059$, $\partial d/\partial\theta = 0$. So the 0.88 and the 0.47 are just the landmark gaps (1.5 m and 0.8 m) divided by the range (1.7 m). Each coefficient multiplies the pose error of its own column:
 
 $$\Delta d \approx -0.88 \cdot \Delta x - 0.47 \cdot \Delta y + 0 \cdot \Delta\theta$$
 
@@ -300,13 +300,13 @@ $$\begin{bmatrix}\Delta d \\ \Delta\beta\end{bmatrix} \approx J \begin{bmatrix}\
 
 **The Jacobian is a local conversion table: it converts a small error in the robot's pose into the corresponding approximate error in what the robot expects its landmark sensor to measure.** This matrix is the measurement Jacobian $H$ of the landmark EKF in [10.06](../../10-localization/10.06-extended-kalman-filter.md).
 
-**Deriving the bearing derivatives by hand: atan2, step by step.** The numbers above ($\Delta y/q$, $-\Delta x/q$) did not fall from the sky. This part shows how to get them yourself, so you never have to memorize them. It uses the numbers of exercise FM.17-E2 (in the Exercise section below): robot $(x, y, \theta) = (1.0, 1.0, 0.3)$, landmark $(l_x, l_y) = (4.0, 5.0)$. The bearing part is worked here with checkpoints (try each one before opening the answer); the range part of E2 is left to you.
+**Deriving the bearing derivatives by hand: atan2, step by step.** The numbers above ($u/q$, $-v/q$) did not fall from the sky. This part shows how to get them yourself, so you never have to memorize them. It uses the numbers of exercise FM.17-E2 (in the Exercise section below): robot $(x, y, \theta) = (1.0, 1.0, 0.3)$, landmark $(l_x, l_y) = (4.0, 5.0)$. The bearing part is worked here with checkpoints (try each one before opening the answer); the range part of E2 is left to you.
 
 *Step 1: start from the actual equation and name the two inputs.*
 
 $$\beta = \operatorname{atan2}(l_y - y,\ l_x - x) - \theta$$
 
-atan2 receives two numbers. Give them names:
+atan2 receives two numbers. Give them names (the same $u$ and $v$ as in the landmark example above):
 
 - $u = l_y - y$, the first input: how far the landmark is from the robot in the map's $y$ direction.
 - $v = l_x - x$, the second input: how far the landmark is from the robot in the map's $x$ direction.
