@@ -290,13 +290,32 @@ $$\Delta d \approx (-0.88)(0.02) + (-0.47)(0) + (0)(0) = -0.0176 \text{ m} = -1.
 
 In plain English: the pose estimate is 2 cm off in $x$, so the range predicted from the estimate is off by about 1.76 cm. Nothing physical moved: the landmark did not shift by 1.76 cm. A 2 cm error in the assumed pose simply causes about a 1.76 cm error in the predicted range. With the bearing row, the same pose error gives $\Delta\beta \approx 0.28 \cdot 0.02 = +0.0055$ rad.
 
-**The whole matrix.** Stack the two rows:
+**The whole matrix.** We now have six numbers: three for the range and three for the bearing. Put them in a table with **2 rows and 3 columns**. Each row is one thing the sensor measures; each column is one way the pose can be off:
 
-$$J = \begin{bmatrix} -0.88235 & -0.47059 & 0 \\ 0.27682 & -0.51903 & -1 \end{bmatrix}$$
+| | column 1: $x$ is off by $\Delta x$ | column 2: $y$ is off by $\Delta y$ | column 3: $\theta$ is off by $\Delta\theta$ |
+|---|---|---|---|
+| **row 1: range $d$** | $-0.88$ | $-0.47$ | $0$ |
+| **row 2: bearing $\beta$** | $+0.28$ | $-0.52$ | $-1$ |
 
-The first row says how pose errors affect the predicted range, the second how they affect the predicted bearing. With pose error $[\Delta x, \Delta y, \Delta\theta]^\top$:
+Every cell answers one question: *"if only this column's coordinate is off by 1 unit, how much does this row's prediction change?"* For example the cell (row 1, column 2) = $-0.47$ says: if $y$ is off by +1 cm, the predicted range is off by $-0.47$ cm. The cell (row 2, column 3) = $-1$ says: if the heading is off by +0.01 rad, the predicted bearing is off by $-0.01$ rad.
+
+That table *is* the Jacobian. Written as a matrix it looks like this (two rows, three columns, the same six numbers):
+
+$$J = \begin{bmatrix} -0.88 & -0.47 & 0 \\ +0.28 & -0.52 & -1 \end{bmatrix}$$
+
+**Error or movement?** Mathematically it is the same thing: a small difference between two poses. In the Kalman filter it is an *error*: the pose the robot believes minus the pose it really has. If it's easier to picture, imagine the robot being *moved* by $\Delta x$, $\Delta y$, $\Delta\theta$ and ask how the measurement would change. The numbers are identical either way.
+
+**Using the matrix.** To get both changes at once, multiply each row by the pose error and add up (the same row-times-column rule as the worked question above):
+
+$$\Delta d \approx (-0.88) \cdot \Delta x + (-0.47) \cdot \Delta y + (0) \cdot \Delta\theta$$
+
+$$\Delta\beta \approx (+0.28) \cdot \Delta x + (-0.52) \cdot \Delta y + (-1) \cdot \Delta\theta$$
+
+In matrix shorthand this pair of lines is written
 
 $$\begin{bmatrix}\Delta d \\ \Delta\beta\end{bmatrix} \approx J \begin{bmatrix}\Delta x \\ \Delta y \\ \Delta\theta\end{bmatrix}$$
+
+where the left column holds the two prediction changes and the right column holds the three pose errors.
 
 **The Jacobian is a local conversion table: it converts a small error in the robot's pose into the corresponding approximate error in what the robot expects its landmark sensor to measure.** This matrix is the measurement Jacobian $H$ of the landmark EKF in [10.06](../../10-localization/10.06-extended-kalman-filter.md).
 

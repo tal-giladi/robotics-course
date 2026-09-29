@@ -55,6 +55,27 @@
         }
       },
       plugins: [
+        // Markdown treats backslashes as escapes, so it would turn a matrix row break `\\` into
+        // `\` (collapsing every matrix into one row) and `\,` into `,`. Hide the math from the
+        // markdown parser and put it back, untouched, in the HTML. Code is left alone.
+        function (hook) {
+          var math = [];
+          hook.beforeEach(function (md) {
+            math = [];
+            return md.split(/(```[\s\S]*?```|~~~[\s\S]*?~~~|`[^`\n]*`)/).map(function (part, i) {
+              if (i % 2) { return part; }
+              return part.replace(/\$\$[\s\S]+?\$\$|\$(?![\s$])[^$\n]*?[^\s\\]\$(?!\d)/g, function (m) {
+                math.push(m);
+                return 'KTXMATH' + (math.length - 1) + 'KTX';
+              });
+            }).join('');
+          });
+          hook.afterEach(function (html) {
+            return html.replace(/KTXMATH(\d+)KTX/g, function (m, i) {
+              return math[+i].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            });
+          });
+        },
         function (hook) {
           hook.doneEach(function () {
             if (window.mermaid) {
