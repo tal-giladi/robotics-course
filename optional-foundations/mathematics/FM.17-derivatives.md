@@ -424,7 +424,7 @@ The same two formulas give the landmark example above: there $u = 0.8$, $v = 1.5
 
 E2 asks for the change in *range* after the move $(\Delta x, \Delta y) = (+0.02, +0.01)$: use the range row for that, not $H_\beta$.
 
-*Step 9: use the bearing row.* Write the pose change as a column (call it $\Delta p$, since $q$ already means the squared distance):
+*Step 9: use the bearing row.* Write the pose change as a column and call it $\Delta p$, **p for pose**. It holds the three things you change (the input): $\Delta x$, $\Delta y$, $\Delta\theta$. Do not confuse it with $\Delta d$, the change in range, which is a result (an output) that the range row computes from $\Delta p$:
 
 $$\Delta p = \begin{bmatrix} 0.02 \\ 0.01 \\ 0 \end{bmatrix}, \qquad \Delta\beta \approx H_\beta \cdot \Delta p$$
 
