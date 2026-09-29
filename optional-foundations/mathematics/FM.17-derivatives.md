@@ -76,10 +76,10 @@ Units are output units per input unit: meters per second, radians per meter. New
 | Function | Derivative | Robot use |
 |---|---|---|
 | $c$ (constant) | $0$ | a stationary landmark |
-| $t^n$ | $n\,t^{n-1}$ | $x = \frac{1}{2}at^2 \Rightarrow \dot x = at$ |
+| $t^n$ | $n \cdot t^{n-1}$ | $x = \frac{1}{2}at^2 \Rightarrow \dot x = at$ |
 | $\sin(\omega t)$ | $\omega\cos(\omega t)$ | oscillation, wheel position |
 | $\cos(\omega t)$ | $-\omega\sin(\omega t)$ | |
-| $e^{kt}$ | $k\,e^{kt}$ | motor spin-up, first-order systems |
+| $e^{kt}$ | $k \cdot e^{kt}$ | motor spin-up, first-order systems |
 | $\sqrt{u}$ | $\frac{1}{2\sqrt u}$ | distances |
 | $a f + b g$ | $a f' + b g'$ | linearity |
 | $f \cdot g$ | $f' g + f g'$ | product rule |
@@ -87,7 +87,7 @@ Units are output units per input unit: meters per second, radians per meter. New
 
 **Numerical example.** $x = 0.5\sin(0.8t)$ → $v = \dot x = 0.5 \cdot 0.8\cos(0.8t) = 0.4\cos(0.8t)$ → $a = \ddot x = -0.32\sin(0.8t)$. At $t = 1$: $x = 0.35868$ m, $v = 0.27868$ m/s, $a = -0.22955$ m/s².
 
-**Chain rule example — wheel to robot.** Motor angle $\phi_m$, wheel angle $\phi_w = \phi_m/56$, distance $s = r\phi_w$. So $\dot s = r\,\dot\phi_w = r\,\dot\phi_m/56$. Motor at 560 rad/s → wheel 10 rad/s → robot $0.045 \cdot 10 = 0.45$ m/s.
+**Chain rule example — wheel to robot.** Motor angle $\phi_m$, wheel angle $\phi_w = \phi_m/56$, distance $s = r\phi_w$. So $\dot s = r \cdot \dot\phi_w = r \cdot \dot\phi_m/56$. Motor at 560 rad/s → wheel 10 rad/s → robot $0.045 \cdot 10 = 0.45$ m/s.
 
 ### Level 3 — Numerical differentiation and its errors
 
@@ -99,9 +99,9 @@ Taylor's theorem ($x(t+h) = x + h\dot x + \frac{h^2}{2}\ddot x + \frac{h^3}{6}\d
 
 But floating-point numbers have about 16 significant digits. When $h$ is tiny, $x(t+h) - x(t)$ cancels most digits and roundoff error $\approx \epsilon/h$ takes over: at $h = 10^{-11}$ the central difference is *worse* ($2.7\times10^{-6}$) than at $h = 10^{-5}$ ($3.5\times10^{-12}$). For double precision, $h \approx 10^{-5}$ to $10^{-6}$ is a good default for central differences on smooth functions scaled near 1.
 
-**The real robot problem: noise divided by dt.** If each position sample has independent noise σ, the difference of two samples has noise $\sqrt2\,\sigma$, and dividing by $dt$ gives velocity noise
+**The real robot problem: noise divided by dt.** If each position sample has independent noise σ, the difference of two samples has noise $\sqrt2 \cdot \sigma$, and dividing by $dt$ gives velocity noise
 
-$$\sigma_v = \frac{\sqrt{2}\,\sigma}{dt}$$
+$$\sigma_v = \frac{\sqrt{2} \cdot \sigma}{dt}$$
 
 #### Encoder speed resolution ($\Delta\omega$), step by step
 
@@ -155,17 +155,17 @@ karmel: $0.0663 / 0.01 = 6.63$ rad/s.
 
 *Step D — pull $k$ out.* Rearrange the same formula so that $k$ stands alone in front:
 
-$$\omega = k \cdot \frac{2\pi}{N\,dt}$$
+$$\omega = k \cdot \frac{2\pi}{N \cdot dt}$$
 
-Look at the fraction $\frac{2\pi}{N\,dt}$. It has no $k$ in it. $N$ is fixed by the hardware and $dt$ is fixed by your loop, so this fraction is one constant number. Give it a name:
+Look at the fraction $\frac{2\pi}{N \cdot dt}$. It has no $k$ in it. $N$ is fixed by the hardware and $dt$ is fixed by your loop, so this fraction is one constant number. Give it a name:
 
-$$\Delta\omega = \frac{2\pi}{N\,dt} \qquad\text{so}\qquad \omega = k \cdot \Delta\omega$$
+$$\Delta\omega = \frac{2\pi}{N \cdot dt} \qquad\text{so}\qquad \omega = k \cdot \Delta\omega$$
 
 karmel: $\Delta\omega = 2\pi / (2464 \cdot 0.01) = 0.255$ rad/s, and $\omega = 26 \cdot 0.255 = 6.63$ rad/s, the same answer as step C.
 
 In words: **the measured speed is always "number of ticks" × "a fixed step"**. $\Delta\omega$ is that step, the speed that one single tick in one sampling interval stands for. This is exactly the table in step 1.
 
-**4. The effect of `dt`.** In $\Delta\omega = 2\pi/(N\,dt)$ a larger `dt` makes $\Delta\omega$ smaller:
+**4. The effect of `dt`.** In $\Delta\omega = 2\pi/(N \cdot dt)$ a larger `dt` makes $\Delta\omega$ smaller:
 
 ```text
 short dt -> fewer ticks per sample -> each tick is a bigger speed step -> coarser, more jitter
@@ -190,9 +190,9 @@ The hardware:
 
 The formula, used for every row below:
 
-$$\Delta\omega = \frac{2\pi}{N\,dt} \qquad\qquad \Delta v = \Delta\omega \cdot r$$
+$$\Delta\omega = \frac{2\pi}{N \cdot dt} \qquad\qquad \Delta v = \Delta\omega \cdot r$$
 
-$\Delta\omega$ is the wheel's speed step (rad/s). $\Delta v$ is the same step as robot ground speed (how fast the robot drives forward), because a wheel turning at $\omega$ rolls the robot forward at $v = \omega\,r$.
+$\Delta\omega$ is the wheel's speed step (rad/s). $\Delta v$ is the same step as robot ground speed (how fast the robot drives forward), because a wheel turning at $\omega$ rolls the robot forward at $v = \omega \cdot r$.
 
 | Sampling rate | $dt$ | $\Delta\omega$ (one tick) | $\Delta v$ (one tick) | Verdict |
 |---|---|---|---|---|
@@ -214,7 +214,7 @@ A second derivative (acceleration) from positions divides by $dt^2$: even worse.
 
 For $f(x, y)$, the partial derivative $\partial f/\partial x$ treats $y$ as a constant. The **gradient** is $\nabla f = [\partial f/\partial x,\ \partial f/\partial y]^\top$. It points uphill, its length is the steepest slope, and it is perpendicular to the contour lines of $f$. For a vector function $\mathbf{f}(\mathbf{x}) \in \mathbb{R}^m$ of $\mathbf{x} \in \mathbb{R}^n$, the **Jacobian** $J \in \mathbb{R}^{m\times n}$ has $J_{ij} = \partial f_i/\partial x_j$, and for small changes
 
-$$\Delta\mathbf{f} \approx J\,\Delta\mathbf{x}$$
+$$\Delta\mathbf{f} \approx J \cdot \Delta\mathbf{x}$$
 
 **Numerical example — range and bearing to a landmark.** Read this one slowly: it is the reason the Jacobian exists.
 
@@ -268,13 +268,13 @@ The exact value is $\partial\beta/\partial y = -\Delta x/q = -0.51903$. The minu
 
 **The full bearing row.** Rotation: if the robot turns left by a small angle, the whole world appears to rotate right relative to the robot, so the bearing decreases by the same angle, $\partial\beta/\partial\theta = -1$. The bearing row is $[+0.28,\ -0.52,\ -1]$, which reads
 
-$$\Delta\beta \approx 0.28\,\Delta x - 0.52\,\Delta y - 1\,\Delta\theta$$
+$$\Delta\beta \approx 0.28 \cdot \Delta x - 0.52 \cdot \Delta y - 1 \cdot \Delta\theta$$
 
 Moving forward ($+x$) increases the bearing, moving left ($+y$) decreases it, and turning left ($+\theta$) decreases it.
 
 **The range row.** Using the chain rule on $d = \sqrt{(l_x - x)^2 + (l_y - y)^2}$: $\partial d/\partial x = -\Delta x/d = -0.88235$, $\partial d/\partial y = -\Delta y/d = -0.47059$, $\partial d/\partial\theta = 0$. Read it as
 
-$$\Delta d \approx -0.88\,\Delta x - 0.47\,\Delta y + 0\,\Delta\theta$$
+$$\Delta d \approx -0.88 \cdot \Delta x - 0.47 \cdot \Delta y + 0 \cdot \Delta\theta$$
 
 - $-0.88$: moving $+x$ slightly brings the robot closer to the landmark, so the range decreases.
 - $-0.47$: moving $+y$ slightly also brings it closer in this particular geometry.
@@ -328,16 +328,16 @@ $u = 5 - 1 = 4$ m and $v = 4 - 1 = 3$ m. The landmark is 3 m away in $x$ and 4 m
 
 *Step 3: the general atan2 derivative, and what each part means.* For $f(x) = \operatorname{atan2}(u(x), v(x))$:
 
-$$\frac{\partial f}{\partial x} = \frac{v\,\dfrac{\partial u}{\partial x} - u\,\dfrac{\partial v}{\partial x}}{u^2 + v^2}$$
+$$\frac{\partial f}{\partial x} = \frac{v \cdot \dfrac{\partial u}{\partial x} - u \cdot \dfrac{\partial v}{\partial x}}{u^2 + v^2}$$
 
 - $u$: the first atan2 input; $v$: the second.
 - $\partial u/\partial x$: how fast the first input changes when the robot's $x$ changes.
 - $\partial v/\partial x$: how fast the second input changes when the robot's $x$ changes.
 - $u^2 + v^2$: the **squared distance** to the landmark, $d^2$.
 
-Where it comes from (you can rebuild it from two facts you know): with $z = u/v$, the table entry $\frac{d}{dz}\operatorname{atan}z = \frac{1}{1+z^2}$ and the quotient rule $\frac{\partial z}{\partial x} = \frac{v\,\partial u/\partial x - u\,\partial v/\partial x}{v^2}$. Multiply them (chain rule):
+Where it comes from (you can rebuild it from two facts you know): with $z = u/v$, the table entry $\frac{d}{dz}\operatorname{atan}z = \frac{1}{1+z^2}$ and the quotient rule $\frac{\partial z}{\partial x} = \frac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{v^2}$. Multiply them (chain rule):
 
-$$\frac{1}{1 + u^2/v^2} \cdot \frac{v\,\partial u/\partial x - u\,\partial v/\partial x}{v^2} = \frac{v\,\partial u/\partial x - u\,\partial v/\partial x}{v^2 + u^2}$$
+$$\frac{1}{1 + u^2/v^2} \cdot \frac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{v^2} = \frac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{v^2 + u^2}$$
 
 (the $v^2$ under the second fraction multiplies into the first denominator: $v^2(1 + u^2/v^2) = v^2 + u^2$). Numeric sanity check: $\operatorname{atan2}(1, 1) = 0.7854$ rad; nudge $v$ from 1 to 1.01 and $\operatorname{atan2}(1, 1.01) = 0.7804$ rad, a rate of about $-0.50$. The formula, with $\partial u = 0$ and $\partial v = 1$, gives $(1 \cdot 0 - 1 \cdot 1)/(1 + 1) = -0.5$.
 
@@ -354,7 +354,7 @@ $v = l_x - x$. The landmark's $l_x$ is fixed and $x$ appears with a minus sign, 
 
 *Step 5: substitute one piece at a time.* Start from the general derivative:
 
-$$\frac{\partial\beta}{\partial x} = \frac{v\,\dfrac{\partial u}{\partial x} - u\,\dfrac{\partial v}{\partial x}}{u^2 + v^2}$$
+$$\frac{\partial\beta}{\partial x} = \frac{v \cdot \dfrac{\partial u}{\partial x} - u \cdot \dfrac{\partial v}{\partial x}}{u^2 + v^2}$$
 
 Put in $\partial u/\partial x = 0$ and $\partial v/\partial x = -1$:
 
@@ -407,7 +407,7 @@ E2 asks for the change in *range* after the move $(\Delta x, \Delta y) = (+0.02,
 
 *Step 9: use the bearing row.* Write the pose change as a column (call it $\Delta p$, since $q$ already means the squared distance):
 
-$$\Delta p = \begin{bmatrix} 0.02 \\ 0.01 \\ 0 \end{bmatrix}, \qquad \Delta\beta \approx H_\beta\,\Delta p$$
+$$\Delta p = \begin{bmatrix} 0.02 \\ 0.01 \\ 0 \end{bmatrix}, \qquad \Delta\beta \approx H_\beta \cdot \Delta p$$
 
 A row times a column is a **dot product**: multiply matching entries and *add* them, which gives **one number**, not three:
 
@@ -428,7 +428,7 @@ $0.0032 - 0.0012 + 0 = +0.0020$ rad (about 0.11°): the move changes the predict
 > 2. Identify $v$, the second argument.
 > 3. Calculate $\partial u/\partial x$: does $x$ appear in $u$, and with which sign?
 > 4. Calculate $\partial v/\partial x$ the same way.
-> 5. Substitute into $\dfrac{\partial f}{\partial x} = \dfrac{v\,\partial u/\partial x - u\,\partial v/\partial x}{u^2 + v^2}$ and simplify.
+> 5. Substitute into $\dfrac{\partial f}{\partial x} = \dfrac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{u^2 + v^2}$ and simplify.
 > 6. Only then put in the numbers.
 >
 > The formula itself is not something to memorize blindly: it is the atan table entry plus the quotient rule (step 3), and you can rebuild it whenever you need it.
@@ -744,7 +744,7 @@ The Pico reports the encoder count as a signed 16-bit integer (−32,768…32,76
 
 ### Symptom: the velocity estimate is extremely noisy
 
-1. Compute the resolution $2\pi/(N_\text{ticks}\,dt)$. If it's comparable to the speeds you care about, the noise is quantization: lower the rate, or measure time between ticks instead of ticks per interval (better at low speed), or low-pass filter ([08.03](../../08-control/08.03-wheel-speed-estimation.md)).
+1. Compute the resolution $2\pi/(N_\text{ticks} \cdot dt)$. If it's comparable to the speeds you care about, the noise is quantization: lower the rate, or measure time between ticks instead of ticks per interval (better at low speed), or low-pass filter ([08.03](../../08-control/08.03-wheel-speed-estimation.md)).
 2. Is $dt$ the *actual* elapsed time? Using a nominal 10 ms when the loop really ran 8–14 ms injects ±40% errors. Timestamp each sample and divide by the measured difference.
 3. Plot the raw counts. Occasional huge spikes are counter wraparound (E5) or dropped messages, not noise.
 
