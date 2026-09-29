@@ -133,15 +133,37 @@ There is no possible reading of 6.67 rad/s. **$\Delta\omega$ is the amount by wh
 
 The wheel is not speeding up and slowing down. The jitter comes only from the encoder reporting whole ticks.
 
-**3. The math.** One revolution is $2\pi$ radians and has $N$ ticks, so one tick is $2\pi/N$ radians. Counting $k$ ticks means the wheel turned $\Delta\theta = k \cdot 2\pi/N$. Angular velocity is angle divided by time:
+**3. The math.** We turn "k ticks in dt seconds" into a speed in four small steps. Each step comes with karmel's numbers ($N = 2464$ ticks per revolution, $dt = 0.01$ s, and say $k = 26$ ticks were counted).
 
-$$\omega = \frac{\Delta\theta}{dt} = \frac{k \cdot 2\pi / N}{dt} = k \cdot \frac{2\pi}{N\,dt}$$
+*Step A — how big is one tick?* One full revolution is $2\pi$ radians (360°), and it is cut into $N$ equal ticks. So one tick is
 
-Everything except $k$ is fixed by the hardware and the sample time, so name it:
+$$\text{one tick} = \frac{2\pi}{N} \text{ radians}$$
 
-$$\Delta\omega = \frac{2\pi}{N\,dt}, \qquad \omega = k\,\Delta\omega$$
+karmel: $2\pi / 2464 = 0.00255$ rad per tick (about 0.15°).
 
-$\Delta\omega$ is the speed represented by one tick during one sampling interval.
+*Step B — how far did the wheel turn?* We counted $k$ ticks, and each is $2\pi/N$ radians, so
+
+$$\Delta\theta = k \cdot \frac{2\pi}{N}$$
+
+karmel: $26 \cdot 0.00255 = 0.0663$ rad.
+
+*Step C — how fast is that?* Speed is distance divided by time. For rotation the "distance" is the angle, so
+
+$$\omega = \frac{\Delta\theta}{dt} = \frac{k \cdot 2\pi / N}{dt}$$
+
+karmel: $0.0663 / 0.01 = 6.63$ rad/s.
+
+*Step D — pull $k$ out.* Rearrange the same formula so that $k$ stands alone in front:
+
+$$\omega = k \cdot \frac{2\pi}{N\,dt}$$
+
+Look at the fraction $\frac{2\pi}{N\,dt}$. It has no $k$ in it. $N$ is fixed by the hardware and $dt$ is fixed by your loop, so this fraction is one constant number. Give it a name:
+
+$$\Delta\omega = \frac{2\pi}{N\,dt} \qquad\text{so}\qquad \omega = k \cdot \Delta\omega$$
+
+karmel: $\Delta\omega = 2\pi / (2464 \cdot 0.01) = 0.255$ rad/s, and $\omega = 26 \cdot 0.255 = 6.63$ rad/s, the same answer as step C.
+
+In words: **the measured speed is always "number of ticks" × "a fixed step"**. $\Delta\omega$ is that step, the speed that one single tick in one sampling interval stands for. This is exactly the table in step 1.
 
 **4. The effect of `dt`.** In $\Delta\omega = 2\pi/(N\,dt)$ a larger `dt` makes $\Delta\omega$ smaller:
 
@@ -159,7 +181,32 @@ long dt:  slower response (lag), better resolution, less jitter
 
 **5. Sampling rate versus `dt`.** A sampling rate of 100 Hz means 100 samples per second, so $dt = 1/100 = 0.01$ s. But $\Delta\omega$ depends on both the sample time and the encoder resolution $N$, not on the rate alone. With $N = 256$, $\Delta\omega = 2\pi/(256 \cdot 0.01) = 2.454$ rad/s, not 0.255. Working backwards, $\Delta\omega = 0.255$ rad/s at 100 Hz means $N = 2\pi/(0.255 \cdot 0.01) \approx 2464$, which is karmel's encoder.
 
-**Numerical example — karmel's encoder** (2,464 ticks/rev = 11 pulses × 56:1 gearbox × 4 quadrature edges, wheel radius 0.045 m). At 1 kHz: $\Delta\omega = 2\pi/(2464 \cdot 0.001) = 2.55$ rad/s = 115 mm/s of robot speed per tick. At 100 Hz: 0.255 rad/s = 11.5 mm/s. At 20 Hz: 0.051 rad/s = 2.3 mm/s. The 1 kHz estimate is useless on its own; the 20 Hz estimate is smooth but averages over 50 ms (lag). The error standard deviation is about $\Delta\omega/\sqrt6$ (difference of two uniform quantization errors): 0.104 rad/s at 100 Hz, which the simulation reproduces (0.102).
+**Numerical example — karmel's encoder.**
+
+The hardware:
+
+- Ticks per wheel revolution: $N = 2464$ (11 pulses × 56:1 gearbox × 4 quadrature edges).
+- Wheel radius: $r = 0.045$ m.
+
+The formula, used for every row below:
+
+$$\Delta\omega = \frac{2\pi}{N\,dt} \qquad\qquad \Delta v = \Delta\omega \cdot r$$
+
+$\Delta\omega$ is the wheel's speed step (rad/s). $\Delta v$ is the same step as robot ground speed (how fast the robot drives forward), because a wheel turning at $\omega$ rolls the robot forward at $v = \omega\,r$.
+
+| Sampling rate | $dt$ | $\Delta\omega$ (one tick) | $\Delta v$ (one tick) | Verdict |
+|---|---|---|---|---|
+| 1 kHz | 0.001 s | $2\pi/(2464 \cdot 0.001) = 2.55$ rad/s | 115 mm/s | Useless alone: one tick more or less jumps the speed by 11 cm/s |
+| 100 Hz | 0.01 s | $2\pi/(2464 \cdot 0.01) = 0.255$ rad/s | 11.5 mm/s | A reasonable middle |
+| 20 Hz | 0.05 s | $2\pi/(2464 \cdot 0.05) = 0.051$ rad/s | 2.3 mm/s | Smooth, but each value is an average over the last 50 ms (lag) |
+
+How big is the jitter in practice? The typical error (standard deviation) is about
+
+$$\sigma_\omega \approx \frac{\Delta\omega}{\sqrt6}$$
+
+At 100 Hz: $0.255 / \sqrt6 = 0.104$ rad/s. The simulation measures 0.102, so the formula holds.
+
+(Where $\sqrt6$ comes from: the tick count is cut off to a whole number at the start *and* at the end of each interval. Each cut-off is a random error of up to one tick, and two such errors combine into $\Delta\omega/\sqrt6$.)
 
 A second derivative (acceleration) from positions divides by $dt^2$: even worse. Robots measure acceleration with an accelerometer instead ([07.05](../../07-sensors/07.05-imu-fundamentals.md)).
 
