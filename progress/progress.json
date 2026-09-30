@@ -5,14 +5,19 @@
   },
   "lessons": {
     "00.01": {
-      "status": "in-progress",
+      "status": "practiced",
       "history": [
         {
           "date": "2026-09-20",
           "status": "in-progress"
+        },
+        {
+          "date": "2026-09-26",
+          "status": "practiced"
         }
       ],
-      "started": "2026-09-20"
+      "started": "2026-09-20",
+      "practiced": "2026-09-26"
     },
     "00.07": {
       "status": "practiced",
@@ -62,13 +67,29 @@
       ],
       "started": "2026-09-25",
       "practiced": "2026-09-25"
+    },
+    "FM.17": {
+      "status": "practiced",
+      "history": [
+        {
+          "date": "2026-09-25",
+          "status": "in-progress"
+        },
+        {
+          "date": "2026-09-29",
+          "status": "practiced"
+        }
+      ],
+      "started": "2026-09-25",
+      "practiced": "2026-09-29"
     }
   },
   "exercises": {
     "00.07-E1": "2026-09-20",
     "00.07-E2": "2026-09-20",
     "00.07-E3": "2026-09-20",
-    "00.07-E4": "2026-09-20"
+    "00.07-E4": "2026-09-20",
+    "FM.17-E1": "2026-09-29"
   },
   "projects": {},
   "current_project": null,
@@ -97,6 +118,12 @@
       "note": "s in the turn-in-place exercise was undefined: it is the wheel's arc distance, same role as d",
       "date": "2026-09-25",
       "resolved": "2026-09-25"
+    },
+    {
+      "id": "FM.17",
+      "note": "Completed with only E1 done; needs to repeat the lesson (E2-E5 open)",
+      "date": "2026-09-29",
+      "resolved": null
     }
   ],
   "log": [
@@ -167,6 +194,26 @@
     {
       "date": "2026-09-25",
       "event": "resolve FM.01"
+    },
+    {
+      "date": "2026-09-25",
+      "event": "in-progress FM.17"
+    },
+    {
+      "date": "2026-09-26",
+      "event": "practiced 00.01"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "practiced FM.17"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "exercise FM.17-E1"
+    },
+    {
+      "date": "2026-09-29",
+      "event": "struggle FM.17: Completed with only E1 done; needs to repeat the lesson (E2-E5 open)"
     }
   ]
 }
