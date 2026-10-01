@@ -32,8 +32,14 @@ projects/evidence/**/*.mp4
 projects/evidence/**/*.mov
 projects/evidence/**/*.bag
 
+# Secrets / local config — never commit
+.env
+.env.*
+!.env.example
+
 # Editors / OS
 .vscode/
+.claude/
 .idea/
 .DS_Store
 Thumbs.db

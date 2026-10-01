@@ -38,7 +38,7 @@
 |---|---|---|---|
 | 21.01 | War machine architecture — what changes on karmel | ✔ verified | fixed 2026-09-24: added the `## Prerequisites` section + markers, 2 external URLs in Go deeper (ISO + Pololu distributors), E2 path/check corrected to `code/exercises` + `-k 2101_e2` |
 | 21.02 | Payloads — the BOM of things you can throw, shoot, stick, spray | ✔ verified | payload taxonomy, impact-energy table, state machine (LOADED = verified fact), rack layout |
-| 21.03 | Releasers I — latches, clamps and pins (static payloads) | ✔ verified | flap torque (2.77× margin), solenoid V²/pulse/flyback, pin+spring fail-open, 5 V tap (spec-delta row 11) |
+| 21.03 | Releasers I — latches, clamps and pins (static payloads) | ✔ verified | flap torque (2.77× margin), solenoid V²/pulse/flyback, pin+spring **fail-closed** (corrected 2026-09-25: was wrongly documented as fail-open), 5 V tap (spec-delta row 11) |
 | 21.04 | Releasers II — launch mechanisms (kinetic payloads) | ✔ verified | launch chain, slingshot k=120 N/m (0.60 J), cannon 6.0 J / 15.5 m/s, AGF lobber verdict (0.40 J, 0.45 m), CO2 51 m |
 | 21.05 | Triggers I — remote control | ✔ verified | written by subagent; PPM decode + dead-man, e-stop interlock; RC RX on GPIO 16 → moves to 20 when 21.07's mic lands (21.07's pin plan); IR phototransistor on GPIO 21 |
 | 21.06 | Triggers II — vision detection | ✔ verified | ArUco path (distance = f·s/p), YOLO path, 15-frame dwell / conf 0.5 / 1–5 m / 2 s cooldown gate, false-fire p_f^N |
@@ -121,6 +121,142 @@ product page). All shop links re-probed 2026-09-24.
 | D2 | Module has 10 lessons (not 6) | 2026-09-23 | User asked for breadth: ≥3 trigger types, ≥3 releaser types, BOM, weights, failures |
 | D3 | BOM page lives inside the module (`hardware/war-machine-bom.md`), not in `hardware/` | 2026-09-23 | Can't touch existing folder; module stays self-contained for GitHub |
 | D4 | Do NOT add entries to `curriculum/syllabus.yaml` / `course.py` | 2026-09-23 | Those are existing files; module is parallel/standalone. (Revisit if user wants it in the main tool.) |
+
+## Session 5 — 2026-09-25 · content review, legal correction, safety fixes
+
+**Trigger:** "go over the content, make sure it's up to date, everything is 100% working, and
+with clear instructions for legal protection."
+
+**Verified unchanged:** `py -m pytest 21-war-machine/code -q` → **33 passed, 19 skipped**.
+`py 21-war-machine/code/validate_module21.py` → **0 errors**, 10 word-count warnings.
+The module's quoted CLI-output blocks reproduce byte-for-byte against the shipped scripts; the
+mass / CG / tipping tables are exact.
+
+**Binding constraint found:** `new-course-instructions.md` §8 (CLAUDE.md: "read it before
+writing course content… it wins over anything in this file") excludes
+**weapons, payloads and targeting** from a published course. Module 21 is a
+payload/releaser/trigger weapon platform with **automated sensor-triggered firing** (vision
+dwell 21.06, sound gate 21.07). Added the required root **`PUBLISHING_WARNING.md`**.
+The module is **not in `_sidebar.md`** and has no `.quiz.yaml`, so it is not imported today —
+recommend keeping it that way.
+
+### Fixed in this session
+
+| # | Fix | Where |
+|---|---|---|
+| 1 | **Legal claim corrected.** The blanket "every row is buyable OTC without a licence" is replaced with a sourced `> [!WARNING]`: retail stock ≠ unrestricted; Israeli law **not verified**. Removed "the highest-energy weapon you can buy without a licence". | 21.02 (×2) |
+| 2 | **Dangling citation removed.** "the law's note is dated (BOM: verified at Fantom)" — there was never a legal note; that row records price/stock only. | 21.02 |
+| 3 | **BOM header** reframed as a stock-and-price record that establishes nothing legal. | `hardware/war-machine-bom.md` |
+| 4 | **Fail-open inversion corrected** (7 places). The spring is on the **holding** side, so power loss **latches the payload in** — fail-*closed*. Added the retaining-catch alternative for a true fail-open. | 21.03, BOM §D, this file |
+| 5 | **Clearance defect corrected.** 21.01's challenge told you to clear 0.5 m, but the Scout build carries a **slingshot with a 15 m clearing** (21.09 L4) — off ~30×. Challenge now says drop-class only, with the launch-class table cross-linked. | 21.01 |
+| 6 | **PPE standard named** (EN 166 / ANSI Z87.1 impact-rated; ordinary safety glasses do not qualify). Previously "eye protection" was specified nowhere. | 21.09 |
+| 7 | **Cannon branch fuse 5 A → 15 A.** A 5 A fuse on a BOM-rated 10–15 A branch nuisance-blows. Added a note that 5.5 A vs 10–15 A is an unresolved 3× estimate conflict — **measure before choosing**. | 21.01 |
+| 8 | **Boost-converter error.** "solenoids lose 32% of their force" at 7.6 V → actually $(7.6/12)^2 \approx 40$%, a ~60% loss (the lesson's own answer key already said ~40%). | 21.01 |
+| 9 | **Wrong formula in a graded answer key.** `m × v = 0.4 J` is momentum, not energy; correct is $\tfrac12 mv^2 \approx 0.20$ J. Students checking against this would fail. | 21.02 |
+| 10 | **Self-contradiction fixed.** The text claimed the CO2 BB was "more energetic" than the bouncy ball it lists at 6.0 J vs 1.25 J. Reframed: the BB's hazard is penetration + 51 m range, not energy. | 21.02 |
+| 11 | **ISO link fixed in 5 files.** Catalogue 73934 is **ISO 10218-1**, not ISO 13849-1 (which is 73481). The URL resolved, so nothing caught it. | 21.01, 21.02, 21.09, 21.10, references |
+| 12 | **Repo hygiene:** `.env`, `.env.*`, `.claude/` added to `.gitignore`. | root |
+
+### Open — deliberately **not** fixed
+
+- **Automated target-selected firing** (21.06 vision dwell, 21.07 sound gate, `trigger_pipeline.py`).
+  Left as-is: making these reliable for real deployment is the thing this session declined to do.
+- The full audit surfaced ~120 further SHOULD-FIX/NIT items (solenoid energy inconsistency
+  0.88 J vs 2.0 J; lever ratio undefined behind the 2.77× margin; rack geometry in 21.02-E2 is
+  not physically satisfiable; ~10 unlinked sibling references; missing `Version-sensitive`
+  markers in 21.01). Recorded in the session spill; not applied.
+
+---
+
+## Session 5b — 2026-09-25 · auto-fire content retained and flagged (session restart)
+
+**Decision:** the auto-fire path was reviewed and judged too risky to make operational, but
+**kept in place rather than deleted**, per the course owner's instruction. Nothing in
+`21.06`, `21.07`, `21.10` or `trigger_pipeline.py` was rewritten, re-engineered or improved —
+only warnings were added.
+
+| File | Change |
+|---|---|
+| `21.06-triggers-vision.md` | `> [!WARNING]` banner at the top: automated fire trigger, NOT checked/verified/cleared, do not use for protection |
+| `21.07-triggers-sound.md` | same banner; notes the acoustic channel is shared, so a sound trigger fires on non-hostile noise |
+| `21.10-integration-and-demo.md` | same banner; flags steps 9 and 10 as wiring the robot to fire with no human deciding |
+| `code/trigger_pipeline.py` | `!! UNCHECKED CODE !!` banner in the module docstring; `VisionTrigger`/`SoundTrigger` tagged `[UNCHECKED]`. **Behaviour unchanged.** |
+| `../PUBLISHING_WARNING.md` | new "Decision on record" table + a precise definition of what "not checked" covers (no bring-up, no safety review, no legal review, no real-target testing) |
+
+**Banners are disclosure, not a safety mechanism** — stated explicitly in both files. The
+automated path should be treated as non-functional teaching material. Validation after the
+change: `py 21-war-machine/code/validate_module21.py` → 0 errors;
+`py -m pytest 21-war-machine/code -q` → 33 passed, 19 skipped.
+
+---
+
+## Session 5c — 2026-09-25 · correctness pass (the ~120 open audit items)
+
+**Instruction:** "go on with number 4 and ignore sensor triggers" — so: fix the correctness
+findings; **do not touch** the automated vision/sound firing path (21.06/21.07 trigger
+design, `trigger_pipeline.py` logic). Those keep their `UNCHECKED` banners and are otherwise
+untouched.
+
+**Validation after every batch:** `py 21-war-machine/code/validate_module21.py` → 0 errors,
+10 word-count warnings; `py -m pytest 21-war-machine/code -q` → **33 passed, 19 skipped**;
+all relative links resolve; a fence-balance audit across every lesson is clean.
+
+### Safety-critical (would injure someone)
+
+| Fix | Where |
+|---|---|
+| **CO2 clearing 50 m → 105 m.** The table cleared 50 m for a projectile the model puts at 51 m — *smaller than the hazard*, while claiming a ×2 margin. Clears now 20/25/105 m with per-row margins (2.2×/2.3×/2.1×) | 21.09 |
+| **"Scale the clearings to fit the room" removed** and replaced with "if the room cannot hold it, that is a NO-GO". This was advice to shorten a safety margin | 21.10 |
+| **Spectator line 15 m → 25 m.** It was labelled "the cannon clearing" but 21.09 says 25 m, and the stated derivation (11 m × 2) gives 22, not 15 | 21.10 (×3) |
+| **Extended-arm braking limit 4.5 → 2.5 m/s².** Recomputed from the derived CG (+77/+90 mm, not the quoted +75/+82). The old value was ~1.8× optimistic, and the recommended software limit of 2.0 sat only 25% under it — now **1.5** | 21.08 (×2), 21.04 |
+| **Fuse row taught the opposite of 21.08's answer.** "A 5 A fuse sized for the stall" → the 15 A branch must *survive* the launch spike and blow only on a sustained stall | 21.09 |
+| **E-stop test 4 was impossible.** It expected `JAMMED`, but `estop()` forces `SAFE` and `step_release()` returns early, so the timeout can never fire. Corrected to `SAFE` + unverified payload | 21.09 (×2) |
+| **Range day: 20 m → per-launcher clearings**, CO2 row gated on the full 105 m | 21.04 |
+| **Safety callouts moved onto the exercises that fire.** 21.08-E3 (20 live cannon shots), 21.09-E3 (live payloads), 21.10-E2 (dozens of shots), 21.10-E3 (an audience) had none — the callout had been sitting on the *paper* exercises instead | 21.08, 21.09, 21.10 |
+| **INMP441 wired to a 5 V rail** in the BOM. Its max VDD is **3.6 V** — that destroys the module on first power-up. Now 3.3 V, flagged | BOM |
+
+### Correctness
+
+| Fix | Where |
+|---|---|
+| **Solenoid pulse energy 0.88 J → 2.25 J.** `releaser.py` hardcoded 4 W/7 W, implying ~0.5 A, while the module's own budget sizes the branch at 1.5 A = 18 W. The old figure was *physically impossible*: 0.88 J of input cannot yield the 1.28 J of work the same pin is credited with (>100% efficiency). Now derived from branch current | `releaser.py`, 21.03, 21.09 |
+| **"Empty pack is the design case" inverted.** The coil sits on the 12 V boost tap, so it sees 12.0 V always and delivers 100% of rated force. The 9.0/9.9 V columns are the *fallback* case | 21.03 |
+| **Lever ratio stated.** The 2.77× flap margin assumes rigid 1:1 drive; a 25–30 mm horn changes it to ~9×. Also noted the margin omits the listed slot friction | 21.03 |
+| **Rack geometry was unsatisfiable** — 3×60 mm slots drawn on a 90 mm rail, and a 60 mm cube cannot hold a 100 ml aerosol can. Redrawn as 3-across in y with 65×130×65 mm slots; E2's criterion changed from a fixed cube to a clearance rule | 21.02 |
+| **Magnet: "not ferrous" is false** (N52 is ferromagnetic), and 50×15 mm is **0.22 kg**, not the 0.15 kg fed to the arm model | 21.02 |
+| Sparkler mass 0.001 → 0.01 kg (10× self-contradiction) | 21.02 |
+| **RC receiver misdescribed** as a single multiplexed PPM signal; the SRX200 is 2-channel with per-channel outputs — the lesson contradicted its own wiring table | 21.05 |
+| **IR beacon wired to GPIO 21 (ADC)** — the RP2350's ADC is GP26–GP29 only, so it could not be built. Now GP26, plus the 5 V-into-Pico-pin correction | 21.05, BOM |
+| "10 presses → 10 fires" unreachable — the FSM needs a reload/re-arm between shots | 21.05 |
+| Latency measured press → release sensor is dominated by the 100–300 ms solenoid, not the radio | 21.05 |
+| **470 µF cap credited with ~1000× its energy** (2.4 J needed, 34 mJ stored → ~1 ms, not 100 ms) | 21.08 |
+| **Pack voltages inverted vs `karmel.yaml`** (`low_warning_v: 10.5`, `cutoff_v: 9.9`), plus an invented third value | 21.08 |
+| **0.1 Ω INA shunt in a 15 A branch** — rated 0.8–3.2 A. Now requires ≤ 5 mΩ | 21.08 |
+| Pack capacity 2,500 → **3,500 mAh** (matches `PACK_AH`/`capacity_ah`) | 21.08 |
+| **Apex values wrong** (30°: 3.4→3.1 m, 29°: 3.1→2.9 m) — the bad 29° value caused a contradiction about the 3 m ceiling | 21.10 |
+| **"17 W × 0.5 h = 8.5 Wh"** mislabelled `BASE_AVERAGE_W` as the drive; Assault's real average is 23.3 W → 11.7 Wh. Firing is 0.09%, not 0.3% | 21.10 (×3) |
+| **Scout given an RC trigger** it does not have (BOM puts the RC in the Assault) — inflated the matrix from 12/36 shots to an unachievable 24/72 | 21.10 |
+| `check (assault): all rules pass` **cannot be printed by the shipped code** (every part is `source="estimate"`); now shows real output + explains the to-do semantics | 21.10 |
+| **Spring constant inversion** — `k = 2E/x²`, so the BOM's 2–8 J is 278–1111 N/m, not 110–550 | 21.04 |
+| Stored-vs-projectile energy factor 1.4–5× → the real span is **2–13×** | 21.04 |
+| Fabricated "70× worse area-to-mass" → the real ratio is **4.5×** | 21.04 |
+| "A third of a third" = 3.5% ≈ a thirtieth | 21.04 |
+| **Relay baseline under-counts**: on 20.02's own 10.1 A the worst case is ≈20.6 A, already over the 20 A relay *before* the arm bus. Restored the design conclusion and flagged it as a rating change | 21.01 |
+| "5 kg of front mass loses the braking margin" — 5 kg at the rail tip still gives **7.1×**; you would need ~10 kg | 21.01 |
+| **FEMA FMEA link returned HTTP 404** while the research log recorded it as verified. Replaced with a source that resolves and documents the primary (MIL-P-1629, 1949) | 21.09 |
+
+### Repo mechanics
+
+- Fixed 4 broken links I introduced (`02.05` is under `02-robot-electronics`, not `02-first-robot`; `01.14` is `battery-monitoring`), and one **indented closing code fence** in 21.10 that left the file unbalanced and made the validator report a missing `## Code`.
+
+### Still open (not in this pass)
+
+- ~90 cosmetic NITs from the audit: bare-text sibling lesson references that should be links,
+  truncated CLI transcripts, a few undated prices.
+- 21.06/21.07 trigger design — **deliberately untouched**.
+- Course-wide: no `lessons/module-NN/` tree, no `.quiz.yaml`, no `curriculum/course-details.md`.
+
+---
 
 ## Session log
 

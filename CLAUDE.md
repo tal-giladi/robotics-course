@@ -1,5 +1,9 @@
 # Instructions for the AI teacher
 
+> **Course guidelines (binding):** before writing or changing any course content, read
+> `C:\Users\TalGiladi\OneDrive\repos\tals-academy\docs\new-course-instructions.md`. It wins over
+> anything in this file or the course plan unless Tal says otherwise in chat.
+
 This repository is a robotics course. When a student works in it with you (Claude Code or any
 coding agent — `AGENTS.md` points here), **you are their teacher**, not a code generator.
 This file overrides generic assistant behavior while studying.

@@ -1,6 +1,19 @@
 # 21 · War machine — weapons for karmel
 
-> **Standalone module.** This module is parallel to the main course: it is not (yet) registered
+> [!WARNING]
+> **Not part of the published course, and not cleared for publication.** This module is
+> **absent from `_sidebar.md`**, so the course-creator adapter does not import it — keep it
+> that way. `new-course-instructions.md` §8 excludes weapons/payloads/targeting content from
+> a published course, and this module is a payload/releaser/trigger **weapon platform** with
+> automated sensor-triggered firing (vision dwell, sound gate). Its legal status in Israel is
+> **unverified** and the module previously made a blanket "no licence required" claim on the
+> strength of a stock-and-price check only.
+>
+> Read **[`../PUBLISHING_WARNING.md`](../PUBLISHING_WARNING.md)** before building, buying,
+> transporting or demonstrating anything here, and before making this repo public.
+> **This is not legal advice.**
+
+> **Standalone module.** This module is parallel to the main course: it is not registered
 > in `curriculum/syllabus.yaml`, so `course.py` does not know about it. The format is the course
 > format; the links are relative and resolve on GitHub.
 

@@ -1,5 +1,19 @@
 """Triggers and the weapon state machine (lessons 21.05, 21.06, 21.07).
 
+!! UNCHECKED CODE — DO NOT USE FOR ANY PROTECTION OR SECURITY PURPOSE !!
+
+This module implements VisionTrigger and SoundTrigger: fire requests generated with no
+human in the decision loop, from a camera and a microphone. It has NEVER been run against
+hardware, never safety-reviewed, and never legally reviewed. The Israeli licensing
+status of a system that fires automatically on sensor input is unverified — see
+21-war-machine/PUBLISHING_WARNING.md.
+
+A sensor-driven fire decision cannot distinguish a hostile target from a bystander, a
+child, a delivery driver or a first responder, and the failure mode is a *correct*
+detection of the wrong thing. Do not connect VisionTrigger or SoundTrigger to any
+actuator, relay or firing mechanism. Use this file as a signal-processing and state-machine
+teaching example only.
+
 The state machine is the one from 21.01 Level 4:
 
     SAFE -> LOADED -> ARMED -> FIRED -> SAFE      (release confirmed)
@@ -14,8 +28,8 @@ interlock) whether a request becomes a shot.
 
 * ButtonTrigger  — keypad / local button: edge + debounce (21.05 Level 2)
 * RcTrigger      — 2.4 GHz frames: dead-man timeout + pulse-width threshold + edge (21.05 Level 3)
-* VisionTrigger  — detection stream: dwell frames + confidence + distance gate (21.06)
-* SoundTrigger   — acoustic envelope: hysteresis + double-clap code (21.07)
+* VisionTrigger  — detection stream: dwell frames + confidence + distance gate (21.06) [UNCHECKED]
+* SoundTrigger   — acoustic envelope: hysteresis + double-clap code (21.07) [UNCHECKED]
 
     py 21-war-machine/code/trigger_pipeline.py demo
 

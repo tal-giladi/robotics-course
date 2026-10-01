@@ -53,6 +53,16 @@ PIN_PULSE_MAX_MS = 300.0
 PIN_PULSE_MARGIN_MS = 50.0
 
 SOL_RATED_N = {"42n": 42.0, "85n": 85.0}   # (datasheet, Hackstore 35 mm 12 V family)
+# Coil power is derived from the branch current, NOT hardcoded watts. The module's own power
+# budget (war_power_budget.py, BUS_PEAKS_A) sizes this branch at 1.5 A on the 12 V tap, and
+# the pulse energy is that current's energy over the pulse. An earlier version used literal
+# 4 W / 7 W constants, which implied the coil draws ~0.5 A — and 0.88 J of electrical input
+# cannot produce the 85 N x 15 mm = 1.28 J of mechanical work the same pin supposedly does
+# (that is >100% efficiency). Both classes are sized at the same measured estimate below;
+# the force difference between them is a force difference, not a current difference.
+# MEASURE YOUR OWN: a clamp meter on the branch during one pulse.
+SOL_BRANCH_A = 1.5              # peak coil current on the 12 V tap, (estimate; war_power_budget.py)
+SOL_TAP_V = 12.0               # the boost tap's setpoint, V
 RATED_V = 12.0
 
 
@@ -110,8 +120,8 @@ def _print_pin() -> None:
 def _print_pulse() -> None:
     for tag, rated in SOL_RATED_N.items():
         pulse = solenoid_pulse_ms()
-        # rough heating: 42 N class draws ~4 W at 12 V while energised (estimate)
-        watts = 4.0 if tag == "42n" else 7.0
+        # energy in = the branch current's energy over the pulse (see SOL_BRANCH_A)
+        watts = SOL_TAP_V * SOL_BRANCH_A
         joules = watts * pulse / 1000.0
         print(f"{tag:<6} pulse {pulse:5.0f} ms  (travel {PIN_STROKE_M * 1000:.0f} mm at {PIN_VELOCITY_M_S * 1000:.0f} mm/s + {PIN_PULSE_MARGIN_MS:.0f} ms margin)")
         print(f"       heat per pulse ~ {joules:.2f} J  — negligible at 1 pulse / 3 s duty")
