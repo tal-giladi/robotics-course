@@ -295,6 +295,7 @@ def sidebar(graph: dict) -> str:
         "- [Hardware](HARDWARE.md)",
         "- [Safety](SAFETY.md)",
         "- [Glossary](references/glossary.md)",
+        "- [Symbols and formulas](references/symbols-and-formulas.md)",
         "",
         "- **Main path**",
     ]

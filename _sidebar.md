@@ -5,6 +5,7 @@
 - [Hardware](HARDWARE.md)
 - [Safety](SAFETY.md)
 - [Glossary](references/glossary.md)
+- [Symbols and formulas](references/symbols-and-formulas.md)
 
 - **Main path**
   - [**00 · Orientation — what robotics actually is**](00-orientation/README.md)
