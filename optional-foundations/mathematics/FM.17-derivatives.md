@@ -354,11 +354,43 @@ $$\frac{\partial f}{\partial x} = \frac{v \cdot \dfrac{\partial u}{\partial x} -
 - $\partial v/\partial x$: how fast the second input changes when the robot's $x$ changes.
 - $u^2 + v^2$: the **squared distance** to the landmark, $d^2$.
 
-Where it comes from (you can rebuild it from two facts you know): with $z = u/v$, the table entry $\frac{d}{dz}\operatorname{atan}z = \frac{1}{1+z^2}$ and the quotient rule $\frac{\partial z}{\partial x} = \frac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{v^2}$. Multiply them (chain rule):
+**Where this formula comes from.** You do not need to memorize it. You can rebuild it from two facts you already know, glued together by the chain rule. Go slowly, one piece at a time.
 
-$$\frac{1}{1 + u^2/v^2} \cdot \frac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{v^2} = \frac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{v^2 + u^2}$$
+*Piece 0: rewrite atan2 as plain atan.* From Step 2, when $v > 0$, $\operatorname{atan2}(u, v) = \operatorname{atan}(u/v)$. Give the ratio a name:
 
-(the $v^2$ under the second fraction multiplies into the first denominator: $v^2(1 + u^2/v^2) = v^2 + u^2$). Numeric sanity check: $\operatorname{atan2}(1, 1) = 0.7854$ rad; nudge $v$ from 1 to 1.01 and $\operatorname{atan2}(1, 1.01) = 0.7804$ rad, a rate of about $-0.50$. The formula, with $\partial u = 0$ and $\partial v = 1$, gives $(1 \cdot 0 - 1 \cdot 1)/(1 + 1) = -0.5$.
+$$z = \frac{u}{v}$$
+
+So the angle is $f = \operatorname{atan}(z)$. Now there is a chain: the robot's $x$ changes $u$ and $v$ → that changes $z$ → that changes the angle $f$.
+
+*Fact 1: how atan reacts to its input.* This is a standard table entry (like $\frac{d}{dz}z^2 = 2z$):
+
+$$\frac{d}{dz}\operatorname{atan}(z) = \frac{1}{1 + z^2}$$
+
+In words: if $z$ changes a little, the angle changes $\frac{1}{1+z^2}$ times as much.
+
+*Fact 2: how the ratio $z = u/v$ reacts to $x$.* $z$ is a fraction, so use the quotient rule ("bottom times derivative of top, minus top times derivative of bottom, all over bottom squared"):
+
+$$\frac{\partial z}{\partial x} = \frac{v \cdot \dfrac{\partial u}{\partial x} - u \cdot \dfrac{\partial v}{\partial x}}{v^2}$$
+
+*Glue them with the chain rule.* How much the angle changes per unit of $x$ = (how much the angle changes per unit of $z$) × (how much $z$ changes per unit of $x$):
+
+$$\frac{\partial f}{\partial x} = \underbrace{\frac{1}{1 + z^2}}_{\text{Fact 1}} \cdot \underbrace{\frac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{v^2}}_{\text{Fact 2}}$$
+
+*Clean up, step by step.* First put $z = u/v$ back, so $z^2 = u^2/v^2$:
+
+$$\frac{\partial f}{\partial x} = \frac{1}{1 + \dfrac{u^2}{v^2}} \cdot \frac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{v^2}$$
+
+Multiplying two fractions: tops together, bottoms together. The top is just the second fraction's top. The bottom is $\left(1 + \frac{u^2}{v^2}\right) \cdot v^2$. Multiply that out:
+
+$$\left(1 + \frac{u^2}{v^2}\right) \cdot v^2 = v^2 + \frac{u^2}{v^2} \cdot v^2 = v^2 + u^2$$
+
+So the whole thing becomes:
+
+$$\frac{\partial f}{\partial x} = \frac{v \cdot \partial u/\partial x - u \cdot \partial v/\partial x}{u^2 + v^2}$$
+
+That is exactly the formula at the top of Step 3. The ugly $v^2$ cancelled, and what is left on the bottom is the squared distance.
+
+*Numeric sanity check (never trust algebra you have not tested).* $\operatorname{atan2}(1, 1) = 0.7854$ rad; nudge $v$ from 1 to 1.01 and $\operatorname{atan2}(1, 1.01) = 0.7804$ rad, a rate of about $-0.50$. The formula, with $\partial u = 0$ and $\partial v = 1$, gives $(1 \cdot 0 - 1 \cdot 1)/(1 + 1) = -0.5$.
 
 *Step 4: for our equation, which input changes when the robot moves in $x$?* Take them one at a time.
 
