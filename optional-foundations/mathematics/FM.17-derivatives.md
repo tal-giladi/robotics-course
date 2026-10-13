@@ -788,7 +788,34 @@ Before running anything: an encoder-based wheel speed estimate by simple differe
 ### Exercise FM.17-E4 — A reusable gradient checker `[coding]`
 
 Goal: never ship a wrong Jacobian.
-Write `check_jacobian(f, J_analytic, x, h=1e-6, tol=1e-6) -> bool` that compares an analytic Jacobian function with central differences and prints the worst entry. Test it on the 2-link arm FK at $q = (30°, 60°)$ with the correct Jacobian, and then with a deliberately wrong one where the top-left entry is $-l_1\sin q_1 + l_2\sin(q_1+q_2)$ (sign error). Report the maximum absolute differences.
+
+**The situation.** Whenever you derive a Jacobian by hand (the table of partial derivatives), it is easy to drop a minus sign, and nothing crashes: the robot just moves wrong. So you want a small test utility you can run on *any* hand-derived Jacobian, the way you'd write a unit-test helper once and reuse it everywhere. This is exactly what the *Gradient check* paragraph above describes, packaged as a function.
+
+**What you already have** (all in `fm17_derivatives.py` from the Code section):
+
+- `f`: a function that takes a vector and returns a vector. Here it is the arm's forward kinematics `fk(q)`, inside `arm_chain_rule()`: joint angles $q = (q_1, q_2)$ in radians in, tip position $(x, y)$ in meters out. Arm lengths $l_1 = 0.12$ m, $l_2 = 0.10$ m.
+- The hand-derived Jacobian of `fk`, written out in `arm_chain_rule()` as `J = np.array([[...], [...]])`: a 2×2 matrix, row = output ($x$ or $y$), column = joint ($q_1$ or $q_2$).
+- `numerical_jacobian(f, x, h)`: computes the same 2×2 matrix with central differences, no calculus needed. Correct by construction (up to ~1e-10), so it serves as the answer key.
+
+**What you write.** A function
+
+```python
+def check_jacobian(f, J_analytic, x, h=1e-6, tol=1e-6) -> bool:
+```
+
+- `f`: the function being differentiated (here `fk`).
+- `J_analytic`: a **function** that takes `x` and returns your hand-derived Jacobian matrix at that point (so turn the `J = np.array(...)` from `arm_chain_rule()` into a function of `q`).
+- `x`: the point to check at (here $q = (30°, 60°)$, converted to radians).
+- `h`: the central-difference step; `tol`: how much disagreement you accept.
+
+It must: (1) compute `A = J_analytic(x)` and `N = numerical_jacobian(f, x, h)`; (2) find the entry where `|A - N|` is largest and print its row, column, both values and the difference; (3) return `True` if that largest difference is below `tol`, otherwise `False`.
+
+**Test it twice:**
+
+1. With the correct Jacobian. Expect `True`.
+2. With a deliberately broken copy: same matrix, except the top-left entry ($\partial x / \partial q_1$) is $-l_1\sin q_1 \mathbf{+} l_2\sin(q_1+q_2)$ instead of $-l_1\sin q_1 \mathbf{-} l_2\sin(q_1+q_2)$ (one flipped sign, the typical hand-derivation bug). Expect `False`, and the printout should point at row 0, column 0.
+
+**Report** the maximum absolute difference in each case.
 
 ### Exercise FM.17-E5 — The −8,000 rad/s spike `[debugging]`
 
